@@ -324,5 +324,5 @@
       "skills": 21
     }
   ],
-  "run_order": "Skills are tested in slot order (1 to 103, see data/skill-principle-map.json): foundational categories first, then Debug, Secure and Review, then Agent operations and Learn."
+  "run_order": "Skills are tested in slot order (1 to 103, see data/skill-principle-map.json): Agent operations (the harness) first, then the three test apps in order (A, B, C). Each app run walks Plan, Design, Build and Verify, then Debug, Secure and Review as needed. Learn is exercised on the first run (slots 33-43) so the retrospective is tested early. Skills tagged All apply on every run."
 }

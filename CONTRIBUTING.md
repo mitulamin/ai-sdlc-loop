@@ -40,7 +40,7 @@ There is one skill per principle, in `skills/<id>-<slug>/`, with a `SKILL.md` an
 - `SKILL.md` front matter has `principles: ["<id>"]` (quoted), `aliases`, `category` (the category slug), a quoted `description`, and `licence`. The statement matches `data/principles.json`.
 - `SOURCES.md` links every source file at a pinned commit, with its licence. Borrowed content keeps its own licence and attribution. Add the source repo to `data/sources.json` and `ATTRIBUTIONS.md` if it is new.
 - Add the skill to `data/skill-principle-map.json` and, if it draws on new files, to `data/mapping.json`, `data/licences.json` and `CREDITS.md`.
-- Run `python scripts/check-skills.py`, then `python scripts/build-principles.py` and `python scripts/build-site.py` so the principle page links the skill.
+- Run `python scripts/check-skills.py`, then `python scripts/build-principles.py` and `python scripts/build-site.py` so the principle page links the skill, and `python scripts/build-agents.py` so the agents and commands for its phase load it. Do not edit `agents/` or `commands/` by hand.
 
 ## Which licence your contribution is under
 

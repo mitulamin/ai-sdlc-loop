@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Regenerate the static site in docs/ from data/ and guides/developer/.
+"""Regenerate the static site in docs/ from data/, guides/developer/ and the agents model.
+
+The agents page reuses the model in scripts/build-agents.py, so it matches agents/ and commands/.
 
 Usage:
   scripts/build-site.py          write the generated files
@@ -11,6 +13,7 @@ Everything else under docs/ is generated; edits are overwritten and extra
 files in generated folders are reported as stale.
 """
 import html
+import importlib.util
 import json
 import re
 import sys
@@ -31,6 +34,7 @@ GENERATED_FILES = [
     "path.html",
     "principles.html",
     "skills.html",
+    "agents.html",
     "sources.html",
     "data/principles.json",
     "data/sources.json",
@@ -112,13 +116,27 @@ NAV = [
     ("path.html", "Learning path"),
     ("principles.html", "All principles"),
     ("skills.html", "Skills"),
+    ("agents.html", "Agents"),
     ("sources.html", "Sources"),
     ("guides/index.html", "Guides"),
 ]
 
-# The redirect pages for merged principle IDs keep the nav they had before skills.html existed,
-# so they stay byte-for-byte unchanged.
-REDIRECT_NAV = [item for item in NAV if item[0] != "skills.html"]
+# The redirect pages for merged principle IDs keep the nav they had before skills.html and
+# agents.html existed, so they stay byte-for-byte unchanged.
+REDIRECT_NAV = [item for item in NAV if item[0] not in ("skills.html", "agents.html")]
+
+DEFAULT_GENERATED_FROM = f'<a href="{BLOB}data/principles.json">data/principles.json</a>'
+
+
+def load_agent_model():
+    """The agents and commands model from scripts/build-agents.py, so the site and agents/ agree."""
+    spec = importlib.util.spec_from_file_location("build_agents", ROOT / "scripts" / "build-agents.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    model, errors = mod.build_model()
+    if errors:
+        raise SystemExit("scripts/build-agents.py: " + "; ".join(errors))
+    return mod, model
 
 LICENCE_LABELS = {
     "clean": ("Clean", "Every source could be adapted"),
@@ -136,7 +154,9 @@ def licence_key(status):
 BRAND = "assets/brand/"
 
 
-def page(title, body, depth, active=None, description="", nav_items=None, brand=True):
+def page(
+    title, body, depth, active=None, description="", nav_items=None, generated_from=DEFAULT_GENERATED_FROM, brand=True
+):
     """Wrap body in the site chrome. depth is the folder depth below docs/.
 
     brand=False leaves out the icons, social tags and header logo; the merged-ID redirect pages use it so
@@ -191,7 +211,7 @@ def page(title, body, depth, active=None, description="", nav_items=None, brand=
 <div class="wrap">
 <p>{SITE_NAME}. Written content is CC BY-SA 4.0 and code is GPL-3.0; the project template is MIT.
 See <a href="{REPO_URL}#readme">the README</a> and <a href="{REPO_URL}/blob/main/LICENSE-CONTENT">LICENSE-CONTENT</a>.
-No trackers, no external scripts. Generated from <a href="{BLOB}data/principles.json">data/principles.json</a>.</p>
+No trackers, no external scripts. Generated from {generated_from}.</p>
 </div>
 </footer>
 <script src="{up}assets/site.js" defer></script>
@@ -790,7 +810,92 @@ Licence status says whether every source could be adapted (clean), or whether li
 </table>
 </div>
 <p class="muted">Machine-readable copies: <a href="data/skill-principle-map.json">skill-principle-map.json</a>, <a href="data/taxonomy.json">taxonomy.json</a>, <a href="data/scorecard.json">scorecard.json</a>.</p>"""
-        return page("Skills", body, 0, "skills.html", f"The {n} amalgamated skills with their phase, test app, slot and licence status.")
+        generated_from = (
+            f'the principles, skill map, taxonomy and scorecard data: <a href="{BLOB}data/principles.json">data/principles.json</a>, '
+            f'<a href="{BLOB}data/skill-principle-map.json">data/skill-principle-map.json</a>, '
+            f'<a href="{BLOB}data/taxonomy.json">data/taxonomy.json</a> and <a href="{BLOB}data/scorecard.json">data/scorecard.json</a>'
+        )
+        return page("Skills", body, 0, "skills.html", f"The {n} amalgamated skills with their phase, test app, slot and licence status.",
+                    generated_from=generated_from)
+
+    def agents_page(self):
+        mod, m = load_agent_model()
+        coord = m["by_slug"][mod.COORDINATOR_PHASE]
+
+        def ids_html(ids):
+            return ", ".join(f'<a href="skills.html#s-{esc(pid)}">{esc(pid)}</a>' for pid in ids)
+
+        def agent_row(name, role, phase_name, cmds, ids):
+            return (
+                f'<tr><td data-label="Agent"><a href="{BLOB}agents/{esc(name)}.md">{esc(name)}</a></td>'
+                f'<td data-label="Role">{esc(role)}</td><td data-label="Phase">{esc(phase_name)}</td>'
+                f'<td data-label="Commands"><div>{cmds}</div></td>'
+                f'<td data-label="Skills" data-sort="{len(ids)}"><div>{len(ids)}: {ids_html(ids)}</div></td></tr>'
+            )
+
+        def cmd_codes(cmds):
+            return ", ".join(f"<code>{esc(c)}</code>" for c in cmds) or "coordinator"
+
+        rows = [agent_row("coordinator", "coordinator", coord["name"], "all", m["loads"][coord["slug"]])]
+        for ph in m["phases"]:
+            ids = m["loads"][ph["slug"]]
+            cmds = cmd_codes(mod.commands_for(m, ph["slug"]))
+            rows.append(agent_row(ph["producer_agent"], f'producer ({ph["role"]})', ph["name"], cmds, ids))
+            rows.append(agent_row(ph["reviewer_agent"], "adversarial reviewer", ph["name"], cmds, ids))
+        cmd_rows = []
+        for name, phases, purpose, _ in m["commands"]:
+            ids = sorted({pid for ph in phases for pid in m["loads"][ph["slug"]]}, key=pid_key)
+            cmd_rows.append(
+                f'<tr><td data-label="Command"><a href="{BLOB}commands/{esc(name)}.md"><code>/{esc(name)}</code></a></td>'
+                f'<td data-label="Phases">{esc(", ".join(ph["name"] for ph in phases))}</td>'
+                f'<td data-label="What it is for"><div>{esc(purpose)}</div></td>'
+                f'<td data-label="Skills" data-sort="{len(ids)}">{len(ids)}</td></tr>'
+            )
+        n_agents = len(rows)
+        body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / Agents</nav>
+<h1>The {n_agents} agents and {len(cmd_rows)} commands</h1>
+<p>The human talks only to the coordinator. For each of the {len(m["phases"])} phases it starts a producer and then a strictly adversarial reviewer, each in a fresh context.
+Producers load each skill's Do and Don't lists together. Reviewers load only each skill's adversarial reviewer checks and the Don't list.
+A phase loads the skills whose phase in <a href="{BLOB}data/skill-principle-map.json">data/skill-principle-map.json</a> is that phase. The agent and command files are generated by <a href="{BLOB}scripts/build-agents.py"><code>scripts/build-agents.py</code></a>.</p>
+<h2 id="agents">Agents</h2>
+<div class="table-wrap">
+<table class="sortable cards">
+<thead><tr>
+<th scope="col" data-type="text">Agent</th>
+<th scope="col" data-type="text">Role</th>
+<th scope="col" data-type="text">Phase</th>
+<th scope="col" data-type="text">Commands</th>
+<th scope="col" data-type="num">Skills</th>
+</tr></thead>
+<tbody>
+{chr(10).join(rows)}
+</tbody>
+</table>
+</div>
+<h2 id="commands">Commands</h2>
+<p>The human gives a command to the coordinator, which runs the loop for each phase on its own and reports at the end of the cycle. The {esc(coord["name"])} phase has no command: the coordinator runs it.</p>
+<div class="table-wrap">
+<table class="sortable cards">
+<thead><tr>
+<th scope="col" data-type="text">Command</th>
+<th scope="col" data-type="text">Phases</th>
+<th scope="col" data-type="text">What it is for</th>
+<th scope="col" data-type="num">Skills</th>
+</tr></thead>
+<tbody>
+{chr(10).join(cmd_rows)}
+</tbody>
+</table>
+</div>
+<p class="muted">Sources: <a href="{BLOB}agents/">agents/</a> and <a href="{BLOB}commands/">commands/</a>.</p>"""
+        generated_from = (
+            f'the taxonomy, skill map and principles data (<a href="{BLOB}data/taxonomy.json">data/taxonomy.json</a>, '
+            f'<a href="{BLOB}data/skill-principle-map.json">data/skill-principle-map.json</a>, '
+            f'<a href="{BLOB}data/principles.json">data/principles.json</a>) and the skills, through scripts/build-agents.py'
+        )
+        return page("Agents", body, 0, "agents.html",
+                    f"The {n_agents} agents and {len(cmd_rows)} slash commands of the loop, with the skills each one loads.",
+                    generated_from=generated_from)
 
     def sources_page(self):
         rows = []
@@ -868,6 +973,7 @@ Licences are as checked and may need your own review before you reuse anything; 
         files["path.html"] = self.path_page()
         files["principles.html"] = self.table_page()
         files["skills.html"] = self.skills_page()
+        files["agents.html"] = self.agents_page()
         files["sources.html"] = self.sources_page()
         for i, c in enumerate(self.cats):
             files[f"categories/{c['slug']}.html"] = self.category_page(i)

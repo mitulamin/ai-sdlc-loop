@@ -24,6 +24,8 @@ jobs:
         run: python scripts/check-skills.py
       - name: Generated principles/*.md are up to date
         run: python scripts/build-principles.py --check
+      - name: Generated agents/ and commands/ are up to date
+        run: python scripts/build-agents.py --check
       - name: Generated docs/ site is up to date
         run: python scripts/build-site.py --check
       - name: Check internal links in docs/ and markdown

@@ -9,6 +9,7 @@ Offline and standard library only. It checks:
   - absolute-path links (/foo) in docs/ are rejected, since the site may live under a sub-path
   - template/ is skipped: its files resolve in a generated project after a profile overlay is applied
   - links to https://github.com/mitulamin/ai-sdlc-loop/(blob|tree)/main/<path> point at a path that exists here
+  - docs/ and the generated agents/ and commands/ are covered: each must hold at least one checked file
 External links are not fetched, so CI does not flake on the network.
 """
 import re
@@ -21,6 +22,7 @@ ROOT = Path(__file__).resolve().parent.parent
 REPO = "https://github.com/mitulamin/ai-sdlc-loop"
 SKIP_DIRS = {".git", "node_modules"}
 EXTERNAL = re.compile(r"^([a-z][a-z0-9+.-]*:|//)", re.I)
+MUST_COVER = ("docs", "agents", "commands")
 
 
 class Collector(HTMLParser):
@@ -121,6 +123,7 @@ def check_target(src, link, in_docs):
 
 def main():
     problems, files = [], 0
+    covered = dict.fromkeys(MUST_COVER, 0)
     for path in sorted(ROOT.rglob("*")):
         if not path.is_file() or any(part in SKIP_DIRS for part in path.relative_to(ROOT).parts):
             continue
@@ -137,15 +140,21 @@ def main():
         else:
             continue
         files += 1
+        if rel.parts[0] in covered:
+            covered[rel.parts[0]] += 1
         for link in links:
             msg = check_target(path, link, in_docs)
             if msg:
                 problems.append(f"{rel}: {msg}")
+    for d, n in covered.items():
+        if not n:
+            problems.append(f"{d}/: no files checked")
     if problems:
         print("\n".join(problems))
         print(f"{len(problems)} broken link(s)")
         return 1
-    print(f"checked links in {files} files, none broken")
+    detail = ", ".join(f"{n} in {d}/" for d, n in covered.items())
+    print(f"checked links in {files} files ({detail}), none broken")
     return 0
 
 
