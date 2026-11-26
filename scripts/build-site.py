@@ -658,6 +658,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 
     def skills_page(self):
         n = len(self.skills)
+        n_draft = sum(1 for sk in self.skills if sk["status"].startswith("draft"))
         rows = []
         for sk in self.skills:
             pid = sk["principle_id"]
@@ -667,9 +668,11 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
             app = self.app_by_id[sk["test_app"]]
             score_text, score_sort, verdict = self.score_cells(pid)
             aliases = "".join(
-                f'<span class="alias" title="Merged into {esc(pid)}">also {esc(a)}</span>' for a in sk["aliases"]
+                f'<span class="alias" title="Merged into {esc(pid)}">also {esc(a)}<span class="sr"> (merged into {esc(pid)})</span></span>' for a in sk["aliases"]
             )
             key = licence_key(sk["licence_status"])
+            if key not in LICENCE_LABELS:
+                raise SystemExit(f'skill {pid}: unrecognised licence_status {sk["licence_status"]!r}; teach licence_key() about it')
             rows.append(
                 f'<tr id="s-{esc(pid)}" data-cat="{esc(c["slug"])}" data-phase="{esc(phase["slug"])}" '
                 f'data-app="{esc(app["id"])}" data-licence="{esc(key)}">'
@@ -721,7 +724,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
         body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / Skills</nav>
 <h1>The {n} skills, in test run order</h1>
 <p>There is one amalgamated skill per principle. Each has a phase, a test app and a slot. The slot is its place in the run order, and the test app is the project it is exercised on.
-Skills are scored in <a href="{BLOB}data/scorecard.json">data/scorecard.json</a>; {self.n_scored} of {n} have been scored so far, and every skill is still a draft.
+Skills are scored in <a href="{BLOB}data/scorecard.json">data/scorecard.json</a>; {self.n_scored} of {n} have been scored so far, and {n_draft} of {n} are still drafts.
 Licence status says whether every source could be adapted (clean), or whether link-only sources were moved to Further reading (rewritten, rebuilt).</p>
 <h2>Test apps</h2>
 <ul class="lp-cards">{app_cards}</ul>
@@ -730,9 +733,9 @@ Licence status says whether every source could be adapted (clean), or whether li
 <p>Each phase is a producer and an adversarial reviewer. A category can span more than one phase.</p>
 <ol class="lp-cards">{phase_cards}</ol>
 <h2 id="run-order">Run order</h2>
-<p>{esc(self.tax.get("run_order", ""))}</p>
+<p>Skills are tested in slot order, 1 to {n}, as set in <a href="{BLOB}data/skill-principle-map.json">data/skill-principle-map.json</a>. Click a column heading to sort, or filter below.</p>
 <div class="filters" role="search" data-table="stable" data-noun="skills">
-<label>Search <input data-q type="search" placeholder="Skill name, principle ID or words" autocomplete="off"></label>
+<label>Search <input data-q type="search" placeholder="Name, ID or words" autocomplete="off"></label>
 <label>Category <select data-attr="cat"><option value="">All categories</option>{cat_opts}</select></label>
 <label>Phase <select data-attr="phase"><option value="">All phases</option>{phase_opts}</select></label>
 <label>Test app <select data-attr="app"><option value="">All apps</option>{app_opts}</select></label>

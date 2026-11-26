@@ -58,7 +58,8 @@
       var q = block.querySelector("[data-q]");
       var selects = Array.prototype.slice.call(block.querySelectorAll("select[data-attr]"));
       var reset = block.querySelector("[data-reset]");
-      var count = document.querySelector("[data-count]");
+      var count = block.parentNode.querySelector("[data-count]");
+      if (!q || !reset || !count) return;
       var noun = block.getAttribute("data-noun") || "rows";
       var rows = Array.prototype.slice.call(table.tBodies[0].rows);
 
