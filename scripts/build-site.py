@@ -30,9 +30,13 @@ GENERATED_FILES = [
     "index.html",
     "path.html",
     "principles.html",
+    "skills.html",
     "sources.html",
     "data/principles.json",
     "data/sources.json",
+    "data/skill-principle-map.json",
+    "data/taxonomy.json",
+    "data/scorecard.json",
 ]
 
 # Hand-written teaching text for the learning path, keyed by category slug.
@@ -107,19 +111,36 @@ NAV = [
     ("index.html", "Home"),
     ("path.html", "Learning path"),
     ("principles.html", "All principles"),
+    ("skills.html", "Skills"),
     ("sources.html", "Sources"),
     ("guides/index.html", "Guides"),
 ]
 
+# The redirect pages for merged principle IDs keep the nav they had before skills.html existed,
+# so they stay byte-for-byte unchanged.
+REDIRECT_NAV = [item for item in NAV if item[0] != "skills.html"]
 
-def page(title, body, depth, active=None, description=""):
+LICENCE_LABELS = {
+    "clean": ("Clean", "Every source could be adapted"),
+    "rewritten": ("Rewritten", "Rewritten: link-only sources moved to Further reading"),
+    "rebuilt": ("Rebuilt", "Rebuilt from MIT sources; the original sources are link only"),
+}
+
+
+def licence_key(status):
+    """Group the free-text licence_status in the skill map: clean, rewritten or rebuilt."""
+    word = status.split(",")[0].split(" ")[0].strip().lower()
+    return word if word in LICENCE_LABELS else "other"
+
+
+def page(title, body, depth, active=None, description="", nav_items=None):
     """Wrap body in the site chrome. depth is the folder depth below docs/."""
     up = "../" * depth
     nav = "".join(
         '<a href="{}{}"{}>{}</a>'.format(
             up, href, ' aria-current="page"' if href == active else "", esc(label)
         )
-        for href, label in NAV
+        for href, label in (nav_items or NAV)
     )
     desc = esc(description or "Software engineering principles for building with agents, and a loop that learns from each project.")
     return f"""<!doctype html>
@@ -174,6 +195,41 @@ class Site:
         self.n_sources = len(self.sdoc["repos"])
         # Repos added after the research run carry a note starting "Added for"; they are cited, not researched.
         self.n_researched = sum(1 for r in self.sdoc["repos"] if not r.get("notes", "").startswith("Added for"))
+        self.map_doc = load(DATA / "skill-principle-map.json")
+        self.tax = load(DATA / "taxonomy.json")
+        self.score_doc = load(DATA / "scorecard.json")
+        self.skills = sorted(self.map_doc["skills"], key=lambda s: s["slot"])
+        self.skill_by_pid = {s["principle_id"]: s for s in self.skills}
+        self.score_by_pid = {r["skill_id"]: r for r in self.score_doc["skills"]}
+        self.phases = sorted(self.tax["phases"], key=lambda ph: ph["order"])
+        self.phase_by_slug = {ph["slug"]: ph for ph in self.phases}
+        self.apps = self.tax["test_apps"]
+        self.app_by_id = {a["id"]: a for a in self.apps}
+        self.n_scored = sum(1 for r in self.score_doc["skills"] if r["runs"])
+
+    def licence_badge(self, sk):
+        key = licence_key(sk["licence_status"])
+        label, tip = LICENCE_LABELS.get(key, (sk["licence_status"], sk["licence_status"]))
+        return f'<span class="lic lic-{esc(key)}" title="{esc(tip)}">{esc(label)}</span>'
+
+    def score_cells(self, pid):
+        """(score text, sort value, verdict text) for a skill, from the latest run on the scorecard."""
+        row = self.score_by_pid.get(pid)
+        runs = row["runs"] if row else []
+        verdict = row["verdict"] if row and row["verdict"] else "none yet"
+        if not runs:
+            return "not run", -1, verdict
+        last = runs[-1]
+        text = f'{last["total"]}/10'
+        if len(runs) > 1:
+            text += f" ({len(runs)} runs)"
+        if any(r["harm_flag"] for r in runs):
+            text += " harm flag"
+        return text, last["total"], verdict
+
+    def app_label(self, app_id):
+        a = self.app_by_id[app_id]
+        return f'App {a["id"]}: {a["name"]}' if a["id"] != "All" else a["name"]
 
     def source_chips(self, p, up):
         out = []
@@ -212,6 +268,8 @@ class Site:
         n_sources = self.n_sources
         n_researched = self.n_researched
         n_added = n_sources - n_researched
+        n_skills = len(self.skills)
+        n_phases = len(self.phases)
         first_cat = self.cats[0]
         learn = self.cat_by_slug.get("learn")
         learn_ids = [p["id"] for p in self.by_cat.get("learn", [])]
@@ -233,12 +291,14 @@ class Site:
 in {n_cats} categories. Use them to adopt agentic tools with less trial and error, then build a learning loop of your own.</p>
 <p class="lp-cta">
 <a class="btn btn-primary" href="path.html">Explore the learning path</a>
+<a class="btn" href="skills.html">See the skills</a>
 <a class="btn" href="#start">Start a project</a>
 <a class="btn" href="principles.html">Browse all principles</a>
 </p>
 <dl class="lp-stats">
 <div><dt>Principles</dt><dd>{n_principles}</dd></div>
 <div><dt>Categories</dt><dd>{n_cats}</dd></div>
+<div><dt>Skills</dt><dd>{n_skills}</dd></div>
 <div><dt>Repos reviewed</dt><dd>{n_researched}</dd></div>
 <div><dt>Sources cited</dt><dd>{n_sources}</dd></div>
 </dl>
@@ -292,6 +352,7 @@ in {n_cats} categories. Use them to adopt agentic tools with less trial and erro
 <li class="lp-card"><h3><a href="path.html">Follow the learning path</a></h3><p>Walk the {n_cats} stages in order, from planning to retrospective.</p></li>
 <li class="lp-card"><h3><a href="principles.html">Explore the principles</a></h3><p>Search, filter and sort all {n_principles}. Each links to its sources.</p></li>
 <li class="lp-card"><h3><a href="categories/{esc(first_cat["slug"])}.html">Read the categories</a></h3><p>One page per category, with the principles that belong to it.</p></li>
+<li class="lp-card"><h3><a href="skills.html">See the skills</a></h3><p>One skill per principle, in test run order, with its phase, test app and licence status. Filter all {n_skills} across {n_phases} phases.</p></li>
 <li class="lp-card"><h3><a href="sources.html">Check the sources</a></h3><p>The {n_sources} sources cited ({n_researched} researched, plus {n_added} added for a skill), with their licences.</p></li>
 <li class="lp-card"><h3><a href="guides/index.html">Read the guides</a></h3><p>Plain-language guides to the principles.</p></li>
 <li class="lp-card"><h3><a href="#start">Start a project</a></h3><p>Copy the template and run your first loop.</p></li>
@@ -352,6 +413,7 @@ Details in <a href="{REPO_URL}#why-gplv3-and-cc-by-sa-for-the-writing">the READM
 <p class="tag">{esc(tag)}</p>
 <p>{esc(why)}</p>
 {sample}
+<p class="muted"><a href="skills.html?cat={esc(c["slug"])}">{len(ps)} skills in this stage</a>, in test run order.</p>
 </div>
 </li>"""
             )
@@ -368,6 +430,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 </form>
 <p class="quick"><a href="categories/{esc(self.cats[0]["slug"])}.html">Start at stage 1</a>
 <a href="principles.html">Browse the table</a>
+<a href="skills.html">See the skills in run order</a>
 <a href="guides/index.html">Read the developer guide</a>
 <a href="index.html">About this project</a></p>
 </section>
@@ -383,6 +446,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 <ul>
 <li>New to this? Read the stages in order and open a few principles in each.</li>
 <li>Looking for something specific? <a href="principles.html">Search and filter</a> all {total} principles, or sort the table.</li>
+<li>Want to see how the principles become skills and in what order they are tested? Open the <a href="skills.html">skills page</a>.</li>
 <li>Want to know where an idea came from? Every principle links to the source repos it was drawn from, and the <a href="sources.html">sources page</a> lists all of them with their licences.</li>
 </ul>
 </section>"""
@@ -392,11 +456,52 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
         c = self.cats[i]
         ps = self.by_cat[c["slug"]]
         tag, why = PATH_TEXT.get(c["slug"], (f"{len(ps)} principles.", ""))
-        rows = "".join(
-            f'<li><a class="pid" href="../principles/{esc(p["id"])}.html">{esc(p["id"])}</a> '
-            f'<span>{esc(p["statement"])}</span></li>'
-            for p in ps
+        def item(p):
+            sk = self.skill_by_pid[p["id"]]
+            phase = self.phase_by_slug[sk["phase"]]
+            return (
+                f'<li><a class="pid" href="../principles/{esc(p["id"])}.html">{esc(p["id"])}</a>'
+                f'<div><span>{esc(p["statement"])}</span>'
+                f'<p class="skill-meta">Skill <a href="{BLOB}{esc(sk["folder"])}/SKILL.md">{esc(sk["skill_name"])}</a>'
+                f' <span class="muted">&middot; <a href="../skills.html?phase={esc(phase["slug"])}">{esc(phase["name"])} phase</a>'
+                f' &middot; <a href="../skills.html#s-{esc(p["id"])}">run slot {sk["slot"]}</a>'
+                f' &middot; {esc(self.app_label(sk["test_app"]))}</span> {self.licence_badge(sk)}</p></div></li>'
+            )
+
+        groups = [g for g in self.tax["subgroups"] if g["category"] == c["slug"]]
+        grouped = {pid for g in groups for pid in g["principles"]}
+        by_id = {p["id"]: p for p in ps}
+        sections = []
+        for g in groups:
+            members = [by_id[pid] for pid in sorted(g["principles"], key=pid_key) if pid in by_id]
+            sections.append(
+                f'<h2 id="{esc(g["slug"])}">{esc(g["name"])} <span class="count">{len(members)} principles</span></h2>\n'
+                f'<ol class="plist">{"".join(item(p) for p in members)}</ol>'
+            )
+        rest = [p for p in ps if p["id"] not in grouped]
+        if groups:
+            if rest:
+                sections.insert(
+                    0,
+                    f'<h2 id="general">General principles <span class="count">{len(rest)} principles</span></h2>\n'
+                    f'<ol class="plist">{"".join(item(p) for p in rest)}</ol>',
+                )
+        else:
+            sections.append(f'<h2>{len(ps)} principles</h2>\n<ol class="plist">{"".join(item(p) for p in rest)}</ol>')
+        phase_counts = {}
+        for p in ps:
+            ph = self.skill_by_pid[p["id"]]["phase"]
+            phase_counts[ph] = phase_counts.get(ph, 0) + 1
+        phase_links = ", ".join(
+            f'<a href="../skills.html?phase={esc(ph["slug"])}">{esc(ph["name"])}</a> ({phase_counts[ph["slug"]]})'
+            for ph in self.phases
+            if ph["slug"] in phase_counts
         )
+        taxonomy = (
+            f'<p class="muted">The {len(ps)} skills here run in these phases: {phase_links}. '
+            f'<a href="../skills.html?cat={esc(c["slug"])}">See them in run order</a>.</p>'
+        )
+        sections_html = "\n".join(sections)
         prev = self.cats[i - 1] if i > 0 else None
         nxt = self.cats[i + 1] if i + 1 < len(self.cats) else None
         pager = '<nav class="pager" aria-label="Learning path">'
@@ -415,8 +520,8 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 <h1>Stage {c["number"]}: {esc(c["name"])}</h1>
 <p class="lede">{esc(tag)}</p>
 <p>{esc(why)}</p>
-<h2>{len(ps)} principles</h2>
-<ol class="plist">{rows}</ol>
+{taxonomy}
+{sections_html}
 {pager}"""
         return page(c["name"], body, 1, "path.html", tag)
 
@@ -471,14 +576,18 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
             else "<span></span>"
         )
         pager += "</nav>"
-        skill_dirs = sorted(d.name for d in (ROOT / "skills").glob(f"{p['id']}-*") if d.is_dir())
-        skills_html = (
-            "<ul>"
-            + "".join(f'<li><a href="{BLOB}skills/{esc(d)}/SKILL.md">{esc(d)}</a></li>' for d in skill_dirs)
-            + "</ul>"
-            if skill_dirs
-            else "<p>Not written yet. When it exists it will be linked here.</p>"
-        )
+        sk = self.skill_by_pid[p["id"]]
+        phase = self.phase_by_slug[sk["phase"]]
+        score_text, _, verdict = self.score_cells(p["id"])
+        skills_html = f"""<p><a href="{BLOB}{esc(sk["folder"])}/SKILL.md">{esc(sk["skill_name"])}</a>
+(<a href="{BLOB}{esc(sk["folder"])}/SOURCES.md">sources</a>) &middot; <a href="../skills.html#s-{esc(p["id"])}">see it in the run order</a></p>
+<dl class="facts">
+<dt>Phase</dt><dd><a href="../skills.html?phase={esc(phase["slug"])}">{esc(phase["name"])}</a>, led by the {esc(phase["role"])}</dd>
+<dt>Run slot</dt><dd>{sk["slot"]} of {len(self.skills)}</dd>
+<dt>Test app</dt><dd>{esc(self.app_label(sk["test_app"]))}</dd>
+<dt>Licence status</dt><dd>{self.licence_badge(sk)} <span class="muted">{esc(sk["licence_status"])}; {sk["clean_sources"]} adaptable and {sk["link_only_sources"]} link-only sources</span></dd>
+<dt>Scorecard</dt><dd>{esc(score_text)}, verdict: {esc(verdict)} <span class="muted">({esc(sk["status"])})</span></dd>
+</dl>"""
         body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> / <a href="../path.html">Learning path</a> /
 <a href="../categories/{esc(c["slug"])}.html">Stage {c["number"]}: {esc(c["name"])}</a> / {esc(p["id"])}</nav>
 <p class="pid-big">Principle {esc(p["id"])}</p>
@@ -505,14 +614,14 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 <p>Principle {esc(alias)} was merged into <a href="{esc(target["id"])}.html">principle {esc(target["id"])}</a>: {esc(target["statement"])}</p>
 <p>{esc(target["provenance"]["notes"])} See <a href="{BLOB}MERGES.md">MERGES.md</a>.</p>"""
         refresh = f'<meta http-equiv="refresh" content="0; url={esc(target["id"])}.html">\n<link rel="canonical" href="{esc(target["id"])}.html">\n'
-        return page(f"Principle {alias} (merged)", body, 1, "principles.html").replace("</head>", refresh + "</head>", 1)
+        return page(f"Principle {alias} (merged)", body, 1, "principles.html", nav_items=REDIRECT_NAV).replace("</head>", refresh + "</head>", 1)
 
     def table_page(self):
         rows = []
         for p in self.principles:
             c = self.cat_by_slug[p["category"]]
             rows.append(
-                f'<tr data-cat="{esc(c["slug"])}" data-sources="{esc("|".join(p["sources"]))}">'
+                f'<tr data-cat="{esc(c["slug"])}" data-src="{esc("|".join(p["sources"]))}">'
                 f'<td data-sort="{pid_key(p["id"])[0] * 1000 + pid_key(p["id"])[1]}"><a href="principles/{esc(p["id"])}.html">{esc(p["id"])}</a></td>'
                 f'<td>{esc(p["statement"])}</td>'
                 f'<td data-sort="{c["number"]}">{cat_link(c)}</td>'
@@ -524,13 +633,13 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
         body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / All principles</nav>
 <h1>All principles</h1>
 <p>Search, filter by category or source, and click a column heading to sort. Works without a server; with JavaScript off you still get the full table.</p>
-<div class="filters" role="search">
-<label>Search <input id="q" type="search" placeholder="Search statements" autocomplete="off"></label>
-<label>Category <select id="cat"><option value="">All categories</option>{opts}</select></label>
-<label>Source <select id="src"><option value="">All sources</option>{src_opts}</select></label>
-<button type="button" id="reset">Reset</button>
+<div class="filters" role="search" data-table="ptable" data-noun="principles">
+<label>Search <input data-q type="search" placeholder="Search statements" autocomplete="off"></label>
+<label>Category <select data-attr="cat"><option value="">All categories</option>{opts}</select></label>
+<label>Source <select data-attr="src"><option value="">All sources</option>{src_opts}</select></label>
+<button type="button" data-reset>Reset</button>
 </div>
-<p id="result-count" class="muted" aria-live="polite">{len(self.principles)} principles</p>
+<p data-count class="muted" aria-live="polite">{len(self.principles)} principles</p>
 <div class="table-wrap">
 <table id="ptable" class="sortable">
 <thead><tr>
@@ -546,6 +655,114 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 </div>
 <p class="muted">Machine-readable copy: <a href="data/principles.json">data/principles.json</a>.</p>"""
         return page("All principles", body, 0, "principles.html")
+
+    def skills_page(self):
+        n = len(self.skills)
+        n_draft = sum(1 for sk in self.skills if sk["status"].startswith("draft"))
+        rows = []
+        for sk in self.skills:
+            pid = sk["principle_id"]
+            p = next(x for x in self.principles if x["id"] == pid)
+            c = self.cat_by_slug[sk["category"]]
+            phase = self.phase_by_slug[sk["phase"]]
+            app = self.app_by_id[sk["test_app"]]
+            score_text, score_sort, verdict = self.score_cells(pid)
+            aliases = "".join(
+                f'<span class="alias" title="Merged into {esc(pid)}">also {esc(a)}<span class="sr"> (merged into {esc(pid)})</span></span>' for a in sk["aliases"]
+            )
+            key = licence_key(sk["licence_status"])
+            if key not in LICENCE_LABELS:
+                raise SystemExit(f'skill {pid}: unrecognised licence_status {sk["licence_status"]!r}; teach licence_key() about it')
+            rows.append(
+                f'<tr id="s-{esc(pid)}" data-cat="{esc(c["slug"])}" data-phase="{esc(phase["slug"])}" '
+                f'data-app="{esc(app["id"])}" data-licence="{esc(key)}">'
+                f'<td data-label="Slot" data-sort="{sk["slot"]}">{sk["slot"]}</td>'
+                f'<td data-label="Principle" data-sort="{pid_key(pid)[0] * 1000 + pid_key(pid)[1]}">'
+                f'<div><a href="principles/{esc(pid)}.html">{esc(pid)}</a>{aliases}</div></td>'
+                f'<td data-label="Skill"><div><a href="{BLOB}{esc(sk["folder"])}/SKILL.md">{esc(sk["skill_name"])}</a>'
+                f'<span class="muted skill-stmt">{esc(p["statement"])}</span></div></td>'
+                f'<td data-label="Category" data-sort="{c["number"]}">{cat_link(c)}</td>'
+                f'<td data-label="Phase" data-sort="{phase["order"]}">{esc(phase["name"])}</td>'
+                f'<td data-label="Test app" title="{esc(app["name"])}">{esc(app["id"])}</td>'
+                f'<td data-label="Licence" data-sort="{esc(key)}"><div>{self.licence_badge(sk)}'
+                f'<span class="muted lic-counts">{sk["clean_sources"]} adaptable, {sk["link_only_sources"]} link-only</span></div></td>'
+                f'<td data-label="Score /10" data-sort="{score_sort}">{esc(score_text)}</td>'
+                f'<td data-label="Verdict">{esc(verdict)}</td></tr>'
+            )
+        counts = {}
+        for sk in self.skills:
+            counts[sk["test_app"]] = counts.get(sk["test_app"], 0) + 1
+        app_cards = ""
+        for a in self.apps:
+            title = f'Test app {esc(a["id"])}' if a["id"] != "All" else "All runs"
+            run = f' <span class="count">run {a["run"]}</span>' if a["run"] else ""
+            app_cards += (
+                f'<li class="lp-card"><h3>{title}{run}</h3><p>{esc(a["name"])}</p>'
+                f'<p class="muted">{esc(a["example"])}</p>'
+                f'<p class="muted"><a href="skills.html?app={esc(a["id"])}">{counts.get(a["id"], 0)} skills</a></p></li>'
+            )
+        phase_counts = {}
+        for sk in self.skills:
+            phase_counts[sk["phase"]] = phase_counts.get(sk["phase"], 0) + 1
+        phase_cards = ""
+        for ph in self.phases:
+            cats = ", ".join(cat_link(self.cat_by_slug[cs]) for cs in ph["categories"])
+            cmds = ", ".join(f"<code>/{esc(cm)}</code>" for cm in ph["commands"]) or "none"
+            phase_cards += (
+                f'<li class="lp-card"><h3>{ph["order"]}. <a href="skills.html?phase={esc(ph["slug"])}">{esc(ph["name"])}</a>'
+                f' <span class="count">{phase_counts.get(ph["slug"], 0)} skills</span></h3>'
+                f'<p>Role: {esc(ph["role"])}</p>'
+                f'<p class="muted">Producer <code>{esc(ph["producer_agent"])}</code>, reviewer <code>{esc(ph["reviewer_agent"])}</code>. Commands: {cmds}.</p>'
+                f'<p class="muted">Categories: {cats}</p></li>'
+            )
+        cat_opts = "".join(f'<option value="{esc(c["slug"])}">{c["number"]}. {esc(c["name"])}</option>' for c in self.cats)
+        phase_opts = "".join(f'<option value="{esc(ph["slug"])}">{ph["order"]}. {esc(ph["name"])}</option>' for ph in self.phases)
+        app_opts = "".join(
+            f'<option value="{esc(a["id"])}">{esc(self.app_label(a["id"]))}</option>' for a in self.apps
+        )
+        lic_opts = "".join(f'<option value="{k}">{esc(tip)}</option>' for k, (_, tip) in LICENCE_LABELS.items())
+        body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / Skills</nav>
+<h1>The {n} skills, in test run order</h1>
+<p>There is one amalgamated skill per principle. Each has a phase, a test app and a slot. The slot is its place in the run order, and the test app is the project it is exercised on.
+Skills are scored in <a href="{BLOB}data/scorecard.json">data/scorecard.json</a>; {self.n_scored} of {n} have been scored so far, and {n_draft} of {n} are still drafts.
+Licence status says whether every source could be adapted (clean), or whether link-only sources were moved to Further reading (rewritten, rebuilt).</p>
+<h2>Test apps</h2>
+<ul class="lp-cards">{app_cards}</ul>
+<p class="muted">&ldquo;All runs&rdquo; skills apply on every run: the harness skills and the Learn skills.</p>
+<h2>Phases</h2>
+<p>Each phase is a producer and an adversarial reviewer. A category can span more than one phase.</p>
+<ol class="lp-cards">{phase_cards}</ol>
+<h2 id="run-order">Run order</h2>
+<p>Skills are tested in slot order, 1 to {n}, as set in <a href="{BLOB}data/skill-principle-map.json">data/skill-principle-map.json</a>. Click a column heading to sort, or filter below.</p>
+<div class="filters" role="search" data-table="stable" data-noun="skills">
+<label>Search <input data-q type="search" placeholder="Name, ID or words" autocomplete="off"></label>
+<label>Category <select data-attr="cat"><option value="">All categories</option>{cat_opts}</select></label>
+<label>Phase <select data-attr="phase"><option value="">All phases</option>{phase_opts}</select></label>
+<label>Test app <select data-attr="app"><option value="">All apps</option>{app_opts}</select></label>
+<label>Licence status <select data-attr="licence"><option value="">All</option>{lic_opts}</select></label>
+<button type="button" data-reset>Reset</button>
+</div>
+<p data-count class="muted" aria-live="polite">{n} skills</p>
+<div class="table-wrap">
+<table id="stable" class="sortable cards">
+<thead><tr>
+<th scope="col" data-type="num">Slot</th>
+<th scope="col" data-type="num">Principle</th>
+<th scope="col" data-type="text">Skill</th>
+<th scope="col" data-type="num">Category</th>
+<th scope="col" data-type="num">Phase</th>
+<th scope="col" data-type="text">Test app</th>
+<th scope="col" data-type="text">Licence</th>
+<th scope="col" data-type="num">Score /10</th>
+<th scope="col" data-type="text">Verdict</th>
+</tr></thead>
+<tbody>
+{chr(10).join(rows)}
+</tbody>
+</table>
+</div>
+<p class="muted">Machine-readable copies: <a href="data/skill-principle-map.json">skill-principle-map.json</a>, <a href="data/taxonomy.json">taxonomy.json</a>, <a href="data/scorecard.json">scorecard.json</a>.</p>"""
+        return page("Skills", body, 0, "skills.html", f"The {n} amalgamated skills with their phase, test app, slot and licence status.")
 
     def sources_page(self):
         rows = []
@@ -622,6 +839,7 @@ Licences are as checked and may need your own review before you reuse anything; 
         files["index.html"] = self.landing_page()
         files["path.html"] = self.path_page()
         files["principles.html"] = self.table_page()
+        files["skills.html"] = self.skills_page()
         files["sources.html"] = self.sources_page()
         for i, c in enumerate(self.cats):
             files[f"categories/{c['slug']}.html"] = self.category_page(i)
@@ -632,6 +850,9 @@ Licences are as checked and may need your own review before you reuse anything; 
         files.update(self.guide_pages())
         files["data/principles.json"] = canonical_json(self.pdoc)
         files["data/sources.json"] = canonical_json(self.sdoc)
+        files["data/skill-principle-map.json"] = canonical_json(self.map_doc)
+        files["data/taxonomy.json"] = canonical_json(self.tax)
+        files["data/scorecard.json"] = canonical_json(self.score_doc)
         return files
 
 
