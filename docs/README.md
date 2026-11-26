@@ -1,6 +1,6 @@
 # docs
 
-The static website (GitHub Pages): a learning path through the 108 principles, a page per category, a page per principle, a searchable and sortable table, the list of source repos and the developer guide pages. Client-side JavaScript only, no build step to view it, no external scripts or trackers. Open `docs/index.html` in a browser to try it.
+The static website (GitHub Pages): a landing page that explains the project, a learning path through the 108 principles, a page per category, a page per principle, a searchable and sortable table, the list of source repos and the developer guide pages. Client-side JavaScript only, no build step to view it, no external scripts or trackers. Open `docs/index.html` in a browser to try it. The landing page is `index.html` and the learning path is `path.html`.
 
 ## Generated and hand-written
 
@@ -17,7 +17,7 @@ Do not edit generated files, they are overwritten. After changing anything in `d
 scripts/build-site.py
 ```
 
-CI runs `scripts/build-site.py --check` and fails if the output is stale. The learning-path text for each category lives in `PATH_TEXT` at the top of the script.
+CI runs `scripts/build-site.py --check` and fails if the output is stale. The landing page is built by `Site.landing_page` in the script. The learning-path text for each category lives in `PATH_TEXT` at the top of the script.
 
 ## Publishing
 
