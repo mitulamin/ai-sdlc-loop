@@ -74,7 +74,7 @@ A change only goes live if it helps on cases held out from the one that caused i
 | `skills/` | One amalgamated skill per principle, with a `SOURCES.md` next to each. Coming in the next phase. |
 | `agents/` | Coordinator, a producer and a reviewer per phase, and the roles. Coming. |
 | `commands/` | Slash commands for the main loop: plan, design, build, verify, review, ship, retro. Coming. |
-| `guides/junior-developer/` | Plain-language guides to the principles. Coming. |
+| `guides/developer/` | Plain-language guides to the principles. Coming. |
 | `docs/` | The static website (GitHub Pages). Coming. |
 | `template/` | What a new project copies. |
 | `scripts/` | `build-principles`, `refresh-sources`, `new-project`. |
