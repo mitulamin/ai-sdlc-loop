@@ -7,8 +7,6 @@ category: debug-and-observe
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 6
-link_only_sources: 0
 ---
 
 # 5.13 Sample in the collector
@@ -46,11 +44,11 @@ dash0 otel-instrumentation ('defer all sampling to the Collector') and otel-coll
 
 ## Sources
 
-6 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Debug
-- Test order: slot 71 of 103
+- Test order: slot 71
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

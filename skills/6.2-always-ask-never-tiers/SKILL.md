@@ -7,8 +7,6 @@ category: secure
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 1
-link_only_sources: 0
 ---
 
 # 6.2 Always ask never tiers
@@ -48,11 +46,11 @@ Addy security-and-hardening only: sort agent actions into always do, ask first, 
 
 ## Sources
 
-1 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Secure
-- Test order: slot 75 of 103
+- Test order: slot 75
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

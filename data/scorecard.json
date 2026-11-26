@@ -1,6 +1,6 @@
 {
-  "schema_version": "1.0.0",
-  "note": "One row per skill, filled during the test runs. Each run adds an entry to runs. Scores are 0 to 2 each; total is out of 10.",
+  "schema_version": "1.1.0",
+  "note": "One row per skill, filled during the test runs. Each run adds an entry to runs. Each criterion scores 0 to 2; total is the sum of the scores.",
   "skills": [
     {
       "slot": 1,

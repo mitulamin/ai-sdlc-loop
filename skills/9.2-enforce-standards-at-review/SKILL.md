@@ -7,8 +7,6 @@ category: learn
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 2
-link_only_sources: 0
 ---
 
 # 9.2 Enforce standards at review
@@ -45,11 +43,11 @@ Pocock retro and agent-os index-standards: keep standards in the reviewer's cont
 
 ## Sources
 
-2 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
-- Test app: All three runs (harness and Learn)
+- Test app: All runs (harness and Learn)
 - Phase: Learn
-- Test order: slot 34 of 103
+- Test order: slot 34
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

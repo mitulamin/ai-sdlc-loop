@@ -7,8 +7,6 @@ category: review-and-ship
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 35
-link_only_sources: 0
 ---
 
 # 7.1 Separate reviewer early and often
@@ -45,15 +43,15 @@ Don't:
 
 ## How the source skills compare
 
-Superpowers requesting-code-review (with code-reviewer.md) and subagent-driven-development, Pocock code-review and many wshobson code-reviewer copies (six identical files) agree: a separate reviewer subagent after each task. PARTIAL overlap with 8.7; proposed sharpening: 7.1 owns review, 8.7 owns fact-finding.
+Superpowers requesting-code-review (with code-reviewer.md) and subagent-driven-development, Pocock code-review and many wshobson code-reviewer copies (identical files) agree: a separate reviewer subagent after each task. PARTIAL overlap with 8.7; proposed sharpening: 7.1 owns review, 8.7 owns fact-finding.
 
 ## Sources
 
-35 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App A (CLI tool)
 - Phase: Review & ship
-- Test order: slot 32 of 103
+- Test order: slot 32
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

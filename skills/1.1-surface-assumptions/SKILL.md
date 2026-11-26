@@ -7,8 +7,6 @@ category: plan-and-specify
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 7
-link_only_sources: 2
 ---
 
 # 1.1 Surface assumptions
@@ -51,7 +49,7 @@ Addy spec-driven-development (a numbered 'assumptions I'm making' list the human
 
 ## Sources
 
-7 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Further reading (link only)
 
@@ -64,5 +62,5 @@ These sources have no usable licence for copying or adapting, so nothing in this
 
 - Test app: App A (CLI tool)
 - Phase: Plan
-- Test order: slot 11 of 103
+- Test order: slot 11
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

@@ -7,8 +7,6 @@ category: debug-and-observe
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 6
-link_only_sources: 0
 ---
 
 # 5.15 Alerts ship with runbooks
@@ -46,11 +44,11 @@ Addy observability and wshobson incident-runbook-templates/on-call-handoff-patte
 
 ## Sources
 
-6 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Review & ship
-- Test order: slot 81 of 103
+- Test order: slot 81
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

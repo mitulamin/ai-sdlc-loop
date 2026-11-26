@@ -7,8 +7,6 @@ category: verify
 aliases: ["4.4"]
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 22
-link_only_sources: 0
 ---
 
 # 4.1 Red green tdd
@@ -56,11 +54,11 @@ Superpowers test-driven-development (iron law: no code without a failing test), 
 
 ## Sources
 
-22 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App A (CLI tool)
 - Phase: Verify
-- Test order: slot 26 of 103
+- Test order: slot 26
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

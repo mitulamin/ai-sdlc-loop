@@ -7,8 +7,6 @@ category: code-craft
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 8
-link_only_sources: 0
 ---
 
 # 3.14 Vertical slices green build
@@ -49,11 +47,11 @@ Addy incremental-implementation and /build, Pocock to-tickets (tracer bullets) a
 
 ## Sources
 
-8 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Build
-- Test order: slot 63 of 103
+- Test order: slot 63
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

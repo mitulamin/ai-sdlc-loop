@@ -31,10 +31,10 @@
 <main id="main" class="wrap">
 <nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / Learning path</nav>
 <section class="hero">
-<h1>A learning path through 103 software principles</h1>
-<p class="lede">These principles were distilled from 41 public repos of agent skills, sub-agents and commands.
+<h1>A learning path through the software principles</h1>
+<p class="lede">These principles were distilled from public repos of agent skills, sub-agents and commands.
 They are the base of a loop that builds software with agents and learns from each project.
-Work through the nine stages in order, or jump straight to the one you need.</p>
+Work through the stages in order, or jump straight to the one you need.</p>
 <form class="search" action="principles.html" method="get" role="search">
 <label for="home-q" class="sr">Search principles</label>
 <input id="home-q" name="q" type="search" placeholder="Search principles, e.g. test, secret, review" autocomplete="off">
@@ -43,93 +43,93 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 <p class="quick"><a href="categories/plan-and-specify.html">Start at stage 1</a>
 <a href="principles.html">Browse the table</a>
 <a href="skills.html">See the skills in run order</a>
-<a href="guides/index.html">Read the developer guide</a>
+<a href="guides/developer/developer-guide.html">Read the developer guide</a>
 <a href="index.html">About this project</a></p>
 </section>
 <section>
-<h2>The nine stages</h2>
-<p>The order follows a project from idea to retrospective. Stage 9 feeds back into stage 1 of the next project.</p>
+<h2>The stages</h2>
+<p>The order follows a project from idea to retrospective. The last stage feeds back into the first stage of the next project.</p>
 <ol class="steps">
 <li class="step">
 <div class="step-num" aria-hidden="true">1</div>
 <div class="step-body">
-<h3><a href="categories/plan-and-specify.html">Plan and specify</a> <span class="count">8 principles</span></h3>
+<h3><a href="categories/plan-and-specify.html">Plan and specify</a></h3>
 <p class="tag">Decide what you are building before any code exists.</p>
 <p>Everything later depends on this. A vague ask turns into confident, wrong code, so this stage is about surfacing assumptions, asking questions and agreeing a spec.</p>
 <p class="sample">Start with <a href="principles/1.1.html">1.1</a>: State assumptions; when something is unclear, stop and ask rather than pick silently</p>
-<p class="muted"><a href="skills.html?cat=plan-and-specify">8 skills in this stage</a>, in test run order.</p>
+<p class="muted"><a href="skills.html?cat=plan-and-specify">See the skills in this stage</a>, in test run order.</p>
 </div>
 </li><li class="step">
 <div class="step-num" aria-hidden="true">2</div>
 <div class="step-body">
-<h3><a href="categories/design-and-architecture.html">Design and architecture</a> <span class="count">18 principles</span></h3>
+<h3><a href="categories/design-and-architecture.html">Design and architecture</a></h3>
 <p class="tag">Shape the code so it is easy to change and easy to test.</p>
-<p>Once you know what to build, decide where the boundaries go. Good seams and small interfaces make the next three stages cheaper.</p>
+<p>Once you know what to build, decide where the boundaries go. Good seams and small interfaces make the stages after it cheaper.</p>
 <p class="sample">Start with <a href="principles/2.1.html">2.1</a>: Design deep modules: a lot of behaviour behind a small interface</p>
-<p class="muted"><a href="skills.html?cat=design-and-architecture">18 skills in this stage</a>, in test run order.</p>
+<p class="muted"><a href="skills.html?cat=design-and-architecture">See the skills in this stage</a>, in test run order.</p>
 </div>
 </li><li class="step">
 <div class="step-num" aria-hidden="true">3</div>
 <div class="step-body">
-<h3><a href="categories/code-craft.html">Code craft</a> <span class="count">14 principles</span></h3>
+<h3><a href="categories/code-craft.html">Code craft</a></h3>
 <p class="tag">Write the smallest change that does the job, in the style already there.</p>
 <p>This is the day-to-day work of building. The theme is restraint: no speculative code, no drive-by edits.</p>
 <p class="sample">Start with <a href="principles/3.1.html">3.1</a>: When you write code, write the minimum that solves the stated problem, with no speculative features, options or hooks</p>
-<p class="muted"><a href="skills.html?cat=code-craft">14 skills in this stage</a>, in test run order.</p>
+<p class="muted"><a href="skills.html?cat=code-craft">See the skills in this stage</a>, in test run order.</p>
 </div>
 </li><li class="step">
 <div class="step-num" aria-hidden="true">4</div>
 <div class="step-body">
-<h3><a href="categories/verify.html">Verify (testing)</a> <span class="count">8 principles</span></h3>
+<h3><a href="categories/verify.html">Verify (testing)</a></h3>
 <p class="tag">Prove the code does what you said it would.</p>
 <p>Tests are how an agent, or you, can tell working from broken without guessing. These principles cover what to test and how to keep tests honest.</p>
 <p class="sample">Start with <a href="principles/4.1.html">4.1</a>: Write one failing test first and watch it fail, then write the minimal code to pass; one seam per cycle, never all tests up front.</p>
-<p class="muted"><a href="skills.html?cat=verify">8 skills in this stage</a>, in test run order.</p>
+<p class="muted"><a href="skills.html?cat=verify">See the skills in this stage</a>, in test run order.</p>
 </div>
 </li><li class="step">
 <div class="step-num" aria-hidden="true">5</div>
 <div class="step-body">
-<h3><a href="categories/debug-and-observe.html">Debug and observe</a> <span class="count">14 principles</span></h3>
+<h3><a href="categories/debug-and-observe.html">Debug and observe</a></h3>
 <p class="tag">When something breaks, find the cause before you change anything.</p>
 <p>Debugging is a method, not a hunch. Build a fast feedback loop, reproduce, narrow down, fix, then guard against it coming back.</p>
 <p class="sample">Start with <a href="principles/5.1.html">5.1</a>: No fixes without root-cause investigation first: trace back to the original trigger, not where the symptom showed up.</p>
-<p class="muted"><a href="skills.html?cat=debug-and-observe">14 skills in this stage</a>, in test run order.</p>
+<p class="muted"><a href="skills.html?cat=debug-and-observe">See the skills in this stage</a>, in test run order.</p>
 </div>
 </li><li class="step">
 <div class="step-num" aria-hidden="true">6</div>
 <div class="step-body">
-<h3><a href="categories/secure.html">Secure</a> <span class="count">8 principles</span></h3>
+<h3><a href="categories/secure.html">Secure</a></h3>
 <p class="tag">Treat security as part of building, not a final pass.</p>
 <p>Threat-model early, validate what comes in, keep secrets out of the repo, and be explicit about what is always, sometimes and never allowed.</p>
 <p class="sample">Start with <a href="principles/6.1.html">6.1</a>: Threat-model before hardening</p>
-<p class="muted"><a href="skills.html?cat=secure">8 skills in this stage</a>, in test run order.</p>
+<p class="muted"><a href="skills.html?cat=secure">See the skills in this stage</a>, in test run order.</p>
 </div>
 </li><li class="step">
 <div class="step-num" aria-hidden="true">7</div>
 <div class="step-body">
-<h3><a href="categories/review-and-ship.html">Review and ship</a> <span class="count">12 principles</span></h3>
+<h3><a href="categories/review-and-ship.html">Review and ship</a></h3>
 <p class="tag">Get a second pair of eyes on the work, then release it safely.</p>
 <p>Review is where mistakes are caught cheaply. Shipping is where they get expensive. These principles cover both.</p>
 <p class="sample">Start with <a href="principles/7.1.html">7.1</a>: Review the work at the end of each phase, using a separate reviewer subagent that did not write it</p>
-<p class="muted"><a href="skills.html?cat=review-and-ship">12 skills in this stage</a>, in test run order.</p>
+<p class="muted"><a href="skills.html?cat=review-and-ship">See the skills in this stage</a>, in test run order.</p>
 </div>
 </li><li class="step">
 <div class="step-num" aria-hidden="true">8</div>
 <div class="step-body">
-<h3><a href="categories/agent-operations.html">Agent operations</a> <span class="count">10 principles</span></h3>
+<h3><a href="categories/agent-operations.html">Agent operations</a></h3>
 <p class="tag">Run the agents themselves well.</p>
 <p>Context is limited and expensive. This stage is about what an agent sees, how skills are loaded, and how work is split between a coordinator and the agents it starts.</p>
 <p class="sample">Start with <a href="principles/8.1.html">8.1</a>: At task time, give the agent only the context that task needs, such as the relevant spec section</p>
-<p class="muted"><a href="skills.html?cat=agent-operations">10 skills in this stage</a>, in test run order.</p>
+<p class="muted"><a href="skills.html?cat=agent-operations">See the skills in this stage</a>, in test run order.</p>
 </div>
 </li><li class="step">
 <div class="step-num" aria-hidden="true">9</div>
 <div class="step-body">
-<h3><a href="categories/learn.html">Learn</a> <span class="count">11 principles</span></h3>
+<h3><a href="categories/learn.html">Learn</a></h3>
 <p class="tag">Turn what went wrong into a better loop.</p>
 <p>The loop gets better only if mistakes change the rules. This closes the cycle and feeds back into stage one of the next project.</p>
 <p class="sample">Start with <a href="principles/9.1.html">9.1</a>: When the reviewer missed a mistake, give the reviewer a new rule; if the mistake is mechanical, build a lint, hook or CI check instead</p>
-<p class="muted"><a href="skills.html?cat=learn">11 skills in this stage</a>, in test run order.</p>
+<p class="muted"><a href="skills.html?cat=learn">See the skills in this stage</a>, in test run order.</p>
 </div>
 </li>
 </ol>
@@ -138,7 +138,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 <h2>How to use this</h2>
 <ul>
 <li>New to this? Read the stages in order and open a few principles in each.</li>
-<li>Looking for something specific? <a href="principles.html">Search and filter</a> all 103 principles, or sort the table.</li>
+<li>Looking for something specific? <a href="principles.html">Search and filter</a> the principles, or sort the table.</li>
 <li>Want to see how the principles become skills and in what order they are tested? Open the <a href="skills.html">skills page</a>.</li>
 <li>Want to know where an idea came from? Every principle links to the source repos it was drawn from, and the <a href="sources.html">sources page</a> lists all of them with their licences.</li>
 </ul>

@@ -7,8 +7,6 @@ category: code-craft
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 3
-link_only_sources: 0
 ---
 
 # 3.7 Comments explain why
@@ -49,11 +47,11 @@ ciembor clean-code and Ousterhout, plus Anthropic pr-review-toolkit comment-anal
 
 ## Sources
 
-3 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App A (CLI tool)
 - Phase: Build
-- Test order: slot 23 of 103
+- Test order: slot 23
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

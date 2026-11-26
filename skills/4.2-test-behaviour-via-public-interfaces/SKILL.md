@@ -7,8 +7,6 @@ category: verify
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 7
-link_only_sources: 0
 ---
 
 # 4.2 Test behaviour via public interfaces
@@ -49,11 +47,11 @@ Pocock tdd (and tests.md), brooks-lint brooks-test, Addy test-engineer and Anthr
 
 ## Sources
 
-7 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App A (CLI tool)
 - Phase: Verify
-- Test order: slot 27 of 103
+- Test order: slot 27
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

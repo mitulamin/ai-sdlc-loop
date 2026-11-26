@@ -7,8 +7,6 @@ category: debug-and-observe
 aliases: ["9.4"]
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 19
-link_only_sources: 0
 ---
 
 # 5.1 Root cause before fix
@@ -53,11 +51,11 @@ Superpowers systematic-debugging (with root-cause-tracing.md), Addy debugging-an
 
 ## Sources
 
-19 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App C (brownfield bug-fix and refactor)
 - Phase: Debug
-- Test order: slot 99 of 103
+- Test order: slot 99
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

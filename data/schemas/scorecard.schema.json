@@ -11,7 +11,7 @@
   "additionalProperties": false,
   "properties": {
     "schema_version": {
-      "const": "1.0.0"
+      "const": "1.1.0"
     },
     "note": {
       "type": "string"
@@ -44,12 +44,8 @@
             "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
           },
           "test_app": {
-            "enum": [
-              "A",
-              "B",
-              "C",
-              "All"
-            ]
+            "type": "string",
+            "pattern": "^([A-Z]|All)$"
           },
           "phase": {
             "type": "string",
@@ -116,7 +112,7 @@
                 "total": {
                   "type": "integer",
                   "minimum": 0,
-                  "maximum": 10
+                  "description": "The sum of the scores; scripts/validate-data.py checks it."
                 },
                 "harm_flag": {
                   "type": "boolean"

@@ -7,8 +7,6 @@ category: code-craft
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 4
-link_only_sources: 1
 ---
 
 # 3.1 Minimum code
@@ -49,7 +47,7 @@ ponytail (simplest solution, with lite, full and ultra levels and a 'never cut' 
 
 ## Sources
 
-4 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Further reading (link only)
 
@@ -61,5 +59,5 @@ These sources have no usable licence for copying or adapting, so nothing in this
 
 - Test app: App A (CLI tool)
 - Phase: Build
-- Test order: slot 19 of 103
+- Test order: slot 19
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

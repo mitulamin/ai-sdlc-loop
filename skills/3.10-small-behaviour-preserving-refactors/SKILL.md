@@ -7,8 +7,6 @@ category: code-craft
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 21
-link_only_sources: 0
 ---
 
 # 3.10 Small behaviour preserving refactors
@@ -49,11 +47,11 @@ Fowler's Refactoring and refactoring-guru (ciembor), Addy code-simplification, P
 
 ## Sources
 
-21 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App C (brownfield bug-fix and refactor)
 - Phase: Build
-- Test order: slot 96 of 103
+- Test order: slot 96
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

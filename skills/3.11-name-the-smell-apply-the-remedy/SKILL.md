@@ -7,8 +7,6 @@ category: code-craft
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 10
-link_only_sources: 0
 ---
 
 # 3.11 Name the smell apply the remedy
@@ -49,11 +47,11 @@ refactoring-guru and Refactoring (ciembor), Pocock improve-codebase-architecture
 
 ## Sources
 
-10 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App C (brownfield bug-fix and refactor)
 - Phase: Build
-- Test order: slot 97 of 103
+- Test order: slot 97
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

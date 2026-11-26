@@ -7,8 +7,6 @@ category: verify
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 4
-link_only_sources: 0
 ---
 
 # 4.8 Tests as production code
@@ -49,11 +47,11 @@ ciembor clean-code, brooks-lint brooks-test and Superpowers writing-good-tests: 
 
 ## Sources
 
-4 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App A (CLI tool)
 - Phase: Verify
-- Test order: slot 29 of 103
+- Test order: slot 29
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

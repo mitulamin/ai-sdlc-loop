@@ -7,8 +7,6 @@ category: secure
 aliases: ["2.11"]
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 16
-link_only_sources: 0
 ---
 
 # 6.3 Validate parameterise encode
@@ -56,11 +54,11 @@ Addy security-and-hardening, agamm owasp-security, wshobson security-coder agent
 
 ## Sources
 
-16 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Secure
-- Test order: slot 76 of 103
+- Test order: slot 76
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

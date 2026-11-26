@@ -33,6 +33,6 @@ Every project used or referenced, with links, roles and licences, is listed in [
 
 Content borrowed from other repos keeps its original licence. This repo does not relicense it. Each borrowed file is credited in the `SOURCES.md` next to the skill that uses it, with the source link pinned to a commit and the source's licence.
 
-The licence of each source repo is recorded in [data/sources.json](data/sources.json). All 41 were checked on 2026-11-26. Do not borrow from a repo whose licence is missing, restrictive or incompatible; the flags are in [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
+The licence of each source repo is recorded in [data/sources.json](data/sources.json). All 45 were checked on 2026-11-26. Do not borrow from a repo whose licence is missing, restrictive or incompatible; the flags are in [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
 
 Principles in `data/principles.json` are short statements written for this repo. They name their sources but do not reproduce them.

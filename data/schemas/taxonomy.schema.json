@@ -13,7 +13,7 @@
   "additionalProperties": false,
   "properties": {
     "schema_version": {
-      "const": "1.0.0"
+      "const": "2.0.0"
     },
     "note": {
       "type": "string"
@@ -131,17 +131,12 @@
           "id",
           "run",
           "name",
-          "example",
-          "skills"
+          "example"
         ],
         "properties": {
           "id": {
-            "enum": [
-              "A",
-              "B",
-              "C",
-              "All"
-            ]
+            "type": "string",
+            "pattern": "^([A-Z]|All)$"
           },
           "run": {
             "type": [
@@ -154,10 +149,6 @@
           },
           "example": {
             "type": "string"
-          },
-          "skills": {
-            "type": "integer",
-            "minimum": 0
           }
         }
       }
