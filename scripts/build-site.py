@@ -451,7 +451,7 @@ in {n_cats} categories. Use them to adopt agentic tools with less trial and erro
 
 <section class="lp-section" id="start" aria-labelledby="start-title">
 <h2 id="start-title">Start a project from the template</h2>
-<p>Clone the repo and run <a href="{BLOB}scripts/new-project.sh"><code>scripts/new-project.sh</code></a> with a profile. It copies the shared base from <a href="{BLOB}template/"><code>template/</code></a>, applies the profile, and runs <code>git init</code>. It refuses a target folder that is not empty.</p>
+<p>Clone the repo and run <a href="{BLOB}scripts/new-project.sh"><code>scripts/new-project.sh</code></a> with a profile. It copies the shared base from <a href="{TREE}template/"><code>template/</code></a>, applies the profile, and runs <code>git init</code>. It refuses a target folder that is not empty.</p>
 <pre tabindex="0"><code>git clone {esc(REPO_URL)}
 cd ai-sdlc-loop
 scripts/new-project.sh ../my-new-project              # solo, the default
@@ -982,7 +982,7 @@ Each skill's <code>SOURCES.md</code> lists its files, pinned to a commit.</p>
 <p>Plain-language guides to the principles. They cover everything, including what experienced developers already know.</p>
 <h2>Developer guides</h2>
 <ul>{listing}</ul>
-<p class="muted">Source: <a href="{BLOB}guides/developer/">guides/developer/</a>. A page marked stub holds placeholder text until the guide is written.</p>"""
+<p class="muted">Source: <a href="{TREE}guides/developer/">guides/developer/</a>. A page marked stub holds placeholder text until the guide is written.</p>"""
         out["guides/index.html"] = page("Guides", body, 1, "guides/index.html")
         return out
 
