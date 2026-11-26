@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Create a new project from template/.
-# Usage: scripts/new-project <target-dir>
+# Usage: scripts/new-project.sh <target-dir>
 set -euo pipefail
 
 if [ $# -ne 1 ]; then
-  echo "Usage: scripts/new-project <target-dir>" >&2
+  echo "Usage: scripts/new-project.sh <target-dir>" >&2
   exit 1
 fi
 

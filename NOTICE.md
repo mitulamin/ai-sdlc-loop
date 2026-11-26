@@ -25,7 +25,7 @@ The text is in [LICENSE-CONTENT](LICENSE-CONTENT). It covers:
 
 ## MIT (the template)
 
-The text is in [template/LICENSE](template/LICENSE). It covers everything under `template/`, code and writing. A project created with `scripts/new-project` copies that folder, including `LICENSE`, and starts under MIT. It does not inherit GPL-3.0 or CC BY-SA 4.0.
+The text is in [template/LICENSE](template/LICENSE). It covers everything under `template/`, code and writing. A project created with `scripts/new-project.sh` copies that folder, including `LICENSE`, and starts under MIT. It does not inherit GPL-3.0 or CC BY-SA 4.0.
 
 ## Borrowed material
 

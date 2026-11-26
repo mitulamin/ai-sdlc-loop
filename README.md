@@ -77,7 +77,7 @@ A change only goes live if it helps on cases held out from the one that caused i
 | `guides/developer/` | Plain-language guides to the principles. Coming. |
 | `docs/` | The static website (GitHub Pages). Coming. |
 | `template/` | What a new project copies. |
-| `scripts/` | `build-principles`, `refresh-sources`, `new-project`. |
+| `scripts/` | `build-principles`, `refresh-sources`, `new-project.sh`. |
 
 ## Start a new project from the template
 
@@ -89,7 +89,7 @@ Two ways.
 ```bash
 git clone https://github.com/mitulamin/ai-sdlc-loop
 cd ai-sdlc-loop
-scripts/new-project ../my-new-project
+scripts/new-project.sh ../my-new-project
 ```
 
 The script copies `template/` into the new folder and runs `git init`. Then edit the new project's `AGENTS.md` (stack, commands, conventions, boundaries) and start your first loop.
@@ -122,7 +122,7 @@ GPL-3.0 covers `scripts/`, `data/schemas/`, and the tooling.
 
 In short: private internal use and modification by a company is allowed, with no duty to publish, because the duties start when you distribute. Anyone who distributes a work that includes this code must release the whole combined work under GPLv3, with source. Hosted or SaaS use that never distributes the code does not start those duties. AGPL-3.0 is the licence that closes that gap. I could discuss it. I am not choosing it here.
 
-Everything under `template/` is MIT, code and writing. The text is in [template/LICENSE](template/LICENSE). The template is meant to be copied into a new project, and GPL would stop someone who wants to start an MIT project from using it. `scripts/new-project` copies the whole folder, including that licence, so the new project starts under MIT.
+Everything under `template/` is MIT, code and writing. The text is in [template/LICENSE](template/LICENSE). The template is meant to be copied into a new project, and GPL would stop someone who wants to start an MIT project from using it. `scripts/new-project.sh` copies the whole folder, including that licence, so the new project starts under MIT.
 
 The writing is CC BY-SA 4.0. The full text is in [LICENSE-CONTENT](LICENSE-CONTENT). You can share and adapt it with attribution. Share-alike means derived text stays under CC BY-SA 4.0, so it stays open.
 
