@@ -17,15 +17,17 @@ Task: $ARGUMENTS
 
 ## Loop
 
-For each phase, in order: Learn.
+Phases, in order: Learn.
+
+Run only after the human has given end-of-cycle feedback. The coordinator puts the proposed edits and their held-out results in its closing report for the human to approve (9.10). The Harness producer applies approved edits at the start of the next run, and every accepted or rejected edit is logged (9.12).
+
+For each phase that runs:
 
 1. Pick, from the phase's skills below, only the ones that apply to the task (1.8, 8.1). Write the brief to a file: the task, the acceptance criteria, the files to read, the skill IDs that apply, and where to write the output and the review.
 2. Start the phase's producer in a fresh context with the brief (8.7).
 3. Start the phase's reviewer in a fresh context with the brief's task and acceptance criteria and the producer's output, not its transcript or reasoning.
 4. On a reviewer FAIL, start a new producer with the brief and the findings file, then a new reviewer. After three FAILs in a row, stop the phase and record it as failed with its findings (5.5).
 5. On PASS, record the output and the review file for the coordinator's end-of-cycle report. Do not ask the human anything here.
-
-Run only after the human has given end-of-cycle feedback. The coordinator puts the proposed edits and their held-out results in its closing report for the human to approve (9.10). The Harness producer applies approved edits at the start of the next run, and every accepted or rejected edit is logged (9.12).
 
 ## Phases and the skills they load
 

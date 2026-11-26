@@ -17,7 +17,9 @@ Task: $ARGUMENTS
 
 ## Loop
 
-For each phase, in order: Build.
+Phases, in order: Build.
+
+For each phase that runs:
 
 1. Pick, from the phase's skills below, only the ones that apply to the task (1.8, 8.1). Write the brief to a file: the task, the acceptance criteria, the files to read, the skill IDs that apply, and where to write the output and the review.
 2. Start the phase's producer in a fresh context with the brief (8.7).
