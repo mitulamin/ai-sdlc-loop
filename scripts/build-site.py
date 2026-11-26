@@ -24,6 +24,7 @@ GUIDES = ROOT / "guides" / "developer"
 PROFILES = ROOT / "template" / "profiles"
 REPO_URL = "https://github.com/mitulamin/ai-sdlc-loop"
 BLOB = REPO_URL + "/blob/main/"
+TREE = REPO_URL + "/tree/main/"
 SITE_NAME = "AI SDLC Loop"
 
 GENERATED_DIRS = ["categories", "principles", "guides"]
@@ -136,6 +137,7 @@ def page(title, body, depth, active=None, description=""):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)} | {SITE_NAME}</title>
 <meta name="description" content="{desc}">
+<link rel="icon" href="data:,">
 <link rel="stylesheet" href="{up}assets/style.css">
 </head>
 <body>
@@ -153,7 +155,7 @@ def page(title, body, depth, active=None, description=""):
 <div class="wrap">
 <p>{SITE_NAME}. Text and data, including the data copies in <code>docs/data/</code>, are CC BY-SA 4.0; code, including this site, is GPL-3.0; the project template is MIT.
 See <a href="{BLOB}LICENSE.md">LICENSE.md</a> and <a href="{BLOB}CREDITS.md">CREDITS.md</a>.
-No trackers, no external scripts. Generated from <a href="{BLOB}data/">data/</a> by <a href="{BLOB}scripts/build-site.py">scripts/build-site.py</a>.</p>
+No trackers, no external scripts. Generated from <a href="{TREE}data/">data/</a> by <a href="{BLOB}scripts/build-site.py">scripts/build-site.py</a>.</p>
 </div>
 </footer>
 <script src="{up}assets/site.js" defer></script>
