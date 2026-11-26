@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mitulamin/ai-sdlc-loop/data/schemas/skill-principle-map.schema.json",
+  "title": "Skill to principle map",
+  "description": "Schema 1.0.0. One entry per amalgamated skill: its folder, principle, aliases, category, test app, phase, test slot and licence status. The single source for wiring skills by ID.",
+  "type": "object",
+  "required": ["version", "count", "skills"],
+  "additionalProperties": false,
+  "properties": {
+    "version": { "type": "string", "format": "date" },
+    "count": { "type": "integer", "minimum": 0 },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["folder", "skill_name", "principle_id", "aliases", "category_id", "category", "test_app", "test_app_name", "phase", "slot", "licence_status", "text_licence", "clean_sources", "link_only_sources", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "folder": { "type": "string", "pattern": "^skills/\\d+\\.\\d+-[a-z0-9-]+$" },
+          "skill_name": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+          "principle_id": { "$ref": "#/$defs/id" },
+          "aliases": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+          "category_id": { "type": "integer", "minimum": 1 },
+          "category": { "type": "string", "minLength": 1 },
+          "test_app": { "enum": ["A", "B", "C", "All"] },
+          "test_app_name": { "type": "string", "minLength": 1 },
+          "phase": { "type": "string", "minLength": 1 },
+          "slot": { "type": "integer", "minimum": 1 },
+          "licence_status": { "type": "string", "minLength": 1 },
+          "text_licence": { "const": "CC-BY-SA-4.0" },
+          "clean_sources": { "type": "integer", "minimum": 0 },
+          "link_only_sources": { "type": "integer", "minimum": 0 },
+          "status": { "type": "string", "minLength": 1 }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^\\d+\\.\\d+$" }
+  }
+}

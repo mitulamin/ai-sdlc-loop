@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mitulamin/ai-sdlc-loop/data/schemas/mapping.schema.json",
+  "title": "Principle to source files",
+  "description": "Schema 1.0.0. Keyed by principle ID: the skill folder, its aliases, the licence-clean source files it was written from (pinned to a commit) and the link-only sources that were not copied or adapted.",
+  "type": "object",
+  "propertyNames": { "pattern": "^\\d+\\.\\d+$" },
+  "additionalProperties": {
+    "type": "object",
+    "required": ["skill", "aliases", "sources", "link_only"],
+    "additionalProperties": false,
+    "properties": {
+      "skill": { "type": "string", "pattern": "^skills/\\d+\\.\\d+-[a-z0-9-]+$" },
+      "aliases": { "type": "array", "items": { "type": "string", "pattern": "^\\d+\\.\\d+$" } },
+      "sources": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["repo", "path", "url", "licence", "primary"],
+          "additionalProperties": false,
+          "properties": {
+            "repo": { "$ref": "#/$defs/repo" },
+            "path": { "type": "string", "minLength": 1 },
+            "url": { "$ref": "#/$defs/pinned_url" },
+            "licence": { "type": "string", "minLength": 1 },
+            "primary": { "type": "boolean" }
+          }
+        }
+      },
+      "link_only": { "type": "array", "items": { "$ref": "#/$defs/link_only" } }
+    }
+  },
+  "$defs": {
+    "repo": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+    "pinned_url": { "type": "string", "pattern": "^https://github\\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/(blob|tree)/[0-9a-f]{40}(/.*)?$" },
+    "link_only": {
+      "type": "object",
+      "required": ["repo", "path", "url", "licence", "why"],
+      "additionalProperties": false,
+      "properties": {
+        "repo": { "$ref": "#/$defs/repo" },
+        "path": { "type": "string", "minLength": 1 },
+        "url": { "$ref": "#/$defs/pinned_url" },
+        "licence": { "type": "string", "minLength": 1 },
+        "why": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

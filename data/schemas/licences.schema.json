@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mitulamin/ai-sdlc-loop/data/schemas/licences.schema.json",
+  "title": "Licences of the skill sources",
+  "description": "Schema 1.0.0. The repo's own licence split, the licence of each source repo at its pinned commit, and per skill the adapted sources and the link-only ones. A research summary, not legal advice.",
+  "type": "object",
+  "required": ["checked", "disclaimer", "split", "repos", "skills"],
+  "additionalProperties": false,
+  "properties": {
+    "checked": { "type": "string", "format": "date" },
+    "disclaimer": { "type": "string" },
+    "split": {
+      "type": "object",
+      "required": ["text", "code"],
+      "additionalProperties": false,
+      "properties": {
+        "text": { "const": "CC-BY-SA-4.0" },
+        "code": { "const": "GPL-3.0-only" }
+      }
+    },
+    "repos": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/repo" },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["url", "pinned_commit", "licences_seen", "adapted_in_skills", "link_only_in_skills", "copyright", "licence_file"],
+        "additionalProperties": false,
+        "properties": {
+          "url": { "type": "string", "pattern": "^https://github\\.com/" },
+          "pinned_commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+          "licences_seen": { "type": "array", "items": { "type": "string" } },
+          "adapted_in_skills": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+          "link_only_in_skills": { "type": "array", "items": { "$ref": "#/$defs/id" } },
+          "copyright": { "type": "array", "items": { "type": "string" } },
+          "licence_file": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "skills": {
+      "type": "object",
+      "propertyNames": { "$ref": "#/$defs/id" },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["status", "sources", "link_only"],
+        "additionalProperties": false,
+        "properties": {
+          "status": { "type": "string", "minLength": 1 },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["repo", "path", "url", "licence"],
+              "additionalProperties": false,
+              "properties": {
+                "repo": { "$ref": "#/$defs/repo" },
+                "path": { "type": "string", "minLength": 1 },
+                "url": { "$ref": "#/$defs/pinned_url" },
+                "licence": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
+          "link_only": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["repo", "path", "url", "licence", "why"],
+              "additionalProperties": false,
+              "properties": {
+                "repo": { "$ref": "#/$defs/repo" },
+                "path": { "type": "string", "minLength": 1 },
+                "url": { "$ref": "#/$defs/pinned_url" },
+                "licence": { "type": "string", "minLength": 1 },
+                "why": { "type": "string", "minLength": 1 }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^\\d+\\.\\d+$" },
+    "repo": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$" },
+    "pinned_url": { "type": "string", "pattern": "^https://github\\.com/[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+/(blob|tree)/[0-9a-f]{40}(/.*)?$" }
+  }
+}
