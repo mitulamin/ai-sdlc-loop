@@ -133,8 +133,15 @@ def licence_key(status):
     return word if word in LICENCE_LABELS else "other"
 
 
-def page(title, body, depth, active=None, description="", nav_items=None):
-    """Wrap body in the site chrome. depth is the folder depth below docs/."""
+BRAND = "assets/brand/"
+
+
+def page(title, body, depth, active=None, description="", nav_items=None, brand=True):
+    """Wrap body in the site chrome. depth is the folder depth below docs/.
+
+    brand=False leaves out the icons, social tags and header logo; the merged-ID redirect pages use it so
+    they stay byte-for-byte unchanged.
+    """
     up = "../" * depth
     nav = "".join(
         '<a href="{}{}"{}>{}</a>'.format(
@@ -143,6 +150,23 @@ def page(title, body, depth, active=None, description="", nav_items=None):
         for href, label in (nav_items or NAV)
     )
     desc = esc(description or "Software engineering principles for building with agents, and a loop that learns from each project.")
+    head_extra = logo = ""
+    if brand:
+        full_title = f"{title} | {SITE_NAME}"
+        head_extra = f"""<link rel="icon" href="{up}{BRAND}ai-sdlc-loop.ico" sizes="any">
+<link rel="icon" href="{up}{BRAND}ai-sdlc-loop.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="{up}{BRAND}ai-sdlc-loop-512.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{SITE_NAME}">
+<meta property="og:title" content="{esc(full_title)}">
+<meta property="og:description" content="{desc}">
+<meta property="og:image" content="{up}{BRAND}ai-sdlc-loop-photographic.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{esc(full_title)}">
+<meta name="twitter:description" content="{desc}">
+<meta name="twitter:image" content="{up}{BRAND}ai-sdlc-loop-photographic.jpg">
+"""
+        logo = f'<img class="brand-logo" src="{up}{BRAND}ai-sdlc-loop.svg" alt="AI SDLC Loop logo" width="28" height="28">'
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -150,13 +174,13 @@ def page(title, body, depth, active=None, description="", nav_items=None):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)} | {SITE_NAME}</title>
 <meta name="description" content="{desc}">
-<link rel="stylesheet" href="{up}assets/style.css">
+{head_extra}<link rel="stylesheet" href="{up}assets/style.css">
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 <header class="site-header">
 <div class="wrap header-inner">
-<a class="brand" href="{up}index.html">{SITE_NAME}</a>
+<a class="brand" href="{up}index.html">{logo}{SITE_NAME}</a>
 <nav aria-label="Main">{nav}<a href="{REPO_URL}">GitHub</a></nav>
 </div>
 </header>
@@ -285,6 +309,10 @@ class Site:
             for c in self.cats
         )
         body = f"""<section class="lp-hero" aria-labelledby="lp-title">
+<picture class="lp-logo">
+<source media="(prefers-reduced-motion: reduce)" srcset="{BRAND}ai-sdlc-loop.svg">
+<img src="{BRAND}ai-sdlc-loop-animated.svg" alt="AI SDLC Loop logo" width="96" height="96">
+</picture>
 <p class="lp-eyebrow">Open source starter for agentic software development</p>
 <h1 id="lp-title">Software engineering principles for building with agents, and a loop that learns from each project</h1>
 <p class="lede">I distilled what {n_researched} public repos teach about working with coding agents into {n_principles} principles
@@ -614,7 +642,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 <p>Principle {esc(alias)} was merged into <a href="{esc(target["id"])}.html">principle {esc(target["id"])}</a>: {esc(target["statement"])}</p>
 <p>{esc(target["provenance"]["notes"])} See <a href="{BLOB}MERGES.md">MERGES.md</a>.</p>"""
         refresh = f'<meta http-equiv="refresh" content="0; url={esc(target["id"])}.html">\n<link rel="canonical" href="{esc(target["id"])}.html">\n'
-        return page(f"Principle {alias} (merged)", body, 1, "principles.html", nav_items=REDIRECT_NAV).replace("</head>", refresh + "</head>", 1)
+        return page(f"Principle {alias} (merged)", body, 1, "principles.html", nav_items=REDIRECT_NAV, brand=False).replace("</head>", refresh + "</head>", 1)
 
     def table_page(self):
         rows = []

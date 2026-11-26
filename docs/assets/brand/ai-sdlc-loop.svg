@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" fill="none" role="img" aria-labelledby="aiSdlcLoopTitle">
+  <title id="aiSdlcLoopTitle">AI SDLC Loop</title>
+  <defs>
+    <linearGradient id="aiSdlcLoopBracket" x1="64" y1="22" x2="64" y2="106" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FF6B35"/>
+      <stop offset="100%" stop-color="#FF9F1A"/>
+    </linearGradient>
+  </defs>
+  <path d="M 44,22 L 18,64 L 44,106" stroke="url(#aiSdlcLoopBracket)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 84,22 L 110,64 L 84,106" stroke="url(#aiSdlcLoopBracket)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M 86.377,61.648 A 22.5 22.5 0 1 1 74.563,44.134" stroke="#00B7D8" stroke-width="8" stroke-linecap="round"/>
+  <path d="M 87.563,54.400 L 77.474,38.659 L 71.652,49.608 Z" fill="#00B7D8"/>
+</svg>

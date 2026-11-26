@@ -53,7 +53,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 
 .site-header { border-bottom: 1px solid var(--line); background: var(--card); }
 .header-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .25rem 1.5rem; padding-top: .6rem; padding-bottom: .6rem; }
-.brand { font-weight: 700; color: var(--fg); text-decoration: none; font-size: 1.1rem; }
+.brand { display: inline-flex; align-items: center; gap: .5rem; font-weight: 700; color: var(--fg); text-decoration: none; font-size: 1.1rem; }
 .site-header nav { display: flex; flex-wrap: wrap; gap: .25rem 1rem; }
 .site-header nav a { color: var(--fg); text-decoration: none; padding: .25rem 0; border-bottom: 2px solid transparent; }
 .site-header nav a:hover { border-bottom-color: var(--line); }
@@ -212,3 +212,9 @@ h2 .count { display: inline-block; }
   table.cards td > * { min-width: 0; }
   table.cards td:first-child { white-space: normal; }
 }
+
+/* Brand */
+.site-header { border-image: linear-gradient(90deg, #ff6b35, #ff9f1a 55%, #00b7d8) 1; border-bottom-width: 3px; }
+.brand-logo { flex: none; width: 1.75rem; height: 1.75rem; }
+.lp-logo { display: block; width: 6rem; height: 6rem; margin: 0 0 .75rem; }
+.lp-logo img { display: block; width: 100%; height: auto; }

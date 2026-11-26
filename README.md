@@ -1,3 +1,5 @@
+<p align="center"><img src="docs/assets/brand/ai-sdlc-loop-512.png" alt="AI SDLC Loop logo" width="256"></p>
+
 # ai-sdlc-loop
 
 A public starter for building your own learning agentic loops. Take it as a base, run it on your own work, and let it learn how you and your team build software.
