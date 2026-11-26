@@ -1,6 +1,6 @@
 ---
 name: eval-skills-before-trusting
-description: Use when before adopting any skill (including these 108). Amalgamated skill for principle 8.5 (Agent operations).
+description: Use when before adopting any skill (including these 103). Amalgamated skill for principle 8.5 (Agent operations).
 principles: [8.5]
 principle: "8.5 Test skills with evals before trusting them"
 aliases: []
@@ -16,7 +16,7 @@ Principle 8.5 (Agent operations): Test skills with evals before trusting them
 
 ## When to use
 
-Before adopting any skill (including these 108).
+Before adopting any skill (including these 103; five duplicates of the original 108 were merged, see MERGES.md).
 
 ## Producer: dos and don'ts
 

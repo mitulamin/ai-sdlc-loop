@@ -1,7 +1,7 @@
 ---
 name: never-log-secrets
 description: Use when any logging, tracing, error reporting or debug output. Amalgamated skill for principle 5.10 (Debug and observe).
-principles: [5.10, 5.6]
+principles: [5.10]
 principle: "5.10 Never log or display secrets, tokens or full personal data, including in debug output."
 aliases: [5.6]
 status: draft, untested

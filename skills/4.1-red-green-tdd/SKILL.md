@@ -1,7 +1,7 @@
 ---
 name: red-green-tdd
 description: Use when implementing any feature or fix. Amalgamated skill for principle 4.1 (Verify).
-principles: [4.1, 4.4]
+principles: [4.1]
 principle: "4.1 Write one failing test first and watch it fail, then write the minimal code to pass; one seam per cycle, never all tests up front."
 aliases: [4.4]
 status: draft, untested

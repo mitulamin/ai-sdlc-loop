@@ -1,7 +1,7 @@
 ---
 name: validate-parameterise-encode
 description: Use when handling any external input or rendering output. Amalgamated skill for principle 6.3 (Secure).
-principles: [6.3, 2.11]
+principles: [6.3]
 principle: "6.3 Validate all external input at the boundary, treat external API responses as untrusted too, parameterise queries and encode output."
 aliases: [2.11]
 status: draft, untested

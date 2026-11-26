@@ -1,7 +1,7 @@
 ---
 name: root-cause-before-fix
 description: Use when any bug, test failure or unexpected behaviour. Amalgamated skill for principle 5.1 (Debug and observe).
-principles: [5.1, 9.4]
+principles: [5.1]
 principle: "5.1 No fixes without root-cause investigation first: trace back to the original trigger, not where the symptom showed up."
 aliases: [9.4]
 status: draft, untested

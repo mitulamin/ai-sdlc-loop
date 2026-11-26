@@ -1,7 +1,7 @@
 ---
 name: reproduce-localise-reduce-fix-guard
 description: Use when fixing a reported bug. Amalgamated skill for principle 5.3 (Debug and observe).
-principles: [5.3, 4.5]
+principles: [5.3]
 principle: "5.3 Reproduce the bug with a failing test first, then localise, reduce, fix, keep the test as a guard, and verify end to end."
 aliases: [4.5]
 status: draft, untested
