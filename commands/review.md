@@ -19,6 +19,8 @@ Task: $ARGUMENTS
 
 Phases, in order: Secure, Review & ship.
 
+Secure runs first. The Review & ship loop here reviews the change and its evidence; merging and releasing it is left to /ship.
+
 For each phase that runs:
 
 1. Pick, from the phase's skills below, only the ones that apply to the task (1.8, 8.1). Write the brief to a file: the task, the acceptance criteria, the files to read, the skill IDs that apply, and where to write the output and the review.

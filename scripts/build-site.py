@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
-"""Regenerate the static site in docs/ from data/ and guides/developer/.
+"""Regenerate the static site in docs/ from data/, guides/developer/ and the agents model.
+
+The agents page reuses the model in scripts/build-agents.py, so it matches agents/ and commands/.
 
 Usage:
   scripts/build-site.py          write the generated files
@@ -11,6 +13,7 @@ Everything else under docs/ is generated; edits are overwritten and extra
 files in generated folders are reported as stale.
 """
 import html
+import importlib.util
 import json
 import re
 import sys
@@ -31,6 +34,7 @@ GENERATED_FILES = [
     "path.html",
     "principles.html",
     "skills.html",
+    "agents.html",
     "sources.html",
     "data/principles.json",
     "data/sources.json",
@@ -112,13 +116,27 @@ NAV = [
     ("path.html", "Learning path"),
     ("principles.html", "All principles"),
     ("skills.html", "Skills"),
+    ("agents.html", "Agents"),
     ("sources.html", "Sources"),
     ("guides/index.html", "Guides"),
 ]
 
-# The redirect pages for merged principle IDs keep the nav they had before skills.html existed,
-# so they stay byte-for-byte unchanged.
-REDIRECT_NAV = [item for item in NAV if item[0] != "skills.html"]
+# The redirect pages for merged principle IDs keep the nav they had before skills.html and
+# agents.html existed, so they stay byte-for-byte unchanged.
+REDIRECT_NAV = [item for item in NAV if item[0] not in ("skills.html", "agents.html")]
+
+DEFAULT_GENERATED_FROM = f'<a href="{BLOB}data/principles.json">data/principles.json</a>'
+
+
+def load_agent_model():
+    """The agents and commands model from scripts/build-agents.py, so the site and agents/ agree."""
+    spec = importlib.util.spec_from_file_location("build_agents", ROOT / "scripts" / "build-agents.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    model, errors = mod.build_model()
+    if errors:
+        raise SystemExit("scripts/build-agents.py: " + "; ".join(errors))
+    return mod, model
 
 LICENCE_LABELS = {
     "clean": ("Clean", "Every source could be adapted"),
@@ -136,7 +154,9 @@ def licence_key(status):
 BRAND = "assets/brand/"
 
 
-def page(title, body, depth, active=None, description="", nav_items=None, brand=True):
+def page(
+    title, body, depth, active=None, description="", nav_items=None, generated_from=DEFAULT_GENERATED_FROM, brand=True
+):
     """Wrap body in the site chrome. depth is the folder depth below docs/.
 
     brand=False leaves out the icons, social tags and header logo; the merged-ID redirect pages use it so
@@ -191,7 +211,7 @@ def page(title, body, depth, active=None, description="", nav_items=None, brand=
 <div class="wrap">
 <p>{SITE_NAME}. Written content is CC BY-SA 4.0 and code is GPL-3.0; the project template is MIT.
 See <a href="{REPO_URL}#readme">the README</a> and <a href="{REPO_URL}/blob/main/LICENSE-CONTENT">LICENSE-CONTENT</a>.
-No trackers, no external scripts. Generated from <a href="{BLOB}data/principles.json">data/principles.json</a>.</p>
+No trackers, no external scripts. Generated from {generated_from}.</p>
 </div>
 </footer>
 <script src="{up}assets/site.js" defer></script>
@@ -953,6 +973,7 @@ Licences are as checked and may need your own review before you reuse anything; 
         files["path.html"] = self.path_page()
         files["principles.html"] = self.table_page()
         files["skills.html"] = self.skills_page()
+        files["agents.html"] = self.agents_page()
         files["sources.html"] = self.sources_page()
         for i, c in enumerate(self.cats):
             files[f"categories/{c['slug']}.html"] = self.category_page(i)

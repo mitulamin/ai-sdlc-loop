@@ -49,7 +49,8 @@ COMMANDS = {
     "build": ("Implement the plan in small, safe steps that keep the build green.", None),
     "verify": ("Prove the build works with tests and evidence, and find the root cause of what fails.",
                "The Debug loop runs only when the Verify output shows failing behaviour (a failing test, a bug or an unexpected result), and only for those failures. Then run the Verify loop again on the fix."),
-    "review": ("Review the change for security and quality before it ships.", None),
+    "review": ("Review the change for security and quality before it ships.",
+               "Secure runs first. The Review & ship loop here reviews the change and its evidence; merging and releasing it is left to /ship."),
     "ship": ("Get the reviewed change merged and released through the gates.", None),
     "retro": ("Turn the human's end-of-cycle feedback into proposed skill and check edits.",
               "Run only after the human has given end-of-cycle feedback. The coordinator puts the proposed edits and their held-out results in its closing report for the human to approve (9.10). The Harness producer applies approved edits at the start of the next run, and every accepted or rejected edit is logged (9.12)."),
@@ -498,7 +499,7 @@ def main():
                 path.write_text(text, encoding="utf-8")
     for d in (AGENTS, COMMANDS_DIR):
         for path in d.glob("*.md"):
-            if path not in wanted and MARKER in path.read_text(encoding="utf-8"):
+            if path not in wanted and MARKER in path.read_text(encoding="utf-8").splitlines():
                 stale.append(str(path.relative_to(ROOT)))
                 if not check:
                     path.unlink()
