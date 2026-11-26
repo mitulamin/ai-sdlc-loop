@@ -148,9 +148,9 @@ Everything under `template/` is MIT, code and writing. The text is in [template/
 
 The writing is CC BY-SA 4.0. The full text is in [LICENSE-CONTENT](LICENSE-CONTENT). You can share and adapt it with attribution. Share-alike means derived text stays under CC BY-SA 4.0, so it stays open.
 
-CC BY-SA 4.0 covers `README.md`, `UPDATING.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `NOTICE.md`, `ATTRIBUTIONS.md`, the principle statements and notes in `principles/`, `docs/` and `guides/`, the other markdown in this repo outside `template/`, and the data files `data/principles.json`, `data/sources.json`, `data/changelog.json` and `data/notes/`.
+CC BY-SA 4.0 covers the markdown in this repo outside `template/`, including the principle statements and notes in `principles/`, `docs/` and `guides/`, and the data files in `data/` (except `data/schemas/`).
 
-Those data files sit with the writing because they hold the research. The principle statements in `data/principles.json` are text. `data/sources.json` and `data/changelog.json` are the record around them. The schemas in `data/schemas/` stay GPL-3.0 with the tooling. Each file is under one licence.
+The data files sit with the writing because they hold the principle statements and the research record around them. The schemas in `data/schemas/` stay GPL-3.0 with the tooling. Each file is under one licence.
 
 Borrowed source repos keep their own licences. They are not relicensed here. Attribution is in [NOTICE.md](NOTICE.md), and every project I used or referenced is linked in [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
 
