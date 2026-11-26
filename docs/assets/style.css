@@ -8,6 +8,8 @@
   --card: #ffffff;
   --warn-bg: #fff6dd;
   --warn-line: #e0b83a;
+  --ok-bg: #e6f4ea;
+  --ok-line: #5aa469;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -21,6 +23,8 @@
     --card: #1b1e22;
     --warn-bg: #3a3118;
     --warn-line: #8a7020;
+    --ok-bg: #1b3324;
+    --ok-line: #3f7a4d;
   }
 }
 
@@ -175,4 +179,25 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
   .lp-cols { grid-template-columns: 1fr; }
   .lp-cta .btn { flex: 1 1 100%; text-align: center; }
   .lp-section { margin-top: 2.25rem; }
+}
+
+/* Skills, licences and merged IDs */
+.lic { display: inline-block; font-size: .75rem; font-weight: 600; padding: 0 .45rem; border-radius: .3rem; border: 1px solid var(--line); background: var(--card); white-space: nowrap; }
+.lic-clean { border-color: var(--ok-line); background: var(--ok-bg); }
+.lic-rewritten, .lic-rebuilt { border-color: var(--warn-line); background: var(--warn-bg); }
+.alias { display: inline-block; font-size: .75rem; padding: 0 .4rem; margin-left: .25rem; border-radius: .3rem; border: 1px dashed var(--muted); color: var(--muted); white-space: nowrap; }
+.merged-list, .phase-list { padding-left: 1.25rem; }
+.merged-list li, .phase-list li { margin: .3rem 0; }
+.link-only { margin: 1.5rem 0; padding: 0 1rem 1rem; border: 2px dashed var(--warn-line); border-radius: .6rem; background: var(--warn-bg); }
+.link-only h2 { margin-top: 1rem; }
+.link-only a { overflow-wrap: anywhere; }
+.sources ul { padding-left: 1.25rem; }
+.sources code, td code { overflow-wrap: anywhere; word-break: break-word; }
+details { margin: .25rem 0; }
+summary { cursor: pointer; color: var(--accent); }
+.split { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 1rem 0; }
+.split > div { padding: .75rem 1rem; border: 1px solid var(--line); border-radius: .6rem; background: var(--card); }
+.split p { margin: .3rem 0; }
+@media (max-width: 40rem) {
+  .split { grid-template-columns: 1fr; }
 }
