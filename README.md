@@ -1,6 +1,11 @@
 <p align="center"><img src="docs/assets/brand/ai-sdlc-loop-512.png" alt="AI SDLC Loop logo" width="256"></p>
 
-# ai-sdlc-loop
+# AI SDLC Loop
+
+![Status: Alpha](https://img.shields.io/badge/status-alpha-FF6B35)
+
+> [!WARNING]
+> This project is a work in progress and is considered alpha. It has not been fully tested yet.
 
 A public starter for building your own learning agentic loops. Take it as a base, run it on your own work, and let it learn how you and your team build software.
 

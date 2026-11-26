@@ -228,6 +228,17 @@
       ],
       "summary": "Removed hard-coded collection counts from the generated site and agent files (via scripts/build-site.py and scripts/build-agents.py), the READMEs, ATTRIBUTIONS.md, CREDITS.md, the skills (front matter source counts, 'of N' slots, skill 8.5's total) and the developer guides; reworded the taxonomy run_order and the sources research_run description without counts; verdict rules now use a share of the maximum score. NOTICE.md says all 45 source repos were checked.",
       "reason": "Counts written into prose go stale whenever a principle, skill or source is added, merged or dropped."
+    },
+    {
+      "date": "2026-11-26",
+      "research_run": "run-1",
+      "type": "edit",
+      "ids": [
+        "readme",
+        "site"
+      ],
+      "summary": "Marked the project as alpha. README.md has a status badge and a warning under the title (title now 'AI SDLC Loop'). Every generated site page now has a fixed corner ALPHA ribbon (markup in the page wrapper of scripts/build-site.py, styles in docs/assets/style.css) and a visually hidden sentence for screen readers. The five merged-ID redirect pages are unchanged.",
+      "reason": "The project is a work in progress and has not been fully tested yet."
     }
   ]
 }

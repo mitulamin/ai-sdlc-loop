@@ -156,6 +156,11 @@ def licence_key(status):
 
 BRAND = "assets/brand/"
 
+ALPHA_NOTICE = (
+    '<div class="alpha-ribbon" aria-hidden="true"><span class="alpha-ribbon__band">Alpha</span></div>\n'
+    '<p class="sr">This project is a work in progress and is considered alpha. It has not been fully tested yet.</p>\n'
+)
+
 
 def page(
     title, body, depth, active=None, description="", nav_items=None, generated_from=DEFAULT_GENERATED_FROM, brand=True, page_path=""
@@ -173,7 +178,7 @@ def page(
         for href, label in (nav_items or NAV)
     )
     desc = esc(description or "Software engineering principles for building with agents, and a loop that learns from each project.")
-    head_extra = logo = ""
+    head_extra = logo = alpha = ""
     if brand:
         full_title = f"{title} | {SITE_NAME}"
         og_url = f"{SITE_ORIGIN}/" if not page_path or page_path == "index.html" else f"{SITE_ORIGIN}/{page_path}"
@@ -192,6 +197,7 @@ def page(
 <meta name="twitter:description" content="{desc}">
 <meta name="twitter:image" content="{esc(og_image)}">
 """
+        alpha = ALPHA_NOTICE
         logo = f'<img class="brand-logo" src="{up}{BRAND}ai-sdlc-loop.svg" alt="AI SDLC Loop logo" width="28" height="28">'
     return f"""<!doctype html>
 <html lang="en">
@@ -204,7 +210,7 @@ def page(
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
-<header class="site-header">
+{alpha}<header class="site-header">
 <div class="wrap header-inner">
 <a class="brand" href="{up}index.html">{logo}{SITE_NAME}</a>
 <nav aria-label="Main">{nav}<a href="{REPO_URL}">GitHub</a></nav>
