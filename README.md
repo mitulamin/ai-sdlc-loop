@@ -152,6 +152,8 @@ CC BY-SA 4.0 covers the markdown in this repo outside `template/`, including the
 
 The data files sit with the writing because they hold the principle statements and the research record around them. The schemas in `data/schemas/` stay GPL-3.0 with the tooling. Each file is under one licence.
 
+The logo and brand image files in `docs/assets/brand/` are not covered by GPL-3.0, CC BY-SA 4.0 or MIT. They remain under plain copyright, all rights reserved, by Shravi Limited. See [NOTICE.md](NOTICE.md).
+
 Borrowed source repos keep their own licences. They are not relicensed here. Attribution is in [NOTICE.md](NOTICE.md), and every project I used or referenced is linked in [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
 
 ## Sources

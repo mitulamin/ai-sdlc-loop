@@ -25,6 +25,10 @@ The data files hold the principle statements and the research record around them
 
 The text is in [template/LICENSE](template/LICENSE). It covers everything under `template/`, code and writing. A project created with `scripts/new-project.sh` copies the base from that folder plus the profile you pick, including `LICENSE`, and starts under MIT. It does not inherit GPL-3.0 or CC BY-SA 4.0.
 
+## Logo and brand images (all rights reserved)
+
+The logo and brand image files in `docs/assets/brand/` (favicons, logos and social card images, in any format) are not covered by GPL-3.0, CC BY-SA 4.0 or MIT. They remain under plain copyright, all rights reserved, by Shravi Limited. None of the licences above gives permission to copy, modify or redistribute them.
+
 ## Borrowed material
 
 Every project used or referenced, with links, roles and licences, is listed in [ATTRIBUTIONS.md](ATTRIBUTIONS.md).

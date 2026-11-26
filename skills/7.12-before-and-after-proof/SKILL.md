@@ -53,7 +53,7 @@ Don't:
 
 ## How the source skills compare
 
-pr-evidence (ArefMozafari), pr-visuals pr-screenshots (michalklejdysz), sideshot (victorsaly) and pr-screenshots (nullswan), all MIT, agree: a UI change is shown with before and after screenshots of the same screen, device and state, and the 'before' is captured first; other changes are shown by one short snippet. They differ in mechanism: pr-evidence hosts images on a non-merging branch with a fresh path per capture and a fixed PR body; pr-visuals gets the 'before' by putting the changed files back to the base branch while the dev server hot-reloads; sideshot pictures only the part that changed, on desktop and phone and in dark mode, and marks what changed; nullswan's scripts capture base and feature branches and write a comparison report. Partial overlap with 4.9, which is the evidence for the agent itself.
+The MIT-licensed source skills agree: a UI change is shown with before and after screenshots of the same screen, device and state, and the 'before' is captured first; other changes are shown by one short snippet. They differ in mechanism: one hosts images on a non-merging branch with a fresh path per capture and a fixed PR body; one gets the 'before' by putting the changed files back to the base branch while the dev server hot-reloads; one pictures only the part that changed, on desktop and phone and in dark mode, and marks what changed; one uses scripts that capture base and feature branches and write a comparison report. Partial overlap with 4.9, which is the evidence for the agent itself.
 
 ## Sources
 
