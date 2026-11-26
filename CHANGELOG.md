@@ -20,3 +20,4 @@ All notable changes to this repo. The machine-readable version of the data chang
 
 - Guides folder is `guides/developer/`. The guides cover everything, including what experienced developers already know.
 - Split the licence. GPL-3.0 stays on the code (`scripts/`, `data/schemas/`, tooling; text in `LICENSE`). CC BY-SA 4.0 covers the writing, including `data/principles.json`, `data/sources.json`, `data/changelog.json` and `data/notes/` (full text in `LICENSE-CONTENT`). The README explains the choice.
+- Everything under `template/` is MIT (`template/LICENSE`, copyright Shravi Limited and contributors, 2026). A project created with `scripts/new-project` inherits MIT.

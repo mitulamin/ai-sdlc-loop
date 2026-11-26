@@ -1,6 +1,6 @@
 # Licensing notes
 
-This repo uses two licences. Why, and the plain-language reading, is in the README under [Why GPLv3, and CC BY-SA for the writing](README.md#why-gplv3-and-cc-by-sa-for-the-writing). This is not legal advice.
+This repo uses three licences. Why, and the plain-language reading, is in the README under [Why GPLv3, and CC BY-SA for the writing](README.md#why-gplv3-and-cc-by-sa-for-the-writing). This is not legal advice.
 
 ## GPL-3.0 (code)
 
@@ -9,7 +9,6 @@ The text is in [LICENSE](LICENSE). It covers:
 - `scripts/`
 - `data/schemas/`
 - tooling, including workflow files added later under `.github/workflows/`
-- code added later inside `template/`
 
 Do not replace or edit LICENSE without a deliberate decision recorded in [CHANGELOG.md](CHANGELOG.md).
 
@@ -18,14 +17,15 @@ Do not replace or edit LICENSE without a deliberate decision recorded in [CHANGE
 The text is in [LICENSE-CONTENT](LICENSE-CONTENT). It covers:
 
 - `README.md`, `UPDATING.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `NOTICE.md`, `ATTRIBUTIONS.md`
-- prose in `template/` (`README.md`, `AGENTS.md`, and later prose added there)
 - principle statements and notes in `principles/`, `docs/` and `guides/`
-- other markdown in this repo, including folder READMEs, `.github/PULL_REQUEST_TEMPLATE.md` and `.github/workflows/README.md`
+- other markdown in this repo outside `template/`, including folder READMEs, `.github/PULL_REQUEST_TEMPLATE.md` and `.github/workflows/README.md`
 - `data/principles.json`, `data/sources.json`, `data/changelog.json` and `data/notes/`
 
 `data/principles.json` holds the principle statements, so it sits with the writing. `data/sources.json` and `data/changelog.json` are the research record around those statements, so they sit with the writing too. The schemas in `data/schemas/` stay under GPL-3.0. Each file is under one licence.
 
-A project created from `template/` carries these licences with it. The GPL-3.0 duties apply when that project is distributed.
+## MIT (the template)
+
+The text is in [template/LICENSE](template/LICENSE). It covers everything under `template/`, code and writing. A project created with `scripts/new-project` copies that folder, including `LICENSE`, and starts under MIT. It does not inherit GPL-3.0 or CC BY-SA 4.0.
 
 ## Borrowed material
 

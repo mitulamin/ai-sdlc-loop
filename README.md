@@ -94,7 +94,7 @@ scripts/new-project ../my-new-project
 
 The script copies `template/` into the new folder and runs `git init`. Then edit the new project's `AGENTS.md` (stack, commands, conventions, boundaries) and start your first loop.
 
-Today `template/` is thin: a README and an `AGENTS.md` skeleton. It fills out as the skills, agents and commands land.
+Today `template/` is thin: a README, an `AGENTS.md` skeleton, and an MIT `LICENSE`. It fills out as the skills, agents and commands land.
 
 ## How the repo stays alive
 
@@ -122,11 +122,11 @@ GPL-3.0 covers `scripts/`, `data/schemas/`, and the tooling.
 
 In short: private internal use and modification by a company is allowed, with no duty to publish, because the duties start when you distribute. Anyone who distributes a work that includes this code must release the whole combined work under GPLv3, with source. Hosted or SaaS use that never distributes the code does not start those duties. AGPL-3.0 is the licence that closes that gap. I could discuss it. I am not choosing it here.
 
-`template/` copies carry the licence with them, so a new project spun up from the template inherits it when the project is distributed. Prose in `template/` is under the content licence below. Code that lands in `template/` later is GPL-3.0.
+Everything under `template/` is MIT, code and writing. The text is in [template/LICENSE](template/LICENSE). The template is meant to be copied into a new project, and GPL would stop someone who wants to start an MIT project from using it. `scripts/new-project` copies the whole folder, including that licence, so the new project starts under MIT.
 
 The writing is CC BY-SA 4.0. The full text is in [LICENSE-CONTENT](LICENSE-CONTENT). You can share and adapt it with attribution. Share-alike means derived text stays under CC BY-SA 4.0, so it stays open.
 
-CC BY-SA 4.0 covers `README.md`, `UPDATING.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `NOTICE.md`, `ATTRIBUTIONS.md`, prose in `template/`, the principle statements and notes in `principles/`, `docs/` and `guides/`, the other markdown in this repo, and the data files `data/principles.json`, `data/sources.json`, `data/changelog.json` and `data/notes/`.
+CC BY-SA 4.0 covers `README.md`, `UPDATING.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `NOTICE.md`, `ATTRIBUTIONS.md`, the principle statements and notes in `principles/`, `docs/` and `guides/`, the other markdown in this repo outside `template/`, and the data files `data/principles.json`, `data/sources.json`, `data/changelog.json` and `data/notes/`.
 
 Those data files sit with the writing because they hold the research. The principle statements in `data/principles.json` are text. `data/sources.json` and `data/changelog.json` are the record around them. The schemas in `data/schemas/` stay GPL-3.0 with the tooling. Each file is under one licence.
 
