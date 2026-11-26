@@ -178,7 +178,7 @@
       "ids": [
         "sources"
       ],
-      "summary": "Pinned all 41 initial source repos in data/sources.json (32 from the review commits recorded in data/licences.json, 9 from default-branch HEAD on 2026-11-26 where no prior SHA was recorded), and added commit_date and pin_source across all 45 repos.",
+      "summary": "Pinned all 45 source repos in data/sources.json to the commit they were reviewed at (pin_source review-record on all 45, none on github-head): 36 from data/licences.json and 9 from the review commits supplied with the Step 4 review (6 already matched, 3 re-pinned from default-branch HEAD). Added commit_date and pin_source across all 45 repos.",
       "reason": "Every source repo now has a reproducible pinned commit."
     },
     {
@@ -189,7 +189,7 @@
         "skills",
         "8.5"
       ],
-      "summary": "Fixed test-plan path from ../../scorecard.csv to ../../data/scorecard.json across all 103 skills, updated skill 8.5 count from 108 to 103, and wired NVIDIA SkillSpector 2.13.7 scanning of skills/ into CI.",
+      "summary": "Fixed test-plan path from ../../scorecard.csv to ../../data/scorecard.json across all 103 skills, updated skill 8.5 count from 108 to 103, gave reviewer agents a tools list (Bash for build, verify, debug, secure and review-and-ship; a prompt rule, not enforcement, because Cursor subagents ignore tools:), and wired NVIDIA SkillSpector 2.13.7 scanning of skills/ into CI with per-finding exceptions (rule, file, text, source line and a per-file cap).",
       "reason": "Keep skills/, agents/ and CI checks accurate and aligned with the repository layout."
     }
   ]

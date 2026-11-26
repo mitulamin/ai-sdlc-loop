@@ -126,7 +126,7 @@
       "pinned_sha": "b044f956f021b6e8877f16781bcfc466a6a120e9",
       "pinned_at": "2026-11-26",
       "commit_date": "2026-05-30",
-      "pin_source": "github-head",
+      "pin_source": "review-record",
       "labels": [],
       "notes": "Not named as a curation list in the brief section 4; classified as curation-list on name. Confirm."
     },
@@ -140,7 +140,7 @@
       "pinned_sha": "20c57162c790d59d35e47c1538dc534c5c59e60d",
       "pinned_at": "2026-11-26",
       "commit_date": "2026-11-15",
-      "pin_source": "github-head",
+      "pin_source": "review-record",
       "labels": [],
       "notes": ""
     },
@@ -154,7 +154,7 @@
       "pinned_sha": "ed74d115b7fb7026a22a4f816a8e3250f425e3b4",
       "pinned_at": "2026-11-26",
       "commit_date": "2026-11-02",
-      "pin_source": "github-head",
+      "pin_source": "review-record",
       "labels": [],
       "notes": ""
     },
@@ -184,7 +184,7 @@
       "pinned_sha": "4adeee6732a12d1540f49a4d50a38ce8c97f9a53",
       "pinned_at": "2026-11-26",
       "commit_date": "2026-11-20",
-      "pin_source": "github-head",
+      "pin_source": "review-record",
       "labels": [
         "ECC"
       ],
@@ -227,10 +227,10 @@
       "role": "skill-source",
       "licence": "LICENSE.md (all rights reserved)",
       "default_branch": "main",
-      "pinned_sha": "a3b7a20a282a7b75ed68c2f8a0d0ecc822171c3e",
+      "pinned_sha": "9587741f62205d168459b1be9441fdb901a1b482",
       "pinned_at": "2026-11-26",
       "commit_date": "2026-11-26",
-      "pin_source": "github-head",
+      "pin_source": "review-record",
       "labels": [],
       "notes": "Tool repository; mined for bundled plugins and commands. LICENSE.md says all rights reserved, use subject to Anthropic's Commercial Terms of Service. Not open source."
     },
@@ -386,10 +386,10 @@
       "role": "curation-list",
       "licence": "LICENSE (CC BY-NC-ND 4.0)",
       "default_branch": "main",
-      "pinned_sha": "81828e36033776ded884deb3f1e5b96236fa4e76",
+      "pinned_sha": "13b65430f1b3274b9242c17b5a681226fe9d6144",
       "pinned_at": "2026-11-26",
       "commit_date": "2026-11-26",
-      "pin_source": "github-head",
+      "pin_source": "review-record",
       "labels": [],
       "notes": "Not named as a curation list in the brief section 4; classified as curation-list on name. Confirm. GitHub reports Other. LICENSE file states Creative Commons Attribution-NonCommercial-NoDerivatives 4.0. Curation list, never copied."
     },
@@ -467,7 +467,7 @@
       "pinned_sha": "47eb3888eb42aef074fcb617931bf6e5934e45d9",
       "pinned_at": "2026-11-26",
       "commit_date": "2026-11-20",
-      "pin_source": "github-head",
+      "pin_source": "review-record",
       "labels": [],
       "notes": ""
     },
@@ -572,10 +572,10 @@
       "role": "curation-list",
       "licence": "MIT",
       "default_branch": "main",
-      "pinned_sha": "ca18ff485998192914e1003cbc1d7489cd1c3e65",
+      "pinned_sha": "166f581cfdc37d94cf56efe4454fb06a5759776c",
       "pinned_at": "2026-11-26",
-      "commit_date": "2026-11-26",
-      "pin_source": "github-head",
+      "commit_date": "2026-11-24",
+      "pin_source": "review-record",
       "labels": [],
       "notes": "Named as a curation list in the brief section 4 although it contains skill files. Never install wholesale."
     },
@@ -619,7 +619,7 @@
       "pinned_sha": "1da55aa810f206d3fe2005e7e3989b15a275d942",
       "pinned_at": "2026-11-26",
       "commit_date": "2026-04-28",
-      "pin_source": "github-head",
+      "pin_source": "review-record",
       "labels": [],
       "notes": "Not named as a curation list in the brief section 4; classified as curation-list on name. Confirm. No licence file in the tree."
     },

@@ -8,10 +8,17 @@ skillspector) does not take a baseline for a recursive scan, so this runs one
 `skillspector scan` per skill folder listed in data/skill-principle-map.json
 (and verifies skills/ on disk matches the map). It runs static analysis only
 (--no-llm), so no skill text leaves the machine and no API key is needed, and
-it fails on any finding (--fail-on-findings) and on incomplete coverage
-(--fail-on-incomplete), for example a SKILL.md whose front matter does not
-parse. Reviewed false positives are listed with non-empty reasons in
-.github/skillspector-exceptions.yaml. Each exception must suppress at least one
+it fails on incomplete coverage (--fail-on-incomplete), for example a SKILL.md
+whose front matter does not parse.
+
+Reviewed false positives are listed with non-empty reasons in
+.github/skillspector-exceptions.yaml. SkillSpector's own baseline matches by
+rule, file and matched text, so a second hit with the same text in the same file
+would be suppressed silently. This script therefore matches the raw findings
+itself, one finding at a time: an exception must match the rule id, the file,
+the matched text and the full source line the finding sits on (`line`), and it
+may suppress at most `max_per_file` findings in any one file (default 1). Any
+finding left over fails the scan. Each exception must also suppress at least one
 finding for every glob in its `skill` list, or the scan fails, so the list
 cannot go stale. Unknown keys in an exception are rejected.
 
@@ -40,37 +47,75 @@ EXCEPTIONS = ROOT / ".github" / "skillspector-exceptions.yaml"
 SKILL_MAP = ROOT / "data" / "skill-principle-map.json"
 SCANNER_VERSION = "2.13.7"
 TIMEOUT_SECONDS = 600
-EXCEPTION_KEYS = {"skill", "id", "path", "message", "reason"}
+EXCEPTION_KEYS = {"skill", "id", "path", "message", "line", "max_per_file", "reason"}
 
 
 def as_list(value):
     return value if isinstance(value, list) else [value]
 
 
-def scan(skill_dir, exceptions, tmp):
-    """Return (name, exit code, issues, hits, completeness, error text).
+def glob_match(value, pattern):
+    return fnmatch.fnmatchcase(value.lower(), pattern.lower())
 
-    hits is the set of exception indexes that suppressed at least one finding.
-    Each rule's reason starts with its index, which SkillSpector echoes back as
-    the suppression reason, so a suppressed finding is attributed to the rule
-    that actually matched it.
+
+def source_line(skill_dir, location):
+    """Return the stripped text of the line a finding points at, or None."""
+    file, number = location.get("file"), location.get("start_line")
+    if not file or not isinstance(number, int) or number < 1:
+        return None
+    try:
+        lines = (skill_dir / file).read_text(encoding="utf-8").split("\n")
+    except (OSError, UnicodeDecodeError):
+        return None
+    return lines[number - 1].strip() if number <= len(lines) else None
+
+
+def apply_exceptions(skill_dir, issues, own):
+    """Split findings into (unexplained, hits).
+
+    A finding is explained by an exception only when the id matches exactly and
+    the `path`, `message` and `line` globs (if given) match that finding's file,
+    matched text and source line, and the exception has not already explained
+    `max_per_file` findings in that file. hits is the set of exception indexes
+    that explained at least one finding.
+    """
+    used = {}
+    unexplained, hits = [], set()
+    for f in issues:
+        loc = f.get("location", {})
+        line = source_line(skill_dir, loc)
+        for i, e in own:
+            if f.get("id") != e["id"]:
+                continue
+            if "path" in e and not glob_match(str(loc.get("file")), e["path"]):
+                continue
+            if "message" in e and not glob_match(str(f.get("finding")), e["message"]):
+                continue
+            if line is None or not glob_match(line, e["line"]):
+                continue
+            key = (i, loc.get("file"))
+            if used.get(key, 0) >= e.get("max_per_file", 1):
+                continue
+            used[key] = used.get(key, 0) + 1
+            hits.add(i)
+            break
+        else:
+            unexplained.append(f)
+    return unexplained, hits
+
+
+def scan(skill_dir, exceptions, tmp):
+    """Return (name, exit code, unexplained findings, hits, completeness, error text).
+
+    hits is the set of exception indexes that explained at least one finding.
     """
     name = skill_dir.name
     own = [(i, e) for i, e in enumerate(exceptions) if any(fnmatch.fnmatchcase(name, g) for g in as_list(e["skill"]))]
-    rules = []
-    for i, e in own:
-        rule = {"id": e["id"], "reason": f"EXCEPTION-{i}: " + " ".join(e["reason"].split())}
-        for key in ("path", "message"):
-            if key in e:
-                rule[key] = e[key]
-        rules.append(rule)
-    baseline = tmp / f"{name}.baseline.yaml"
-    baseline.write_text(yaml.safe_dump({"version": 2, "rules": rules}), encoding="utf-8")
     report = tmp / f"{name}.json"
     try:
         proc = subprocess.run(
-            ["skillspector", "scan", str(skill_dir), "--no-llm", "--fail-on-findings", "--fail-on-incomplete",
-             "--baseline", str(baseline), "--show-suppressed", "--format", "json", "--output", str(report)],
+            ["skillspector", "scan", str(skill_dir), "--no-llm", "--fail-on-incomplete",
+             "--format", "json", "--output", str(report)],
             capture_output=True, text=True, timeout=TIMEOUT_SECONDS,
         )
     except subprocess.TimeoutExpired:
@@ -78,14 +123,15 @@ def scan(skill_dir, exceptions, tmp):
     if not report.exists():
         return name, 2, [], set(), None, proc.stderr.strip() or proc.stdout.strip()
     data = json.loads(report.read_text(encoding="utf-8"))
+    completeness = data.get("analysis_completeness")
     if not data.get("execution_successful"):
-        return name, 2, [], set(), data.get("analysis_completeness"), "SkillSpector reported execution_successful=false"
-    hits = set()
-    for s in data.get("suppressed", []):
-        m = re.match(r"EXCEPTION-(\d+): ", s.get("suppression_reason", ""))
-        if m:
-            hits.add(int(m.group(1)))
-    return name, proc.returncode, data.get("issues", []), hits, data.get("analysis_completeness"), proc.stderr.strip()
+        return name, 2, [], set(), completeness, "SkillSpector reported execution_successful=false"
+    unexplained, hits = apply_exceptions(skill_dir, data.get("issues", []), own)
+    incomplete = bool(completeness) and not completeness.get("is_complete", True)
+    if proc.returncode not in (0, 1):
+        return name, 2, unexplained, hits, completeness, proc.stderr.strip()
+    code = 1 if unexplained or incomplete or proc.returncode == 1 else 0
+    return name, code, unexplained, hits, completeness, proc.stderr.strip()
 
 
 def load_exceptions():
@@ -98,13 +144,17 @@ def load_exceptions():
         if not isinstance(e, dict):
             problems.append(f"exception #{n} is not a mapping: {e}")
             continue
-        for key in ("skill", "id", "reason"):
+        for key in ("skill", "id", "line", "reason"):
             if key not in e:
                 problems.append(f"exception #{n} lacks '{key}': {e}")
         if "id" in e and (not isinstance(e["id"], str) or not e["id"].strip()):
             problems.append(f"exception #{n} 'id' must be a non-empty string")
         if "reason" in e and (not isinstance(e["reason"], str) or not e["reason"].strip()):
             problems.append(f"exception #{n} 'reason' must be a non-empty string")
+        if "line" in e and (not isinstance(e["line"], str) or not e["line"].strip()):
+            problems.append(f"exception #{n} 'line' must be a non-empty glob on the source line")
+        if "max_per_file" in e and (type(e["max_per_file"]) is not int or e["max_per_file"] < 1):
+            problems.append(f"exception #{n} 'max_per_file' must be an integer of at least 1")
         if "skill" in e:
             globs = e["skill"] if isinstance(e["skill"], list) else [e["skill"]]
             if not globs or any(not isinstance(g, str) or not g.strip() for g in globs):

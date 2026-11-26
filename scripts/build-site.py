@@ -906,13 +906,24 @@ A phase loads the skills whose phase in <a href="{BLOB}data/skill-principle-map.
         rows = []
         n_head = sum(1 for r in self.sdoc["repos"] if r.get("pin_source") == "github-head")
         n_recorded = sum(1 for r in self.sdoc["repos"] if r.get("pinned_sha")) - n_head
+        if n_head:
+            pin_note = (f"{n_recorded} pins are the commits the sources were reviewed at and {n_head} are the default-branch HEAD when pinned. "
+                        "Each pin shows the commit date and the date it was pinned.")
+        else:
+            pin_note = (f"All {n_recorded} pins are the commits the sources were reviewed at. "
+                        "Each pin shows the commit date and the date it was pinned.")
         for r in sorted(self.sdoc["repos"], key=lambda r: (r["owner"].lower(), r["repo"].lower())):
             used = sum(1 for p in self.principles if any(lab in r["labels"] for lab in p["sources"]))
             sha = r["pinned_sha"]
             if sha:
-                date_note = r["pinned_at"] or ""
-                src_note = ", HEAD on pin date" if r.get("pin_source") == "github-head" else ""
-                pin_html = f'<a href="{esc(r["url"])}/tree/{esc(sha)}"><code>{esc(sha[:7])}</code></a> <span class="muted">({esc(date_note)}{esc(src_note)})</span>'
+                parts = []
+                if r.get("commit_date"):
+                    parts.append(f'committed {esc(r["commit_date"])}')
+                if r.get("pinned_at"):
+                    parts.append(f'pinned {esc(r["pinned_at"])}')
+                if r.get("pin_source") == "github-head":
+                    parts.append("default-branch HEAD when pinned")
+                pin_html = f'<a href="{esc(r["url"])}/tree/{esc(sha)}"><code>{esc(sha[:7])}</code></a> <span class="muted">({", ".join(parts)})</span>'
                 pin_sort = sha
             else:
                 pin_html = "not pinned yet"
@@ -926,7 +937,7 @@ A phase loads the skills whose phase in <a href="{BLOB}data/skill-principle-map.
         body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / Sources</nav>
 <h1>Source repos</h1>
 <p>{self.n_sources} sources cited: the {self.n_researched} public repos the principles were drawn from ({esc(run["id"])}, {esc(run["date"])}), plus {self.n_sources - self.n_researched} added later for skill 7.12.
-{n_recorded} pins come from the recorded review commits and {n_head} from default-branch HEAD on 2026-11-26 where no prior SHA was recorded.
+{pin_note}
 Licences are as checked and may need your own review before you reuse anything; see
 <a href="{BLOB}ATTRIBUTIONS.md">ATTRIBUTIONS.md</a>. Curation lists are pointers to other sources and are never installed wholesale.</p>
 <div class="table-wrap">
