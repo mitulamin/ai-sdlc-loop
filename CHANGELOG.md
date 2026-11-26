@@ -4,6 +4,31 @@ All notable changes to this repo. The machine-readable version of the data chang
 
 ## Unreleased
 
+### Imported the amalgamated-skills-103 kit
+
+The kit already contains the dedupe (108 principles to 103) and the licence cleanup, and supersedes the earlier drafts. See [IMPORT.md](IMPORT.md) and [MERGES.md](MERGES.md).
+
+Added:
+
+- `skills/<id>-<slug>/`: 103 amalgamated skills, one per principle, each with `SKILL.md` (when to use, producer dos and don'ts, steps, adversarial reviewer checks, source comparison, test slot) and `SOURCES.md` (sources pinned to a commit, with licences, and "Further reading (link only)").
+- `data/skill-principle-map.json` (skill to principle, aliases, category, test app, phase, slot, licence status), `data/mapping.json` (principle to source files) and `data/licences.json` (licence per repo and per source), with JSON schemas.
+- `scorecard.csv` (one row per skill), `CREDITS.md`, `IMPORT.md`, `LICENSE.md`, `LICENSES/` and `scripts/validate.py`, which prints `OK: 103 principles, 103 skills, 5 aliases, licences clean`.
+
+Changed:
+
+- `data/principles.json` is the kit's index: 103 principles, and an `aliases` map for the retired IDs (4.4 to 4.1, 4.5 to 5.3, 9.4 to 5.1, 5.6 to 5.10, 2.11 to 6.3). Survivors 4.1, 5.1, 5.3, 5.10 and 6.3 use the kit's merged statements. The 16 statements sharpened earlier for the overlapping pairs go back to the kit's wording, and the "how it differs" notes become the kit's `partial_overlap_with` field. `data/schemas/principles.schema.json` is now 2.0.0.
+- `principles/<id>.md` is regenerated from the kit's data by `scripts/build-principles.py`, in the kit's layout. Retired IDs no longer have a file in `principles/`; they resolve through `aliases`, and the site keeps a redirect page for each.
+- Licence: text is CC BY-SA 4.0 and code is GPL-3.0-only, set in `LICENSE.md` with the full texts in `LICENSES/`. `docs/` (the site) now sits with the code under GPL-3.0-only, `data/schemas/` and CI stay GPL-3.0-only, and `template/` stays MIT. `LICENSES/` holds the canonical plain-text legalcode. The root `LICENSE` is now a pointer to `LICENSE.md`; this is a deliberate change to `LICENSE`.
+- README merged with the kit's README: the kit's dedup verdict, licence cleanup, test apps, run and scorecard sections, and links to `CREDITS.md`, `LICENSE.md` and `LICENSES/`.
+- The five survivor skills' `principles:` front matter lists only the survivor; the retired ID stays in `aliases:`. Skill 8.5 says 103 skills instead of 108.
+- `scripts/build-site.py` reads the kit's data (minimal change so the site still builds): sources come from each principle's primary files in `data/mapping.json`, each principle page links its skill, and the footer links `LICENSE.md` and `CREDITS.md`.
+- `UPDATING.md`, `CONTRIBUTING.md`, `NOTICE.md`, `ATTRIBUTIONS.md`, `data/README.md`, `scripts/README.md` and `skills/README.md` describe the kit's layout and licences.
+
+Removed:
+
+- `LICENSE-CONTENT` (its CC BY-SA 4.0 text is now `LICENSES/CC-BY-SA-4.0.txt`).
+- `principles/4.4.md`, `4.5.md`, `9.4.md`, `5.6.md` and `2.11.md` (alias stubs).
+
 ### Added
 
 - Folder structure and placeholder READMEs for principles, skills, agents, commands, guides, docs, template and scripts.
