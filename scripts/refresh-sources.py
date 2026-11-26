@@ -2,12 +2,12 @@
 """Compare the pinned SHA of every source repo in data/sources.json with its upstream HEAD.
 
 Usage:
-  scripts/refresh-sources.sh                 print a status table, change nothing
-  scripts/refresh-sources.sh --json FILE     also write the report as JSON
-  scripts/refresh-sources.sh --pin           pin repos that have no pinned_sha yet (first run only)
-  scripts/refresh-sources.sh --repin NAME... move the pin of the named repos (owner/repo) to upstream HEAD,
+  scripts/refresh-sources.py                 print a status table, change nothing
+  scripts/refresh-sources.py --json FILE     also write the report as JSON
+  scripts/refresh-sources.py --pin           pin repos that have no pinned_sha yet (first run only)
+  scripts/refresh-sources.py --repin NAME... move the pin of the named repos (owner/repo) to upstream HEAD,
                                           only after you have reviewed the diff
-  scripts/refresh-sources.sh --exit-code     exit 2 when anything changed or is missing
+  scripts/refresh-sources.py --exit-code     exit 2 when anything changed or is missing
 
 Statuses: unpinned, unchanged, changed, missing (git could not reach the repo: renamed, deleted or private).
 

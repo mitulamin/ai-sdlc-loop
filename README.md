@@ -77,7 +77,7 @@ A change only goes live if it helps on cases held out from the one that caused i
 | `guides/developer/` | Plain-language guides to the principles. Coming. |
 | `docs/` | The static website (GitHub Pages). Coming. |
 | `template/` | What a new project copies. |
-| `scripts/` | `build-principles`, `refresh-sources.sh`, `new-project.sh`. |
+| `scripts/` | `build-principles`, `refresh-sources.py`, `new-project.sh`. |
 
 ## Start a new project from the template
 
@@ -100,7 +100,7 @@ Today `template/` is thin: a README, an `AGENTS.md` skeleton, and an MIT `LICENS
 
 This is not a one-off. The research should be re-run about every six months, because the sources move, new ones appear and some disappear.
 
-Every source repo is pinned to a commit in `data/sources.json`. `scripts/refresh-sources.sh` compares each pin with the upstream head and tells you what changed. Principles and skills carry their provenance, data files have versioned schemas, and generated files are kept apart from hand-written ones so a refresh does not overwrite human edits. Every merge, drop and change is logged in `CHANGELOG.md` and `data/changelog.json`.
+Every source repo is pinned to a commit in `data/sources.json`. `scripts/refresh-sources.py` compares each pin with the upstream head and tells you what changed. Principles and skills carry their provenance, data files have versioned schemas, and generated files are kept apart from hand-written ones so a refresh does not overwrite human edits. Every merge, drop and change is logged in `CHANGELOG.md` and `data/changelog.json`.
 
 The full process is in [UPDATING.md](UPDATING.md).
 

@@ -16,7 +16,7 @@ This repo is meant to be refreshed about every six months, and sooner if a sourc
 | Path | Kind | Who changes it |
 | --- | --- | --- |
 | `data/principles.json` | Hand-written source of truth | People, through a PR, with a changelog entry |
-| `data/sources.json` | Hand-written, except pins | People; pins by `scripts/refresh-sources.sh --pin` or `--repin` |
+| `data/sources.json` | Hand-written, except pins | People; pins by `scripts/refresh-sources.py --pin` or `--repin` |
 | `data/changelog.json`, `CHANGELOG.md` | Hand-written log | People |
 | `data/notes/` | Hand-written overlays (for example `data/notes/principles/1.1.md`) | People |
 | `data/schemas/` | Hand-written, versioned | People |
@@ -43,7 +43,7 @@ Rules of thumb:
 ### 1. Check what moved (built)
 
 ```bash
-scripts/refresh-sources.sh --json data/refresh/run-2/sources-report.json
+scripts/refresh-sources.py --json data/refresh/run-2/sources-report.json
 ```
 
 This reads each repo's upstream head and compares it with the pin. Each repo comes back as:
@@ -51,7 +51,7 @@ This reads each repo's upstream head and compares it with the pin. Each repo com
 - `unchanged`: nothing to do.
 - `changed`: upstream moved. The report includes a compare link.
 - `missing`: git could not reach it. It was renamed, deleted or made private. Find out which, and decide whether to replace or drop the source.
-- `unpinned`: never pinned. First run only: `scripts/refresh-sources.sh --pin`.
+- `unpinned`: never pinned. First run only: `scripts/refresh-sources.py --pin`.
 
 ### 2. Find new, changed and removed items (not built yet)
 
@@ -91,7 +91,7 @@ Re-run the test-app workflow for skills that changed, and update `data/scorecard
 After you have reviewed a repo's changes, move its pin:
 
 ```bash
-scripts/refresh-sources.sh --repin owner/repo
+scripts/refresh-sources.py --repin owner/repo
 ```
 
 Only re-pin a repo whose changes you have actually handled.

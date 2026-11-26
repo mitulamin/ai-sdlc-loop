@@ -106,7 +106,7 @@ When a new source is used:
 
 1. Add the repo to [data/sources.json](data/sources.json) with its role and `licence` set to `TBD`, then add its row to section 1 here, also reading `TBD`.
 2. Check its licence. Put the SPDX identifier in `data/sources.json` and replace `TBD` here. Add it to the licence flags if it is missing, restrictive or mixed. Do not borrow from a repo whose licence is unchecked or incompatible.
-3. Pin the commit (`scripts/refresh-sources.sh --repin owner/repo`).
+3. Pin the commit (`scripts/refresh-sources.py --repin owner/repo`).
 4. Credit each borrowed file in the `SOURCES.md` next to the skill that uses it: link at the pinned commit, licence, and what was taken.
 5. For a book, tool or idea that is only referenced, add a row to section 2 with a real link. If you cannot verify a link, write "link to be confirmed".
 6. Add a line to [CHANGELOG.md](CHANGELOG.md).
