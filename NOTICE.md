@@ -1,27 +1,28 @@
 # Licensing notes
 
-This repo uses three licences. Why, and the plain-language reading, is in the README under [Why GPLv3, and CC BY-SA for the writing](README.md#why-gplv3-and-cc-by-sa-for-the-writing). This is not legal advice.
+The licence split is set in [LICENSE.md](LICENSE.md), with the full texts in [LICENSES/](LICENSES/). Why, and the plain-language reading, is in the README under [Licence](README.md#licence). This is not legal advice.
 
-## GPL-3.0 (code)
+## GPL-3.0-only (code)
 
-The text is in [LICENSE](LICENSE). It covers:
+The text is in [LICENSES/GPL-3.0-only.txt](LICENSES/GPL-3.0-only.txt). It covers:
 
 - `scripts/`
+- the GitHub Pages site in `docs/`
 - `data/schemas/`
-- tooling, including workflow files added later under `.github/workflows/`
+- CI and tooling, including `.github/workflows/`
 
-Do not replace or edit LICENSE without a deliberate decision recorded in [CHANGELOG.md](CHANGELOG.md).
+Do not replace or edit `LICENSE`, `LICENSE.md` or `LICENSES/` without a deliberate decision recorded in [CHANGELOG.md](CHANGELOG.md).
 
-## CC BY-SA 4.0 (writing)
+## CC BY-SA 4.0 (text)
 
-The text is in [LICENSE-CONTENT](LICENSE-CONTENT). It covers:
+The text is in [LICENSES/CC-BY-SA-4.0.txt](LICENSES/CC-BY-SA-4.0.txt). It covers:
 
-- `README.md`, `UPDATING.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `NOTICE.md`, `ATTRIBUTIONS.md`
-- principle statements and notes in `principles/`, `docs/` and `guides/`
-- other markdown in this repo outside `template/`, including folder READMEs, `.github/PULL_REQUEST_TEMPLATE.md` and `.github/workflows/README.md`
-- `data/principles.json`, `data/sources.json`, `data/changelog.json` and `data/notes/`
+- the skills in `skills/` (`SKILL.md` and `SOURCES.md`), the principles in `principles/`, and `guides/`
+- the data files in `data/` (except `data/schemas/`) and `scorecard.csv`
+- `README.md`, `IMPORT.md`, `MERGES.md`, `CREDITS.md`, `UPDATING.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `NOTICE.md`, `ATTRIBUTIONS.md`
+- other markdown in this repo outside `template/`, including `agents/`, `commands/`, folder READMEs, `.github/PULL_REQUEST_TEMPLATE.md` and `.github/workflows/README.md`
 
-`data/principles.json` holds the principle statements, so it sits with the writing. `data/sources.json` and `data/changelog.json` are the research record around those statements, so they sit with the writing too. The schemas in `data/schemas/` stay under GPL-3.0. Each file is under one licence.
+Each file is under one licence.
 
 ## MIT (the template)
 
@@ -29,10 +30,8 @@ The text is in [template/LICENSE](template/LICENSE). It covers everything under 
 
 ## Borrowed material
 
-Every project used or referenced, with links, roles and licences, is listed in [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
+The sources the skills were adapted from, with licence, copyright notice and pinned commit, are in [CREDITS.md](CREDITS.md). The licence of every source file, per repo and per skill, is in [data/licences.json](data/licences.json). Every project used or referenced in the research is listed in [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
 
-Content borrowed from other repos keeps its original licence. This repo does not relicense it. Each borrowed file is credited in the `SOURCES.md` next to the skill that uses it, with the source link pinned to a commit and the source's licence.
+Content borrowed from other repos keeps its original licence. This repo does not relicense it. Each skill's `SOURCES.md` credits the exact files, linked at a pinned commit, with the licence of each.
 
-The licence of each source repo is recorded in [data/sources.json](data/sources.json). All 41 were checked on 2026-11-26. Do not borrow from a repo whose licence is missing, restrictive or incompatible; the flags are in [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
-
-Principles in `data/principles.json` are short statements written for this repo. They name their sources but do not reproduce them.
+Sources with no usable licence are link only: nothing from them is copied or adapted, and they appear only under "Further reading (link only)" in a skill's `SOURCES.md`. They are listed in the "Link only" section of [CREDITS.md](CREDITS.md). `scripts/validate.py` fails if one appears in a skill's main source list.

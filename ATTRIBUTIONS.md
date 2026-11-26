@@ -1,12 +1,12 @@
 # Attributions
 
-Every project this repo has used or referenced. The licence terms of this repo itself are in [NOTICE.md](NOTICE.md).
+Every project this repo has used or referenced. The licence terms of this repo itself are in [LICENSE.md](LICENSE.md) and [NOTICE.md](NOTICE.md). The sources the skills were actually adapted from, with copyright notices and pinned commits, are in [CREDITS.md](CREDITS.md).
 
 ## 1. Source repos (41)
 
 These are the repos the principles and skills are distilled from. The list mirrors [data/sources.json](data/sources.json), which is the source of truth for pins and licences.
 
-Licences were checked on 2026-11-26. Each is the repo-level licence as GitHub reports it (SPDX id), or, where GitHub reports none or "Other", a description naming the licence file. Pins are still unset, so these licences are for the default branch on that date. Nothing from these repos is copied into this repo yet. Before a file is borrowed, its own licence is checked again, because a repo can hold files under other terms. Once borrowed, each skill's `SOURCES.md` credits the exact files, linked at a pinned commit, with the licence. Borrowed content keeps its own licence and is not relicensed here. This is not legal advice.
+Licences were checked on 2026-11-26. Each is the repo-level licence as GitHub reports it (SPDX id), or, where GitHub reports none or "Other", a description naming the licence file. Pins are still unset, so these licences are for the default branch on that date. The skills adapt licence-clean files from some of these repos (and from a few repos found later, listed in [CREDITS.md](CREDITS.md)); repos with no usable licence are link only and nothing from them is copied or adapted. Before a file is borrowed, its own licence is checked again, because a repo can hold files under other terms. Once borrowed, each skill's `SOURCES.md` credits the exact files, linked at a pinned commit, with the licence. Borrowed content keeps its own licence and is not relicensed here. This is not legal advice.
 
 ### Skill sources (35)
 
@@ -88,8 +88,8 @@ Projects and works this repo points to or relies on, but does not copy from. Lin
 | --- | --- | --- | --- |
 | NVIDIA SkillSpector | Scanner for agent skill files | Every borrowed file is scanned with it before it goes in | [github.com/NVIDIA/SkillSpector](https://github.com/NVIDIA/SkillSpector) |
 | skill-creator (Anthropic) | Anthropic's skill for writing and testing skills, inside the anthropics/skills repo | Principles 8.3, 8.4 and 8.5 cite it | [anthropics/skills, skill-creator](https://github.com/anthropics/skills/tree/main/skills/skill-creator) |
-| Creative Commons, CC BY-SA 4.0 | Licence for the written content | [LICENSE-CONTENT](LICENSE-CONTENT) | [creativecommons.org/licenses/by-sa/4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
-| Free Software Foundation, GNU GPL v3 | Licence for the code | [LICENSE](LICENSE) | [gnu.org/licenses/gpl-3.0](https://www.gnu.org/licenses/gpl-3.0.html) |
+| Creative Commons, CC BY-SA 4.0 | Licence for the written content | [LICENSES/CC-BY-SA-4.0.txt](LICENSES/CC-BY-SA-4.0.txt) | [creativecommons.org/licenses/by-sa/4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
+| Free Software Foundation, GNU GPL v3 | Licence for the code | [LICENSES/GPL-3.0-only.txt](LICENSES/GPL-3.0-only.txt) | [gnu.org/licenses/gpl-3.0](https://www.gnu.org/licenses/gpl-3.0.html) |
 | Free Software Foundation, GNU AGPL v3 | The alternative licence mentioned in the README | README, "Why GPLv3" | [gnu.org/licenses/agpl-3.0](https://www.gnu.org/licenses/agpl-3.0.html) |
 | "Release It!" by Michael T. Nygard | Book on designing software that survives production | Cited by ciembor/agent-rules-books; principles 2.7, 2.8, 2.15, 5.8, 5.9, 5.10 and 5.14 | [Pragmatic Bookshelf](https://pragprog.com/titles/mnee2/release-it-second-edition/) |
 | Hyrum's Law | Observation that every observable behaviour of an interface ends up depended on | Principle 2.12 | [hyrumslaw.com](https://www.hyrumslaw.com/) |
