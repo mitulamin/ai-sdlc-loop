@@ -77,7 +77,7 @@ A change only goes live if it helps on cases held out from the one that caused i
 | `guides/developer/` | Plain-language guides to the principles. Coming. |
 | `docs/` | The static website (GitHub Pages). Coming. |
 | `template/` | The shared base a new project copies, and `template/profiles/` with the solo, small-team and large-org overlays. |
-| `scripts/` | `build-principles`, `refresh-sources.py`, `new-project.sh`. |
+| `scripts/` | `build-principles.py`, `refresh-sources.py`, `new-project.sh`. |
 
 ## Start a new project from the template
 

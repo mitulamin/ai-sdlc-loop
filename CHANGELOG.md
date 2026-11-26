@@ -24,6 +24,7 @@ All notable changes to this repo. The machine-readable version of the data chang
 
 ### Changed
 
+- Renamed `scripts/build-principles` to `scripts/build-principles.py` so every script has an extension that matches its language. References in the README, CONTRIBUTING, UPDATING, the pull request template, the CI workflow and the generated `principles/` files are updated.
 - The learning site's visible name is "AI SDLC Loop" (page titles, header and footer). The repo name and URLs are unchanged.
 
 - `scripts/new-project.sh` takes a profile argument (`scripts/new-project.sh <target-dir> [profile]`, default `solo`), shows usage with `--help` or on bad input, and still refuses a target that is not empty. It copies the base, then applies the profile.
