@@ -6,21 +6,21 @@ This repo is meant to be refreshed about every six months, and sooner if a sourc
 
 1. **Pin everything.** Every source repo has a commit SHA in `data/sources.json`. Every link in a skill's `SOURCES.md` is pinned to a commit. Nothing points at a moving branch.
 2. **Keep generated and hand-written content apart.** A refresh may rewrite generated files. It must never touch hand-written ones.
-3. **IDs are permanent.** A principle ID is never renumbered or reused. A dropped principle stays in `data/principles.json` with a status. A merged principle is removed from the list and its ID lives on as an alias of the survivor, so old links still resolve. Every merge is logged in `MERGES.md`.
+3. **IDs are permanent.** A principle ID is never renumbered or reused. A merged principle is removed from the list and its ID lives on in the `aliases` map of `data/principles.json`, pointing at the survivor, so old references still resolve. A dropped principle is logged in `data/changelog.json` and its ID is never reused. Every merge is logged in `MERGES.md`.
 4. **Log every change.** Merges, drops, additions, edits and re-pins go in `data/changelog.json` and `CHANGELOG.md`.
-5. **Version the data.** Every data file has a `schema_version`, and every schema lives in `data/schemas/`.
+5. **Version the data.** Every data file has a schema in `data/schemas/`, with the schema version in its description. The kit files carry a `version` date; `sources.json` and `changelog.json` carry a `schema_version`.
 6. **A human approves the result.** A refresh is a pull request. It is never pushed straight to main.
 
 ## What is generated and what is hand-written
 
 | Path | Kind | Who changes it |
 | --- | --- | --- |
-| `data/principles.json` | Hand-written source of truth | People, through a PR, with a changelog entry |
+| `data/principles.json`, `data/skill-principle-map.json`, `data/mapping.json`, `data/licences.json` | Source of truth, from the amalgamated-skills kit | People, through a PR, with a changelog entry. Statements are never edited by hand in generated files. |
 | `data/sources.json` | Hand-written, except pins | People; pins by `scripts/refresh-sources.py --pin` or `--repin` |
 | `data/changelog.json`, `CHANGELOG.md` | Hand-written log | People |
 | `data/notes/` | Hand-written overlays (for example `data/notes/principles/1.1.md`) | People |
 | `data/schemas/` | Hand-written, versioned | People |
-| `principles/*.md` | Generated | `scripts/build-principles.py`. First line is a `GENERATED` marker. |
+| `principles/*.md` | Generated | `scripts/build-principles.py`. `principles/<id>.md` follows the kit layout and has no marker line; `principles/README.md` starts with a `GENERATED` marker. `--check` catches hand edits to either. |
 | `data/refresh/<run-id>/` | Generated reports and proposals from a refresh | Refresh tooling; reviewed, then kept as the audit trail |
 | `skills/<id>-<slug>/SKILL.md` | Drafted from sources, then hand-edited | People. A refresh only produces a proposal for it, never an overwrite. |
 | `skills/<id>-<slug>/SOURCES.md` | Pinned links and dedupe summary | Refresh proposes; a person accepts |
@@ -32,7 +32,7 @@ Rules of thumb:
 - If a file starts with the `GENERATED` marker, do not edit it. Change the input and regenerate.
 - If you want to add a human note to a generated page, put it in `data/notes/` and rebuild.
 - A refresh writes only to `data/refresh/<run-id>/`, to the pins in `data/sources.json`, and to generated files. Anything else it wants to change is written as a proposal in `data/refresh/<run-id>/` for a person to apply.
-- `scripts/build-principles.py --check` fails if a generated file is out of date. Run it before every commit. CI will run it later.
+- `scripts/build-principles.py --check` fails if a generated file is out of date, and `scripts/validate.py` checks the counts, aliases, slots and licences. Run both before every commit. CI runs `--check`.
 
 ## The playbook
 
@@ -76,13 +76,13 @@ For each principle whose sources changed, update that skill's source list and de
 
 ### 5. Change the principles
 
-- **Add:** append a new number in the category. Set `provenance.origin` to `refresh` and `provenance.research_run` to the new run.
-- **Merge:** only if truly duplicate. Keep the clearer one. Remove the other from `principles`, add its ID to the survivor's `aliases` and `provenance.merged_from`, combine the sources (no repeats) and fold the useful wording into the survivor's statement. Add a row to `MERGES.md` and a `merge` entry to `data/changelog.json`. `scripts/build-principles.py` and `scripts/build-site.py` write a small redirect page for each alias.
-- **Overlap, not duplicate:** keep both. Sharpen the wording and add a `distinct_from` note to each saying when to use it and how it differs from its partner.
-- **Drop:** set `status` to `dropped` and give the reason in `provenance.notes`.
+- **Add:** append a new number in the category, with its skill folder, and add the matching entries to `data/skill-principle-map.json`, `data/mapping.json`, `data/licences.json` and `scorecard.csv`.
+- **Merge:** only if truly duplicate. Keep the clearer one. Remove the other from `principles`, add it to the top-level `aliases` map and to the survivor's `aliases` list (with its old statement), put the survivor's old wording in `previous_statement`, fold the duplicate's skill into the survivor's skill (no repeats) and remove the duplicate's skill folder. Add a section to `MERGES.md` and a `merge` entry to `data/changelog.json`. `scripts/build-site.py` writes a small redirect page for each alias; `principles/` has no file for a retired ID.
+- **Overlap, not duplicate:** keep both, and set `partial_overlap_with` on each to point at its partner.
+- **Drop:** remove it from `principles` and the skill map, log a `drop` entry with the reason in `data/changelog.json`, and never reuse the ID.
 - **Edit wording:** allowed. Log it as an `edit`.
 
-Never delete an entry or reuse a number.
+Never reuse a number.
 
 ### 6. Re-score (not built yet)
 
@@ -113,18 +113,18 @@ scripts/build-principles.py --check
 
 ## Provenance
 
-- Every principle has a `provenance` block: where it came from, which research run, what it was merged from.
+- Every principle lists the duplicates merged into it (`aliases`, with their old statements) and its wording before the merge (`previous_statement`). `data/mapping.json` lists the source files it came from.
 - Every skill's `SOURCES.md` lists the source files it came from, linked at the pinned commit, with licence and attribution.
 - Hand edits that change the meaning of a principle or skill get a changelog entry.
 
 ## Schema versions
 
-Each data file has a `schema_version` (semantic versioning). The matching schema is in `data/schemas/`, and `scripts/build-principles.py` refuses to run on a version it does not know.
+Each data file has a matching schema in `data/schemas/`, versioned with semantic versioning in the schema's description; `sources.json` and `changelog.json` also carry a `schema_version`. `scripts/validate-data.py` validates every file, and `scripts/build-principles.py` refuses to run on data that does not match what it expects.
 
 To change a schema:
 
 1. Edit the schema in `data/schemas/`.
-2. Bump `schema_version` in the schema, in every data file that uses it, and in the scripts that read it.
+2. Bump the version in the schema, in any data file that carries a `schema_version`, and in the scripts that read it.
 3. Add a `schema` entry to `data/changelog.json` and a note in `CHANGELOG.md` saying how to migrate.
 4. A breaking change bumps the major version.
 

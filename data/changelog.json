@@ -111,6 +111,59 @@
       ],
       "summary": "principles schema 1.0.0 to 1.1.0: added optional aliases and distinct_from. Existing data stays valid; set schema_version to 1.1.0.",
       "reason": "Merged IDs need to keep resolving, and overlapping principles need a note on how they differ."
+    },
+    {
+      "date": "2026-11-26",
+      "research_run": "run-1",
+      "type": "import",
+      "ids": [
+        "skills",
+        "principles",
+        "data/skill-principle-map.json",
+        "data/mapping.json",
+        "data/licences.json",
+        "scorecard.csv"
+      ],
+      "summary": "Imported the amalgamated-skills-103 kit: 103 skills (one per principle, SKILL.md and SOURCES.md each), 103 principles with 5 aliases (4.4 to 4.1, 4.5 to 5.3, 9.4 to 5.1, 5.6 to 5.10, 2.11 to 6.3), the skill-principle map, the principle-to-source mapping, the licence record and the scorecard. data/principles.json is replaced by the kit's index.",
+      "reason": "The kit already contains the dedupe and the licence cleanup; it supersedes the earlier drafts."
+    },
+    {
+      "date": "2026-11-26",
+      "research_run": "run-1",
+      "type": "edit",
+      "ids": [
+        "2.14",
+        "3.5",
+        "7.6",
+        "7.10",
+        "7.1",
+        "8.7",
+        "4.9",
+        "7.12",
+        "3.14",
+        "5.4",
+        "8.5",
+        "9.9",
+        "8.1",
+        "8.3",
+        "2.5",
+        "3.1"
+      ],
+      "summary": "With the kit's data/principles.json, these 16 statements take the kit's wording, which is the original research wording, not the sharpened wording added on 2026-11-26. The distinct_from notes are replaced by the kit's partial_overlap_with field. Survivors 4.1, 5.1, 5.3, 5.10 and 6.3 keep the kit's merged statements.",
+      "reason": "The kit's data is the single source; statements are not edited by hand."
+    },
+    {
+      "date": "2026-11-26",
+      "research_run": "run-1",
+      "type": "schema",
+      "ids": [
+        "principles",
+        "skill-principle-map",
+        "mapping",
+        "licences"
+      ],
+      "summary": "principles schema 1.1.0 to 2.0.0 for the kit layout (version, count, categories with numeric id, aliases map, per-principle aliases with old statements). Added schemas 1.0.0 for skill-principle-map.json, mapping.json and licences.json.",
+      "reason": "Every data file must validate against a schema."
     }
   ]
 }

@@ -2,7 +2,8 @@
 
 | Script | What it does |
 | --- | --- |
-| `build-principles.py` | Regenerates `principles/*.md` from `data/principles.json`. `--check` fails if anything is stale. |
+| `validate.py` | Checks the amalgamated-skills kit: 103 principles, 103 skill folders with `SKILL.md` and `SOURCES.md`, 5 aliases, slots 1 to 103, a licence line in every skill, no non-adaptable source in a main source list, 103 scorecard rows, and the licence files. Prints `OK: ...` or `FAILED` and exits 1. |
+| `build-principles.py` | Regenerates `principles/*.md` from `data/principles.json` and `data/skill-principle-map.json`. `--check` fails if anything is stale. |
 | `refresh-sources.py` | Compares each pinned SHA in `data/sources.json` with the upstream head. `--pin` and `--repin` move pins. |
 | `build-site.py` | Regenerates the static site in `docs/` from `data/` and `guides/developer/`. `--check` fails if anything is stale. |
 | `validate-data.py` | Validates every `data/*.json` against `data/schemas/`. Needs `pip install jsonschema`. |
