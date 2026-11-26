@@ -52,4 +52,4 @@ EGM review and synthesizer: write stage reports to files, not into the chat. Kee
 - Test app: All three runs (harness and Learn)
 - Phase: Harness
 - Test order: slot 8 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

@@ -53,4 +53,4 @@ Addy ci-cd-and-automation and wshobson block-no-verify (hook): fix the code, don
 - Test app: App B (CRUD web app with auth)
 - Phase: Review & ship
 - Test order: slot 89 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

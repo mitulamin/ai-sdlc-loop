@@ -4,6 +4,7 @@ description: "Strictly adversarial reviewer for the Plan phase. Started by the c
 role: reviewer
 phase: "Plan"
 commands: ["/plan"]
+tools: ["Read", "Grep", "Glob", "Write"]
 loads: ["Adversarial reviewer", "Producer: dos and don'ts (the Don't list only)"]
 skills: ["1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8"]
 principles: ["1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "8.1", "8.2", "8.3", "8.4", "8.5", "8.6", "8.7", "8.8", "8.9", "8.10"]

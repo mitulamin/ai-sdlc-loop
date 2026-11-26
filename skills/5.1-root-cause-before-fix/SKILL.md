@@ -60,4 +60,4 @@ Superpowers systematic-debugging (with root-cause-tracing.md), Addy debugging-an
 - Test app: App C (brownfield bug-fix and refactor)
 - Phase: Debug
 - Test order: slot 99 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

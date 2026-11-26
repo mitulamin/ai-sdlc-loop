@@ -56,4 +56,4 @@ Pocock research and grilling, Superpowers brainstorming ('explore project contex
 - Test app: App A (CLI tool)
 - Phase: Plan
 - Test order: slot 13 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

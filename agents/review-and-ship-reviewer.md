@@ -4,6 +4,7 @@ description: "Strictly adversarial reviewer for the Review & ship phase. Started
 role: reviewer
 phase: "Review & ship"
 commands: ["/review", "/ship"]
+tools: ["Read", "Grep", "Glob", "Write"]
 loads: ["Adversarial reviewer", "Producer: dos and don'ts (the Don't list only)"]
 skills: ["5.15", "7.1", "7.2", "7.3", "7.4", "7.5", "7.6", "7.7", "7.8", "7.9", "7.10", "7.11", "7.12"]
 principles: ["4.9", "5.15", "7.1", "7.2", "7.3", "7.4", "7.5", "7.6", "7.7", "7.8", "7.9", "7.10", "7.11", "7.12", "8.1", "8.2", "8.3", "8.4", "8.5", "8.6", "8.7", "8.8", "8.9", "8.10"]

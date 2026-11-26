@@ -54,4 +54,4 @@ Addy code-review-and-quality, code-reviewer agent and /review, plus steipete pr-
 - Test app: App B (CRUD web app with auth)
 - Phase: Review & ship
 - Test order: slot 82 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

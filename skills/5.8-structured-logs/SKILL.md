@@ -56,4 +56,4 @@ Addy observability-and-instrumentation, ciembor release-it and wshobson python-o
 - Test app: App B (CRUD web app with auth)
 - Phase: Debug
 - Test order: slot 67 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

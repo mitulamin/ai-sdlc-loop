@@ -54,4 +54,4 @@ Superpowers writing-skills and testing-skills-with-subagents: reproduce the fail
 - Test app: All three runs (harness and Learn)
 - Phase: Learn
 - Test order: slot 38 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

@@ -54,4 +54,4 @@ Pocock chief-of-staff, Superpowers subagent-driven-development and dispatching-p
 - Test app: All three runs (harness and Learn)
 - Phase: Harness
 - Test order: slot 7 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

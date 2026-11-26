@@ -56,4 +56,4 @@ Pocock tdd (and tests.md), brooks-lint brooks-test, Addy test-engineer and Anthr
 - Test app: App A (CLI tool)
 - Phase: Verify
 - Test order: slot 27 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

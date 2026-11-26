@@ -57,4 +57,4 @@ Addy documentation-and-adrs, wshobson architecture-decision-records and Pocock i
 - Test app: App B (CRUD web app with auth)
 - Phase: Design
 - Test order: slot 49 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

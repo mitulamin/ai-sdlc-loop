@@ -9,6 +9,7 @@
 | `validate-data.py` | Validates every `data/*.json` against `data/schemas/`. Needs `pip install jsonschema`. |
 | `check-skills.py` | Checks `skills/` against `data/principles.json` and `data/skill-principle-map.json`: one folder per principle with `SKILL.md` and `SOURCES.md`, matching front matter and aliases. Standard library only. |
 | `check-links.py` | Checks internal links in `docs/` and markdown, offline. |
+| `skillspector-scan.py` | Scans every folder in `skills/` with NVIDIA SkillSpector (`--no-llm`) against `.github/skillspector-exceptions.yaml`, failing on unexplained findings or stale/reasonless exceptions. Needs `skillspector==2.13.7` and `pyyaml`. |
 | `new-project.sh` | `new-project.sh <target-dir> [profile]`. Copies the `template/` base, applies a profile (`solo` default, `small-team`, `large-org`) and runs `git init`. `--help` lists the profiles. |
 
-Python 3, git and bash. Everything is standard library only except `validate-data.py`, which needs `jsonschema`. See [UPDATING.md](../UPDATING.md).
+Python 3, git and bash. Everything is standard library only except `validate-data.py` (needs `jsonschema`) and `skillspector-scan.py` (needs `skillspector==2.13.7` and `pyyaml`). See [UPDATING.md](../UPDATING.md).

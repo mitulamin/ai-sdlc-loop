@@ -4,6 +4,7 @@ description: "Strictly adversarial reviewer for the Debug phase. Started by the 
 role: reviewer
 phase: "Debug"
 commands: ["/verify"]
+tools: ["Read", "Grep", "Glob", "Write"]
 loads: ["Adversarial reviewer", "Producer: dos and don'ts (the Don't list only)"]
 skills: ["5.1", "5.2", "5.3", "5.5", "5.7", "5.8", "5.9", "5.11", "5.12", "5.13", "5.14"]
 principles: ["5.1", "5.2", "5.3", "5.5", "5.7", "5.8", "5.9", "5.11", "5.12", "5.13", "5.14", "8.1", "8.2", "8.3", "8.4", "8.5", "8.6", "8.7", "8.8", "8.9", "8.10"]

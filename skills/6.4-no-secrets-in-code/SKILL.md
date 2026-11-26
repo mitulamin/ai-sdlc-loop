@@ -56,4 +56,4 @@ Addy security-and-hardening and wshobson secrets-management: never commit secret
 - Test app: App B (CRUD web app with auth)
 - Phase: Secure
 - Test order: slot 77 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

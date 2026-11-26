@@ -104,6 +104,8 @@ def main():
                 repo["pinned_sha"] = e["upstream_sha"]
                 repo["default_branch"] = e["default_branch"]
                 repo["pinned_at"] = date.today().isoformat()
+                repo["pin_source"] = "github-head"
+                repo.pop("commit_date", None)
                 changed += 1
         SOURCES.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print(f"Updated {changed} pin(s). Log it in data/changelog.json and CHANGELOG.md.")

@@ -57,4 +57,4 @@ Pocock codebase-design (with DEEPENING.md), improve-codebase-architecture, setup
 - Test app: App A (CLI tool)
 - Phase: Design
 - Test order: slot 17 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

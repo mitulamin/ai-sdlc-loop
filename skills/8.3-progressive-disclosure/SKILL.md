@@ -52,4 +52,4 @@ Anthropic skill-creator and plugin-dev skill-development, Stratos core and murat
 - Test app: All three runs (harness and Learn)
 - Phase: Harness
 - Test order: slot 3 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

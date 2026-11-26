@@ -59,4 +59,4 @@ These sources have no usable licence for copying or adapting, so nothing in this
 - Test app: All three runs (harness and Learn)
 - Phase: Learn
 - Test order: slot 40 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

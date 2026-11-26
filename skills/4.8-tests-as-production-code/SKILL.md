@@ -56,4 +56,4 @@ ciembor clean-code, brooks-lint brooks-test and Superpowers writing-good-tests: 
 - Test app: App A (CLI tool)
 - Phase: Verify
 - Test order: slot 29 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

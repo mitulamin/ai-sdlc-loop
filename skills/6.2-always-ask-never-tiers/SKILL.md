@@ -55,4 +55,4 @@ Addy security-and-hardening only: sort agent actions into always do, ask first, 
 - Test app: App B (CRUD web app with auth)
 - Phase: Secure
 - Test order: slot 75 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

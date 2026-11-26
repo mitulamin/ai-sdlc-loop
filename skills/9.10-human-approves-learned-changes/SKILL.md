@@ -53,4 +53,4 @@ claude-reflect /reflect (approval per fix), Anthropic hookify conversation-analy
 - Test app: All three runs (harness and Learn)
 - Phase: Learn
 - Test order: slot 41 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

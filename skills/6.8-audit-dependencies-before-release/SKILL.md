@@ -56,4 +56,4 @@ Addy security-and-hardening, Trail of Bits supply-chain-risk-auditor and wshobso
 - Test app: App C (brownfield bug-fix and refactor)
 - Phase: Secure
 - Test order: slot 103 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

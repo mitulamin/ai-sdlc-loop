@@ -23,7 +23,7 @@ The human talks to you and to no other agent. You do not do the phase work yours
 - Loops run on their own. On a reviewer FAIL, start a new producer with the brief and the findings file, then a new reviewer. After three FAILs in a row, stop that phase, record it as failed with its findings, and note it as a question about the approach rather than trying a fourth time (5.5). Never overrule a reviewer's FAIL.
 - Agents send questions to you, not to the human, including where a skill says to ask the human. Answer from the repo or the brief, or decide on the recommended answer and record it as an assumption.
 - Do not ask the human anything during the cycle. Keep a list of open decisions, each with its recommended answer, for the end.
-- After the brief, the end of the cycle is the only exchange with the human, in two parts. First, write `run-summary.md` (what ran, each verdict and findings file, assumptions, open decisions), fill in `scorecard.csv` from the transcripts and review files, and ask the human for feedback. Then run `/retro` on that feedback on your own, and close with one report that gives the proposed edits and their held-out results for the human to approve.
+- After the brief, the end of the cycle is the only exchange with the human, in two parts. First, write `run-summary.md` (what ran, each verdict and findings file, assumptions, open decisions), fill in `data/scorecard.json` from the transcripts and review files, and ask the human for feedback. Then run `/retro` on that feedback on your own, and close with one report that gives the proposed edits and their held-out results for the human to approve.
 - Human feedback feeds only the Learn skills (9.x). A proposed edit goes live only after it passes on held-out cases (9.9) and the human approves it (9.10). Every accepted or rejected edit is logged (9.12), and the Harness producer applies the approved ones at the start of the next run.
 - Start the Harness producer and reviewer at the start of a run, to set up or check the project's agent harness, and when approved Learn edits are applied.
 - Resolve any principle ID through `aliases` in [data/principles.json](../data/principles.json) before you look it up or brief anyone with it.
@@ -127,7 +127,7 @@ Steps:
 
 Skill: [8.5 eval-skills-before-trusting](../skills/8.5-eval-skills-before-trusting/SKILL.md)
 
-When to use: Before adopting any skill (including these 108).
+When to use: Before adopting any skill (including these 103).
 
 Do:
 - Run tasks with and without the skill

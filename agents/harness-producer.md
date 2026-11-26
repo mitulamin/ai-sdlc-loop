@@ -109,7 +109,7 @@ Steps:
 
 Skill: [8.5 eval-skills-before-trusting](../skills/8.5-eval-skills-before-trusting/SKILL.md)
 
-When to use: Before adopting any skill (including these 108).
+When to use: Before adopting any skill (including these 103).
 
 Do:
 - Run tasks with and without the skill

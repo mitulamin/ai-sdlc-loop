@@ -4,6 +4,7 @@ description: "Strictly adversarial reviewer for the Design phase. Started by the
 role: reviewer
 phase: "Design"
 commands: ["/design"]
+tools: ["Read", "Grep", "Glob", "Write"]
 loads: ["Adversarial reviewer", "Producer: dos and don'ts (the Don't list only)"]
 skills: ["2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "2.10", "2.12", "2.13", "2.14", "2.15", "2.16", "2.17", "2.18", "2.19"]
 principles: ["2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "2.10", "2.12", "2.13", "2.14", "2.15", "2.16", "2.17", "2.18", "2.19", "3.1", "3.5", "8.1", "8.2", "8.3", "8.4", "8.5", "8.6", "8.7", "8.8", "8.9", "8.10"]

@@ -56,4 +56,4 @@ Addy code-simplification and /code-simplify, Anthropic code-simplifier agents: p
 - Test app: App A (CLI tool)
 - Phase: Build
 - Test order: slot 24 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

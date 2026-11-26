@@ -4,6 +4,7 @@ description: "Strictly adversarial reviewer for the Harness phase. Started by th
 role: reviewer
 phase: "Harness"
 commands: []
+tools: ["Read", "Grep", "Glob", "Write"]
 loads: ["Adversarial reviewer", "Producer: dos and don'ts (the Don't list only)"]
 skills: ["8.1", "8.2", "8.3", "8.4", "8.5", "8.6", "8.7", "8.8", "8.9", "8.10"]
 principles: ["7.1", "8.1", "8.2", "8.3", "8.4", "8.5", "8.6", "8.7", "8.8", "8.9", "8.10", "9.9"]

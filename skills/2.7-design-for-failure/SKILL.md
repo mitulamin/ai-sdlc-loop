@@ -57,4 +57,4 @@ ciembor release-it (Nygard) is the main source: timeouts, bounded retries with b
 - Test app: App B (CRUD web app with auth)
 - Phase: Design
 - Test order: slot 50 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

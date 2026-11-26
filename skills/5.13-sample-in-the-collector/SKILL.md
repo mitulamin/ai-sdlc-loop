@@ -53,4 +53,4 @@ dash0 otel-instrumentation ('defer all sampling to the Collector') and otel-coll
 - Test app: App B (CRUD web app with auth)
 - Phase: Debug
 - Test order: slot 71 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

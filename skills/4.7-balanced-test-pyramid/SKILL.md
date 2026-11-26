@@ -56,4 +56,4 @@ Addy test-driven-development and test-engineer, wshobson test-automator/tdd-orch
 - Test app: App B (CRUD web app with auth)
 - Phase: Verify
 - Test order: slot 65 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

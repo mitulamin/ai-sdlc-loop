@@ -56,4 +56,4 @@ Pocock domain-modeling ('invent edge-case scenarios'), grill-with-docs and Force
 - Test app: App B (CRUD web app with auth)
 - Phase: Design
 - Test order: slot 61 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

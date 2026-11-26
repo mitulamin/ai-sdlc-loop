@@ -54,4 +54,4 @@ Pocock retro: when the reviewer missed a mistake, add a reviewer rule; if mechan
 - Test app: All three runs (harness and Learn)
 - Phase: Learn
 - Test order: slot 33 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

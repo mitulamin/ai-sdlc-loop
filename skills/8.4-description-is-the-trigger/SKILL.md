@@ -52,4 +52,4 @@ Anthropic skill-creator, plugin-dev skill-development and skill-reviewer: the de
 - Test app: All three runs (harness and Learn)
 - Phase: Harness
 - Test order: slot 4 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

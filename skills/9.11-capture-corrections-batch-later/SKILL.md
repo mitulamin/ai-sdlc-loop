@@ -52,4 +52,4 @@ claude-reflect (hooks queue corrections) and Kulaxyz self-learning: capture corr
 - Test app: All three runs (harness and Learn)
 - Phase: Learn
 - Test order: slot 42 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)
