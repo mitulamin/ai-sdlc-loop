@@ -4,6 +4,24 @@ All notable changes to this repo. The machine-readable version of the data chang
 
 ## Unreleased
 
+### Rebuilt the docs/ site from the kit's data
+
+`scripts/build-site.py` now builds the site from `data/principles.json`, `data/skill-principle-map.json`, `data/licences.json`, `data/mapping.json` and `scorecard.csv` instead of the earlier adapter. It stops with a message if the files disagree. `--check` is unchanged. Still static, client-side only, no trackers.
+
+Added:
+
+- `docs/skills.html`: the 103 skills in run order, with test app, phase, slot, licence status and score, filterable.
+- A licence-status column and filter, a phase and test-app filter, and a slot column on `docs/principles.html`; a "Merged IDs" list.
+- Sources and licences page: adapted sources with licence and pinned commit; link-only sources in their own box (whole repos and single folders, with every linked file and why); research repos that were not used.
+- `docs/data/skill-principle-map.json`, `mapping.json`, `licences.json` and `scorecard.csv`, copied from `data/` for readers.
+
+Changed:
+
+- 103 principles shown, with aliases marked: each survivor row shows "also 4.4" and so on, and `principles/4.4.html`, `4.5`, `9.4`, `5.6` and `2.11` open their survivor.
+- Each principle page shows its skill, phase, test app, slot, licence status and score; adapted sources and link-only sources are listed separately.
+- Landing page counts skills and merged IDs and explains the five merges; the footer links `LICENSE.md` and `CREDITS.md`.
+- `docs/assets/site.js` filters any table through one generic mechanism; the `src` query parameter of `principles.html` is now `source`.
+
 ### Imported the amalgamated-skills-103 kit
 
 The kit already contains the dedupe (108 principles to 103) and the licence cleanup, and supersedes the earlier drafts. See [IMPORT.md](IMPORT.md) and [MERGES.md](MERGES.md).
