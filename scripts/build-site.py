@@ -20,6 +20,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 DOCS = ROOT / "docs"
 GUIDES = ROOT / "guides" / "developer"
+PROFILES = ROOT / "template" / "profiles"
 REPO_URL = "https://github.com/mitulamin/ai-sdlc-loop"
 BLOB = REPO_URL + "/blob/main/"
 SITE_NAME = "AI SDLC Loop"
@@ -27,6 +28,7 @@ SITE_NAME = "AI SDLC Loop"
 GENERATED_DIRS = ["categories", "principles", "guides"]
 GENERATED_FILES = [
     "index.html",
+    "path.html",
     "principles.html",
     "sources.html",
     "data/principles.json",
@@ -102,7 +104,8 @@ def canonical_json(obj):
 
 
 NAV = [
-    ("index.html", "Learning path"),
+    ("index.html", "Home"),
+    ("path.html", "Learning path"),
     ("principles.html", "All principles"),
     ("sources.html", "Sources"),
     ("guides/index.html", "Guides"),
@@ -118,7 +121,7 @@ def page(title, body, depth, active=None, description=""):
         )
         for href, label in NAV
     )
-    desc = esc(description or "A learning path through 108 software principles for agentic loops.")
+    desc = esc(description or "Software engineering principles for building with agents, and a loop that learns from each project.")
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -179,7 +182,148 @@ class Site:
                 out.append(f'<span class="chip">{esc(lab)}</span>')
         return " ".join(out)
 
-    def home(self):
+    def profile_cards(self):
+        """The template profiles, in the order the README lists them. Descriptions come from profile.txt."""
+        order = [
+            ("solo", "Individuals", "Working alone, on your own projects."),
+            ("small-team", "Small teams", "A few people sharing one repo."),
+            ("large-org", "Large organisations", "Many people, with owners, gates and audit needs."),
+        ]
+        cards = []
+        for slug, who, line in order:
+            f = PROFILES / slug / "profile.txt"
+            detail = f.read_text(encoding="utf-8").strip() if f.exists() else ""
+            cards.append(
+                f"""<li class="lp-card">
+<h3>{esc(who)}</h3>
+<p>{esc(line)}</p>
+<p class="lp-profile"><span class="muted">Template profile</span> <code>{esc(slug)}</code></p>
+<p class="muted">{esc(detail)}</p>
+</li>"""
+            )
+        return "".join(cards)
+
+    def landing_page(self):
+        n_principles = len(self.principles)
+        n_cats = len(self.cats)
+        n_sources = len(self.sdoc["repos"])
+        first_cat = self.cats[0]
+        learn = self.cat_by_slug.get("learn")
+        learn_ids = [p["id"] for p in self.by_cat.get("learn", [])]
+        learn_range = f"{learn_ids[0]} to {learn_ids[-1]}" if learn_ids else ""
+        learn_link = (
+            f'<a href="categories/{esc(learn["slug"])}.html">the {esc(learn["name"])} category</a>'
+            + (f" (principles {learn_range})" if learn_range else "")
+            if learn
+            else "the last category"
+        )
+        stage_chips = "".join(
+            f'<li><a class="chip" href="categories/{esc(c["slug"])}.html">{c["number"]}. {esc(c["name"])}</a></li>'
+            for c in self.cats
+        )
+        body = f"""<section class="lp-hero" aria-labelledby="lp-title">
+<p class="lp-eyebrow">Open source starter for agentic software development</p>
+<h1 id="lp-title">Software engineering principles for building with agents, and a loop that learns from each project</h1>
+<p class="lede">I distilled what {n_sources} public repos teach about working with coding agents into {n_principles} principles
+in {n_cats} categories. Use them to adopt agentic tools with less trial and error, then build a learning loop of your own.</p>
+<p class="lp-cta">
+<a class="btn btn-primary" href="path.html">Explore the learning path</a>
+<a class="btn" href="#start">Start a project</a>
+<a class="btn" href="principles.html">Browse all principles</a>
+</p>
+<dl class="lp-stats">
+<div><dt>Principles</dt><dd>{n_principles}</dd></div>
+<div><dt>Categories</dt><dd>{n_cats}</dd></div>
+<div><dt>Source repos</dt><dd>{n_sources}</dd></div>
+</dl>
+</section>
+
+<section class="lp-section" aria-labelledby="why">
+<h2 id="why">What this is and why it exists</h2>
+<div class="lp-cols">
+<div>
+<p>At Shravi Limited we are building aidev, a software engineering team in a box. I wanted agents that do real software work end to end without me steering every step.</p>
+<p>The ideas for that are scattered across dozens of public repos: skills, sub-agents, slash commands and rules files. Many say the same thing in different words. Some contradict each other. Some are risky to install. And if you load them all, their descriptions alone use up the context window before the agent does anything useful.</p>
+</div>
+<div>
+<p>So I had a research bot read {n_sources} public repos and boil them down to {n_principles} numbered principles in {n_cats} categories. Each one is traceable to the repos it came from.</p>
+<p>The principles are not the point. The point is the loop that produced them and the loop that keeps improving them. This repo is a base, not a finished product. Fork it, swap in your own principles, and let your own projects change it.</p>
+</div>
+</div>
+</section>
+
+<section class="lp-section" aria-labelledby="who">
+<h2 id="who">Who it is for</h2>
+<p>An individual and a large company share the same principles. What changes is ceremony: gates, roles, review and ownership. So there is one shared template, and three profiles that switch that ceremony on or off.</p>
+<ul class="lp-cards">{self.profile_cards()}</ul>
+<p class="muted">If you are unsure, start with <code>solo</code> or <code>small-team</code>. It is easier to add ceremony later than to remove it.</p>
+</section>
+
+<section class="lp-section" aria-labelledby="how">
+<h2 id="how">How it works</h2>
+<ol class="lp-cards lp-steps">
+<li class="lp-card">
+<h3>One coordinator</h3>
+<p>I talk to one agent, the coordinator. It does not do the work. It plans, then starts new agents with blank contexts and gives each exactly the context its job needs.</p>
+<p class="muted">An agent that has not seen the whole conversation cannot be misled by it.</p>
+</li>
+<li class="lp-card">
+<h3>Producer and adversarial reviewer</h3>
+<p>Every phase is a pair. The producer gets the dos and don'ts for that phase. The reviewer checks only against the don'ts and known failure modes, and is there to find problems.</p>
+<p class="muted">Loops run on their own and come back at the end of a cycle.</p>
+</li>
+<li class="lp-card">
+<h3>Human review feeds Learn</h3>
+<p>After the last phase there is a human acceptance review. My feedback goes to {learn_link}, which asks which phase failed, which rule was at fault, and how to harden the checklist.</p>
+<p class="muted">A change goes live only if it helps on held-out cases and a human approves it.</p>
+</li>
+</ol>
+</section>
+
+<section class="lp-section" aria-labelledby="do">
+<h2 id="do">What you can do here</h2>
+<ul class="lp-cards lp-links">
+<li class="lp-card"><h3><a href="path.html">Follow the learning path</a></h3><p>Walk the {n_cats} stages in order, from planning to retrospective.</p></li>
+<li class="lp-card"><h3><a href="principles.html">Explore the principles</a></h3><p>Search, filter and sort all {n_principles}. Each links to its sources.</p></li>
+<li class="lp-card"><h3><a href="categories/{esc(first_cat["slug"])}.html">Read the categories</a></h3><p>One page per category, with the principles that belong to it.</p></li>
+<li class="lp-card"><h3><a href="sources.html">Check the sources</a></h3><p>The {n_sources} repos the principles came from, with their licences.</p></li>
+<li class="lp-card"><h3><a href="guides/index.html">Read the guides</a></h3><p>Plain-language guides to the principles.</p></li>
+<li class="lp-card"><h3><a href="#start">Start a project</a></h3><p>Copy the template and run your first loop.</p></li>
+</ul>
+<h3 class="lp-sub">The {n_cats} categories</h3>
+<ul class="lp-chips">{stage_chips}</ul>
+</section>
+
+<section class="lp-section" id="start" aria-labelledby="start-title">
+<h2 id="start-title">Start a project from the template</h2>
+<p>Clone the repo and run <a href="{BLOB}scripts/new-project.sh"><code>scripts/new-project.sh</code></a> with a profile. It copies the shared base from <a href="{BLOB}template/"><code>template/</code></a>, applies the profile, and runs <code>git init</code>. It refuses a target folder that is not empty.</p>
+<pre tabindex="0"><code>git clone {esc(REPO_URL)}
+cd ai-sdlc-loop
+scripts/new-project.sh ../my-new-project              # solo, the default
+scripts/new-project.sh ../my-new-project small-team
+scripts/new-project.sh ../my-new-project large-org</code></pre>
+<p>Then edit the new project's <code>AGENTS.md</code>, read its <code>PROCESS.md</code>, and start your first loop. More in <a href="{REPO_URL}#start-a-new-project-from-the-template">the README</a>.</p>
+</section>
+
+<section class="lp-section lp-final" aria-labelledby="next">
+<h2 id="next">Where to go next</h2>
+<p class="lp-cta">
+<a class="btn btn-primary" href="path.html">Start at the learning path</a>
+<a class="btn" href="categories/{esc(first_cat["slug"])}.html">Jump to stage 1: {esc(first_cat["name"])}</a>
+<a class="btn" href="{REPO_URL}">View on GitHub</a>
+</p>
+<p class="muted">Open source. Code is GPL-3.0, written content is CC BY-SA 4.0, and the project template is MIT.
+Details in <a href="{REPO_URL}#why-gplv3-and-cc-by-sa-for-the-writing">the README</a>.</p>
+</section>"""
+        return page(
+            "Principles for building with agents",
+            body,
+            0,
+            "index.html",
+            f"{n_principles} software engineering principles distilled from {n_sources} public repos, and a template to start your own agentic loop.",
+        )
+
+    def path_page(self):
         total = len(self.principles)
         steps = []
         for c in self.cats:
@@ -205,7 +349,8 @@ class Site:
 </div>
 </li>"""
             )
-        body = f"""<section class="hero">
+        body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / Learning path</nav>
+<section class="hero">
 <h1>A learning path through {total} software principles</h1>
 <p class="lede">These principles were distilled from {len(self.sdoc["repos"])} public repos of agent skills, sub-agents and commands.
 They are the base of a loop that builds software with agents and learns from each project.
@@ -217,7 +362,8 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 </form>
 <p class="quick"><a href="categories/{esc(self.cats[0]["slug"])}.html">Start at stage 1</a>
 <a href="principles.html">Browse the table</a>
-<a href="guides/index.html">Read the developer guide</a></p>
+<a href="guides/index.html">Read the developer guide</a>
+<a href="index.html">About this project</a></p>
 </section>
 <section>
 <h2>The nine stages</h2>
@@ -234,7 +380,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 <li>Want to know where an idea came from? Every principle links to the source repos it was drawn from, and the <a href="sources.html">sources page</a> lists all of them with their licences.</li>
 </ul>
 </section>"""
-        return page("Learning path", body, 0, "index.html")
+        return page("Learning path", body, 0, "path.html")
 
     def category_page(self, i):
         c = self.cats[i]
@@ -251,7 +397,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
         pager += (
             f'<a class="prev" href="{esc(prev["slug"])}.html"><small>Previous stage</small>{esc(prev["name"])}</a>'
             if prev
-            else '<a class="prev" href="../index.html"><small>Back to</small>Learning path</a>'
+            else '<a class="prev" href="../path.html"><small>Back to</small>Learning path</a>'
         )
         pager += (
             f'<a class="next" href="{esc(nxt["slug"])}.html"><small>Next stage</small>{esc(nxt["name"])}</a>'
@@ -259,14 +405,14 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
             else '<a class="next" href="../principles.html"><small>Finished</small>All principles</a>'
         )
         pager += "</nav>"
-        body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Learning path</a> / Stage {c["number"]}</nav>
+        body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> / <a href="../path.html">Learning path</a> / Stage {c["number"]}</nav>
 <h1>Stage {c["number"]}: {esc(c["name"])}</h1>
 <p class="lede">{esc(tag)}</p>
 <p>{esc(why)}</p>
 <h2>{len(ps)} principles</h2>
 <ol class="plist">{rows}</ol>
 {pager}"""
-        return page(c["name"], body, 1, "index.html", tag)
+        return page(c["name"], body, 1, "path.html", tag)
 
     def principle_page(self, idx):
         p = self.principles[idx]
@@ -302,7 +448,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
             else "<span></span>"
         )
         pager += "</nav>"
-        body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Learning path</a> /
+        body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> / <a href="../path.html">Learning path</a> /
 <a href="../categories/{esc(c["slug"])}.html">Stage {c["number"]}: {esc(c["name"])}</a> / {esc(p["id"])}</nav>
 <p class="pid-big">Principle {esc(p["id"])}</p>
 <h1>{esc(p["statement"])}</h1>
@@ -335,7 +481,8 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
         opts = "".join(f'<option value="{esc(c["slug"])}">{c["number"]}. {esc(c["name"])}</option>' for c in self.cats)
         labels = sorted({lab for p in self.principles for lab in p["sources"]}, key=str.lower)
         src_opts = "".join(f'<option value="{esc(lab)}">{esc(lab)}</option>' for lab in labels)
-        body = f"""<h1>All principles</h1>
+        body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / All principles</nav>
+<h1>All principles</h1>
 <p>Search, filter by category or source, and click a column heading to sort. Works without a server; with JavaScript off you still get the full table.</p>
 <div class="filters" role="search">
 <label>Search <input id="q" type="search" placeholder="Search statements" autocomplete="off"></label>
@@ -371,7 +518,8 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
                 f'<td data-sort="{used}">{used}</td><td>{esc(pin)}</td></tr>'
             )
         run = self.sdoc["research_run"]
-        body = f"""<h1>Source repos</h1>
+        body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / Sources</nav>
+<h1>Source repos</h1>
 <p>The {len(self.sdoc["repos"])} public repos the principles were drawn from ({esc(run["id"])}, {esc(run["date"])}).
 Licences are as checked and may need your own review before you reuse anything; see
 <a href="{BLOB}ATTRIBUTIONS.md">ATTRIBUTIONS.md</a>. Curation lists are pointers to other sources and are never installed wholesale.</p>
@@ -411,7 +559,7 @@ Licences are as checked and may need your own review before you reuse anything; 
             )
             body_html = render_markdown(text, f.parent)
             out[f"guides/developer/{slug}.html"] = page(
-                title, f'<nav class="crumbs"><a href="../index.html">Guides</a> / {esc(title)}</nav>\n{banner}\n<article class="prose">{body_html}</article>',
+                title, f'<nav class="crumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> / <a href="../index.html">Guides</a> / {esc(title)}</nav>\n{banner}\n<article class="prose">{body_html}</article>',
                 2, "guides/index.html",
             )
             entries.append((slug, title, stub))
@@ -420,7 +568,8 @@ Licences are as checked and may need your own review before you reuse anything; 
             f'<li><a href="developer/{slug}.html">{esc(title)}</a>{badge if stub else ""}</li>'
             for slug, title, stub in entries
         )
-        body = f"""<h1>Guides</h1>
+        body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> / Guides</nav>
+<h1>Guides</h1>
 <p>Plain-language guides to the principles. They cover everything, including what experienced developers already know.</p>
 <h2>Developer guides</h2>
 <ul>{listing}</ul>
@@ -430,7 +579,8 @@ Licences are as checked and may need your own review before you reuse anything; 
 
     def build(self):
         files = {}
-        files["index.html"] = self.home()
+        files["index.html"] = self.landing_page()
+        files["path.html"] = self.path_page()
         files["principles.html"] = self.table_page()
         files["sources.html"] = self.sources_page()
         for i, c in enumerate(self.cats):
