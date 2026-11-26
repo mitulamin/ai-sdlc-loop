@@ -10,6 +10,7 @@ docs/assets/style.css, docs/assets/site.js, docs/.nojekyll and docs/README.md.
 Everything else under docs/ is generated; edits are overwritten and extra
 files in generated folders are reported as stale.
 """
+import csv
 import html
 import json
 import re
@@ -30,9 +31,14 @@ GENERATED_FILES = [
     "index.html",
     "path.html",
     "principles.html",
+    "skills.html",
     "sources.html",
     "data/principles.json",
     "data/sources.json",
+    "data/skill-principle-map.json",
+    "data/mapping.json",
+    "data/licences.json",
+    "data/scorecard.csv",
 ]
 
 # Hand-written teaching text for the learning path, keyed by category slug.
@@ -107,6 +113,7 @@ NAV = [
     ("index.html", "Home"),
     ("path.html", "Learning path"),
     ("principles.html", "All principles"),
+    ("skills.html", "Skills"),
     ("sources.html", "Sources"),
     ("guides/index.html", "Guides"),
 ]
@@ -163,80 +170,161 @@ def slugify(name):
     return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
 
 
-def site_view(pdoc, sdoc, mapping, licences):
-    """Shape the kit's data/principles.json into the fields the pages use.
+# Licence status of a skill, as worded in data/skill-principle-map.json, to a short key and label.
+LICENCE_STATUS = [
+    ("clean", "clean", "Clean: every source could be adapted"),
+    ("rewritten", "rewritten", "Rewritten: link-only sources moved to Further reading"),
+    ("rebuilt", "rebuilt", "Rebuilt from MIT sources; the original sources are link only"),
+]
 
-    A principle's sources are the repos of its primary source files in
-    data/mapping.json, labelled as in data/sources.json where the repo is
-    listed there and by owner/repo otherwise.
+# Research repos that are not in data/licences.json (no skill was written from them) but must only ever be
+# linked, never copied. Reasons follow CREDITS.md.
+NOT_USED_LINK_ONLY = {
+    "anthropics/claude-code": "Proprietary (all rights reserved).",
+    "hesreallyhim/awesome-claude-code": "CC BY-NC-ND 4.0: no derivatives, not for commercial use.",
+    "travisvn/awesome-claude-skills": "No licence file.",
+    "sickn33/agentic-awesome-skills": "A curation list that bundles third-party skills; each keeps its upstream licence.",
+}
+
+
+class DataError(Exception):
+    pass
+
+
+def licence_status(raw):
+    for prefix, key, label in LICENCE_STATUS:
+        if raw.startswith(prefix):
+            return key, label
+    raise DataError(f"unknown licence status in data/skill-principle-map.json: {raw!r}")
+
+
+def load_scorecard():
+    with open(ROOT / "scorecard.csv", encoding="utf-8", newline="") as f:
+        return {r["skill_id"]: r for r in csv.DictReader(f)}
+
+
+def site_view(pdoc, smap, licences, scorecard):
+    """Join the kit's data files into the one model the pages are built from.
+
+    principles.json gives the 103 principles and their aliases; skill-principle-map.json the skill, test app,
+    phase, slot and licence status of each; licences.json the adapted and link-only source files of each;
+    scorecard.csv the score. Any disagreement between them stops the build.
     """
     cats = [{"number": c["id"], "slug": slugify(c["name"]), "name": c["name"]} for c in pdoc["categories"]]
     slug_by_id = {c["number"]: c["slug"] for c in cats}
-    repo_by_name = {f'{r["owner"]}/{r["repo"]}'.lower(): r for r in sdoc["repos"]}
-    repo_by_label = {lab: r for r in sdoc["repos"] for lab in r["labels"]}
+    skill_by_pid = {s["principle_id"]: s for s in smap["skills"]}
+    ids = [p["id"] for p in pdoc["principles"]]
+    if len(ids) != len(set(ids)) or set(ids) != set(skill_by_pid) or set(ids) != set(licences["skills"]):
+        raise DataError("principles.json, skill-principle-map.json and licences.json must list the same principle IDs")
+    if set(ids) != set(scorecard):
+        raise DataError("scorecard.csv must have one row per principle ID")
+    if len(ids) != pdoc["count"] or len(smap["skills"]) != smap["count"]:
+        raise DataError("a data file's count does not match its entries")
+    alias_map = {a["id"]: p["id"] for p in pdoc["principles"] for a in p["aliases"]}
+    if alias_map != pdoc["aliases"]:
+        raise DataError("principles.json: per-principle aliases do not match the top-level aliases map")
     principles = []
     for p in pdoc["principles"]:
-        labels = []
-        for s in mapping[p["id"]]["sources"]:
-            if not s["primary"]:
-                continue
-            r = repo_by_name.get(s["repo"].lower())
-            if r:
-                lab = r["labels"][0] if r["labels"] else s["repo"]
-                repo_by_label.setdefault(lab, r)
-            else:
-                lab = s["repo"]
-                owner, _, repo = s["repo"].partition("/")
-                info = licences["repos"].get(s["repo"], {})
-                repo_by_label.setdefault(lab, {
-                    "owner": owner, "repo": repo, "url": f"https://github.com/{s['repo']}",
-                    "licence": ", ".join(info.get("licences_seen", [])) or s["licence"], "labels": [lab],
-                })
-            if lab not in labels:
-                labels.append(lab)
-        aliases = [a["id"] for a in p["aliases"]]
-        notes = " ".join(f'Merged duplicate {a["id"]}: {a["statement"]}.' for a in p["aliases"])
-        if p["previous_statement"]:
-            notes += f' Previous wording: {p["previous_statement"]}.'
+        sk = skill_by_pid[p["id"]]
+        lic = licences["skills"][p["id"]]
+        row = scorecard[p["id"]]
+        if (int(row["slot"]), row["app"], row["phase"]) != (sk["slot"], sk["test_app"], sk["phase"]):
+            raise DataError(f"scorecard.csv row {p['id']} disagrees with skill-principle-map.json on slot, app or phase")
+        if (sk["clean_sources"], sk["link_only_sources"]) != (len(lic["sources"]), len(lic["link_only"])):
+            raise DataError(f"{p['id']}: source counts in skill-principle-map.json and licences.json differ")
+        if sk["folder"] != p["skill_folder"]:
+            raise DataError(f"{p['id']}: skill folder differs between principles.json and skill-principle-map.json")
+        key, label = licence_status(sk["licence_status"])
+        if lic["status"] != sk["licence_status"]:
+            raise DataError(f"{p['id']}: licence status differs between skill-principle-map.json and licences.json")
         principles.append({
             "id": p["id"],
             "category": slug_by_id[p["category"]],
             "number": pid_key(p["id"])[1],
             "statement": p["statement"],
-            "sources": labels,
-            "status": "active",
-            "provenance": {"origin": "amalgamated-skills kit", "research_run": pdoc["version"], "merged_from": aliases, "notes": notes.strip()},
-            "aliases": aliases,
-            "distinct_from": (
-                [{"id": p["partial_overlap_with"], "difference": "Partial overlap; kept as a separate principle."}]
-                if p["partial_overlap_with"] else []
-            ),
-            "skill_folder": p["skill_folder"],
+            "previous_statement": p["previous_statement"],
+            "merged": p["aliases"],
+            "overlap": p["partial_overlap_with"],
+            "skill_folder": sk["folder"],
+            "skill_name": sk["skill_name"],
+            "phase": sk["phase"],
+            "app": sk["test_app"],
+            "app_name": sk["test_app_name"],
+            "slot": sk["slot"],
+            "licence_key": key,
+            "licence_label": label,
+            "text_licence": sk["text_licence"],
+            "build_status": sk["status"],
+            "adapted": lic["sources"],
+            "link_only": lic["link_only"],
+            "score": row,
         })
-    return cats, principles, repo_by_label
+    return cats, principles
+
+
+def repo_groups(sdoc, licences, principles):
+    """Split every source repo by what the kit may do with it.
+
+    adapted: the licence allowed adapting at least one file. link_only: nothing was copied, only linked.
+    unused: researched, but no skill was written from it. A repo adapted in some folders and link only in
+    another is in adapted with its link-only files listed under link_only too.
+    """
+    research = {f'{r["owner"]}/{r["repo"]}'.lower(): r for r in sdoc["repos"]}
+    link_files = {}
+    for p in principles:
+        for f in p["link_only"]:
+            link_files.setdefault(f["repo"], []).append({**f, "principle": p["id"]})
+    adapted, link_only = [], []
+    for name, info in licences["repos"].items():
+        entry = {
+            "name": name,
+            "url": info["url"],
+            "licences": info["licences_seen"],
+            "pin": info["pinned_commit"],
+            "licence_file": info["licence_file"],
+            "adapted_in": sorted(info["adapted_in_skills"], key=pid_key),
+            "link_only_in": sorted(info["link_only_in_skills"], key=pid_key),
+            "link_files": link_files.get(name, []),
+            "role": research.get(name.lower(), {}).get("role", "skill-source"),
+        }
+        if entry["adapted_in"]:
+            adapted.append(entry)
+        if entry["link_only_in"]:
+            link_only.append({**entry, "partial": bool(entry["adapted_in"]), "reason": "; ".join(entry["licences"])})
+    in_kit = {n.lower() for n in licences["repos"]}
+    unused = []
+    for key, r in research.items():
+        if key in in_kit:
+            continue
+        name = f'{r["owner"]}/{r["repo"]}'
+        entry = {
+            "name": name, "url": r["url"], "licences": [r["licence"]], "pin": None, "licence_file": None,
+            "adapted_in": [], "link_only_in": [], "link_files": [], "role": r["role"],
+        }
+        if name.lower() in NOT_USED_LINK_ONLY:
+            link_only.append({**entry, "partial": False, "reason": NOT_USED_LINK_ONLY[name.lower()]})
+        else:
+            unused.append(entry)
+    key = lambda e: e["name"].lower()
+    return sorted(adapted, key=key), sorted(link_only, key=key), sorted(unused, key=key)
 
 
 class Site:
     def __init__(self):
         self.pdoc = load(DATA / "principles.json")
         self.sdoc = load(DATA / "sources.json")
-        cats, principles, self.repo_by_label = site_view(
-            self.pdoc, self.sdoc, load(DATA / "mapping.json"), load(DATA / "licences.json")
-        )
+        self.smap = load(DATA / "skill-principle-map.json")
+        self.licences = load(DATA / "licences.json")
+        self.mapping = load(DATA / "mapping.json")
+        self.scorecard_csv = (DATA.parent / "scorecard.csv").read_bytes().decode("utf-8")
+        cats, principles = site_view(self.pdoc, self.smap, self.licences, load_scorecard())
         self.cats = sorted(cats, key=lambda c: c["number"])
         self.cat_by_slug = {c["slug"]: c for c in self.cats}
         self.principles = sorted(principles, key=lambda p: pid_key(p["id"]))
+        self.by_id = {p["id"]: p for p in self.principles}
         self.by_cat = {c["slug"]: [p for p in self.principles if p["category"] == c["slug"]] for c in self.cats}
-
-    def source_chips(self, p, up):
-        out = []
-        for lab in p["sources"]:
-            r = self.repo_by_label.get(lab)
-            if r:
-                out.append(f'<a class="chip" href="{esc(r["url"])}">{esc(lab)}</a>')
-            else:
-                out.append(f'<span class="chip">{esc(lab)}</span>')
-        return " ".join(out)
+        self.aliases = dict(self.pdoc["aliases"])
+        self.adapted, self.link_only, self.unused = repo_groups(self.sdoc, self.licences, self.principles)
 
     def profile_cards(self):
         """The template profiles, in the order the README lists them. Descriptions come from profile.txt."""
@@ -470,43 +558,69 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 {pager}"""
         return page(c["name"], body, 1, "path.html", tag)
 
+    def licence_badge(self, p):
+        short = {"clean": "Clean", "rewritten": "Rewritten", "rebuilt": "Rebuilt"}[p["licence_key"]]
+        return f'<span class="lic lic-{p["licence_key"]}" title="{esc(p["licence_label"])}">{short}</span>'
+
+    def source_list(self, files):
+        """Source files grouped by repo, in the order the data gives them."""
+        groups = {}
+        for f in files:
+            groups.setdefault(f["repo"], []).append(f)
+        out = []
+        for repo, fs in groups.items():
+            licences = ", ".join(dict.fromkeys(f["licence"] for f in fs))
+            items = "".join(
+                f'<li><a href="{esc(f["url"])}"><code>{esc(f["path"])}</code></a>'
+                + (f' <span class="muted">({esc(f["licence"])}; {esc(f["why"])})</span>' if f.get("why") else f' <span class="muted">({esc(f["licence"])})</span>')
+                + "</li>"
+                for f in fs
+            )
+            out.append(
+                f'<li><a href="https://github.com/{esc(repo)}">{esc(repo)}</a> '
+                f'<span class="muted">{esc(licences)}</span><ul>{items}</ul></li>'
+            )
+        return "".join(out)
+
     def principle_page(self, idx):
         p = self.principles[idx]
         c = self.cat_by_slug[p["category"]]
-        srcs = []
-        for lab in p["sources"]:
-            r = self.repo_by_label.get(lab)
-            if r:
-                srcs.append(
-                    f'<li><a href="{esc(r["url"])}">{esc(r["owner"])}/{esc(r["repo"])}</a> '
-                    f'<span class="muted">(as "{esc(lab)}", {esc(r["licence"])})</span></li>'
-                )
-            else:
-                srcs.append(f'<li>{esc(lab)} <span class="muted">(no repo recorded)</span></li>')
-        prov = p["provenance"]
-        merged = (
-            "Merged from: " + ", ".join(f'<a href="{esc(m)}.html">{esc(m)}</a>' for m in prov["merged_from"]) + "."
-            if prov["merged_from"]
-            else "No merges."
+        merged = "".join(
+            f'<li><a href="{esc(m["id"])}.html">{esc(m["id"])}</a>: {esc(m["statement"])}</li>' for m in p["merged"]
         )
-        notes = f"<p>{esc(prov['notes'])}</p>" if prov["notes"] else ""
-        aliases = (
+        merged_html = (
             "<dt>Also known as</dt><dd>"
-            + ", ".join(f'<a href="{esc(a)}.html">{esc(a)}</a>' for a in p.get("aliases", []))
-            + " (merged into this principle)</dd>"
-            if p.get("aliases")
+            + ", ".join(f'<a href="{esc(m["id"])}.html">{esc(m["id"])}</a>' for m in p["merged"])
+            + " (merged duplicates; each ID opens this principle)</dd>"
+            if p["merged"]
             else ""
         )
-        differs = (
-            "<h2>How it differs from related principles</h2>\n<ul>"
-            + "".join(
-                f'<li><a href="{esc(d["id"])}.html">{esc(d["id"])}</a>: {esc(d["difference"])}</li>'
-                for d in p["distinct_from"]
+        history = ""
+        if p["merged"] or p["previous_statement"] or p["overlap"]:
+            parts = []
+            if p["merged"]:
+                parts.append(f'<p>Merged duplicates, kept as aliases (see <a href="{BLOB}MERGES.md">MERGES.md</a>):</p><ul>{merged}</ul>')
+            if p["previous_statement"]:
+                parts.append(f'<p>Wording before the merge: {esc(p["previous_statement"])}</p>')
+            if p["overlap"]:
+                o = self.by_id[p["overlap"]]
+                parts.append(
+                    f'<p>Partly overlaps <a href="{esc(o["id"])}.html">{esc(o["id"])}</a> '
+                    f'({esc(o["statement"])}); kept as a separate principle.</p>'
+                )
+            history = "<h2>History</h2>" + "".join(parts)
+        score = p["score"]
+        scored = score["total_0_10"] or "not run yet"
+        verdict = score["verdict_keep_merge_drop"] or "none yet"
+        if p["link_only"]:
+            link_html = (
+                '<div class="link-only"><h2>Link only: not copied or adapted</h2>'
+                "<p>These sources could not be adapted because of their licence. Nothing was copied from them; "
+                "they are linked as further reading.</p>"
+                f'<ul class="sources">{self.source_list(p["link_only"])}</ul></div>'
             )
-            + "</ul>"
-            if p.get("distinct_from")
-            else ""
-        )
+        else:
+            link_html = '<h2>Link only</h2><p>None. Every source for this skill could be adapted.</p>'
         prev = self.principles[idx - 1] if idx > 0 else None
         nxt = self.principles[idx + 1] if idx + 1 < len(self.principles) else None
         pager = '<nav class="pager" aria-label="Neighbouring principles">'
@@ -527,72 +641,190 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 <h1>{esc(p["statement"])}</h1>
 <dl class="facts">
 <dt>Category</dt><dd><a href="../categories/{esc(c["slug"])}.html">{esc(c["name"])}</a></dd>
-<dt>Status</dt><dd>{esc(p["status"])}</dd>
-<dt>Origin</dt><dd>{esc(prov["origin"])}, research {esc(prov["research_run"])}. {merged}</dd>
-{aliases}</dl>
-{notes}
-{differs}
-<h2>Sources</h2>
-<p>This principle was drawn from these repos. Licences are as checked on the <a href="../sources.html">sources page</a>.</p>
-<ul class="sources">{"".join(srcs)}</ul>
-<h2>Amalgamated skill</h2>
-<p><a href="{BLOB}{esc(p["skill_folder"])}/SKILL.md">{esc(p["skill_folder"])}</a>, with its sources and their licences in <a href="{BLOB}{esc(p["skill_folder"])}/SOURCES.md">SOURCES.md</a>.</p>
-<p class="muted"><a href="{BLOB}principles/{esc(p["id"])}.md">View this principle as markdown on GitHub</a></p>
+<dt>Skill</dt><dd><a href="{BLOB}{esc(p["skill_folder"])}/SKILL.md">{esc(p["skill_name"])}</a> <span class="muted">({esc(p["build_status"])})</span></dd>
+<dt>Phase</dt><dd>{esc(p["phase"])}</dd>
+<dt>Test app</dt><dd>{esc(p["app_name"])}</dd>
+<dt>Test slot</dt><dd>{p["slot"]} of {len(self.principles)} (<a href="../skills.html">run order</a>)</dd>
+<dt>Licence status</dt><dd>{self.licence_badge(p)} <span class="muted">{esc(p["licence_label"])}. The skill text is {esc(p["text_licence"])}.</span></dd>
+<dt>Score</dt><dd>{esc(scored)} <span class="muted">(verdict: {esc(verdict)})</span></dd>
+{merged_html}</dl>
+{history}
+<h2>Adapted sources</h2>
+<p>{len(p["adapted"])} source files this skill was written from, each pinned to a commit with its licence. The skill text is our own wording; see <a href="../sources.html">all sources</a> and <a href="{BLOB}CREDITS.md">CREDITS.md</a>.</p>
+<ul class="sources">{self.source_list(p["adapted"])}</ul>
+{link_html}
+<h2>In the repo</h2>
+<p><a href="{BLOB}{esc(p["skill_folder"])}/SKILL.md">SKILL.md</a>, <a href="{BLOB}{esc(p["skill_folder"])}/SOURCES.md">SOURCES.md</a>, and
+<a href="{BLOB}principles/{esc(p["id"])}.md">this principle as markdown</a>.</p>
 {pager}"""
         return page(f'{p["id"]} {p["statement"]}', body, 1, "principles.html", p["statement"])
 
     def alias_page(self, alias, target):
-        body = f"""<p class="pid-big">Principle {esc(alias)}</p>
-<h1>Merged into {esc(target["id"])}</h1>
-<p>Principle {esc(alias)} was merged into <a href="{esc(target["id"])}.html">principle {esc(target["id"])}</a>: {esc(target["statement"])}</p>
-<p>{esc(target["provenance"]["notes"])} See <a href="{BLOB}MERGES.md">MERGES.md</a>.</p>"""
+        m = next(m for m in target["merged"] if m["id"] == alias)
+        body = f"""<p class="pid-big">Principle {esc(alias)} <span class="badge">merged</span></p>
+<h1>{esc(alias)} now opens {esc(target["id"])}</h1>
+<p>Principle {esc(alias)} ({esc(m["statement"])}) was a duplicate and was merged into
+<a href="{esc(target["id"])}.html">principle {esc(target["id"])}</a>: {esc(target["statement"])}</p>
+<p>IDs are never renumbered, so {esc(alias)} stays valid as an alias. Nothing was lost in the merge. See <a href="{BLOB}MERGES.md">MERGES.md</a>.</p>
+<p><a class="btn btn-primary" href="{esc(target["id"])}.html">Open principle {esc(target["id"])}</a></p>"""
         refresh = f'<meta http-equiv="refresh" content="0; url={esc(target["id"])}.html">\n<link rel="canonical" href="{esc(target["id"])}.html">\n'
-        return page(f"Principle {alias} (merged)", body, 1, "principles.html").replace("</head>", refresh + "</head>", 1)
+        return page(f"Principle {alias} (merged into {target['id']})", body, 1, "principles.html").replace("</head>", refresh + "</head>", 1)
 
     def table_page(self):
+        n = len(self.principles)
         rows = []
         for p in self.principles:
             c = self.cat_by_slug[p["category"]]
+            also = "".join(
+                f' <span class="alias">also <a href="principles/{esc(m["id"])}.html">{esc(m["id"])}</a></span>' for m in p["merged"]
+            )
+            repos = sorted({f["repo"] for f in p["adapted"]} | {f["repo"] for f in p["link_only"]}, key=str.lower)
             rows.append(
-                f'<tr data-cat="{esc(c["slug"])}" data-sources="{esc("|".join(p["sources"]))}">'
-                f'<td data-sort="{pid_key(p["id"])[0] * 1000 + pid_key(p["id"])[1]}"><a href="principles/{esc(p["id"])}.html">{esc(p["id"])}</a></td>'
+                f'<tr data-cat="{esc(c["slug"])}" data-phase="{esc(p["phase"])}" data-app="{esc(p["app"])}" '
+                f'data-licence="{esc(p["licence_key"])}" data-source="{esc("|".join(repos))}">'
+                f'<td data-sort="{pid_key(p["id"])[0] * 1000 + pid_key(p["id"])[1]}"><a href="principles/{esc(p["id"])}.html">{esc(p["id"])}</a>{also}</td>'
                 f'<td>{esc(p["statement"])}</td>'
                 f'<td data-sort="{c["number"]}">{cat_link(c)}</td>'
-                f'<td data-sort="{len(p["sources"])}">{self.source_chips(p, "")}</td></tr>'
+                f'<td>{esc(p["phase"])}</td>'
+                f'<td>{esc(p["app"])}</td>'
+                f'<td data-sort="{p["slot"]}">{p["slot"]}</td>'
+                f'<td>{self.licence_badge(p)}</td></tr>'
             )
-        opts = "".join(f'<option value="{esc(c["slug"])}">{c["number"]}. {esc(c["name"])}</option>' for c in self.cats)
-        labels = sorted({lab for p in self.principles for lab in p["sources"]}, key=str.lower)
-        src_opts = "".join(f'<option value="{esc(lab)}">{esc(lab)}</option>' for lab in labels)
+        cat_opts = "".join(f'<option value="{esc(c["slug"])}">{c["number"]}. {esc(c["name"])}</option>' for c in self.cats)
+        repos = sorted({f["repo"] for p in self.principles for f in p["adapted"] + p["link_only"]}, key=str.lower)
+        src_opts = "".join(f'<option value="{esc(r)}">{esc(r)}</option>' for r in repos)
+        merged_rows = "".join(
+            f'<li><a href="principles/{esc(a)}.html">{esc(a)}</a> opens <a href="principles/{esc(t)}.html">{esc(t)}</a>: '
+            f'<span class="muted">{esc(next(m["statement"] for m in self.by_id[t]["merged"] if m["id"] == a))}</span></li>'
+            for a, t in sorted(self.aliases.items(), key=lambda kv: pid_key(kv[0]))
+        )
         body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / All principles</nav>
 <h1>All principles</h1>
-<p>Search, filter by category or source, and click a column heading to sort. Works without a server; with JavaScript off you still get the full table.</p>
-<div class="filters" role="search">
-<label>Search <input id="q" type="search" placeholder="Search statements" autocomplete="off"></label>
-<label>Category <select id="cat"><option value="">All categories</option>{opts}</select></label>
-<label>Source <select id="src"><option value="">All sources</option>{src_opts}</select></label>
-<button type="button" id="reset">Reset</button>
+<p>{n} principles: the original {n + len(self.aliases)} less {len(self.aliases)} merged duplicates (see <a href="{BLOB}MERGES.md">MERGES.md</a>).
+IDs are never renumbered, so a merged ID is kept as an alias and opens the principle it was merged into.
+Search, filter and click a column heading to sort. With JavaScript off you still get the full table.</p>
+<div class="filters" role="search" data-table="ptable">
+<label>Search <input data-q type="search" placeholder="Statement or ID, e.g. test or 4.4" autocomplete="off"></label>
+<label>Category <select data-attr="cat"><option value="">All categories</option>{cat_opts}</select></label>
+<label>Phase <select data-attr="phase"><option value="">All phases</option>{self.phase_options()}</select></label>
+<label>Test app <select data-attr="app"><option value="">All apps</option>{self.app_options()}</select></label>
+<label>Licence status <select data-attr="licence"><option value="">All</option>{self.licence_options()}</select></label>
+<label>Source repo <select data-attr="source"><option value="">All sources</option>{src_opts}</select></label>
+<button type="button" data-reset>Reset</button>
 </div>
-<p id="result-count" class="muted" aria-live="polite">{len(self.principles)} principles</p>
+<p data-count class="muted" aria-live="polite">{n} principles</p>
 <div class="table-wrap">
 <table id="ptable" class="sortable">
 <thead><tr>
 <th scope="col" data-type="num">ID</th>
 <th scope="col" data-type="text">Principle</th>
 <th scope="col" data-type="num">Category</th>
-<th scope="col" data-type="num">Sources</th>
+<th scope="col" data-type="text">Phase</th>
+<th scope="col" data-type="text">Test app</th>
+<th scope="col" data-type="num">Slot</th>
+<th scope="col" data-type="text">Licence</th>
 </tr></thead>
 <tbody>
 {chr(10).join(rows)}
 </tbody>
 </table>
 </div>
-<p class="muted">Machine-readable copy: <a href="data/principles.json">data/principles.json</a>.</p>"""
+<h2 id="merged">Merged IDs</h2>
+<p>These {len(self.aliases)} IDs were retired. Each one opens the principle that kept its content.</p>
+<ul class="merged-list">{merged_rows}</ul>
+<p class="muted">Machine-readable copies: <a href="data/principles.json">principles.json</a>,
+<a href="data/skill-principle-map.json">skill-principle-map.json</a>, <a href="data/scorecard.csv">scorecard.csv</a>.</p>"""
         return page("All principles", body, 0, "principles.html")
+
+    def phase_options(self):
+        first = {}
+        for p in self.principles:
+            first[p["phase"]] = min(first.get(p["phase"], p["slot"]), p["slot"])
+        return "".join(f'<option value="{esc(ph)}">{esc(ph)}</option>' for ph in sorted(first, key=first.get))
+
+    def app_options(self):
+        apps = {}
+        for p in self.principles:
+            apps[p["app"]] = p["app_name"]
+        return "".join(f'<option value="{esc(k)}">{esc(v)}</option>' for k, v in sorted(apps.items()))
+
+    def licence_options(self):
+        return "".join(f'<option value="{k}">{esc(label)}</option>' for _, k, label in LICENCE_STATUS)
+
+    def skills_page(self):
+        n = len(self.principles)
+        by_slot = sorted(self.principles, key=lambda p: p["slot"])
+        scored = sum(1 for p in by_slot if p["score"]["total_0_10"])
+        rows = []
+        for p in by_slot:
+            sc = p["score"]
+            rows.append(
+                f'<tr data-phase="{esc(p["phase"])}" data-app="{esc(p["app"])}" data-licence="{esc(p["licence_key"])}">'
+                f'<td data-sort="{p["slot"]}">{p["slot"]}</td>'
+                f'<td data-sort="{pid_key(p["id"])[0] * 1000 + pid_key(p["id"])[1]}"><a href="principles/{esc(p["id"])}.html">{esc(p["id"])}</a></td>'
+                f'<td><a href="{BLOB}{esc(p["skill_folder"])}/SKILL.md">{esc(p["skill_name"])}</a></td>'
+                f'<td>{esc(p["phase"])}</td>'
+                f'<td>{esc(p["app"])}</td>'
+                f'<td>{self.licence_badge(p)}</td>'
+                f'<td data-sort="{esc(sc["total_0_10"] or -1)}">{esc(sc["total_0_10"]) if sc["total_0_10"] else "not run"}</td>'
+                f'<td>{esc(sc["verdict_keep_merge_drop"]) if sc["verdict_keep_merge_drop"] else "none yet"}</td></tr>'
+            )
+        apps = {}
+        for p in by_slot:
+            apps.setdefault(p["app"], {"name": p["app_name"], "n": 0})["n"] += 1
+        app_cards = "".join(
+            f'<li class="lp-card"><h3>{esc(k)}</h3><p>{esc(v["name"])}</p><p class="muted">{v["n"]} skills</p></li>'
+            for k, v in sorted(apps.items())
+        )
+        phases = {}
+        for p in by_slot:
+            phases.setdefault(p["phase"], []).append(p["slot"])
+        phase_rows = "".join(
+            f"<li><strong>{esc(ph)}</strong> <span class=\"muted\">slots {min(sl)} to {max(sl)}, {len(sl)} skills</span></li>"
+            for ph, sl in phases.items()
+        )
+        body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / Skills</nav>
+<h1>The {n} skills and their test slots</h1>
+<p>There is exactly one amalgamated skill per principle. Each has a test app, a phase and a slot: the slot is the run order, and the test app is the project it is exercised on. Skills are scored in
+<a href="{BLOB}scorecard.csv">scorecard.csv</a>; {scored} of {n} have been scored so far. The workflow is described in the <a href="{BLOB}README.md">README</a>.</p>
+<h2>Test apps</h2>
+<ul class="lp-cards">{app_cards}</ul>
+<p class="muted">&ldquo;All&rdquo; skills are used on every run: the harness skills (stage 8) and the Learn skills (stage 9).</p>
+<h2>Phases in run order</h2>
+<ul class="phase-list">{phase_rows}</ul>
+<h2>Run order</h2>
+<div class="filters" role="search" data-table="stable">
+<label>Search <input data-q type="search" placeholder="Skill name or principle ID" autocomplete="off"></label>
+<label>Phase <select data-attr="phase"><option value="">All phases</option>{self.phase_options()}</select></label>
+<label>Test app <select data-attr="app"><option value="">All apps</option>{self.app_options()}</select></label>
+<label>Licence status <select data-attr="licence"><option value="">All</option>{self.licence_options()}</select></label>
+<button type="button" data-reset>Reset</button>
+</div>
+<p data-count class="muted" aria-live="polite">{n} skills</p>
+<div class="table-wrap">
+<table id="stable" class="sortable">
+<thead><tr>
+<th scope="col" data-type="num">Slot</th>
+<th scope="col" data-type="num">Principle</th>
+<th scope="col" data-type="text">Skill</th>
+<th scope="col" data-type="text">Phase</th>
+<th scope="col" data-type="text">Test app</th>
+<th scope="col" data-type="text">Licence</th>
+<th scope="col" data-type="num">Score /10</th>
+<th scope="col" data-type="text">Verdict</th>
+</tr></thead>
+<tbody>
+{chr(10).join(rows)}
+</tbody>
+</table>
+</div>
+<p class="muted">Machine-readable copies: <a href="data/skill-principle-map.json">skill-principle-map.json</a>, <a href="data/scorecard.csv">scorecard.csv</a>.</p>"""
+        return page("Skills", body, 0, "skills.html", f"The {n} amalgamated skills with their test app, phase and slot.")
 
     def sources_page(self):
         rows = []
         for r in sorted(self.sdoc["repos"], key=lambda r: (r["owner"].lower(), r["repo"].lower())):
-            used = sum(1 for p in self.principles if any(self.repo_by_label.get(lab) is r for lab in p["sources"]))
+            used = len(self.licences["repos"].get(f'{r["owner"]}/{r["repo"]}', {}).get("adapted_in_skills", []))
             pin = r["pinned_sha"][:7] if r["pinned_sha"] else "not pinned yet"
             rows.append(
                 f'<tr><td><a href="{esc(r["url"])}">{esc(r["owner"])}/{esc(r["repo"])}</a></td>'
@@ -664,16 +896,21 @@ Licences are as checked and may need your own review before you reuse anything; 
         files["index.html"] = self.landing_page()
         files["path.html"] = self.path_page()
         files["principles.html"] = self.table_page()
+        files["skills.html"] = self.skills_page()
         files["sources.html"] = self.sources_page()
         for i, c in enumerate(self.cats):
             files[f"categories/{c['slug']}.html"] = self.category_page(i)
         for i, p in enumerate(self.principles):
             files[f"principles/{p['id']}.html"] = self.principle_page(i)
-            for alias in p.get("aliases", []):
-                files[f"principles/{alias}.html"] = self.alias_page(alias, p)
+            for m in p["merged"]:
+                files[f"principles/{m['id']}.html"] = self.alias_page(m["id"], p)
         files.update(self.guide_pages())
         files["data/principles.json"] = canonical_json(self.pdoc)
         files["data/sources.json"] = canonical_json(self.sdoc)
+        files["data/skill-principle-map.json"] = canonical_json(self.smap)
+        files["data/mapping.json"] = canonical_json(self.mapping)
+        files["data/licences.json"] = canonical_json(self.licences)
+        files["data/scorecard.csv"] = self.scorecard_csv
         return files
 
 
@@ -788,16 +1025,20 @@ def existing_generated():
 
 def main():
     check = "--check" in sys.argv[1:]
-    files = Site().build()
+    try:
+        files = Site().build()
+    except DataError as e:
+        print(f"build-site: {e}", file=sys.stderr)
+        return 1
     stale = []
     for rel, content in files.items():
         path = DOCS / rel
         if check:
-            if not path.exists() or path.read_text(encoding="utf-8") != content:
+            if not path.exists() or path.read_bytes() != content.encode("utf-8"):
                 stale.append(rel)
         else:
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(content, encoding="utf-8")
+            path.write_bytes(content.encode("utf-8"))
     extra = sorted(existing_generated() - expected_paths(files))
     if check:
         if stale or extra:

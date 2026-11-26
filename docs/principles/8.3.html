@@ -12,7 +12,7 @@
 <header class="site-header">
 <div class="wrap header-inner">
 <a class="brand" href="../index.html">AI SDLC Loop</a>
-<nav aria-label="Main"><a href="../index.html">Home</a><a href="../path.html">Learning path</a><a href="../principles.html" aria-current="page">All principles</a><a href="../sources.html">Sources</a><a href="../guides/index.html">Guides</a><a href="https://github.com/mitulamin/ai-sdlc-loop">GitHub</a></nav>
+<nav aria-label="Main"><a href="../index.html">Home</a><a href="../path.html">Learning path</a><a href="../principles.html" aria-current="page">All principles</a><a href="../skills.html">Skills</a><a href="../sources.html">Sources</a><a href="../guides/index.html">Guides</a><a href="https://github.com/mitulamin/ai-sdlc-loop">GitHub</a></nav>
 </div>
 </header>
 <main id="main" class="wrap">
@@ -22,18 +22,21 @@
 <h1>Progressive disclosure: short description always, body on trigger, references on demand</h1>
 <dl class="facts">
 <dt>Category</dt><dd><a href="../categories/agent-operations.html">Agent operations</a></dd>
-<dt>Status</dt><dd>active</dd>
-<dt>Origin</dt><dd>amalgamated-skills kit, research 2026-11-26. No merges.</dd>
+<dt>Skill</dt><dd><a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/skills/8.3-progressive-disclosure/SKILL.md">progressive-disclosure</a> <span class="muted">(draft, untested)</span></dd>
+<dt>Phase</dt><dd>Harness</dd>
+<dt>Test app</dt><dd>All three runs (harness and Learn)</dd>
+<dt>Test slot</dt><dd>3 of 103 (<a href="../skills.html">run order</a>)</dd>
+<dt>Licence status</dt><dd><span class="lic lic-clean" title="Clean: every source could be adapted">Clean</span> <span class="muted">Clean: every source could be adapted. The skill text is CC-BY-SA-4.0.</span></dd>
+<dt>Score</dt><dd>not run yet <span class="muted">(verdict: none yet)</span></dd>
 </dl>
-
-<h2>How it differs from related principles</h2>
-<ul><li><a href="8.1.html">8.1</a>: Partial overlap; kept as a separate principle.</li></ul>
-<h2>Sources</h2>
-<p>This principle was drawn from these repos. Licences are as checked on the <a href="../sources.html">sources page</a>.</p>
-<ul class="sources"><li><a href="https://github.com/anthropics/skills">anthropics/skills</a> <span class="muted">(as "Anthropic skill-creator", per-skill LICENSE.txt (Apache License 2.0 text))</span></li><li><a href="https://github.com/anthropics/claude-plugins-official">anthropics/claude-plugins-official</a> <span class="muted">(as "Anthropic plugins", Apache-2.0)</span></li><li><a href="https://github.com/peterfriese/Stratos">peterfriese/Stratos</a> <span class="muted">(as "Stratos", LICENSE (Apache License 2.0 text))</span></li><li><a href="https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering">muratcankoylan/Agent-Skills-for-Context-Engineering</a> <span class="muted">(as "muratcankoylan", MIT)</span></li></ul>
-<h2>Amalgamated skill</h2>
-<p><a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/skills/8.3-progressive-disclosure/SKILL.md">skills/8.3-progressive-disclosure</a>, with its sources and their licences in <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/skills/8.3-progressive-disclosure/SOURCES.md">SOURCES.md</a>.</p>
-<p class="muted"><a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/principles/8.3.md">View this principle as markdown on GitHub</a></p>
+<h2>History</h2><p>Partly overlaps <a href="8.1.html">8.1</a> (Load only the context the task needs, such as the relevant spec section); kept as a separate principle.</p>
+<h2>Adapted sources</h2>
+<p>6 source files this skill was written from, each pinned to a commit with its licence. The skill text is our own wording; see <a href="../sources.html">all sources</a> and <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/CREDITS.md">CREDITS.md</a>.</p>
+<ul class="sources"><li><a href="https://github.com/anthropics/skills">anthropics/skills</a> <span class="muted">Apache-2.0 (folder LICENSE.txt)</span><ul><li><a href="https://github.com/anthropics/skills/blob/e4bb5d960d87126ff3b3a8af1a104b7db67560ba/skills/skill-creator/SKILL.md"><code>skills/skill-creator/SKILL.md</code></a> <span class="muted">(Apache-2.0 (folder LICENSE.txt))</span></li></ul></li><li><a href="https://github.com/anthropics/claude-plugins-official">anthropics/claude-plugins-official</a> <span class="muted">Apache-2.0 (plugin LICENSE)</span><ul><li><a href="https://github.com/anthropics/claude-plugins-official/blob/0fbfda5a91f4adc311daca25acc99132f40f0b6e/plugins/plugin-dev/skills/skill-development/SKILL.md"><code>plugins/plugin-dev/skills/skill-development/SKILL.md</code></a> <span class="muted">(Apache-2.0 (plugin LICENSE))</span></li><li><a href="https://github.com/anthropics/claude-plugins-official/blob/0fbfda5a91f4adc311daca25acc99132f40f0b6e/plugins/plugin-dev/agents/skill-reviewer.md"><code>plugins/plugin-dev/agents/skill-reviewer.md</code></a> <span class="muted">(Apache-2.0 (plugin LICENSE))</span></li><li><a href="https://github.com/anthropics/claude-plugins-official/blob/0fbfda5a91f4adc311daca25acc99132f40f0b6e/plugins/plugin-dev/commands/create-plugin.md"><code>plugins/plugin-dev/commands/create-plugin.md</code></a> <span class="muted">(Apache-2.0 (plugin LICENSE))</span></li></ul></li><li><a href="https://github.com/peterfriese/Stratos">peterfriese/Stratos</a> <span class="muted">Apache-2.0</span><ul><li><a href="https://github.com/peterfriese/Stratos/blob/64879724d53a6ca2c925fd614e2c2c15c1d49120/stratos-core/SKILL.md"><code>stratos-core/SKILL.md</code></a> <span class="muted">(Apache-2.0)</span></li></ul></li><li><a href="https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering">muratcankoylan/Agent-Skills-for-Context-Engineering</a> <span class="muted">MIT</span><ul><li><a href="https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering/blob/d9202c76d6dc8351e648badb576a6e9b5aae1e7f/skills/context-fundamentals/SKILL.md"><code>skills/context-fundamentals/SKILL.md</code></a> <span class="muted">(MIT)</span></li></ul></li></ul>
+<h2>Link only</h2><p>None. Every source for this skill could be adapted.</p>
+<h2>In the repo</h2>
+<p><a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/skills/8.3-progressive-disclosure/SKILL.md">SKILL.md</a>, <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/skills/8.3-progressive-disclosure/SOURCES.md">SOURCES.md</a>, and
+<a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/principles/8.3.md">this principle as markdown</a>.</p>
 <nav class="pager" aria-label="Neighbouring principles"><a class="prev" href="8.2.html"><small>Previous</small>8.2</a><a class="next" href="8.4.html"><small>Next</small>8.4</a></nav>
 </main>
 <footer class="site-footer">
