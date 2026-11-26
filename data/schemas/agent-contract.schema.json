@@ -1,0 +1,264 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mitulamin/ai-sdlc-loop/data/schemas/agent-contract.schema.json",
+  "title": "Agent output contract",
+  "description": "The output field every agent must declare, and the format of the shared surface register agents write it to.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "output_field",
+    "register"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.1.0"
+    },
+    "note": {
+      "type": "string"
+    },
+    "output_field": {
+      "type": "object",
+      "required": [
+        "key",
+        "heading",
+        "none_text",
+        "rule",
+        "request_block"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "heading": {
+          "type": "string",
+          "minLength": 1
+        },
+        "none_text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "rule": {
+          "type": "string",
+          "minLength": 1
+        },
+        "request_block": {
+          "type": "object",
+          "required": [
+            "header",
+            "footer",
+            "placeholder",
+            "line_rule",
+            "verbatim_rule",
+            "tag_meaning",
+            "cannot_write_instruction",
+            "line_format"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "header": {
+              "type": "string",
+              "minLength": 1
+            },
+            "footer": {
+              "type": "string",
+              "minLength": 1
+            },
+            "placeholder": {
+              "type": "string"
+            },
+            "line_rule": {
+              "type": "string"
+            },
+            "verbatim_rule": {
+              "type": "string"
+            },
+            "tag_meaning": {
+              "type": "object",
+              "minProperties": 1,
+              "propertyNames": {
+                "pattern": "^[a-z]+$"
+              },
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "cannot_write_instruction": {
+              "type": "string",
+              "minLength": 1
+            },
+            "line_format": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "register": {
+      "type": "object",
+      "required": [
+        "flag",
+        "default_path",
+        "format",
+        "id_pattern",
+        "timestamp_format",
+        "events",
+        "types",
+        "impact",
+        "urgency",
+        "statuses",
+        "by",
+        "via"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "flag": {
+          "type": "string",
+          "pattern": "^--[a-z-]+$"
+        },
+        "default_path": {
+          "type": "string",
+          "pattern": "\\.jsonl$"
+        },
+        "format": {
+          "type": "string"
+        },
+        "id_pattern": {
+          "type": "string"
+        },
+        "timestamp_format": {
+          "type": "string"
+        },
+        "events": {
+          "type": "object",
+          "required": [
+            "declare",
+            "update"
+          ],
+          "additionalProperties": false,
+          "patternProperties": {
+            "^(declare|update)$": {
+              "type": "object",
+              "required": [
+                "purpose",
+                "required"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "purpose": {
+                  "type": "string"
+                },
+                "required": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  },
+                  "minItems": 1
+                },
+                "optional": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "types": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z]+$"
+          }
+        },
+        "impact": {
+          "$ref": "#/$defs/scale"
+        },
+        "urgency": {
+          "$ref": "#/$defs/scale"
+        },
+        "statuses": {
+          "type": "object",
+          "required": [
+            "values",
+            "meaning",
+            "rule"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 2
+            },
+            "meaning": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              }
+            },
+            "rule": {
+              "type": "string"
+            }
+          }
+        },
+        "by": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        "via": {
+          "type": "object",
+          "required": [
+            "values",
+            "meaning"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "values": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1
+            },
+            "meaning": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "scale": {
+      "type": "object",
+      "required": [
+        "values",
+        "meaning"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "values": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2
+        },
+        "meaning": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

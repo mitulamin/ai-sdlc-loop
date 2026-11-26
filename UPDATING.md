@@ -21,7 +21,7 @@ This repo is meant to be refreshed about every six months, and sooner if a sourc
 | `data/notes/` | Hand-written overlays (for example `data/notes/principles/1.1.md`) | People |
 | `data/schemas/` | Hand-written, versioned | People |
 | `principles/*.md` | Generated | `scripts/build-principles.py`. First line is a `GENERATED` marker. |
-| `agents/*.md`, `commands/*.md` | Generated from `data/skill-principle-map.json`, `data/taxonomy.json`, `data/principles.json` and `skills/` | `scripts/build-agents.py`. Each file has a `GENERATED` marker. |
+| `agents/*.md`, `commands/*.md` | Generated from `data/skill-principle-map.json`, `data/taxonomy.json`, `data/principles.json`, `data/agent-contract.json` and `skills/` | `scripts/build-agents.py`. Each file has a `GENERATED` marker. |
 | `data/refresh/<run-id>/` | Generated reports and proposals from a refresh | Refresh tooling; reviewed, then kept as the audit trail |
 | `skills/<id>-<slug>/SKILL.md` | Drafted from sources, then hand-edited | People. A refresh only produces a proposal for it, never an overwrite. |
 | `skills/<id>-<slug>/SOURCES.md` | Pinned links and dedupe summary | Refresh proposes; a person accepts |

@@ -11,6 +11,7 @@ Sections:
 - [The commands](#the-commands)
 - [What producers and reviewers load](#what-producers-and-reviewers-load)
 - [The rules of the loop](#the-rules-of-the-loop)
+- [Assumptions, open questions and the register](#assumptions-open-questions-and-the-register)
 - [The phase model and the Learn loop](#the-phase-model-and-the-learn-loop)
 - [A worked example: one cycle](#a-worked-example-one-cycle)
 - [Keeping token cost down](#keeping-token-cost-down)
@@ -33,6 +34,7 @@ The aim is loops that run on their own from start to finish, come back to the hu
 | Skill | One folder in `skills/` per principle, with a `SKILL.md` that holds When to use, Do and Don't lists, Steps and adversarial reviewer checks. |
 | Brief | A file the coordinator writes for an agent: the task, the acceptance criteria, the files to read, the skill IDs that apply, and where to write the output. |
 | Fresh context | A new agent that has not seen the conversation so far. It cannot be misled by earlier mistakes because it never saw them. |
+| Register | A plain append-only file, `.ai-sdlc/register.jsonl` by default, where agents write the assumptions they made, the questions they could not answer and their blockers, as register-request blocks. The coordinator reads it as its inbox, and you can read it too. |
 | Findings file | The file a reviewer writes. Its first line is `Verdict: PASS` or `Verdict: FAIL`, followed by each finding with its evidence. |
 | P0 to P3 | Severity of a finding: P0 is security, data loss or correctness; P3 is a nit. Any P0 or P1 is a FAIL. |
 | Cycle | One pass of the loop from the human's brief to the end-of-cycle review. |
@@ -83,6 +85,7 @@ Three details matter:
 - `/verify` runs Debug only when the Verify output shows failing behaviour (a failing test, a bug or an unexpected result), and only for those failures. Then it runs Verify again on the fix.
 - There is one Review & ship phase, so `/review` and `/ship` start the same Review & ship producer and reviewer, each on its own task. `/review` runs Secure first.
 - `/retro` runs only after the human has given end-of-cycle feedback. The Harness phase has no command: the coordinator runs it.
+- Every command takes an optional `--register <path>` after the task, for example `/plan Add CSV import --register .ai-sdlc/csv-import.jsonl`. It names the register for the run; without it the default is `.ai-sdlc/register.jsonl`.
 
 ## What producers and reviewers load
 
@@ -101,9 +104,37 @@ This split is principle [9.2](../../docs/principles/9.2.html): enforce standards
 4. **Fix and re-review.** On a FAIL, the coordinator starts a new producer with the brief and the findings file, then a new reviewer.
 5. **Three FAILs in a row stops the phase.** The coordinator records the phase as failed with its findings and notes it as a question about the approach, rather than trying a fourth time ([5.5](../../docs/principles/5.5.html)).
 6. **Reviewers are never overruled.** The coordinator does not override a reviewer's FAIL.
-7. **No mid-cycle questions to the human.** Agents send questions to the coordinator, even where a skill says to ask the human. The coordinator answers from the repo or the brief, or picks the recommended answer and records it as an assumption. The one exception is the interview at the very start of a project or epic, before any loop starts ([1.4](../../docs/principles/1.4.html)).
-8. **The end of the cycle is the only exchange with the human.** The coordinator writes `run-summary.md` (what ran, each verdict and findings file, assumptions, open decisions), fills in [data/scorecard.json](../../data/scorecard.json), and asks for feedback.
+7. **No mid-cycle questions to the human.** Agents send questions to the coordinator, through the register, even where a skill says to ask the human. The coordinator answers from the repo or the brief, or picks the recommended answer and records it as an assumption. The one exception is the interview at the very start of a project or epic, before any loop starts ([1.4](../../docs/principles/1.4.html)).
+8. **The end of the cycle is the only exchange with the human.** The coordinator writes `run-summary.md` (what ran, each verdict and findings file, the curated assumptions and open questions from the register, open decisions), fills in [data/scorecard.json](../../data/scorecard.json), and asks for feedback.
 9. **`/retro` proposes; the human approves.** The coordinator runs `/retro` on the feedback and closes with one report that gives the proposed edits and their results on held-out cases ([9.9](../../docs/principles/9.9.html)). An edit goes live only when the human approves it ([9.10](../../docs/principles/9.10.html)), every accepted or rejected edit is logged ([9.12](../../docs/principles/9.12.html)), and the Harness producer applies the approved edits at the start of the next run.
+
+## Assumptions, open questions and the register
+
+Agents cannot ask you anything mid-cycle, so they need somewhere to put what they assumed, what they could not settle and what stopped them. Two things carry that, and both are required.
+
+**The output field.** Every agent has one required output field, `assumptions_and_open_questions`. Its output ends with a section headed `## Assumptions and open questions`, and that section holds a register-request block. If there is nothing to declare, the block says `None.` An agent definition that lacks the field, the block or the instruction below fails `scripts/build-agents.py --check` and `scripts/check-skills.py`, and a producer output without the section is a P1 finding for its reviewer. The field and the block are defined in [data/agent-contract.json](../../data/agent-contract.json), and `scripts/build-agents.py` generates them into every agent, so nothing is hand-edited. Skills carry no output contract of their own, except skill [1.1](../../docs/principles/1.1.html), which tells its readers to use the block.
+
+**The register-request block.** One line per entry, with the type inside the brackets, between two delimiter lines:
+
+```text
+=== REGISTER REQUESTS ===
+[ASSUMPTION: Dates in the CSV are ISO 8601; no locale-specific formats.]
+[QUESTION: Should the import accept semicolon-separated files? Recommend yes.]
+[BLOCKER: No sample CSV in the repo, so malformed-row handling cannot be tested.]
+=== END REGISTER REQUESTS ===
+```
+
+An assumption is something the agent decided and carried on with, a question is something it wants answered (with its recommended answer in the statement), and a blocker stops it finishing. The types come from `register.types` in the contract data, so adding one is a data change only: the block, the parser and the validation follow.
+
+**Two ways into the register, one format.** An agent that can write the register runs `scripts/register.py ingest` on its own output file, which writes each statement out verbatim. An agent that cannot, such as a reviewer with no shell, emits the same block in its findings file and again as plain text in its final message. Every agent definition says: "Agents that cannot write to the register themselves must emit the register-request block in their transcript. Any coordinator invoking such an agent must take those register requests as-is and write them out verbatim." So the coordinator ingests such a block without summarising, merging, rewording or dropping a line.
+
+**The register.** It is a JSON Lines file, one JSON object per line, append-only. A line either declares an entry (`id`, `agent`, `phase`, `type`, `text`, `status`, `ts`, and optionally `impact`, `urgency`, `recommendation` and `via`) or updates an earlier one (`ref`, a new `status`, and optionally `note`, `answer`, `by`, `impact` and `urgency`). Statuses are open, surfaced, answered, dismissed and duplicate, and an entry's current status is its latest update. A block line carries no impact or urgency, so the coordinator rates the entry with an update line. The full field list, the meaning of the values and an example are in [agents/README.md](../../agents/README.md#the-shared-surface-register); [scripts/register.py](../../scripts/register.py) writes, lists and checks the register, and its `selftest` (run by `build-agents.py --check`) checks that the block parser round-trips every type.
+
+You choose where it lives with `--register <path>` on any command, and it defaults to `.ai-sdlc/register.jsonl`. Whether you commit it or ignore it is up to you.
+
+**What the coordinator does with it.** The register is the coordinator's inbox, and it pulls it rather than waiting to be told: before each brief, after each producer and reviewer finishes, and before the end-of-cycle report. It rates, de-dupes and ranks open entries (blockers first, then impact, then urgency), settles what it can from the repo or the brief, and batches the rest for you with a recommended answer for each, in the end-of-cycle report. A blocker it cannot settle stops only the work that depends on it. It records what it surfaced and what you answered as update lines, and acts on the answers.
+
+**It is never a required relay.** Nothing is deleted or rewritten, so every raw entry stays readable in the file. You can read it at any point during a run, and you can answer an entry by appending an update line yourself; the coordinator picks it up at its next pull.
 
 ## The phase model and the Learn loop
 
