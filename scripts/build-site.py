@@ -171,6 +171,9 @@ class Site:
             for lab in r["labels"]:
                 self.repo_by_label[lab] = r
         self.by_cat = {c["slug"]: [p for p in self.principles if p["category"] == c["slug"]] for c in self.cats}
+        self.n_sources = len(self.sdoc["repos"])
+        # Repos added after the research run carry a note starting "Added for"; they are cited, not researched.
+        self.n_researched = sum(1 for r in self.sdoc["repos"] if not r.get("notes", "").startswith("Added for"))
 
     def source_chips(self, p, up):
         out = []
@@ -206,7 +209,9 @@ class Site:
     def landing_page(self):
         n_principles = len(self.principles)
         n_cats = len(self.cats)
-        n_sources = len(self.sdoc["repos"])
+        n_sources = self.n_sources
+        n_researched = self.n_researched
+        n_added = n_sources - n_researched
         first_cat = self.cats[0]
         learn = self.cat_by_slug.get("learn")
         learn_ids = [p["id"] for p in self.by_cat.get("learn", [])]
@@ -224,7 +229,7 @@ class Site:
         body = f"""<section class="lp-hero" aria-labelledby="lp-title">
 <p class="lp-eyebrow">Open source starter for agentic software development</p>
 <h1 id="lp-title">Software engineering principles for building with agents, and a loop that learns from each project</h1>
-<p class="lede">I distilled what {n_sources} public repos teach about working with coding agents into {n_principles} principles
+<p class="lede">I distilled what {n_researched} public repos teach about working with coding agents into {n_principles} principles
 in {n_cats} categories. Use them to adopt agentic tools with less trial and error, then build a learning loop of your own.</p>
 <p class="lp-cta">
 <a class="btn btn-primary" href="path.html">Explore the learning path</a>
@@ -234,7 +239,8 @@ in {n_cats} categories. Use them to adopt agentic tools with less trial and erro
 <dl class="lp-stats">
 <div><dt>Principles</dt><dd>{n_principles}</dd></div>
 <div><dt>Categories</dt><dd>{n_cats}</dd></div>
-<div><dt>Source repos</dt><dd>{n_sources}</dd></div>
+<div><dt>Repos reviewed</dt><dd>{n_researched}</dd></div>
+<div><dt>Sources cited</dt><dd>{n_sources}</dd></div>
 </dl>
 </section>
 
@@ -246,7 +252,7 @@ in {n_cats} categories. Use them to adopt agentic tools with less trial and erro
 <p>The ideas for that are scattered across dozens of public repos: skills, sub-agents, slash commands and rules files. Many say the same thing in different words. Some contradict each other. Some are risky to install. And if you load them all, their descriptions alone use up the context window before the agent does anything useful.</p>
 </div>
 <div>
-<p>So I had a research bot read {n_sources} public repos and boil them down to {n_principles} numbered principles in {n_cats} categories. Each one is traceable to the repos it came from.</p>
+<p>So I had a research bot read {n_researched} public repos and boil them down to {n_principles} numbered principles in {n_cats} categories. Each one is traceable to the repos it came from.</p>
 <p>The principles are not the point. The point is the loop that produced them and the loop that keeps improving them. This repo is a base, not a finished product. Fork it, swap in your own principles, and let your own projects change it.</p>
 </div>
 </div>
@@ -286,7 +292,7 @@ in {n_cats} categories. Use them to adopt agentic tools with less trial and erro
 <li class="lp-card"><h3><a href="path.html">Follow the learning path</a></h3><p>Walk the {n_cats} stages in order, from planning to retrospective.</p></li>
 <li class="lp-card"><h3><a href="principles.html">Explore the principles</a></h3><p>Search, filter and sort all {n_principles}. Each links to its sources.</p></li>
 <li class="lp-card"><h3><a href="categories/{esc(first_cat["slug"])}.html">Read the categories</a></h3><p>One page per category, with the principles that belong to it.</p></li>
-<li class="lp-card"><h3><a href="sources.html">Check the sources</a></h3><p>The {n_sources} repos the principles came from, with their licences.</p></li>
+<li class="lp-card"><h3><a href="sources.html">Check the sources</a></h3><p>The {n_sources} sources cited ({n_researched} researched, plus {n_added} added for a skill), with their licences.</p></li>
 <li class="lp-card"><h3><a href="guides/index.html">Read the guides</a></h3><p>Plain-language guides to the principles.</p></li>
 <li class="lp-card"><h3><a href="#start">Start a project</a></h3><p>Copy the template and run your first loop.</p></li>
 </ul>
@@ -320,7 +326,7 @@ Details in <a href="{REPO_URL}#why-gplv3-and-cc-by-sa-for-the-writing">the READM
             body,
             0,
             "index.html",
-            f"{n_principles} software engineering principles distilled from {n_sources} public repos, and a template to start your own agentic loop.",
+            f"{n_principles} software engineering principles distilled from {n_researched} public repos, and a template to start your own agentic loop.",
         )
 
     def path_page(self):
@@ -352,7 +358,7 @@ Details in <a href="{REPO_URL}#why-gplv3-and-cc-by-sa-for-the-writing">the READM
         body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / Learning path</nav>
 <section class="hero">
 <h1>A learning path through {total} software principles</h1>
-<p class="lede">These principles were distilled from {len(self.sdoc["repos"])} public repos of agent skills, sub-agents and commands.
+<p class="lede">These principles were distilled from {self.n_researched} public repos of agent skills, sub-agents and commands.
 They are the base of a loop that builds software with agents and learns from each project.
 Work through the nine stages in order, or jump straight to the one you need.</p>
 <form class="search" action="principles.html" method="get" role="search">
@@ -465,6 +471,14 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
             else "<span></span>"
         )
         pager += "</nav>"
+        skill_dirs = sorted(d.name for d in (ROOT / "skills").glob(f"{p['id']}-*") if d.is_dir())
+        skills_html = (
+            "<ul>"
+            + "".join(f'<li><a href="{BLOB}skills/{esc(d)}/SKILL.md">{esc(d)}</a></li>' for d in skill_dirs)
+            + "</ul>"
+            if skill_dirs
+            else "<p>Not written yet. When it exists it will be linked here.</p>"
+        )
         body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="../index.html">Home</a> / <a href="../path.html">Learning path</a> /
 <a href="../categories/{esc(c["slug"])}.html">Stage {c["number"]}: {esc(c["name"])}</a> / {esc(p["id"])}</nav>
 <p class="pid-big">Principle {esc(p["id"])}</p>
@@ -480,7 +494,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 <p>This principle was drawn from these repos. Licences are as checked on the <a href="../sources.html">sources page</a>.</p>
 <ul class="sources">{"".join(srcs)}</ul>
 <h2>Amalgamated skill</h2>
-<p>Not written yet. When it exists it will be linked here.</p>
+{skills_html}
 <p class="muted"><a href="{BLOB}principles/{esc(p["id"])}.md">View this principle as markdown on GitHub</a></p>
 {pager}"""
         return page(f'{p["id"]} {p["statement"]}', body, 1, "principles.html", p["statement"])
@@ -546,7 +560,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
         run = self.sdoc["research_run"]
         body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / Sources</nav>
 <h1>Source repos</h1>
-<p>The {len(self.sdoc["repos"])} public repos the principles were drawn from ({esc(run["id"])}, {esc(run["date"])}).
+<p>{self.n_sources} sources cited: the {self.n_researched} public repos the principles were drawn from ({esc(run["id"])}, {esc(run["date"])}), plus {self.n_sources - self.n_researched} added later for skill 7.12.
 Licences are as checked and may need your own review before you reuse anything; see
 <a href="{BLOB}ATTRIBUTIONS.md">ATTRIBUTIONS.md</a>. Curation lists are pointers to other sources and are never installed wholesale.</p>
 <div class="table-wrap">

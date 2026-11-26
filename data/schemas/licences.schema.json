@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mitulamin/ai-sdlc-loop/data/schemas/licences.schema.json",
+  "title": "Source licences",
+  "description": "The declared licence of every source repo and source file the skills draw on, per repo and per skill. Not the licence of this repo, which is set in LICENSE, LICENSE-CONTENT, template/LICENSE and NOTICE.md.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "checked",
+    "disclaimer",
+    "repos",
+    "skills"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "checked": {
+      "type": "string",
+      "format": "date"
+    },
+    "disclaimer": {
+      "type": "string"
+    },
+    "repos": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "url",
+          "pinned_commit",
+          "licences_seen"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "pinned_commit": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "licences_seen": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "skills": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[0-9]+\\.[0-9]+$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "status",
+          "sources"
+        ],
+        "properties": {
+          "status": {
+            "type": "string"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "repo",
+                "path",
+                "url",
+                "licence"
+              ],
+              "properties": {
+                "repo": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "licence": {
+                  "type": "string"
+                },
+                "primary": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

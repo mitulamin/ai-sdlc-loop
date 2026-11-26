@@ -20,7 +20,7 @@ The dedupe pass was run by Rex, the research bot, and took the list from 108 pri
 - **5.6 into 5.10.** Old 5.6: "Redact secrets in any debug output you show". New 5.10: "Never log or display secrets, tokens or full personal data, including in debug output." Sources: Addy, ciembor (Release It!), Pocock.
 - **2.11 into 6.3.** Old 2.11: "Validate input at the boundary; treat external responses as untrusted too". New 6.3: "Validate all external input at the boundary, treat external API responses as untrusted too, parameterise queries and encode output." Sources: Addy, ciembor.
 
-No amalgamated skills exist yet (they are the next phase), so there were no skills, agents, commands or test-order slots to update. When skills are written, the survivor's skill should carry the merged principle's dos, don'ts, steps and reviewer checks, with no repeated rules.
+Amalgamated skills now exist, one per surviving principle, and each merged ID is listed as an alias on the survivor's skill.
 
 ## Overlapping pairs kept separate
 

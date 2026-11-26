@@ -6,7 +6,7 @@ It is a base, not a finished product. Fork it, copy it, strip out what you do no
 
 ## Status
 
-This repo is being built in phases. Right now it has the structure, the 103 principles as data and one file each, the list of 41 source repos, and the process for keeping all of it fresh. Skills, agents, commands, the website and CI come next. Each folder has a short README that says what will go in it.
+This repo is being built in phases. Right now it has the structure, the 103 principles as data and one file each, one skill per principle with its sources, the list of 45 source repos, the learning website, CI, and the process for keeping all of it fresh. Agents, commands and the developer guides come next. Each folder has a short README that says what will go in it.
 
 ## How this came about
 
@@ -71,12 +71,12 @@ A change only goes live if it helps on cases held out from the one that caused i
 | --- | --- |
 | `principles/` | One file per principle. Generated from `data/principles.json`. |
 | `MERGES.md` | Log of principles merged into others, with the old ID, the new ID, the reason and the date. |
-| `data/` | The source of truth: principles, source repos, changelog, JSON schemas. |
-| `skills/` | One amalgamated skill per principle, with a `SOURCES.md` next to each. Coming in the next phase. |
+| `data/` | The source of truth: principles, source repos, changelog, the skill map, taxonomy, source mapping, licences and scorecard, and JSON schemas. |
+| `skills/` | One amalgamated skill per principle (103), with a `SOURCES.md` next to each. |
 | `agents/` | Coordinator, a producer and a reviewer per phase, and the roles. Coming. |
 | `commands/` | Slash commands for the main loop: plan, design, build, verify, review, ship, retro. Coming. |
 | `guides/developer/` | Plain-language guides to the principles. Coming. |
-| `docs/` | The static website (GitHub Pages). Coming. |
+| `docs/` | The static website (GitHub Pages), generated from `data/`. |
 | `template/` | The shared base a new project copies, and `template/profiles/` with the solo, small-team and large-org overlays. |
 | `scripts/` | `build-principles.py`, `refresh-sources.py`, `new-project.sh`. |
 

@@ -111,6 +111,34 @@
       ],
       "summary": "principles schema 1.0.0 to 1.1.0: added optional aliases and distinct_from. Existing data stays valid; set schema_version to 1.1.0.",
       "reason": "Merged IDs need to keep resolving, and overlapping principles need a note on how they differ."
+    },
+    {
+      "date": "2026-11-26",
+      "research_run": "run-1",
+      "type": "add",
+      "ids": [
+        "skills",
+        "skill-principle-map",
+        "taxonomy",
+        "mapping",
+        "licences",
+        "scorecard"
+      ],
+      "summary": "Added 103 skills (one per principle, each with SKILL.md and SOURCES.md) and the data files for the skill map, taxonomy, source mapping, licences and scorecard, each with a schema.",
+      "reason": "One amalgamated skill per principle, built from the pinned sources."
+    },
+    {
+      "date": "2026-11-26",
+      "research_run": "run-1",
+      "type": "add",
+      "ids": [
+        "ArefMozafari/pr-evidence",
+        "michalklejdysz/pr-visuals",
+        "nullswan/pr-screenshots",
+        "victorsaly/sideshot"
+      ],
+      "summary": "Added four MIT source repos (41 to 45), pinned, for the 7.12 skill.",
+      "reason": "rstack's before-and-after is PolyForm Shield (link only), so 7.12 is built from MIT sources."
     }
   ]
 }

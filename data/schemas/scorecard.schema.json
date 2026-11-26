@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mitulamin/ai-sdlc-loop/data/schemas/scorecard.schema.json",
+  "title": "Skill scorecard",
+  "description": "One row per skill, in test slot order. Each test run appends to runs; verdict is set after the human review.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "skills"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "note": {
+      "type": "string"
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "slot",
+          "skill_id",
+          "skill_name",
+          "test_app",
+          "phase",
+          "runs",
+          "verdict"
+        ],
+        "properties": {
+          "slot": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "skill_id": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+$"
+          },
+          "skill_name": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "test_app": {
+            "enum": [
+              "A",
+              "B",
+              "C",
+              "All"
+            ]
+          },
+          "phase": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "runs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "run_id",
+                "date",
+                "scores",
+                "total",
+                "harm_flag"
+              ],
+              "properties": {
+                "run_id": {
+                  "type": "string"
+                },
+                "date": {
+                  "type": "string",
+                  "format": "date"
+                },
+                "scores": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "triggered",
+                    "followed",
+                    "reviewer_caught",
+                    "outcome",
+                    "cost"
+                  ],
+                  "properties": {
+                    "triggered": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 2
+                    },
+                    "followed": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 2
+                    },
+                    "reviewer_caught": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 2
+                    },
+                    "outcome": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 2
+                    },
+                    "cost": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 2
+                    }
+                  }
+                },
+                "total": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 10
+                },
+                "harm_flag": {
+                  "type": "boolean"
+                },
+                "evidence_link": {
+                  "type": "string"
+                },
+                "human_note": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "verdict": {
+            "enum": [
+              null,
+              "keep",
+              "merge",
+              "drop"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

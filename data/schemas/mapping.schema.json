@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mitulamin/ai-sdlc-loop/data/schemas/mapping.schema.json",
+  "title": "Principle to source files",
+  "description": "For each principle: its skill folder, aliases, the source files it was written from (pinned URLs, with licence) and link-only further reading.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "principles"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0.0"
+    },
+    "principles": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[0-9]+\\.[0-9]+$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "skill",
+          "aliases",
+          "sources",
+          "link_only"
+        ],
+        "properties": {
+          "skill": {
+            "type": "string",
+            "pattern": "^skills/"
+          },
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[0-9]+\\.[0-9]+$"
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "repo",
+                "path",
+                "url",
+                "licence"
+              ],
+              "properties": {
+                "repo": {
+                  "type": "string"
+                },
+                "path": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": "string",
+                  "format": "uri"
+                },
+                "licence": {
+                  "type": "string"
+                },
+                "primary": {
+                  "type": "boolean"
+                }
+              }
+            }
+          },
+          "link_only": {
+            "type": "array",
+            "items": {
+              "type": "object"
+            }
+          }
+        }
+      }
+    }
+  }
+}
