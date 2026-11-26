@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Developer Guide | AI SDLC Loop</title>
+<meta name="description" content="Software engineering principles for building with agents, and a loop that learns from each project.">
+<link rel="icon" href="../../assets/brand/ai-sdlc-loop.ico" sizes="any">
+<link rel="icon" href="../../assets/brand/ai-sdlc-loop.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="../../assets/brand/ai-sdlc-loop-512.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AI SDLC Loop">
+<meta property="og:url" content="https://mitulamin.github.io/ai-sdlc-loop/guides/developer/developer-guide.html">
+<meta property="og:title" content="Developer Guide | AI SDLC Loop">
+<meta property="og:description" content="Software engineering principles for building with agents, and a loop that learns from each project.">
+<meta property="og:image" content="https://mitulamin.github.io/ai-sdlc-loop/assets/brand/ai-sdlc-loop-photographic.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Developer Guide | AI SDLC Loop">
+<meta name="twitter:description" content="Software engineering principles for building with agents, and a loop that learns from each project.">
+<meta name="twitter:image" content="https://mitulamin.github.io/ai-sdlc-loop/assets/brand/ai-sdlc-loop-photographic.jpg">
+<link rel="stylesheet" href="../../assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap header-inner">
+<a class="brand" href="../../index.html"><img class="brand-logo" src="../../assets/brand/ai-sdlc-loop.svg" alt="AI SDLC Loop logo" width="28" height="28">AI SDLC Loop</a>
+<nav aria-label="Main"><a href="../../index.html">Home</a><a href="../../path.html">Learning path</a><a href="../../principles.html">All principles</a><a href="../../skills.html">Skills</a><a href="../../agents.html">Agents</a><a href="../../sources.html">Sources</a><a href="../../guides/index.html" aria-current="page">Guides</a><a href="https://github.com/mitulamin/ai-sdlc-loop">GitHub</a></nav>
+</div>
+</header>
+<main id="main" class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> / <a href="../index.html">Guides</a> / Developer Guide</nav>
+
+<article class="prose"><h1 id="developer-guide">Developer Guide</h1>
+<p>A field guide to named principles and methodologies you will meet in real software work, each with a short plain-English explanation and a link to a canonical source.</p>
+<h2 id="how-to-use-this-guide">How to use this guide</h2>
+<p>You will keep meeting named principles in reviews, design docs and incident write-ups. This guide is a map of the ones you are most likely to hear. For each name you get one or two plain-English sentences and a link to an official document, a canonical essay, or a well-known article. You do not need to memorise the list. Use it when a term comes up, and let the originals teach you the rest.</p>
+<p>SOLID, YAGNI, DRY and the twelve-factor app are covered in more depth in the companion paper, <a href="quality-principles.html">Principles for Building Quality Software and Apps</a>. This guide goes wider, into architecture, reliability, operations, delivery, security, and the laws that shape teams.</p>
+<p>Where a name matches one of the 103 principles this repo uses for building with agents, the entry says which one, so you can see how the idea is applied in practice. The <a href="../../path.html">learning path</a> walks all of them in order. If a word in an explanation is new to you, the <a href="#words-this-guide-uses">glossary</a> at the end defines it.</p>
+<p><strong>A field guide, not a syllabus.</strong> No one applies all of these at once. Learn the names, follow the link when the idea shows up in your work, and ask a teammate when two principles seem to disagree.</p>
+<p>Sections:</p>
+<ul><li><a href="#design">Design</a></li><li><a href="#architecture-and-data">Architecture and data</a></li><li><a href="#reliability">Reliability</a></li><li><a href="#operations-and-observability">Operations and observability</a></li><li><a href="#testing-and-delivery">Testing and delivery</a></li><li><a href="#security">Security</a></li><li><a href="#team-and-process-laws">Team and process laws</a></li><li><a href="#a-good-place-to-start">A good place to start</a></li><li><a href="#words-this-guide-uses">Words this guide uses</a></li></ul>
+<h2 id="design">Design</h2>
+<p>These ideas are about how you shape everyday code: clarity, small pieces, and habits that keep a codebase kind to the next reader, who may be you in six months.</p>
+<h3 id="the-zen-of-python">The Zen of Python</h3>
+<p>PEP 20 is a short list of aphorisms that ship with the Python language: readability counts, explicit is better than implicit, simple is better than complex, and errors should never pass silently. Even if you do not write Python, it is a clear statement of a style that favours clarity over cleverness. <a href="https://peps.python.org/pep-0020/">https://peps.python.org/pep-0020/</a></p>
+<p>On this site: principle <a href="../../principles/3.8.html">3.8</a>, prefer clarity over cleverness.</p>
+<h3 id="unix-philosophy">Unix philosophy</h3>
+<p>Write small programs that do one thing well, and combine them, often through simple text interfaces, rather than building one large program that tries to do everything. The usual sources are Doug McIlroy&#x27;s early Unix practice and Eric Raymond&#x27;s later write-up in The Art of Unix Programming. <a href="https://en.wikipedia.org/wiki/Unix_philosophy">https://en.wikipedia.org/wiki/Unix_philosophy</a></p>
+<h3 id="the-pragmatic-programmer">The Pragmatic Programmer</h3>
+<p>Andy Hunt and Dave Thomas offer a set of working habits more than a single rule: keep knowledge orthogonal, so a change in one place does not force a change in another; fix &quot;broken windows&quot; before they spread; and get a thin slice working end to end with tracer bullets. Their DRY rule, that each piece of knowledge should have one authoritative home, is covered in the <a href="quality-principles.html">companion paper</a>. <a href="https://pragprog.com/tips/">https://pragprog.com/tips/</a></p>
+<p>On this site: principle <a href="../../principles/3.14.html">3.14</a>, build in thin vertical slices, is the tracer-bullet habit applied to agents.</p>
+<h3 id="clean-code">Clean Code</h3>
+<p>Robert C. Martin&#x27;s book argues that code is clean when the next person can read, change and test it: names that say what they mean, small focused functions, no surprising side effects, and leaving the file a little better than you found it. The book is the source. <a href="https://www.pearson.com/en-us/subject-catalog/p/clean-code-a-handbook-of-agile-software-craftsmanship-2nd-edition/P200000013239/9780135398548">https://www.pearson.com/en-us/subject-catalog/p/clean-code-a-handbook-of-agile-software-craftsmanship-2nd-edition/P200000013239/9780135398548</a></p>
+<p>On this site: principles <a href="../../principles/3.4.html">3.4</a> (small functions at one level of abstraction) and <a href="../../principles/3.7.html">3.7</a> (comments explain why, never narrate what).</p>
+<h3 id="worse-is-better">Worse is better</h3>
+<p>Richard Gabriel&#x27;s essay argues that a simpler design that ships and can evolve often beats a more complete, more &quot;correct&quot; design that arrives late. It is a useful counterweight when you are tempted to perfect an abstraction before anyone can use it. <a href="https://www.dreamsongs.com/RiseOfWorseIsBetter.html">https://www.dreamsongs.com/RiseOfWorseIsBetter.html</a></p>
+<p>On this site: principle <a href="../../principles/3.1.html">3.1</a>, write the minimum that solves the stated problem.</p>
+<p>For SOLID, YAGNI, DRY, KISS, composition over inheritance and related design tensions, see the companion paper, <a href="quality-principles.html">Principles for Building Quality Software and Apps</a>.</p>
+<h2 id="architecture-and-data">Architecture and data</h2>
+<p>These names show up when a system has more than one part, more than one model of the data, or more than one way those parts can fail to agree.</p>
+<h3 id="domain-driven-design">Domain-Driven Design</h3>
+<p>Eric Evans&#x27;s approach is to model the software in the language of the business, and to split a large system into bounded contexts, each with its own model, so one team&#x27;s language does not leak into another&#x27;s. His short official reference is the best starting summary. <a href="https://www.domainlanguage.com/ddd/reference/">https://www.domainlanguage.com/ddd/reference/</a></p>
+<p>On this site: principles <a href="../../principles/2.16.html">2.16</a> (keep a glossary of the domain language) and <a href="../../principles/2.17.html">2.17</a> (split the domain into bounded contexts).</p>
+<h3 id="cqrs">CQRS</h3>
+<p>Command Query Responsibility Segregation, popularised by Greg Young and explained by Martin Fowler, means using a different model to handle writes (commands) from the model you use to handle reads (queries). It can help when those needs diverge sharply. It is extra complexity you should not add by default, and it is not the same thing as event sourcing. <a href="https://martinfowler.com/bliki/CQRS.html">https://martinfowler.com/bliki/CQRS.html</a></p>
+<p>On this site: principle <a href="../../principles/3.6.html">3.6</a>, separate commands from queries, is the same idea at the scale of a single function, and it is cheap enough to apply everywhere.</p>
+<h3 id="event-driven-architecture">Event-driven architecture</h3>
+<p>Components communicate by emitting and reacting to events, rather than calling each other directly for every change. Fowler&#x27;s 2017 article is the clearest map of the variants, including simple notifications, events that carry state, and event sourcing, three ideas that are often mixed up. <a href="https://martinfowler.com/articles/201701-event-driven.html">https://martinfowler.com/articles/201701-event-driven.html</a></p>
+<p>On this site: principle <a href="../../principles/2.18.html">2.18</a>, derive aggregates from events and commands.</p>
+<h3 id="hexagonal-architecture">Hexagonal architecture</h3>
+<p>Also called ports and adapters, from Alistair Cockburn: keep the core application logic in the middle, and talk to databases, user interfaces and other services through replaceable adapters. The business rules should not depend on a particular framework or datastore. <a href="https://alistair.cockburn.us/hexagonal-architecture/">https://alistair.cockburn.us/hexagonal-architecture/</a></p>
+<p>On this site: principles <a href="../../principles/2.2.html">2.2</a> (choose seams deliberately) and <a href="../../principles/2.3.html">2.3</a> (keep framework, persistence and vendor details behind adapters).</p>
+<h3 id="the-cap-theorem">The CAP theorem</h3>
+<p>Eric Brewer&#x27;s conjecture, later proved by Seth Gilbert and Nancy Lynch, says a distributed data system cannot simultaneously guarantee consistency, availability and partition tolerance. In real networks, partitions happen, so you have to decide how you degrade. Brewer&#x27;s later essay is the best short reading, because it also explains why a blunt &quot;pick two&quot; is not quite right. <a href="https://www.infoq.com/articles/cap-twelve-years-later-how-the-rules-have-changed/">https://www.infoq.com/articles/cap-twelve-years-later-how-the-rules-have-changed/</a></p>
+<h3 id="acid">ACID</h3>
+<p>Atomicity, Consistency, Isolation and Durability are the classic promises of a database transaction: a group of writes either all happen or none do, they leave the data valid, they do not trample one another, and they survive a crash. This is what you are asking for when you commit a transaction in a relational database. <a href="https://en.wikipedia.org/wiki/ACID">https://en.wikipedia.org/wiki/ACID</a></p>
+<h3 id="eventual-consistency">Eventual consistency</h3>
+<p>If no new updates are made, all replicas of a piece of data will eventually agree on the last value. Werner Vogels&#x27;s essay is the standard explanation: you gain availability and scale, and you accept a window in which different readers can see different answers. <a href="https://allthingsdistributed.com/2007/12/eventually_consistent.html">https://allthingsdistributed.com/2007/12/eventually_consistent.html</a></p>
+<h3 id="the-strangler-fig-pattern">The strangler fig pattern</h3>
+<p>Martin Fowler&#x27;s name for replacing a legacy system gradually, by routing more and more work to new code until the old system can be retired, rather than attempting a risky big-bang rewrite. <a href="https://martinfowler.com/bliki/StranglerFigApplication.html">https://martinfowler.com/bliki/StranglerFigApplication.html</a></p>
+<h2 id="reliability">Reliability</h2>
+<p>Google&#x27;s Site Reliability Engineering books are the usual home for several of these ideas. The others are named patterns for staying up when something, inevitably, goes wrong.</p>
+<h3 id="slos-and-slis">SLOs and SLIs</h3>
+<p>A service level indicator is a measurement of how the service is doing for users, such as request latency or error rate. A service level objective is the target you set for that indicator. You cannot manage reliability by gut feel alone; you need a number that reflects the user experience. <a href="https://sre.google/sre-book/service-level-objectives/">https://sre.google/sre-book/service-level-objectives/</a></p>
+<p>On this site: principle <a href="../../principles/5.7.html">5.7</a>, define what &quot;working&quot; means before instrumenting.</p>
+<h3 id="error-budgets">Error budgets</h3>
+<p>An error budget is the gap between perfect reliability and your SLO: the amount of unreliability you are willing to spend on change and risk. When the budget is gone, you slow feature work and focus on reliability. This is how SRE turns &quot;is it safe to launch?&quot; into a shared, numeric conversation. <a href="https://sre.google/sre-book/embracing-risk/">https://sre.google/sre-book/embracing-risk/</a></p>
+<h3 id="toil">Toil</h3>
+<p>In SRE, toil is manual, repetitive, automatable operational work that grows as the service grows and leaves no lasting improvement. The published aim at Google is to keep it below half of an SRE&#x27;s time, so people can do engineering that makes the next incident less likely. <a href="https://sre.google/sre-book/eliminating-toil/">https://sre.google/sre-book/eliminating-toil/</a></p>
+<h3 id="blameless-postmortems">Blameless postmortems</h3>
+<p>After an incident, write down what happened, what the impact was, what caused it, and what you will change, on the assumption that everyone involved meant well and was working with the information they had. You cannot fix people; you can fix systems and processes. <a href="https://sre.google/sre-book/postmortem-culture/">https://sre.google/sre-book/postmortem-culture/</a></p>
+<p>On this site: principle <a href="../../principles/9.5.html">9.5</a>, ask what conditions allowed the failure, not who caused it.</p>
+<h3 id="chaos-engineering">Chaos engineering</h3>
+<p>Run controlled experiments, often in production, to see whether the system still behaves when things fail: a host dies, a dependency slows, a network path drops. The aim is to find weaknesses before your users do, with a limited blast radius. <a href="https://principlesofchaos.org/">https://principlesofchaos.org/</a></p>
+<h3 id="fail-fast">Fail fast</h3>
+<p>Detect bad input or a broken assumption immediately and make the failure visible, rather than carrying on with corrupted state. Failures that surface at the boundary are cheap; failures that explode three services later are not. <a href="https://www.martinfowler.com/ieeeSoftware/failFast.pdf">https://www.martinfowler.com/ieeeSoftware/failFast.pdf</a></p>
+<p>On this site: principle <a href="../../principles/6.3.html">6.3</a>, validate all external input at the boundary, is one everyday form of failing fast.</p>
+<h3 id="circuit-breakers">Circuit breakers</h3>
+<p>If a dependency is failing or timing out, stop calling it for a while and fail quickly, then probe now and then to see if it has recovered. This protects both sides from a storm of retries. <a href="https://martinfowler.com/bliki/CircuitBreaker.html">https://martinfowler.com/bliki/CircuitBreaker.html</a></p>
+<p>On this site: principle <a href="../../principles/2.7.html">2.7</a>, design for failure.</p>
+<h3 id="bulkheads">Bulkheads</h3>
+<p>Isolate resources so that a failure in one part of the system, such as one thread pool, queue or tenant, cannot use up everything and take the rest down with it. The name comes from the watertight compartments in a ship. <a href="https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead">https://learn.microsoft.com/en-us/azure/architecture/patterns/bulkhead</a></p>
+<p>On this site: principle <a href="../../principles/2.7.html">2.7</a>, design for failure.</p>
+<h3 id="backpressure">Backpressure</h3>
+<p>When a consumer cannot keep up, it should signal the producer to slow down, rather than queuing without bound until something falls over. The Reactive Manifesto is the short named source for this idea in modern service design. <a href="https://www.reactivemanifesto.org/glossary#Back-Pressure">https://www.reactivemanifesto.org/glossary#Back-Pressure</a></p>
+<p>On this site: principle <a href="../../principles/2.8.html">2.8</a>, bound every queue, cache, pool and result set, and decide what happens when full.</p>
+<h3 id="idempotency">Idempotency</h3>
+<p>An operation is idempotent if doing it once or several times leaves the same result. That is what makes retries safe for payments, creates and other writes. Stripe&#x27;s API docs are a clear practical explanation. <a href="https://docs.stripe.com/api/idempotent_requests">https://docs.stripe.com/api/idempotent_requests</a></p>
+<p>On this site: principle <a href="../../principles/2.13.html">2.13</a>, make retried writes safe with idempotency keys derived from intent.</p>
+<h3 id="retries-with-backoff">Retries with backoff</h3>
+<p>Transient failures are common, so retry, but wait longer after each attempt and add jitter so every client does not retry at once. Never retry a non-idempotent write blindly. Amazon&#x27;s Builders&#x27; Library essay is the standard practical guide. <a href="https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/">https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/</a></p>
+<p>On this site: principle <a href="../../principles/2.7.html">2.7</a>, which asks for bounded retries with backoff.</p>
+<h3 id="the-fallacies-of-distributed-computing">The fallacies of distributed computing</h3>
+<p>Peter Deutsch and colleagues listed eight assumptions first-time builders of distributed systems make, all of which turn out false: that the network is reliable, latency is zero, bandwidth is infinite, the network is secure, the topology does not change, there is one administrator, transport is free, and the network is homogeneous. James Gosling&#x27;s page preserves the list. <a href="https://nighthacks.com/jag/res/Fallacies.html">https://nighthacks.com/jag/res/Fallacies.html</a></p>
+<p>Google also publishes a short workbook chapter on how to run an error-budget policy in practice: <a href="https://sre.google/workbook/error-budget-policy/">https://sre.google/workbook/error-budget-policy/</a>.</p>
+<h2 id="operations-and-observability">Operations and observability</h2>
+<p>These principles are about running the system once it is in production, and about being able to ask why it misbehaved without guessing.</p>
+<h3 id="observability-logs-metrics-and-traces">Observability: logs, metrics and traces</h3>
+<p>Observability is the ability to ask new questions about a running system without first shipping new instrumentation. The usual three signals are logs (records of events), metrics (numeric aggregates over time) and traces (the path of a request across services). OpenTelemetry&#x27;s primer is the official starting point for that vocabulary. <a href="https://opentelemetry.io/docs/concepts/observability-primer/">https://opentelemetry.io/docs/concepts/observability-primer/</a></p>
+<p>On this site: the <a href="../../categories/debug-and-observe.html">Debug and observe</a> category, for example principles <a href="../../principles/5.8.html">5.8</a> (structured logs), <a href="../../principles/5.9.html">5.9</a> (correlation IDs) and <a href="../../principles/5.14.html">5.14</a> (instrument boundaries and failure points).</p>
+<h3 id="infrastructure-as-code">Infrastructure as code</h3>
+<p>Define servers, networks and related infrastructure in versioned files, and apply those files through tools, rather than clicking in a console. The environment can then be reviewed, repeated and rolled back like application code. <a href="https://martinfowler.com/bliki/InfrastructureAsCode.html">https://martinfowler.com/bliki/InfrastructureAsCode.html</a></p>
+<h3 id="immutable-infrastructure">Immutable infrastructure</h3>
+<p>Once a server or container is deployed, you do not patch it in place; you build a new one and replace the old. This avoids snowflake machines that nobody can reproduce. <a href="https://martinfowler.com/bliki/ImmutableServer.html">https://martinfowler.com/bliki/ImmutableServer.html</a></p>
+<p>For how a service should treat config, logs, processes and deploys, see the twelve-factor app in the <a href="quality-principles.html">companion paper</a>, or read the methodology itself at <a href="https://12factor.net/">https://12factor.net/</a>. Google&#x27;s SRE chapter on monitoring distributed systems is also a strong official companion to the observability primer: <a href="https://sre.google/sre-book/monitoring-distributed-systems/">https://sre.google/sre-book/monitoring-distributed-systems/</a>.</p>
+<h2 id="testing-and-delivery">Testing and delivery</h2>
+<p>These practices are how changes get from your laptop into production without becoming a heroics exercise, and how you tell whether the path is actually getting better.</p>
+<h3 id="test-driven-development">Test-driven development</h3>
+<p>From Kent Beck: write a small failing test, write the code that makes it pass, then refactor, in a short loop. The tests become a specification you can run, and they leave you safer to change the design. <a href="https://martinfowler.com/bliki/TestDrivenDevelopment.html">https://martinfowler.com/bliki/TestDrivenDevelopment.html</a></p>
+<p>On this site: principle <a href="../../principles/4.1.html">4.1</a>, write one failing test first and watch it fail.</p>
+<h3 id="continuous-integration">Continuous integration</h3>
+<p>Every developer integrates into a shared mainline frequently, and each integration is verified by an automated build and tests. If the build breaks, fixing it is the priority. Fowler&#x27;s article is still the clearest statement of the practice. <a href="https://martinfowler.com/articles/continuousIntegration.html">https://martinfowler.com/articles/continuousIntegration.html</a></p>
+<p>On this site: principles <a href="../../principles/5.4.html">5.4</a> (when the build breaks, stop and fix it before writing anything new) and <a href="../../principles/7.9.html">7.9</a> (no quality gate is skippable).</p>
+<h3 id="continuous-delivery">Continuous delivery</h3>
+<p>Keep the software in a state where you can release it at any time, with a repeatable pipeline from commit to a production-ready build. You may still choose when to go live; the point is that the path is already proven. The site for Humble and Farley&#x27;s book is the usual starting point. <a href="https://continuousdelivery.com/">https://continuousdelivery.com/</a></p>
+<p>On this site: principle <a href="../../principles/7.10.html">7.10</a>, shift checks left and release in small, frequent batches.</p>
+<h3 id="trunk-based-development">Trunk-based development</h3>
+<p>Developers merge small changes to a single trunk, often called main, at least daily, rather than living on long feature branches. It is a required practice for genuine continuous integration. <a href="https://trunkbaseddevelopment.com/">https://trunkbaseddevelopment.com/</a></p>
+<p>On this site: principle <a href="../../principles/7.6.html">7.6</a>, keep each change small and about one thing.</p>
+<h3 id="feature-toggles">Feature toggles</h3>
+<p>Release incomplete or risky features behind a flag so you can merge to trunk and control rollout without a long-lived branch. Fowler&#x27;s article is the standard map of the different kinds of toggle and their risks. <a href="https://martinfowler.com/articles/feature-toggles.html">https://martinfowler.com/articles/feature-toggles.html</a></p>
+<p>On this site: principle <a href="../../principles/7.11.html">7.11</a>, give feature flags a lifecycle that ends in removing them.</p>
+<h3 id="semantic-versioning">Semantic versioning</h3>
+<p>For software you publish, version numbers of the form MAJOR.MINOR.PATCH tell users what kind of change to expect: breaking changes bump major, new compatible features bump minor, and compatible fixes bump patch. <a href="https://semver.org/">https://semver.org/</a></p>
+<p>On this site: principle <a href="../../principles/2.15.html">2.15</a>, state failure modes, retryability, timeouts and versioning in the contract.</p>
+<h3 id="dora-metrics">DORA metrics</h3>
+<p>DORA, a long-running research program now published at dora.dev, measures software delivery with a small set of outcome metrics. The current official set is change lead time, deployment frequency, failed-deployment recovery time, change fail rate, and deployment rework rate. The point is to improve both throughput and stability, not one at the expense of the other. <a href="https://dora.dev/guides/dora-metrics/">https://dora.dev/guides/dora-metrics/</a></p>
+<p>For how many tests to write at each level, see the test pyramid in the <a href="quality-principles.html">companion paper</a>, or Fowler&#x27;s short summary at <a href="https://martinfowler.com/bliki/TestPyramid.html">https://martinfowler.com/bliki/TestPyramid.html</a>.</p>
+<h2 id="security">Security</h2>
+<p>You do not need to become a specialist overnight, but you do need a few named habits and one standard list of the ways web apps usually go wrong.</p>
+<h3 id="defence-in-depth">Defence in depth</h3>
+<p>Do not rely on a single control. Stack independent protections, such as authentication, authorisation, network rules, encryption and monitoring, so that one failure does not open the whole system. NIST&#x27;s glossary is the official short definition. <a href="https://csrc.nist.gov/glossary/term/defense_in_depth">https://csrc.nist.gov/glossary/term/defense_in_depth</a></p>
+<h3 id="least-privilege">Least privilege</h3>
+<p>Give each user, service and process only the access it needs to do its job, and no more. This limits how much damage a stolen credential or a buggy service can do. <a href="https://csrc.nist.gov/glossary/term/least_privilege">https://csrc.nist.gov/glossary/term/least_privilege</a></p>
+<p>On this site: principle <a href="../../principles/6.2.html">6.2</a>, sort actions into always do, ask first and never do, applies the same thinking to what an agent may do.</p>
+<h3 id="owasp-top-10">OWASP Top 10</h3>
+<p>The OWASP Top 10 is the standard awareness list of the most critical risks to web applications, and the usual first security reading for application developers. The current edition is the 2025 list. <a href="https://owasp.org/www-project-top-ten/">https://owasp.org/www-project-top-ten/</a></p>
+<p>On this site: the <a href="../../categories/secure.html">Secure</a> category, especially principle <a href="../../principles/6.3.html">6.3</a> (validate input, parameterise queries, encode output).</p>
+<h3 id="shift-left-security">Shift-left security</h3>
+<p>Move security checks earlier in the development lifecycle, into design, coding and the pipeline, rather than waiting for a review at the end. Issues found early, such as leaked secrets or known-vulnerable dependencies, are cheaper and less embarrassing to fix. OWASP&#x27;s DevSecOps guideline is a practical starting point. <a href="https://owasp.org/www-project-devsecops-guideline/">https://owasp.org/www-project-devsecops-guideline/</a></p>
+<p>On this site: principles <a href="../../principles/6.4.html">6.4</a> (never commit secrets), <a href="../../principles/6.8.html">6.8</a> (audit dependencies before each release) and <a href="../../principles/7.10.html">7.10</a> (shift checks left).</p>
+<p>For a more formal official framework, see NIST&#x27;s Secure Software Development Framework: <a href="https://nvlpubs.nist.gov/nistpubs/specialpublications/NIST.SP.800-218.pdf">https://nvlpubs.nist.gov/nistpubs/specialpublications/NIST.SP.800-218.pdf</a>.</p>
+<h2 id="team-and-process-laws">Team and process laws</h2>
+<p>These are observations about people, organisations and time. They are not physical laws, but they have been named because teams keep rediscovering them the hard way.</p>
+<h3 id="conways-law">Conway&#x27;s Law</h3>
+<p>Mel Conway&#x27;s 1968 observation: organisations design systems that mirror their communication structure. If you want a different architecture, you often have to change how teams talk, or accept that the org chart will show up in the code. <a href="https://melconway.com/Home/Conways_Law.html">https://melconway.com/Home/Conways_Law.html</a></p>
+<h3 id="postels-law">Postel&#x27;s law</h3>
+<p>Also called the robustness principle, from Jon Postel&#x27;s TCP work: be conservative in what you send, and liberal in what you accept. It helped early internet protocols interoperate. Later guidance, including RFC 9413, cautions that being too liberal about bad input can hide bugs and create security holes, so apply it with care. The original wording is in RFC 793: <a href="https://www.rfc-editor.org/rfc/rfc793">https://www.rfc-editor.org/rfc/rfc793</a></p>
+<h3 id="hyrums-law">Hyrum&#x27;s Law</h3>
+<p>With enough users of an API, they will come to depend on every observable behaviour, even the accidental ones you never promised. That is why a &quot;harmless&quot; implementation change sometimes breaks people, and why tests and explicit contracts matter. <a href="https://www.hyrumslaw.com/">https://www.hyrumslaw.com/</a></p>
+<p>On this site: principle <a href="../../principles/2.12.html">2.12</a>, prefer adding over changing.</p>
+<h3 id="galls-law">Gall&#x27;s Law</h3>
+<p>A complex system that works has usually evolved from a simple system that worked; a complex system designed from scratch rarely does. Start simple, then grow. The usual citation is John Gall&#x27;s Systemantics (1975). <a href="https://en.wikipedia.org/wiki/John_Gall_%28author%29">https://en.wikipedia.org/wiki/John_Gall_%28author%29</a></p>
+<h3 id="hofstadters-law">Hofstadter&#x27;s Law</h3>
+<p>It always takes longer than you expect, even when you take Hofstadter&#x27;s Law into account. Coined in Douglas Hofstadter&#x27;s Gödel, Escher, Bach, it is a humorous warning about estimation, not a planning method. <a href="https://en.wikipedia.org/wiki/Hofstadter%27s_law">https://en.wikipedia.org/wiki/Hofstadter%27s_law</a></p>
+<h3 id="brookss-law">Brooks&#x27;s Law</h3>
+<p>Adding people to a late software project makes it later, because of ramp-up time and the extra communication. Fred Brooks set this out in The Mythical Man-Month; a widely used copy of the essay is here. <a href="https://www.cs.cmu.edu/~15712/papers/mythicalmanmonth00fred.pdf">https://www.cs.cmu.edu/~15712/papers/mythicalmanmonth00fred.pdf</a></p>
+<h3 id="the-agile-manifesto">The Agile Manifesto</h3>
+<p>The 2001 manifesto values individuals and interactions, working software, customer collaboration, and responding to change, over the items on the right of each pair. The twelve principles behind it are worth reading once, if only so you can tell the original idea from later ceremony. <a href="https://agilemanifesto.org/">https://agilemanifesto.org/</a></p>
+<p>The twelve principles behind the Agile Manifesto are at <a href="https://agilemanifesto.org/principles.html">https://agilemanifesto.org/principles.html</a>. For the later caution on Postel&#x27;s law, see RFC 9413, Maintaining Robust Protocols: <a href="https://www.rfc-editor.org/rfc/rfc9413.html">https://www.rfc-editor.org/rfc/rfc9413.html</a>.</p>
+<h2 id="a-good-place-to-start">A good place to start</h2>
+<p>If you only follow a handful of links this month, these six will repay the time. The rest will still be here when the name comes up.</p>
+<ol><li><a href="quality-principles.html">Principles for Building Quality Software and Apps</a>: the companion paper on SOLID, YAGNI, DRY and the twelve-factor app</li><li><a href="https://peps.python.org/pep-0020/">The Zen of Python</a>: peps.python.org</li><li><a href="https://martinfowler.com/bliki/TestDrivenDevelopment.html">Test-Driven Development</a>: martinfowler.com</li><li><a href="https://sre.google/sre-book/service-level-objectives/">Service Level Objectives</a>: sre.google</li><li><a href="https://owasp.org/www-project-top-ten/">OWASP Top 10</a>: owasp.org</li><li><a href="https://agilemanifesto.org/">Manifesto for Agile Software Development</a>: agilemanifesto.org</li></ol>
+<h2 id="words-this-guide-uses">Words this guide uses</h2>
+<p>Short definitions of terms the entries above use without stopping to explain.</p>
+<div class="table-wrap"><table><thead><tr><th>Term</th><th>What it means here</th></tr></thead><tbody><tr><td>Principle</td><td>A named rule of thumb that experienced people have found useful. It guides a choice; it does not decide it for you.</td></tr><tr><td>Methodology</td><td>A named way of working made of several practices, such as continuous delivery or the twelve-factor app.</td></tr><tr><td>Canonical source</td><td>The original or most widely accepted statement of an idea, such as the author&#x27;s own essay or an official specification.</td></tr><tr><td>API</td><td>Application programming interface: the functions, endpoints or messages one piece of software offers so others can use it.</td></tr><tr><td>Contract</td><td>What a component promises to callers: its inputs, outputs, errors and limits. Tests and documentation make it explicit.</td></tr><tr><td>Production</td><td>The live system real users depend on, as opposed to your laptop, a test environment or staging.</td></tr><tr><td>Distributed system</td><td>A system whose parts run on more than one machine and talk over a network, so any message can be slow, lost or duplicated.</td></tr><tr><td>Replica</td><td>A copy of the same data kept on another machine, for speed or for safety if one machine fails.</td></tr><tr><td>Dependency</td><td>Another library, service or system your code relies on to work.</td></tr><tr><td>Trunk or mainline</td><td>The single shared branch everyone integrates into, usually called main.</td></tr><tr><td>Pipeline</td><td>The automated steps that build, test and deploy each change.</td></tr><tr><td>Refactor</td><td>Change the structure of code without changing what it does.</td></tr><tr><td>Incident</td><td>An event where the service fails or degrades for users and someone has to respond.</td></tr><tr><td>Blast radius</td><td>How much of the system, or how many users, a failure or an experiment can affect.</td></tr><tr><td>Credential</td><td>A secret that proves identity, such as a password, API key or token.</td></tr></tbody></table></div></article>
+</main>
+<footer class="site-footer">
+<div class="wrap">
+<p>AI SDLC Loop. Written content is CC BY-SA 4.0 and code is GPL-3.0; the project template is MIT.
+See <a href="https://github.com/mitulamin/ai-sdlc-loop#readme">the README</a> and <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/LICENSE-CONTENT">LICENSE-CONTENT</a>.
+No trackers, no external scripts. Generated from <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/principles.json">data/principles.json</a>.</p>
+</div>
+</footer>
+<script src="../../assets/site.js" defer></script>
+</body>
+</html>

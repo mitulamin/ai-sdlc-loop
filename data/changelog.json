@@ -191,6 +191,16 @@
       ],
       "summary": "Fixed test-plan path from ../../scorecard.csv to ../../data/scorecard.json across all 103 skills, updated skill 8.5 count from 108 to 103, gave reviewer agents a tools list (Bash for build, verify, debug, secure and review-and-ship; a prompt rule, not enforcement, because Cursor subagents ignore tools:), and wired NVIDIA SkillSpector 2.13.7 scanning of skills/ into CI with per-finding exceptions (rule, file, text, source line and a per-file cap).",
       "reason": "Keep skills/, agents/ and CI checks accurate and aligned with the repository layout."
+    },
+    {
+      "date": "2026-11-26",
+      "research_run": "run-1",
+      "type": "add",
+      "ids": [
+        "guides"
+      ],
+      "summary": "Added four developer guides in guides/developer/ (Developer Guide, Principles for Building Quality Software and Apps, Using the agents and commands, Testing the skills) and replaced the stub index. Published by scripts/build-site.py, which now rewrites guide links to files under docs/ as site-relative links, gives guide headings GitHub-style ids, orders the guides listing by the index, and fails on cursor.com/canvas links in a guide. Counts, aliases, the run order and the scorecard follow data/principles.json, data/taxonomy.json, data/skill-principle-map.json and data/scorecard.json; no principle, skill or source changed.",
+      "reason": "Publish the plain-language guides the site and README promised."
     }
   ]
 }

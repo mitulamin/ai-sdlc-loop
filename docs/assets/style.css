@@ -121,6 +121,7 @@ tbody tr[hidden] { display: none; }
 td:first-child { white-space: nowrap; font-variant-numeric: tabular-nums; }
 
 .prose { max-width: 42rem; }
+.prose p, .prose li { overflow-wrap: anywhere; }
 .prose pre { overflow-x: auto; background: var(--card); border: 1px solid var(--line); padding: .75rem; border-radius: .4rem; }
 code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .9em; background: var(--accent-bg); padding: 0 .25rem; border-radius: .2rem; }
 

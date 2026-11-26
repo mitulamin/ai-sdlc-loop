@@ -15,6 +15,7 @@ overwritten and extra files in generated folders are reported as stale.
 import html
 import importlib.util
 import json
+import os
 import re
 import sys
 from pathlib import Path
@@ -23,6 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 DOCS = ROOT / "docs"
 GUIDES = ROOT / "guides" / "developer"
+GUIDE_PAGES = DOCS / "guides" / "developer"
 PROFILES = ROOT / "template" / "profiles"
 REPO_URL = "https://github.com/mitulamin/ai-sdlc-loop"
 BLOB = REPO_URL + "/blob/main/"
@@ -406,7 +408,7 @@ in {n_cats} categories. Use them to adopt agentic tools with less trial and erro
 <li class="lp-card"><h3><a href="categories/{esc(first_cat["slug"])}.html">Read the categories</a></h3><p>One page per category, with the principles that belong to it.</p></li>
 <li class="lp-card"><h3><a href="skills.html">See the skills</a></h3><p>One skill per principle, in test run order, with its phase, test app and licence status. Filter all {n_skills} across {n_phases} phases.</p></li>
 <li class="lp-card"><h3><a href="sources.html">Check the sources</a></h3><p>The {n_sources} sources cited ({n_researched} researched, plus {n_added} added for a skill), with their licences.</p></li>
-<li class="lp-card"><h3><a href="guides/index.html">Read the guides</a></h3><p>Plain-language guides to the principles.</p></li>
+<li class="lp-card"><h3><a href="guides/index.html">Read the guides</a></h3><p>Plain-language guides to the principles.</p>{self.guide_links_html()}</li>
 <li class="lp-card"><h3><a href="#start">Start a project</a></h3><p>Copy the template and run your first loop.</p></li>
 </ul>
 <h3 class="lp-sub">The {n_cats} categories</h3>
@@ -484,7 +486,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 <p class="quick"><a href="categories/{esc(self.cats[0]["slug"])}.html">Start at stage 1</a>
 <a href="principles.html">Browse the table</a>
 <a href="skills.html">See the skills in run order</a>
-<a href="guides/index.html">Read the developer guide</a>
+<a href="{self.developer_guide_href()}">Read the developer guide</a>
 <a href="index.html">About this project</a></p>
 </section>
 <section>
@@ -957,16 +959,46 @@ Licences are as checked and may need your own review before you reuse anything; 
 <p class="muted">Machine-readable copy: <a href="data/sources.json">data/sources.json</a>.</p>"""
         return page("Sources", body, 0, "sources.html", page_path="sources.html")
 
-    def guide_pages(self):
-        out = {}
+    def guide_files(self):
+        """guides/developer/*.md with the README first, then in the order the README links them."""
         files = sorted(GUIDES.glob("*.md"))
+        readme = GUIDES / "README.md"
+        linked = re.findall(r"\]\(([\w.-]+\.md)\)", readme.read_text(encoding="utf-8")) if readme.exists() else []
+        order = {name: i for i, name in enumerate(dict.fromkeys(linked))}
+        return sorted(files, key=lambda f: (f.name != "README.md", order.get(f.name, len(order)), f.name))
+
+    def guide_entries(self):
+        """(slug, title, stub) for each guide page, in listing order."""
         entries = []
-        for f in files:
-            slug = "index" if f.name == "README.md" else f.stem
+        for f in self.guide_files():
             text = f.read_text(encoding="utf-8")
             title_m = re.search(r"^#\s+(.+)$", text, re.M)
-            title = title_m.group(1).strip() if title_m else f.stem
-            stub = "coming later" in text.lower()
+            entries.append((
+                "index" if f.name == "README.md" else f.stem,
+                title_m.group(1).strip() if title_m else f.stem,
+                "coming later" in text.lower(),
+            ))
+        return entries
+
+    def guide_links_html(self):
+        """The written guides (not the index or stubs) as a list for the landing page."""
+        links = "".join(
+            f'<li><a href="guides/developer/{esc(slug)}.html">{esc(title)}</a></li>'
+            for slug, title, stub in self.guide_entries()
+            if slug != "index" and not stub
+        )
+        return f'<ul class="muted">{links}</ul>' if links else ""
+
+    def developer_guide_href(self):
+        return "guides/developer/developer-guide.html" if (GUIDES / "developer-guide.md").exists() else "guides/index.html"
+
+    def guide_pages(self):
+        out = {}
+        entries = self.guide_entries()
+        for f, (slug, title, stub) in zip(self.guide_files(), entries):
+            text = f.read_text(encoding="utf-8")
+            if "cursor.com/canvas" in text:
+                raise SystemExit(f"{f.relative_to(ROOT)}: link to the matching guide or site page, not a cursor.com/canvas URL")
             rel = f.relative_to(ROOT).as_posix()
             banner = (
                 '<div class="notice"><strong>This guide is still a stub.</strong> The page below is the placeholder text '
@@ -979,7 +1011,6 @@ Licences are as checked and may need your own review before you reuse anything; 
                 title, f'<nav class="crumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> / <a href="../index.html">Guides</a> / {esc(title)}</nav>\n{banner}\n<article class="prose">{body_html}</article>',
                 2, "guides/index.html", page_path=f"guides/developer/{slug}.html",
             )
-            entries.append((slug, title, stub))
         badge = ' <span class="badge">stub</span>'
         listing = "".join(
             f'<li><a href="developer/{slug}.html">{esc(title)}</a>{badge if stub else ""}</li>'
@@ -1018,6 +1049,11 @@ Licences are as checked and may need your own review before you reuse anything; 
 
 
 def inline_md(text, base_dir):
+    """Inline markdown for a page in docs/guides/developer/.
+
+    A link to another guide becomes its sibling page, a link to a file under docs/ (such as ../../docs/agents.html)
+    becomes the site-relative link (../../agents.html), and any other repo path becomes a GitHub link.
+    """
     text = esc(text)
     text = re.sub(r"`([^`]+)`", r"<code>\1</code>", text)
     text = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", text)
@@ -1029,12 +1065,15 @@ def inline_md(text, base_dir):
             return f'<a href="{esc(href)}">{label}</a>'
         path, _, frag = href.partition("#")
         target = (base_dir / path).resolve()
+        suffix = "#" + frag if frag else ""
         if target.parent == GUIDES.resolve() and target.suffix == ".md":
             slug = "index" if target.name == "README.md" else target.stem
-            href = slug + ".html" + ("#" + frag if frag else "")
+            href = slug + ".html" + suffix
+        elif target.is_relative_to(DOCS.resolve()):
+            href = Path(os.path.relpath(target, GUIDE_PAGES.resolve())).as_posix() + suffix
         else:
             try:
-                href = BLOB + target.relative_to(ROOT).as_posix() + ("#" + frag if frag else "")
+                href = BLOB + target.relative_to(ROOT).as_posix() + suffix
             except ValueError:
                 pass
         return f'<a href="{esc(href)}">{label}</a>'
@@ -1042,10 +1081,20 @@ def inline_md(text, base_dir):
     return re.sub(r"\[([^\]]+)\]\(([^)\s]+)\)", link, text)
 
 
+def heading_slug(heading):
+    """The id GitHub gives a markdown heading, so #fragment links work on GitHub and on the site."""
+    s = heading.strip().lower()
+    s = re.sub(r"[`*_]", "", s)
+    s = re.sub(r"\[([^\]]*)\]\([^)]*\)", r"\1", s)
+    s = re.sub(r"[^\w\- ]", "", s)
+    return s.replace(" ", "-")
+
+
 def render_markdown(text, base_dir):
-    """Small markdown subset: headings, paragraphs, lists, tables, code fences."""
+    """Small markdown subset: headings (with GitHub-style ids), paragraphs, lists, tables, code fences."""
     out, para, items, kind = [], [], [], None
     lines = text.splitlines()
+    seen_ids = {}
 
     def flush_para():
         if para:
@@ -1073,7 +1122,12 @@ def render_markdown(text, base_dir):
         elif re.match(r"^#{1,6}\s", line):
             flush_para(); flush_list()
             level = len(line) - len(line.lstrip("#"))
-            out.append(f"<h{level}>{inline_md(line[level:].strip(), base_dir)}</h{level}>")
+            heading = line[level:].strip()
+            hid = heading_slug(heading)
+            n = seen_ids.get(hid, 0)
+            seen_ids[hid] = n + 1
+            hid = hid if n == 0 else f"{hid}-{n}"
+            out.append(f'<h{level} id="{esc(hid)}">{inline_md(heading, base_dir)}</h{level}>')
         elif line.startswith("|") and i + 1 < len(lines) and re.match(r"^\|[\s:|-]+\|$", lines[i + 1]):
             flush_para(); flush_list()
             head = [c.strip() for c in line.strip("|").split("|")]
