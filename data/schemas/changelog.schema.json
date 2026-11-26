@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mitulamin/ai-sdlc-loop/data/schemas/changelog.schema.json",
+  "title": "Data changelog",
+  "description": "Machine-readable log of changes to principles, sources and skills. CHANGELOG.md is the human summary.",
+  "type": "object",
+  "required": ["schema_version", "entries"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["date", "research_run", "type", "ids", "summary"],
+        "additionalProperties": false,
+        "properties": {
+          "date": { "type": "string", "format": "date" },
+          "research_run": { "type": "string" },
+          "type": { "enum": ["import", "add", "edit", "merge", "drop", "pin", "repin", "schema"] },
+          "ids": { "type": "array", "items": { "type": "string" }, "description": "principle ids, skill ids or repo names touched" },
+          "summary": { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    }
+  }
+}
