@@ -15,6 +15,24 @@ Do not renumber or delete principles. Merge or drop them by setting `status`. Se
 
 Add it to `data/sources.json` with `role` `skill-source` or `curation-list`, `licence` `TBD`, and `pinned_sha` `null`. Then run `scripts/refresh-sources.py --repin owner/repo` once you have looked at it.
 
+## Add or change a template profile
+
+The base lives in `template/`. A profile is a small overlay in `template/profiles/<name>/`, never a copy of the base.
+
+- `profile.txt`: one line, shown in the script usage.
+- `omit` (optional): base files to leave out, one path per line, relative to the project root.
+- `overlay/` (optional): files to add or replace. Same paths as in the new project.
+
+Put something in the base only if every profile needs it. Put it in an overlay if it is ceremony: a gate, a role, a review rule, an ownership file. Use `@PROFILE@` where a file should name the profile. Keep profiles short, and keep everything under `template/` MIT.
+
+To check a change, run the script once per profile into a temp folder and look at the result:
+
+```bash
+for p in solo small-team large-org; do scripts/new-project.sh "$(mktemp -d)/x" "$p"; done
+```
+
+Then update the table in the README, `scripts/README.md` and `CHANGELOG.md`.
+
 ## Add a skill
 
 Skills arrive in the next phase. The rules will be added here then: one skill per principle, `SKILL.md` plus `SOURCES.md`, sources pinned to a commit, licence and attribution kept.
