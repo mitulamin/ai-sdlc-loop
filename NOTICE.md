@@ -17,7 +17,7 @@ Do not replace or edit LICENSE without a deliberate decision recorded in [CHANGE
 
 The text is in [LICENSE-CONTENT](LICENSE-CONTENT). It covers:
 
-- `README.md`, `UPDATING.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `NOTICE.md`
+- `README.md`, `UPDATING.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `NOTICE.md`, `ATTRIBUTIONS.md`
 - prose in `template/` (`README.md`, `AGENTS.md`, and later prose added there)
 - principle statements and notes in `principles/`, `docs/` and `guides/`
 - other markdown in this repo, including folder READMEs, `.github/PULL_REQUEST_TEMPLATE.md` and `.github/workflows/README.md`
@@ -28,6 +28,8 @@ The text is in [LICENSE-CONTENT](LICENSE-CONTENT). It covers:
 A project created from `template/` carries these licences with it. The GPL-3.0 duties apply when that project is distributed.
 
 ## Borrowed material
+
+Every project used or referenced, with links, roles and licences, is listed in [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
 
 Content borrowed from other repos keeps its original licence. This repo does not relicense it. Each borrowed file is credited in the `SOURCES.md` next to the skill that uses it, with the source link pinned to a commit and the source's licence.
 

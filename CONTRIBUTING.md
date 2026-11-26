@@ -27,6 +27,10 @@ By contributing, you agree your contribution is licensed on the same split as th
 - Writing is under CC BY-SA 4.0 ([LICENSE-CONTENT](LICENSE-CONTENT)). That includes docs, guides, principle statements and notes, `template/` prose, skill and agent markdown, and `data/principles.json`, `data/sources.json`, `data/changelog.json` and `data/notes/`.
 - Do not add material you cannot license that way. Borrowed files keep their own licence and their attribution.
 
+## Credit your sources
+
+If you use or reference a new project, add it to [ATTRIBUTIONS.md](ATTRIBUTIONS.md). The steps are at the bottom of that file.
+
 ## Rules
 
 - Never hand-edit a file that starts with a `GENERATED` marker.
