@@ -27,7 +27,7 @@ Counts in entries are as of the entry date.
 - `data/skill-principle-map.json`, `data/taxonomy.json`, `data/mapping.json`, `data/licences.json` and `data/scorecard.json`, each with a schema (version 1.0.0) in `data/schemas/`.
 - `scripts/check-skills.py`, run in CI, which checks the skills against the principles and the skill data files.
 - `CREDITS.md`: per-source credits with copyright lines and pins.
-- Four MIT source repos for skill 7.12 in `data/sources.json` and `ATTRIBUTIONS.md` (`pr-evidence`, `pr-visuals`, `pr-screenshots`, `sideshot`), taking the count from 41 to 45. They are pinned.
+- Four MIT source repos for skill 7.12 in `data/sources.json` and `ATTRIBUTIONS.md`, taking the count from 41 to 45. They are pinned.
 - Skills page (`docs/skills.html`): the 103 skills in test run order, filterable by category, phase, test app and licence status, with each skill's slot, licence badge and scorecard score and verdict. It also shows the test apps and the nine phases from `data/taxonomy.json`. On narrow screens the table becomes stacked cards. The nav, the landing page and the learning path link to it, and a filtered view can be shared through the URL.
 - Category pages now show the taxonomy: subgroups from `data/taxonomy.json` as headings, and under every principle its skill, phase, run slot, test app and licence badge. Principle pages show the skill's phase, slot, test app, licence status and scorecard row.
 - `docs/data/` now also carries copies of `skill-principle-map.json`, `taxonomy.json` and `scorecard.json`, written by `scripts/build-site.py`.

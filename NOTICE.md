@@ -16,16 +16,18 @@ Do not replace or edit LICENSE without a deliberate decision recorded in [CHANGE
 
 The text is in [LICENSE-CONTENT](LICENSE-CONTENT). It covers:
 
-- `README.md`, `UPDATING.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `NOTICE.md`, `ATTRIBUTIONS.md`
-- principle statements and notes in `principles/`, `docs/` and `guides/`
-- other markdown in this repo outside `template/`, including folder READMEs, `.github/PULL_REQUEST_TEMPLATE.md` and `.github/workflows/README.md`
-- `data/principles.json`, `data/sources.json`, `data/changelog.json` and `data/notes/`
+- markdown in this repo outside `template/`, including the principle statements and notes in `principles/`, `docs/` and `guides/`
+- the data files in `data/` (except `data/schemas/`)
 
-`data/principles.json` holds the principle statements, so it sits with the writing. `data/sources.json` and `data/changelog.json` are the research record around those statements, so they sit with the writing too. The schemas in `data/schemas/` stay under GPL-3.0. Each file is under one licence.
+The data files hold the principle statements and the research record around them, so they sit with the writing. The schemas in `data/schemas/` stay under GPL-3.0. Each file is under one licence.
 
 ## MIT (the template)
 
 The text is in [template/LICENSE](template/LICENSE). It covers everything under `template/`, code and writing. A project created with `scripts/new-project.sh` copies the base from that folder plus the profile you pick, including `LICENSE`, and starts under MIT. It does not inherit GPL-3.0 or CC BY-SA 4.0.
+
+## Logo and brand images (all rights reserved)
+
+The logo and brand image files in `docs/assets/brand/` (favicons, logos and social card images, in any format) are not covered by GPL-3.0, CC BY-SA 4.0 or MIT. They remain under plain copyright, all rights reserved, by Shravi Limited. None of the licences above gives permission to copy, modify or redistribute them.
 
 ## Borrowed material
 
