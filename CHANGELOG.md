@@ -16,7 +16,12 @@ All notable changes to this repo. The machine-readable version of the data chang
 - `scripts/new-project.sh` and a minimal `template/`.
 - `ATTRIBUTIONS.md`: links to all 41 source repos with their checked licences, and to works referenced but not sourced.
 
+- Template profiles: `solo` (default), `small-team` and `large-org`, as small overlays in `template/profiles/`. One shared base, no copies. Solo skips gates and has no roles file. Small team adds a light review process and a short `ROLES.md`. Large org adds review gates, `ROLES.md` with owners and `.github/CODEOWNERS`.
+- Base template now includes `CHANGELOG.md` and a basic pull request template, and `AGENTS.md` and `README.md` name the profile used.
+
 ### Changed
+
+- `scripts/new-project.sh` takes a profile argument (`scripts/new-project.sh <target-dir> [profile]`, default `solo`), shows usage with `--help` or on bad input, and still refuses a target that is not empty. It copies the base, then applies the profile.
 
 - Guides folder is `guides/developer/`. The guides cover everything, including what experienced developers already know.
 - Split the licence. GPL-3.0 stays on the code (`scripts/`, `data/schemas/`, tooling; text in `LICENSE`). CC BY-SA 4.0 covers the writing, including `data/principles.json`, `data/sources.json`, `data/changelog.json` and `data/notes/` (full text in `LICENSE-CONTENT`). The README explains the choice.

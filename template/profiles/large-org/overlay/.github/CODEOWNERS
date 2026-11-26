@@ -1,0 +1,8 @@
+# Paths and who must review them. Replace the handles.
+# The last matching pattern wins.
+
+*                @your-org/tech-leads
+AGENTS.md        @your-org/loop-owners
+PROCESS.md       @your-org/loop-owners
+ROLES.md         @your-org/loop-owners
+/.github/        @your-org/tech-leads

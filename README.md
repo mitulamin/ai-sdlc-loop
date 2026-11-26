@@ -76,25 +76,39 @@ A change only goes live if it helps on cases held out from the one that caused i
 | `commands/` | Slash commands for the main loop: plan, design, build, verify, review, ship, retro. Coming. |
 | `guides/developer/` | Plain-language guides to the principles. Coming. |
 | `docs/` | The static website (GitHub Pages). Coming. |
-| `template/` | What a new project copies. |
+| `template/` | The shared base a new project copies, and `template/profiles/` with the solo, small-team and large-org overlays. |
 | `scripts/` | `build-principles`, `refresh-sources.py`, `new-project.sh`. |
 
 ## Start a new project from the template
 
-Two ways.
-
-1. Use this repo as a GitHub template: click **Use this template** on the repo page.
-2. Clone it and run the script:
+Clone it and run the script with a profile:
 
 ```bash
 git clone https://github.com/mitulamin/ai-sdlc-loop
 cd ai-sdlc-loop
-scripts/new-project.sh ../my-new-project
+scripts/new-project.sh ../my-new-project              # solo, the default
+scripts/new-project.sh ../my-new-project small-team
+scripts/new-project.sh ../my-new-project large-org
+scripts/new-project.sh --help                         # usage and the list of profiles
 ```
 
-The script copies `template/` into the new folder and runs `git init`. Then edit the new project's `AGENTS.md` (stack, commands, conventions, boundaries) and start your first loop.
+The script copies the shared base from `template/`, applies the profile on top, and runs `git init`. It refuses a target folder that is not empty. Then edit the new project's `AGENTS.md` (stack, commands, conventions, boundaries), read its `PROCESS.md`, and start your first loop.
 
-Today `template/` is thin: a README, an `AGENTS.md` skeleton, and an MIT `LICENSE`. It fills out as the skills, agents and commands land.
+### Pick a profile
+
+An individual and a large company share the same principles. What changes is ceremony: gates, roles, review and ownership. So there is one base template, and three profiles that switch that ceremony on or off. I did not make three separate trees.
+
+| Profile | For | What you get on top of the base |
+| --- | --- | --- |
+| `solo` | One person | A short `PROCESS.md` with no gates. No roles file and no pull request template. |
+| `small-team` | A few people | A light `PROCESS.md` (branch, pull request, one reviewer), a short `ROLES.md`, and the base pull request template. |
+| `large-org` | Many people | `PROCESS.md` with review gates, a `ROLES.md` table with owners, `.github/CODEOWNERS`, and a pull request template with the gates as a checklist. |
+
+Every profile starts from the same base: `README.md`, `AGENTS.md`, `CHANGELOG.md` and the MIT `LICENSE`. If you are unsure, start with `solo` or `small-team`. It is easier to add ceremony later than to remove it. The large-org profile is a starter, not a process manual.
+
+Profiles live in `template/profiles/<name>/`. Each one is small: a `profile.txt`, an optional `omit` list of base files to leave out, and an `overlay/` folder of files to add or replace. The base is never copied into a profile. To add your own, see [CONTRIBUTING.md](CONTRIBUTING.md#add-or-change-a-template-profile).
+
+You can also use this repo as a GitHub template (**Use this template** on the repo page), but then you get the whole repo, not a profile. The script is the intended route.
 
 ## How the repo stays alive
 
@@ -122,7 +136,7 @@ GPL-3.0 covers `scripts/`, `data/schemas/`, and the tooling.
 
 In short: private internal use and modification by a company is allowed, with no duty to publish, because the duties start when you distribute. Anyone who distributes a work that includes this code must release the whole combined work under GPLv3, with source. Hosted or SaaS use that never distributes the code does not start those duties. AGPL-3.0 is the licence that closes that gap. I could discuss it. I am not choosing it here.
 
-Everything under `template/` is MIT, code and writing. The text is in [template/LICENSE](template/LICENSE). The template is meant to be copied into a new project, and GPL would stop someone who wants to start an MIT project from using it. `scripts/new-project.sh` copies the whole folder, including that licence, so the new project starts under MIT.
+Everything under `template/` is MIT, code and writing. The text is in [template/LICENSE](template/LICENSE). The template is meant to be copied into a new project, and GPL would stop someone who wants to start an MIT project from using it. `scripts/new-project.sh` copies the base and the profile you pick, including that licence, so the new project starts under MIT.
 
 The writing is CC BY-SA 4.0. The full text is in [LICENSE-CONTENT](LICENSE-CONTENT). You can share and adapt it with attribution. Share-alike means derived text stays under CC BY-SA 4.0, so it stays open.
 
