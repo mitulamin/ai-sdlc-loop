@@ -35,7 +35,12 @@ Then update the table in the README, `scripts/README.md` and `CHANGELOG.md`.
 
 ## Add a skill
 
-Skills arrive in the next phase. The rules will be added here then: one skill per principle, `SKILL.md` plus `SOURCES.md`, sources pinned to a commit, licence and attribution kept.
+There is one skill per principle, in `skills/<id>-<slug>/`, with a `SKILL.md` and a `SOURCES.md`. The folder name is the principle ID and a short slug, and the ID is the survivor's ID if the principle was merged (the old ID goes in `aliases`).
+
+- `SKILL.md` front matter has `principles: ["<id>"]` (quoted), `aliases`, `category` (the category slug), a quoted `description`, and `licence`. The statement matches `data/principles.json`.
+- `SOURCES.md` links every source file at a pinned commit, with its licence. Borrowed content keeps its own licence and attribution. Add the source repo to `data/sources.json` and `ATTRIBUTIONS.md` if it is new.
+- Add the skill to `data/skill-principle-map.json` and, if it draws on new files, to `data/mapping.json`, `data/licences.json` and `CREDITS.md`.
+- Run `python scripts/check-skills.py`, then `python scripts/build-principles.py` and `python scripts/build-site.py` so the principle page links the skill.
 
 ## Which licence your contribution is under
 

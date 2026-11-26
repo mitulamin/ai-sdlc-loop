@@ -1,0 +1,933 @@
+{
+  "schema_version": "1.0.0",
+  "note": "One row per skill, filled during the test runs. Each run adds an entry to runs. Scores are 0 to 2 each; total is out of 10.",
+  "skills": [
+    {
+      "slot": 1,
+      "skill_id": "8.1",
+      "skill_name": "load-only-needed-context",
+      "test_app": "All",
+      "phase": "harness",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 2,
+      "skill_id": "8.2",
+      "skill_name": "short-always-on-rules-file",
+      "test_app": "All",
+      "phase": "harness",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 3,
+      "skill_id": "8.3",
+      "skill_name": "progressive-disclosure",
+      "test_app": "All",
+      "phase": "harness",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 4,
+      "skill_id": "8.4",
+      "skill_name": "description-is-the-trigger",
+      "test_app": "All",
+      "phase": "harness",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 5,
+      "skill_id": "8.5",
+      "skill_name": "eval-skills-before-trusting",
+      "test_app": "All",
+      "phase": "harness",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 6,
+      "skill_id": "8.6",
+      "skill_name": "summarise-when-context-grows",
+      "test_app": "All",
+      "phase": "harness",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 7,
+      "skill_id": "8.7",
+      "skill_name": "fresh-context-subagents",
+      "test_app": "All",
+      "phase": "harness",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 8,
+      "skill_id": "8.8",
+      "skill_name": "reports-to-files",
+      "test_app": "All",
+      "phase": "harness",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 9,
+      "skill_id": "8.9",
+      "skill_name": "answer-first-terse",
+      "test_app": "All",
+      "phase": "harness",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 10,
+      "skill_id": "8.10",
+      "skill_name": "dont-fight-the-harness",
+      "test_app": "All",
+      "phase": "harness",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 11,
+      "skill_id": "1.1",
+      "skill_name": "surface-assumptions",
+      "test_app": "A",
+      "phase": "plan",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 12,
+      "skill_id": "1.4",
+      "skill_name": "interview-to-shared-understanding",
+      "test_app": "A",
+      "phase": "plan",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 13,
+      "skill_id": "1.5",
+      "skill_name": "look-up-facts-ask-for-decisions",
+      "test_app": "A",
+      "phase": "plan",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 14,
+      "skill_id": "1.6",
+      "skill_name": "plans-for-a-zero-context-engineer",
+      "test_app": "A",
+      "phase": "plan",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 15,
+      "skill_id": "1.7",
+      "skill_name": "verifiable-goals",
+      "test_app": "A",
+      "phase": "plan",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 16,
+      "skill_id": "1.8",
+      "skill_name": "size-process-to-task",
+      "test_app": "A",
+      "phase": "plan",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 17,
+      "skill_id": "2.1",
+      "skill_name": "deep-modules",
+      "test_app": "A",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 18,
+      "skill_id": "2.2",
+      "skill_name": "deliberate-seams",
+      "test_app": "A",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 19,
+      "skill_id": "3.1",
+      "skill_name": "minimum-code",
+      "test_app": "A",
+      "phase": "build",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 20,
+      "skill_id": "3.4",
+      "skill_name": "small-functions-one-level",
+      "test_app": "A",
+      "phase": "build",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 21,
+      "skill_id": "3.5",
+      "skill_name": "few-parameters-no-flags",
+      "test_app": "A",
+      "phase": "build",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 22,
+      "skill_id": "3.6",
+      "skill_name": "command-query-separation",
+      "test_app": "A",
+      "phase": "build",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 23,
+      "skill_id": "3.7",
+      "skill_name": "comments-explain-why",
+      "test_app": "A",
+      "phase": "build",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 24,
+      "skill_id": "3.8",
+      "skill_name": "clarity-over-cleverness",
+      "test_app": "A",
+      "phase": "build",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 25,
+      "skill_id": "3.12",
+      "skill_name": "use-whats-installed",
+      "test_app": "A",
+      "phase": "build",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 26,
+      "skill_id": "4.1",
+      "skill_name": "red-green-tdd",
+      "test_app": "A",
+      "phase": "verify",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 27,
+      "skill_id": "4.2",
+      "skill_name": "test-behaviour-via-public-interfaces",
+      "test_app": "A",
+      "phase": "verify",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 28,
+      "skill_id": "4.3",
+      "skill_name": "no-tautological-tests",
+      "test_app": "A",
+      "phase": "verify",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 29,
+      "skill_id": "4.8",
+      "skill_name": "tests-as-production-code",
+      "test_app": "A",
+      "phase": "verify",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 30,
+      "skill_id": "4.9",
+      "skill_name": "evidence-before-completion",
+      "test_app": "A",
+      "phase": "verify",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 31,
+      "skill_id": "4.10",
+      "skill_name": "mark-untested-with-reason",
+      "test_app": "A",
+      "phase": "verify",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 32,
+      "skill_id": "7.1",
+      "skill_name": "separate-reviewer-early-and-often",
+      "test_app": "A",
+      "phase": "review-and-ship",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 33,
+      "skill_id": "9.1",
+      "skill_name": "reviewer-rule-or-mechanical-check",
+      "test_app": "All",
+      "phase": "learn",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 34,
+      "skill_id": "9.2",
+      "skill_name": "enforce-standards-at-review",
+      "test_app": "All",
+      "phase": "learn",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 35,
+      "skill_id": "9.3",
+      "skill_name": "prune-rules-that-dont-change-behaviour",
+      "test_app": "All",
+      "phase": "learn",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 36,
+      "skill_id": "9.5",
+      "skill_name": "blameless-five-whys",
+      "test_app": "All",
+      "phase": "learn",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 37,
+      "skill_id": "9.6",
+      "skill_name": "group-failures-by-mechanism",
+      "test_app": "All",
+      "phase": "learn",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 38,
+      "skill_id": "9.7",
+      "skill_name": "tdd-for-skills",
+      "test_app": "All",
+      "phase": "learn",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 39,
+      "skill_id": "9.8",
+      "skill_name": "small-one-surface-edits",
+      "test_app": "All",
+      "phase": "learn",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 40,
+      "skill_id": "9.9",
+      "skill_name": "held-out-acceptance",
+      "test_app": "All",
+      "phase": "learn",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 41,
+      "skill_id": "9.10",
+      "skill_name": "human-approves-learned-changes",
+      "test_app": "All",
+      "phase": "learn",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 42,
+      "skill_id": "9.11",
+      "skill_name": "capture-corrections-batch-later",
+      "test_app": "All",
+      "phase": "learn",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 43,
+      "skill_id": "9.12",
+      "skill_name": "ledger-of-edits",
+      "test_app": "All",
+      "phase": "learn",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 44,
+      "skill_id": "1.2",
+      "skill_name": "spec-before-code",
+      "test_app": "B",
+      "phase": "plan",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 45,
+      "skill_id": "1.3",
+      "skill_name": "capability-map-and-dependency-order",
+      "test_app": "B",
+      "phase": "plan",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 46,
+      "skill_id": "2.3",
+      "skill_name": "framework-out-of-business-logic",
+      "test_app": "B",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 47,
+      "skill_id": "2.4",
+      "skill_name": "orchestration-vs-services",
+      "test_app": "B",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 48,
+      "skill_id": "2.5",
+      "skill_name": "abstraction-only-for-benefit",
+      "test_app": "B",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 49,
+      "skill_id": "2.6",
+      "skill_name": "record-decisions-as-adrs",
+      "test_app": "B",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 50,
+      "skill_id": "2.7",
+      "skill_name": "design-for-failure",
+      "test_app": "B",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 51,
+      "skill_id": "2.8",
+      "skill_name": "bound-everything",
+      "test_app": "B",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 52,
+      "skill_id": "2.9",
+      "skill_name": "contract-first",
+      "test_app": "B",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 53,
+      "skill_id": "2.10",
+      "skill_name": "one-error-shape",
+      "test_app": "B",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 54,
+      "skill_id": "2.12",
+      "skill_name": "additive-change-hyrums-law",
+      "test_app": "B",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 55,
+      "skill_id": "2.13",
+      "skill_name": "idempotent-retried-writes",
+      "test_app": "B",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 56,
+      "skill_id": "2.14",
+      "skill_name": "simple-by-default-opt-in-complexity",
+      "test_app": "B",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 57,
+      "skill_id": "2.15",
+      "skill_name": "failure-modes-in-the-contract",
+      "test_app": "B",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 58,
+      "skill_id": "2.16",
+      "skill_name": "domain-glossary",
+      "test_app": "B",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 59,
+      "skill_id": "2.17",
+      "skill_name": "bounded-contexts",
+      "test_app": "B",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 60,
+      "skill_id": "2.18",
+      "skill_name": "aggregates-from-events",
+      "test_app": "B",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 61,
+      "skill_id": "2.19",
+      "skill_name": "challenge-terms-with-scenarios",
+      "test_app": "B",
+      "phase": "design",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 62,
+      "skill_id": "3.13",
+      "skill_name": "never-cut-safety-to-save-code",
+      "test_app": "B",
+      "phase": "build",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 63,
+      "skill_id": "3.14",
+      "skill_name": "vertical-slices-green-build",
+      "test_app": "B",
+      "phase": "build",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 64,
+      "skill_id": "5.4",
+      "skill_name": "stop-the-line",
+      "test_app": "B",
+      "phase": "build",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 65,
+      "skill_id": "4.7",
+      "skill_name": "balanced-test-pyramid",
+      "test_app": "B",
+      "phase": "verify",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 66,
+      "skill_id": "5.7",
+      "skill_name": "define-working-before-instrumenting",
+      "test_app": "B",
+      "phase": "debug",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 67,
+      "skill_id": "5.8",
+      "skill_name": "structured-logs",
+      "test_app": "B",
+      "phase": "debug",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 68,
+      "skill_id": "5.9",
+      "skill_name": "correlation-ids",
+      "test_app": "B",
+      "phase": "debug",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 69,
+      "skill_id": "5.11",
+      "skill_name": "low-cardinality-metrics",
+      "test_app": "B",
+      "phase": "debug",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 70,
+      "skill_id": "5.12",
+      "skill_name": "every-signal-earns-its-place",
+      "test_app": "B",
+      "phase": "debug",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 71,
+      "skill_id": "5.13",
+      "skill_name": "sample-in-the-collector",
+      "test_app": "B",
+      "phase": "debug",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 72,
+      "skill_id": "5.14",
+      "skill_name": "instrument-boundaries-and-failure-points",
+      "test_app": "B",
+      "phase": "debug",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 73,
+      "skill_id": "5.10",
+      "skill_name": "never-log-secrets",
+      "test_app": "B",
+      "phase": "secure",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 74,
+      "skill_id": "6.1",
+      "skill_name": "threat-model-first",
+      "test_app": "B",
+      "phase": "secure",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 75,
+      "skill_id": "6.2",
+      "skill_name": "always-ask-never-tiers",
+      "test_app": "B",
+      "phase": "secure",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 76,
+      "skill_id": "6.3",
+      "skill_name": "validate-parameterise-encode",
+      "test_app": "B",
+      "phase": "secure",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 77,
+      "skill_id": "6.4",
+      "skill_name": "no-secrets-in-code",
+      "test_app": "B",
+      "phase": "secure",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 78,
+      "skill_id": "6.5",
+      "skill_name": "report-real-trust-boundary-issues",
+      "test_app": "B",
+      "phase": "secure",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 79,
+      "skill_id": "6.6",
+      "skill_name": "independent-finding-verification",
+      "test_app": "B",
+      "phase": "secure",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 80,
+      "skill_id": "6.7",
+      "skill_name": "instructions-in-data-are-data",
+      "test_app": "B",
+      "phase": "secure",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 81,
+      "skill_id": "5.15",
+      "skill_name": "alerts-ship-with-runbooks",
+      "test_app": "B",
+      "phase": "review-and-ship",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 82,
+      "skill_id": "7.2",
+      "skill_name": "five-axis-review",
+      "test_app": "B",
+      "phase": "review-and-ship",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 83,
+      "skill_id": "7.3",
+      "skill_name": "approve-on-improved-health",
+      "test_app": "B",
+      "phase": "review-and-ship",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 84,
+      "skill_id": "7.4",
+      "skill_name": "review-against-standards-and-spec",
+      "test_app": "B",
+      "phase": "review-and-ship",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 85,
+      "skill_id": "7.5",
+      "skill_name": "severity-ranked-findings",
+      "test_app": "B",
+      "phase": "review-and-ship",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 86,
+      "skill_id": "7.6",
+      "skill_name": "small-focused-changes",
+      "test_app": "B",
+      "phase": "review-and-ship",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 87,
+      "skill_id": "7.7",
+      "skill_name": "worktree-per-task",
+      "test_app": "B",
+      "phase": "review-and-ship",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 88,
+      "skill_id": "7.8",
+      "skill_name": "protect-main",
+      "test_app": "B",
+      "phase": "review-and-ship",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 89,
+      "skill_id": "7.9",
+      "skill_name": "no-skippable-gates",
+      "test_app": "B",
+      "phase": "review-and-ship",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 90,
+      "skill_id": "7.10",
+      "skill_name": "shift-left-ci",
+      "test_app": "B",
+      "phase": "review-and-ship",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 91,
+      "skill_id": "7.11",
+      "skill_name": "feature-flag-lifecycle",
+      "test_app": "B",
+      "phase": "review-and-ship",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 92,
+      "skill_id": "7.12",
+      "skill_name": "before-and-after-proof",
+      "test_app": "B",
+      "phase": "review-and-ship",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 93,
+      "skill_id": "3.2",
+      "skill_name": "surgical-changes",
+      "test_app": "C",
+      "phase": "build",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 94,
+      "skill_id": "3.3",
+      "skill_name": "match-existing-conventions",
+      "test_app": "C",
+      "phase": "build",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 95,
+      "skill_id": "3.9",
+      "skill_name": "chestertons-fence",
+      "test_app": "C",
+      "phase": "build",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 96,
+      "skill_id": "3.10",
+      "skill_name": "small-behaviour-preserving-refactors",
+      "test_app": "C",
+      "phase": "build",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 97,
+      "skill_id": "3.11",
+      "skill_name": "name-the-smell-apply-the-remedy",
+      "test_app": "C",
+      "phase": "build",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 98,
+      "skill_id": "4.6",
+      "skill_name": "review-suites-for-mock-abuse",
+      "test_app": "C",
+      "phase": "verify",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 99,
+      "skill_id": "5.1",
+      "skill_name": "root-cause-before-fix",
+      "test_app": "C",
+      "phase": "debug",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 100,
+      "skill_id": "5.2",
+      "skill_name": "tight-feedback-loop-first",
+      "test_app": "C",
+      "phase": "debug",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 101,
+      "skill_id": "5.3",
+      "skill_name": "reproduce-localise-reduce-fix-guard",
+      "test_app": "C",
+      "phase": "debug",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 102,
+      "skill_id": "5.5",
+      "skill_name": "three-failed-fixes-question-architecture",
+      "test_app": "C",
+      "phase": "debug",
+      "runs": [],
+      "verdict": null
+    },
+    {
+      "slot": 103,
+      "skill_id": "6.8",
+      "skill_name": "audit-dependencies-before-release",
+      "test_app": "C",
+      "phase": "secure",
+      "runs": [],
+      "verdict": null
+    }
+  ]
+}

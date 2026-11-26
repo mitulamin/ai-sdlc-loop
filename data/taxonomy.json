@@ -1,0 +1,328 @@
+{
+  "schema_version": "1.0.0",
+  "note": "Categories are defined in data/principles.json; this file adds subgroups, phases, roles, commands and test apps. Principle IDs only; retired IDs resolve through aliases in data/principles.json.",
+  "subgroups": [
+    {
+      "category": "design-and-architecture",
+      "slug": "api-design",
+      "name": "API design",
+      "principles": [
+        "2.9",
+        "2.10",
+        "2.12",
+        "2.13",
+        "2.14",
+        "2.15"
+      ]
+    },
+    {
+      "category": "design-and-architecture",
+      "slug": "domain-modelling",
+      "name": "Domain modelling",
+      "principles": [
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.19"
+      ]
+    },
+    {
+      "category": "debug-and-observe",
+      "slug": "observability-and-logging",
+      "name": "Observability and logging",
+      "principles": [
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.10",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14",
+        "5.15"
+      ]
+    }
+  ],
+  "phases": [
+    {
+      "slug": "harness",
+      "name": "Harness",
+      "order": 1,
+      "role": "harness engineer",
+      "producer_agent": "harness-producer",
+      "reviewer_agent": "harness-reviewer",
+      "commands": [],
+      "categories": [
+        "agent-operations"
+      ],
+      "principles": [
+        "8.1",
+        "8.2",
+        "8.3",
+        "8.4",
+        "8.5",
+        "8.6",
+        "8.7",
+        "8.8",
+        "8.9",
+        "8.10"
+      ]
+    },
+    {
+      "slug": "plan",
+      "name": "Plan",
+      "order": 2,
+      "role": "planner",
+      "producer_agent": "plan-producer",
+      "reviewer_agent": "plan-reviewer",
+      "commands": [
+        "plan"
+      ],
+      "categories": [
+        "plan-and-specify"
+      ],
+      "principles": [
+        "1.1",
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.5",
+        "1.6",
+        "1.7",
+        "1.8"
+      ]
+    },
+    {
+      "slug": "design",
+      "name": "Design",
+      "order": 3,
+      "role": "architect",
+      "producer_agent": "design-producer",
+      "reviewer_agent": "design-reviewer",
+      "commands": [
+        "design"
+      ],
+      "categories": [
+        "design-and-architecture"
+      ],
+      "principles": [
+        "2.1",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.6",
+        "2.7",
+        "2.8",
+        "2.9",
+        "2.10",
+        "2.12",
+        "2.13",
+        "2.14",
+        "2.15",
+        "2.16",
+        "2.17",
+        "2.18",
+        "2.19"
+      ]
+    },
+    {
+      "slug": "build",
+      "name": "Build",
+      "order": 4,
+      "role": "implementer",
+      "producer_agent": "build-producer",
+      "reviewer_agent": "build-reviewer",
+      "commands": [
+        "build"
+      ],
+      "categories": [
+        "code-craft",
+        "debug-and-observe"
+      ],
+      "principles": [
+        "3.1",
+        "3.2",
+        "3.3",
+        "3.4",
+        "3.5",
+        "3.6",
+        "3.7",
+        "3.8",
+        "3.9",
+        "3.10",
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14",
+        "5.4"
+      ]
+    },
+    {
+      "slug": "verify",
+      "name": "Verify",
+      "order": 5,
+      "role": "tester",
+      "producer_agent": "verify-producer",
+      "reviewer_agent": "verify-reviewer",
+      "commands": [
+        "verify"
+      ],
+      "categories": [
+        "verify"
+      ],
+      "principles": [
+        "4.1",
+        "4.2",
+        "4.3",
+        "4.6",
+        "4.7",
+        "4.8",
+        "4.9",
+        "4.10"
+      ]
+    },
+    {
+      "slug": "debug",
+      "name": "Debug",
+      "order": 6,
+      "role": "debugger",
+      "producer_agent": "debug-producer",
+      "reviewer_agent": "debug-reviewer",
+      "commands": [
+        "verify"
+      ],
+      "categories": [
+        "debug-and-observe"
+      ],
+      "principles": [
+        "5.1",
+        "5.2",
+        "5.3",
+        "5.5",
+        "5.7",
+        "5.8",
+        "5.9",
+        "5.11",
+        "5.12",
+        "5.13",
+        "5.14"
+      ]
+    },
+    {
+      "slug": "secure",
+      "name": "Secure",
+      "order": 7,
+      "role": "security engineer",
+      "producer_agent": "secure-producer",
+      "reviewer_agent": "secure-reviewer",
+      "commands": [
+        "review"
+      ],
+      "categories": [
+        "debug-and-observe",
+        "secure"
+      ],
+      "principles": [
+        "5.10",
+        "6.1",
+        "6.2",
+        "6.3",
+        "6.4",
+        "6.5",
+        "6.6",
+        "6.7",
+        "6.8"
+      ]
+    },
+    {
+      "slug": "review-and-ship",
+      "name": "Review & ship",
+      "order": 8,
+      "role": "release manager",
+      "producer_agent": "review-and-ship-producer",
+      "reviewer_agent": "review-and-ship-reviewer",
+      "commands": [
+        "review",
+        "ship"
+      ],
+      "categories": [
+        "debug-and-observe",
+        "review-and-ship"
+      ],
+      "principles": [
+        "5.15",
+        "7.1",
+        "7.2",
+        "7.3",
+        "7.4",
+        "7.5",
+        "7.6",
+        "7.7",
+        "7.8",
+        "7.9",
+        "7.10",
+        "7.11",
+        "7.12"
+      ]
+    },
+    {
+      "slug": "learn",
+      "name": "Learn",
+      "order": 9,
+      "role": "learner",
+      "producer_agent": "learn-producer",
+      "reviewer_agent": "learn-reviewer",
+      "commands": [
+        "retro"
+      ],
+      "categories": [
+        "learn"
+      ],
+      "principles": [
+        "9.1",
+        "9.2",
+        "9.3",
+        "9.5",
+        "9.6",
+        "9.7",
+        "9.8",
+        "9.9",
+        "9.10",
+        "9.11",
+        "9.12"
+      ]
+    }
+  ],
+  "test_apps": [
+    {
+      "id": "A",
+      "run": 1,
+      "name": "CLI tool, greenfield",
+      "example": "a ledger CLI that imports bank CSVs, categorises them by rules and prints monthly reports",
+      "skills": 22
+    },
+    {
+      "id": "B",
+      "run": 2,
+      "name": "Small CRUD web app with auth, greenfield",
+      "example": "teamtasks: sign-up and login, projects and tasks, a REST API, SQLite or Postgres, a minimal UI",
+      "skills": 49
+    },
+    {
+      "id": "C",
+      "run": 3,
+      "name": "Brownfield fix and refactor",
+      "example": "fix one real open bug and do one small refactor in a small, well-tested open-source repo (for example pallets/click), as a PR on a fork",
+      "skills": 11
+    },
+    {
+      "id": "All",
+      "run": null,
+      "name": "All three runs (harness and Learn)",
+      "example": "skills that apply to every run: the harness and the Learn loop",
+      "skills": 21
+    }
+  ],
+  "run_order": "Skills are tested in slot order (1 to 103, see data/skill-principle-map.json): foundational categories first, then Debug, Secure and Review, then Agent operations and Learn."
+}

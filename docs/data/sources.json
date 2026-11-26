@@ -556,6 +556,62 @@
         "wshobson"
       ],
       "notes": ""
+    },
+    {
+      "owner": "ArefMozafari",
+      "repo": "pr-evidence",
+      "url": "https://github.com/ArefMozafari/pr-evidence",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": "cb8c053d31ca064e87454419059301d9fcf3e2b7",
+      "pinned_at": "2026-11-26",
+      "labels": [
+        "pr-evidence"
+      ],
+      "notes": "Added for the 7.12 skill, rebuilt from MIT sources after rstack's before-and-after was found to be PolyForm Shield (link only)."
+    },
+    {
+      "owner": "michalklejdysz",
+      "repo": "pr-visuals",
+      "url": "https://github.com/michalklejdysz/pr-visuals",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": "6cc2de319a83da8f0277ce0f483ab6185780d8e2",
+      "pinned_at": "2026-11-26",
+      "labels": [
+        "pr-visuals"
+      ],
+      "notes": "Added for the 7.12 skill, rebuilt from MIT sources after rstack's before-and-after was found to be PolyForm Shield (link only)."
+    },
+    {
+      "owner": "nullswan",
+      "repo": "pr-screenshots",
+      "url": "https://github.com/nullswan/pr-screenshots",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": "3c5592d6a0afcc27f85015d5593f1e8763dde9d3",
+      "pinned_at": "2026-11-26",
+      "labels": [
+        "pr-screenshots"
+      ],
+      "notes": "Added for the 7.12 skill, rebuilt from MIT sources after rstack's before-and-after was found to be PolyForm Shield (link only)."
+    },
+    {
+      "owner": "victorsaly",
+      "repo": "sideshot",
+      "url": "https://github.com/victorsaly/sideshot",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": "48802c68e1fcc8718f34fa7cbcc2026a32e11c12",
+      "pinned_at": "2026-11-26",
+      "labels": [
+        "sideshot"
+      ],
+      "notes": "Added for the 7.12 skill, rebuilt from MIT sources after rstack's before-and-after was found to be PolyForm Shield (link only)."
     }
   ]
 }

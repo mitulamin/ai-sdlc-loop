@@ -2,13 +2,13 @@
 
 Every project this repo has used or referenced. The licence terms of this repo itself are in [NOTICE.md](NOTICE.md).
 
-## 1. Source repos (41)
+## 1. Source repos (45)
 
 These are the repos the principles and skills are distilled from. The list mirrors [data/sources.json](data/sources.json), which is the source of truth for pins and licences.
 
-Licences were checked on 2026-11-26. Each is the repo-level licence as GitHub reports it (SPDX id), or, where GitHub reports none or "Other", a description naming the licence file. Pins are still unset, so these licences are for the default branch on that date. Nothing from these repos is copied into this repo yet. Before a file is borrowed, its own licence is checked again, because a repo can hold files under other terms. Once borrowed, each skill's `SOURCES.md` credits the exact files, linked at a pinned commit, with the licence. Borrowed content keeps its own licence and is not relicensed here. This is not legal advice.
+Licences were checked on 2026-11-26. Each is the repo-level licence as GitHub reports it (SPDX id), or, where GitHub reports none or "Other", a description naming the licence file. Pins are unset for the first 41 repos, so those licences are for the default branch on that date; the 4 repos added for skill 7.12 are pinned in `data/sources.json`. Skills are now written from these sources. Each skill's `SOURCES.md` credits the files it draws on, linked at a pinned commit, with the licence, and [CREDITS.md](CREDITS.md) lists the credits per source with copyright lines. The per-file licence of every source repo is in [data/licences.json](data/licences.json). Before a file is borrowed, its own licence is checked again, because a repo can hold files under other terms. Borrowed content keeps its own licence and is not relicensed here. This is not legal advice.
 
-### Skill sources (35)
+### Skill sources (39)
 
 Repos with real skill, sub-agent, command or rules files we may borrow from.
 
@@ -21,6 +21,7 @@ Repos with real skill, sub-agent, command or rules files we may borrow from.
 | [anthropics/claude-code](https://github.com/anthropics/claude-code) | anthropics | claude-code | skill-source | LICENSE.md (all rights reserved) |
 | [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) | anthropics | claude-plugins-official | skill-source | Apache-2.0 |
 | [anthropics/skills](https://github.com/anthropics/skills) | anthropics | skills | skill-source | per-skill LICENSE.txt (Apache License 2.0 text) |
+| [ArefMozafari/pr-evidence](https://github.com/ArefMozafari/pr-evidence) | ArefMozafari | pr-evidence | skill-source | MIT |
 | [BayramAnnakov/claude-reflect](https://github.com/BayramAnnakov/claude-reflect) | BayramAnnakov | claude-reflect | skill-source | MIT |
 | [buildermethods/agent-os](https://github.com/buildermethods/agent-os) | buildermethods | agent-os | skill-source | MIT |
 | [ciembor/agent-rules-books](https://github.com/ciembor/agent-rules-books) | ciembor | agent-rules-books | skill-source | MIT |
@@ -37,17 +38,20 @@ Repos with real skill, sub-agent, command or rules files we may borrow from.
 | [Kulaxyz/self-learning-skills](https://github.com/Kulaxyz/self-learning-skills) | Kulaxyz | self-learning-skills | skill-source | MIT |
 | [mattpocock/skills](https://github.com/mattpocock/skills) | mattpocock | skills | skill-source | MIT |
 | [michaelshimeles/rstack](https://github.com/michaelshimeles/rstack) | michaelshimeles | rstack | skill-source | per-skill LICENSE files (MIT, PolyForm Shield 1.0.0) |
+| [michalklejdysz/pr-visuals](https://github.com/michalklejdysz/pr-visuals) | michalklejdysz | pr-visuals | skill-source | MIT |
 | [microsoft/SkillOpt](https://github.com/microsoft/SkillOpt) | microsoft | SkillOpt | skill-source | MIT |
 | [microsoft/skills](https://github.com/microsoft/skills) | microsoft | skills | skill-source | MIT |
 | [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) | multica-ai | andrej-karpathy-skills | skill-source | no licence file found |
 | [muratcankoylan/Agent-Skills-for-Context-Engineering](https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering) | muratcankoylan | Agent-Skills-for-Context-Engineering | skill-source | MIT |
 | [NousResearch/hermes-agent-self-evolution](https://github.com/NousResearch/hermes-agent-self-evolution) | NousResearch | hermes-agent-self-evolution | skill-source | no licence file found |
+| [nullswan/pr-screenshots](https://github.com/nullswan/pr-screenshots) | nullswan | pr-screenshots | skill-source | MIT |
 | [obra/superpowers](https://github.com/obra/superpowers) | obra | superpowers | skill-source | MIT |
 | [ollygarden/opentelemetry-agent-skills](https://github.com/ollygarden/opentelemetry-agent-skills) | ollygarden | opentelemetry-agent-skills | skill-source | Apache-2.0 |
 | [peterfriese/Stratos](https://github.com/peterfriese/Stratos) | peterfriese | Stratos | skill-source | LICENSE (Apache License 2.0 text) |
 | [sanyuan0704/sanyuan-skills](https://github.com/sanyuan0704/sanyuan-skills) | sanyuan0704 | sanyuan-skills | skill-source | MIT |
 | [steipete/agent-rules](https://github.com/steipete/agent-rules) | steipete | agent-rules | skill-source | MIT |
 | [trailofbits/skills](https://github.com/trailofbits/skills) | trailofbits | skills | skill-source | CC-BY-SA-4.0 |
+| [victorsaly/sideshot](https://github.com/victorsaly/sideshot) | victorsaly | sideshot | skill-source | MIT |
 | [wshobson/agents](https://github.com/wshobson/agents) | wshobson | agents | skill-source | MIT |
 
 ### Curation lists (6)
