@@ -89,7 +89,10 @@
 
       var params = new URLSearchParams(location.search);
       q.value = params.get("q") || "";
-      selects.forEach(function (sel) { sel.value = params.get(sel.getAttribute("data-attr")) || ""; });
+      selects.forEach(function (sel) {
+        sel.value = params.get(sel.getAttribute("data-attr")) || "";
+        if (sel.selectedIndex === -1) sel.value = "";
+      });
 
       q.addEventListener("input", apply);
       selects.forEach(function (sel) { sel.addEventListener("change", apply); });

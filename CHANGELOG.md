@@ -6,7 +6,7 @@ All notable changes to this repo. The machine-readable version of the data chang
 
 ### Rebuilt the docs/ site from the kit's data
 
-`scripts/build-site.py` now builds the site from `data/principles.json`, `data/skill-principle-map.json`, `data/licences.json`, `data/mapping.json` and `scorecard.csv` instead of the earlier adapter. It stops with a message if the files disagree. `--check` is unchanged. Still static, client-side only, no trackers.
+`scripts/build-site.py` now builds the site from `data/principles.json`, `data/skill-principle-map.json`, `data/licences.json`, `data/mapping.json` and `scorecard.csv` instead of the minimal adapter that kept CI building. It stops with a message if the files disagree (IDs, counts, slot, app, phase, licence status, per-repo and per-skill source lists) or a file is malformed. `--check` keeps its meaning, now compares bytes, and also reports stray files in `docs/data/`. Still static, client-side only, no trackers.
 
 Added:
 
@@ -20,7 +20,11 @@ Changed:
 - 103 principles shown, with aliases marked: each survivor row shows "also 4.4" and so on, and `principles/4.4.html`, `4.5`, `9.4`, `5.6` and `2.11` open their survivor.
 - Each principle page shows its skill, phase, test app, slot, licence status and score; adapted sources and link-only sources are listed separately.
 - Landing page counts skills and merged IDs and explains the five merges; the footer links `LICENSE.md` and `CREDITS.md`.
-- `docs/assets/site.js` filters any table through one generic mechanism; the `src` query parameter of `principles.html` is now `source`.
+- `docs/assets/site.js` filters any table through one generic mechanism; the `src` query parameter of `principles.html` is now `source`, and an unknown filter value in the URL is ignored.
+- On screens narrower than 40rem the tables stack into labelled cards. Column sorting is for wide screens; on a phone use the filters.
+- The adapted-sources and link-only tables each show only the licences that apply to their own files, so a repo that is adapted for one folder and link only for another is not shown as wholly clean.
+- The landing page counts all source repos (the research list plus those added in the licence cleanup) and `sources.html` says how the total is made up.
+- Added `.gitignore` for `__pycache__/`.
 
 ### Imported the amalgamated-skills-103 kit
 

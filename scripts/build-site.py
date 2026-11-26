@@ -27,7 +27,7 @@ BLOB = REPO_URL + "/blob/main/"
 TREE = REPO_URL + "/tree/main/"
 SITE_NAME = "AI SDLC Loop"
 
-GENERATED_DIRS = ["categories", "principles", "guides"]
+GENERATED_DIRS = ["categories", "principles", "guides", "data"]
 GENERATED_FILES = [
     "index.html",
     "path.html",
@@ -283,16 +283,25 @@ def site_view(pdoc, smap, licences, scorecard):
     return cats, principles
 
 
+def uniq(items):
+    return list(dict.fromkeys(items))
+
+
 def repo_groups(sdoc, licences, principles):
     """Split every source repo by what the kit may do with it.
 
     adapted: the licence allowed adapting at least one file. link_only: nothing was copied, only linked.
     unused: researched, but no skill was written from it. A repo adapted in some folders and link only in
-    another is in adapted with its link-only files listed under link_only too.
+    another is in both, and each table shows only the licences that apply to its own files.
     """
     research = {f'{r["owner"]}/{r["repo"]}'.lower(): r for r in sdoc["repos"]}
-    link_files = {}
+    for name in NOT_USED_LINK_ONLY:
+        if name not in research:
+            raise DataError(f"NOT_USED_LINK_ONLY names {name}, which is not in data/sources.json")
+    adapted_files, link_files = {}, {}
     for p in principles:
+        for f in p["adapted"]:
+            adapted_files.setdefault(f["repo"], []).append({**f, "principle": p["id"]})
         for f in p["link_only"]:
             link_files.setdefault(f["repo"], []).append({**f, "principle": p["id"]})
     adapted, link_only = [], []
@@ -300,18 +309,22 @@ def repo_groups(sdoc, licences, principles):
         entry = {
             "name": name,
             "url": info["url"],
-            "licences": info["licences_seen"],
             "pin": info["pinned_commit"],
             "licence_file": info["licence_file"],
-            "adapted_in": sorted(info["adapted_in_skills"], key=pid_key),
-            "link_only_in": sorted(info["link_only_in_skills"], key=pid_key),
+            "adapted_in": sorted({f["principle"] for f in adapted_files.get(name, [])}, key=pid_key),
+            "link_only_in": sorted({f["principle"] for f in link_files.get(name, [])}, key=pid_key),
             "link_files": link_files.get(name, []),
             "role": research.get(name.lower(), {}).get("role", "skill-source"),
         }
+        if entry["adapted_in"] != sorted(info["adapted_in_skills"], key=pid_key) or entry["link_only_in"] != sorted(
+            info["link_only_in_skills"], key=pid_key
+        ):
+            raise DataError(f"{name}: licences.json lists different skills per repo and per skill")
         if entry["adapted_in"]:
-            adapted.append(entry)
+            adapted.append({**entry, "licences": uniq(f["licence"] for f in adapted_files[name])})
         if entry["link_only_in"]:
-            link_only.append({**entry, "partial": bool(entry["adapted_in"]), "reason": "; ".join(entry["licences"])})
+            reasons = uniq(f'{f["licence"]} ({f["why"]})' for f in link_files[name])
+            link_only.append({**entry, "partial": bool(entry["adapted_in"]), "reason": "; ".join(reasons)})
     in_kit = {n.lower() for n in licences["repos"]}
     unused = []
     for key, r in research.items():
@@ -322,8 +335,8 @@ def repo_groups(sdoc, licences, principles):
             "name": name, "url": r["url"], "licences": [r["licence"]], "pin": None, "licence_file": None,
             "adapted_in": [], "link_only_in": [], "link_files": [], "role": r["role"],
         }
-        if name.lower() in NOT_USED_LINK_ONLY:
-            link_only.append({**entry, "partial": False, "reason": NOT_USED_LINK_ONLY[name.lower()]})
+        if key in NOT_USED_LINK_ONLY:
+            link_only.append({**entry, "partial": False, "reason": NOT_USED_LINK_ONLY[key]})
         else:
             unused.append(entry)
     key = lambda e: e["name"].lower()
@@ -372,6 +385,7 @@ class Site:
         n_principles = len(self.principles)
         n_cats = len(self.cats)
         n_sources = len(self.sdoc["repos"])
+        n_repos = len({e["name"].lower() for e in self.adapted + self.link_only + self.unused})
         n_merged = len(self.aliases)
         first_cat = self.cats[0]
         merged_links = ", ".join(
@@ -405,7 +419,7 @@ in {n_cats} categories. Use them to adopt agentic tools with less trial and erro
 <div><dt>Principles</dt><dd>{n_principles}</dd></div>
 <div><dt>Skills</dt><dd>{n_principles}</dd></div>
 <div><dt>Categories</dt><dd>{n_cats}</dd></div>
-<div><dt>Source repos</dt><dd>{n_sources}</dd></div>
+<div><dt>Source repos</dt><dd>{n_repos}</dd></div>
 <div><dt>Merged IDs</dt><dd>{n_merged}</dd></div>
 </dl>
 </section>
@@ -732,14 +746,14 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 <h1>All principles</h1>
 <p>{n} principles: the original {n + len(self.aliases)} less {len(self.aliases)} merged duplicates (see <a href="{BLOB}MERGES.md">MERGES.md</a>).
 IDs are never renumbered, so a merged ID is kept as an alias and opens the principle it was merged into.
-Search, filter and click a column heading to sort. With JavaScript off you still get the full table.</p>
+Search and filter, and on a wide screen click a column heading to sort (on a phone each row is a card, so use the filters). With JavaScript off you still get the full table.</p>
 <div class="filters" role="search" data-table="ptable">
 <label>Search <input data-q type="search" placeholder="e.g. test or 4.4" autocomplete="off"></label>
 <label>Category <select data-attr="cat"><option value="">All categories</option>{cat_opts}</select></label>
 <label>Phase <select data-attr="phase"><option value="">All phases</option>{self.phase_options()}</select></label>
 <label>Test app <select data-attr="app"><option value="">All apps</option>{self.app_options()}</select></label>
 <label>Licence status <select data-attr="licence"><option value="">All</option>{self.licence_options()}</select></label>
-<label>Source repo <select data-attr="source"><option value="">All sources</option>{src_opts}</select></label>
+<label>Source repo (adapted or linked) <select data-attr="source"><option value="">All sources</option>{src_opts}</select></label>
 <button type="button" data-reset>Reset</button>
 </div>
 <p data-count class="muted" aria-live="polite">{n} principles</p>
@@ -856,7 +870,7 @@ Search, filter and click a column heading to sort. With JavaScript off you still
 
     def skills_cell(self, ids):
         if not ids:
-            return "<span class=\"muted\">none</span>"
+            return '<span class="muted">none, not used</span>'
         return f"<details><summary>{len(ids)} skill{'s' if len(ids) != 1 else ''}</summary>{self.id_links(ids)}</details>"
 
     def repo_cell(self, e):
@@ -892,7 +906,7 @@ Search, filter and click a column heading to sort. With JavaScript off you still
             f'<tr><td>{self.repo_cell(e)}'
             + (' <span class="badge">only this folder</span>' if e["partial"] else "")
             + f'</td><td>{esc(e["reason"])}</td>'
-            f'<td data-sort="{len(e["link_only_in"])}">{self.skills_cell(e["link_only_in"]) if e["link_only_in"] else "<span class=\"muted\">none, not used</span>"}</td>'
+            f'<td data-sort="{len(e["link_only_in"])}">{self.skills_cell(e["link_only_in"])}</td>'
             f"<td>{files_cell(e)}</td></tr>"
             for e in self.link_only
         )
@@ -901,6 +915,7 @@ Search, filter and click a column heading to sort. With JavaScript off you still
             for e in self.unused
         )
         run = self.sdoc["research_run"]
+        n_repos = len({e["name"].lower() for e in self.adapted + self.link_only + self.unused})
         body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / Sources</nav>
 <h1>Sources and licences</h1>
 <p>Every skill was written from public repos whose licences allow adapting them. Sources that could not be adapted were never copied; they are only linked, and they are listed separately below.
@@ -911,6 +926,7 @@ Licences were checked on {esc(self.licences["checked"])}. {esc(self.licences["di
 </div>
 <p>See <a href="{BLOB}LICENSE.md">LICENSE.md</a>, <a href="{BLOB}CREDITS.md">CREDITS.md</a> (copyright notices and pinned commits) and <a href="{BLOB}ATTRIBUTIONS.md">ATTRIBUTIONS.md</a>.
 Each skill's <code>SOURCES.md</code> lists its files, pinned to a commit.</p>
+<p>{n_repos} repos in all: {len(self.sdoc["repos"])} from the initial research ({esc(run["id"])}, {esc(run["date"])}) and {n_repos - len(self.sdoc["repos"])} more added during the licence cleanup. A repo can be adapted for one folder and link only for another, so the three groups below add up to more than {n_repos}.</p>
 <ul class="lp-cards">
 <li class="lp-card"><h3>{len(self.adapted)}</h3><p>Adapted source repos</p></li>
 <li class="lp-card"><h3>{len(self.link_only)}</h3><p>Link-only source repos, whole or in part</p><p class="muted">{n_link_only_files} linked files across {sum(1 for p in self.principles if p["link_only"])} skills</p></li>
@@ -952,7 +968,7 @@ Each skill's <code>SOURCES.md</code> lists its files, pinned to a commit.</p>
 </div>
 
 <h2 id="unused">Researched, not used ({len(self.unused)})</h2>
-<p>Read during research ({esc(run["id"])}, {esc(run["date"])}) but no skill was written from them. Nothing was copied.</p>
+<p>Read during research but no skill was written from them. Nothing was copied.</p>
 <div class="table-wrap">
 <table class="sortable">
 <thead><tr>
@@ -1143,6 +1159,9 @@ def main():
         files = Site().build()
     except DataError as e:
         print(f"build-site: {e}", file=sys.stderr)
+        return 1
+    except (KeyError, ValueError, TypeError, IndexError) as e:
+        print(f"build-site: a data file is malformed or missing a field ({type(e).__name__}: {e})", file=sys.stderr)
         return 1
     stale = []
     for rel, content in files.items():

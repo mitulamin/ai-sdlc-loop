@@ -202,9 +202,9 @@ summary { cursor: pointer; color: var(--accent); }
   .split { grid-template-columns: 1fr; }
 }
 
-/* Stack table rows into cards on narrow screens; the cell's column heading comes from data-label */
+/* Stack table rows into cards on narrow screens; the cell's column heading comes from data-label. Sorting is for wide screens: the heading row, and its buttons, are not shown. */
 @media (max-width: 40rem) {
-  table.sortable thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  table.sortable thead { display: none; }
   table.sortable, table.sortable tbody, table.sortable tr, table.sortable td { display: block; width: 100%; }
   table.sortable tr { padding: .6rem .25rem; border-bottom: 1px solid var(--line); }
   table.sortable tr[hidden] { display: none; }
