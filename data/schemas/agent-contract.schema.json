@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mitulamin/ai-sdlc-loop/data/schemas/agent-contract.schema.json",
+  "title": "Agent output contract",
+  "description": "The output field every agent must declare, and the format of the shared surface register agents write it to.",
+  "type": "object",
+  "required": ["schema_version", "output_field", "register"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "note": { "type": "string" },
+    "output_field": {
+      "type": "object",
+      "required": ["key", "heading", "none_text", "rule"],
+      "additionalProperties": false,
+      "properties": {
+        "key": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "heading": { "type": "string", "minLength": 1 },
+        "none_text": { "type": "string", "minLength": 1 },
+        "rule": { "type": "string", "minLength": 1 }
+      }
+    },
+    "register": {
+      "type": "object",
+      "required": ["flag", "default_path", "format", "id_pattern", "timestamp_format", "events", "types", "impact", "urgency", "statuses", "by"],
+      "additionalProperties": false,
+      "properties": {
+        "flag": { "type": "string", "pattern": "^--[a-z-]+$" },
+        "default_path": { "type": "string", "pattern": "\\.jsonl$" },
+        "format": { "type": "string" },
+        "id_pattern": { "type": "string" },
+        "timestamp_format": { "type": "string" },
+        "events": {
+          "type": "object",
+          "required": ["declare", "update"],
+          "additionalProperties": false,
+          "patternProperties": {
+            "^(declare|update)$": {
+              "type": "object",
+              "required": ["purpose", "required"],
+              "additionalProperties": false,
+              "properties": {
+                "purpose": { "type": "string" },
+                "required": { "type": "array", "items": { "type": "string" }, "minItems": 1 },
+                "optional": { "type": "array", "items": { "type": "string" } }
+              }
+            }
+          }
+        },
+        "types": { "type": "array", "items": { "enum": ["assumption", "question"] }, "minItems": 2 },
+        "impact": { "$ref": "#/$defs/scale" },
+        "urgency": { "$ref": "#/$defs/scale" },
+        "statuses": {
+          "type": "object",
+          "required": ["values", "meaning", "rule"],
+          "additionalProperties": false,
+          "properties": {
+            "values": { "type": "array", "items": { "type": "string" }, "minItems": 2 },
+            "meaning": { "type": "object", "additionalProperties": { "type": "string" } },
+            "rule": { "type": "string" }
+          }
+        },
+        "by": { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+      }
+    }
+  },
+  "$defs": {
+    "scale": {
+      "type": "object",
+      "required": ["values", "meaning"],
+      "additionalProperties": false,
+      "properties": {
+        "values": { "type": "array", "items": { "type": "string" }, "minItems": 2 },
+        "meaning": { "type": "string" }
+      }
+    }
+  }
+}

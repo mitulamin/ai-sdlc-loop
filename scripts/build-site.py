@@ -832,6 +832,29 @@ Licence status says whether every source could be adapted (clean), or whether li
                 f'<td data-label="What it is for"><div>{esc(purpose)}</div></td>'
                 f'<td data-label="Skills" data-sort="{len(ids)}">{len(ids)}</td></tr>'
             )
+        contract = m["contract"]
+        fld, reg = contract["output_field"], contract["register"]
+        reg_rows = "\n".join(
+            f'<tr><td data-label="Event"><code>{esc(ev)}</code></td><td data-label="What it is">{esc(spec["purpose"])}</td>'
+            f'<td data-label="Fields"><div>{", ".join("<code>" + esc(k) + "</code>" for k in spec["required"] + spec.get("optional", []))}</div></td></tr>'
+            for ev, spec in reg["events"].items()
+        )
+        contract_html = f"""<h2 id="assumptions">{esc(fld["heading"])}</h2>
+<p>Every agent has one required output field, <code>{esc(fld["key"])}</code>: its output ends with a section headed &ldquo;{esc(fld["heading"])}&rdquo;. {esc(fld["rule"])}
+<code>scripts/build-agents.py --check</code> and <code>scripts/check-skills.py</code> fail if an agent lacks it.</p>
+<h3 id="register">The shared surface register</h3>
+<p>Agents also append each entry to a register, a plain file the coordinator treats as its inbox: it pulls the register, curates and de-dupes it, ranks what is open, batches it for the human, and records what it surfaced and what the human answered. It is never a required relay, because every raw entry stays readable, and answerable, by the human directly.
+Commands that start a phase take <code>{esc(reg["flag"])} &lt;path&gt;</code>; the default is <code>{esc(reg["default_path"])}</code>.
+The format is {esc(reg["format"])}</p>
+<div class="table-wrap">
+<table class="cards">
+<thead><tr><th scope="col">Event</th><th scope="col">What it is</th><th scope="col">Fields</th></tr></thead>
+<tbody>
+{reg_rows}
+</tbody>
+</table>
+</div>
+<p>An entry is a <code>{esc(reg["types"][0])}</code> or a <code>{esc(reg["types"][1])}</code> with an impact and an urgency ({esc(", ".join(reg["impact"]["values"]))}) and a status ({esc(", ".join(reg["statuses"]["values"]))}). Field meanings, an example and the helper script are in <a href="{BLOB}agents/README.md#the-shared-surface-register">agents/README.md</a>; the data is <a href="{BLOB}data/agent-contract.json">data/agent-contract.json</a>.</p>"""
         body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / Agents</nav>
 <h1>The agents and commands</h1>
 <p>The human talks only to the coordinator. For each phase it starts a producer and then a strictly adversarial reviewer, each in a fresh context.
@@ -867,11 +890,14 @@ A phase loads the skills whose phase in <a href="{BLOB}data/skill-principle-map.
 </tbody>
 </table>
 </div>
+<p>Each command also takes an optional <code>{esc(reg["flag"])} &lt;path&gt;</code> after the task, naming the register for the run.</p>
+{contract_html}
 <p class="muted">Sources: <a href="{BLOB}agents/">agents/</a> and <a href="{BLOB}commands/">commands/</a>.</p>"""
         generated_from = (
-            f'the taxonomy, skill map and principles data (<a href="{BLOB}data/taxonomy.json">data/taxonomy.json</a>, '
+            f'the taxonomy, skill map, principles and agent contract data (<a href="{BLOB}data/taxonomy.json">data/taxonomy.json</a>, '
             f'<a href="{BLOB}data/skill-principle-map.json">data/skill-principle-map.json</a>, '
-            f'<a href="{BLOB}data/principles.json">data/principles.json</a>) and the skills, through scripts/build-agents.py'
+            f'<a href="{BLOB}data/principles.json">data/principles.json</a>, '
+            f'<a href="{BLOB}data/agent-contract.json">data/agent-contract.json</a>) and the skills, through scripts/build-agents.py'
         )
         return page("Agents", body, 0, "agents.html",
                     "The agents and slash commands of the loop, with the skills each one loads.",

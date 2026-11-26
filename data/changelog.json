@@ -239,6 +239,21 @@
       ],
       "summary": "Marked the project as alpha. README.md has a status badge and a warning under the title (title now 'AI SDLC Loop'). Every generated site page now has a fixed corner ALPHA ribbon (markup in the page wrapper of scripts/build-site.py, styles in docs/assets/style.css) and a visually hidden sentence for screen readers. The five merged-ID redirect pages are unchanged.",
       "reason": "The project is a work in progress and has not been fully tested yet."
+    },
+    {
+      "date": "2026-11-26",
+      "research_run": "run-1",
+      "type": "add",
+      "ids": [
+        "agents",
+        "commands",
+        "data",
+        "scripts",
+        "guides",
+        "site"
+      ],
+      "summary": "Added data/agent-contract.json (schema 1.0.0, with data/schemas/agent-contract.schema.json): the required output field assumptions_and_open_questions for every agent and the append-only JSON Lines format of the shared surface register. scripts/build-agents.py renders the field and the coordinator's register-as-inbox rules into agents/ and commands/, every command takes --register <path> (default .ai-sdlc/register.jsonl), and build-agents --check and check-skills fail if an agent lacks the field. Added scripts/register.py. Documented in agents/README.md, the Using the agents and commands guide and the agents page. No existing schema changed, so no existing schema_version moved.",
+      "reason": "Agents cannot ask the human mid-cycle, so their assumptions and open questions need a required, visible place that the coordinator and the human can both read."
     }
   ]
 }

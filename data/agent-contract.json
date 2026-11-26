@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0.0",
+  "note": "The output field every agent must declare, and the format of the shared surface register agents write it to. scripts/build-agents.py renders both into agents/, commands/ and the agents page, and scripts/build-agents.py --check and scripts/check-skills.py fail if an agent lacks the field.",
+  "output_field": {
+    "key": "assumptions_and_open_questions",
+    "heading": "Assumptions and open questions",
+    "none_text": "None.",
+    "rule": "It is required. An explicit None. is allowed when there are none; leaving the section out is not."
+  },
+  "register": {
+    "flag": "--register",
+    "default_path": ".ai-sdlc/register.jsonl",
+    "format": "JSON Lines: one JSON object per line, UTF-8, append-only. Never edit or delete a line; a change of state is a new line.",
+    "id_pattern": "^r-[0-9]{14}-[0-9a-f]{4}$",
+    "timestamp_format": "UTC, RFC 3339, for example 2026-11-26T22:30:00Z",
+    "events": {
+      "declare": {
+        "purpose": "An agent declares an assumption it made or a question it could not answer.",
+        "required": ["id", "event", "ts", "agent", "phase", "type", "text", "impact", "urgency", "status"],
+        "optional": ["recommendation"]
+      },
+      "update": {
+        "purpose": "The coordinator or the human changes the state of an earlier entry.",
+        "required": ["id", "event", "ts", "agent", "phase", "ref", "status"],
+        "optional": ["note", "answer", "by"]
+      }
+    },
+    "types": ["assumption", "question"],
+    "impact": {
+      "values": ["low", "medium", "high"],
+      "meaning": "what goes wrong if the assumption or the recommended answer is wrong: low is cosmetic or easy to undo, medium is rework in one phase, high is a wrong product, security or data risk, or rework across phases."
+    },
+    "urgency": {
+      "values": ["low", "medium", "high"],
+      "meaning": "how soon the human's view is needed: low can wait for the end of the cycle, medium is needed before later phases rely on it, high blocks the work."
+    },
+    "statuses": {
+      "values": ["open", "surfaced", "answered", "dismissed", "duplicate"],
+      "meaning": {
+        "open": "Declared, not yet looked at.",
+        "surfaced": "Put in front of the human.",
+        "answered": "The human answered, or confirmed or rejected the assumption.",
+        "dismissed": "Settled from the repo or the brief, with the reason in note.",
+        "duplicate": "Same as the entry in ref."
+      },
+      "rule": "An entry is declared with status open. Its current status is the status of the latest update line whose ref is its id."
+    },
+    "by": ["coordinator", "human"]
+  }
+}

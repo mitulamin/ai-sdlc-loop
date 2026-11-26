@@ -90,13 +90,31 @@ A phase loads the skills whose phase in <a href="https://github.com/mitulamin/ai
 </tbody>
 </table>
 </div>
+<p>Each command also takes an optional <code>--register &lt;path&gt;</code> after the task, naming the register for the run.</p>
+<h2 id="assumptions">Assumptions and open questions</h2>
+<p>Every agent has one required output field, <code>assumptions_and_open_questions</code>: its output ends with a section headed &ldquo;Assumptions and open questions&rdquo;. It is required. An explicit None. is allowed when there are none; leaving the section out is not.
+<code>scripts/build-agents.py --check</code> and <code>scripts/check-skills.py</code> fail if an agent lacks it.</p>
+<h3 id="register">The shared surface register</h3>
+<p>Agents also append each entry to a register, a plain file the coordinator treats as its inbox: it pulls the register, curates and de-dupes it, ranks what is open, batches it for the human, and records what it surfaced and what the human answered. It is never a required relay, because every raw entry stays readable, and answerable, by the human directly.
+Commands that start a phase take <code>--register &lt;path&gt;</code>; the default is <code>.ai-sdlc/register.jsonl</code>.
+The format is JSON Lines: one JSON object per line, UTF-8, append-only. Never edit or delete a line; a change of state is a new line.</p>
+<div class="table-wrap">
+<table class="cards">
+<thead><tr><th scope="col">Event</th><th scope="col">What it is</th><th scope="col">Fields</th></tr></thead>
+<tbody>
+<tr><td data-label="Event"><code>declare</code></td><td data-label="What it is">An agent declares an assumption it made or a question it could not answer.</td><td data-label="Fields"><div><code>id</code>, <code>event</code>, <code>ts</code>, <code>agent</code>, <code>phase</code>, <code>type</code>, <code>text</code>, <code>impact</code>, <code>urgency</code>, <code>status</code>, <code>recommendation</code></div></td></tr>
+<tr><td data-label="Event"><code>update</code></td><td data-label="What it is">The coordinator or the human changes the state of an earlier entry.</td><td data-label="Fields"><div><code>id</code>, <code>event</code>, <code>ts</code>, <code>agent</code>, <code>phase</code>, <code>ref</code>, <code>status</code>, <code>note</code>, <code>answer</code>, <code>by</code></div></td></tr>
+</tbody>
+</table>
+</div>
+<p>An entry is a <code>assumption</code> or a <code>question</code> with an impact and an urgency (low, medium, high) and a status (open, surfaced, answered, dismissed, duplicate). Field meanings, an example and the helper script are in <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/agents/README.md#the-shared-surface-register">agents/README.md</a>; the data is <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/agent-contract.json">data/agent-contract.json</a>.</p>
 <p class="muted">Sources: <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/agents/">agents/</a> and <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/commands/">commands/</a>.</p>
 </main>
 <footer class="site-footer">
 <div class="wrap">
 <p>AI SDLC Loop. Written content is CC BY-SA 4.0 and code is GPL-3.0; the project template is MIT.
 See <a href="https://github.com/mitulamin/ai-sdlc-loop#readme">the README</a> and <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/LICENSE-CONTENT">LICENSE-CONTENT</a>.
-No trackers, no external scripts. Generated from the taxonomy, skill map and principles data (<a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/taxonomy.json">data/taxonomy.json</a>, <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/skill-principle-map.json">data/skill-principle-map.json</a>, <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/principles.json">data/principles.json</a>) and the skills, through scripts/build-agents.py.</p>
+No trackers, no external scripts. Generated from the taxonomy, skill map, principles and agent contract data (<a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/taxonomy.json">data/taxonomy.json</a>, <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/skill-principle-map.json">data/skill-principle-map.json</a>, <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/principles.json">data/principles.json</a>, <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/agent-contract.json">data/agent-contract.json</a>) and the skills, through scripts/build-agents.py.</p>
 </div>
 </footer>
 <script src="assets/site.js" defer></script>

@@ -13,6 +13,9 @@ Standard library only. Exits 1 on any error. Checks:
 - data/licences.json lists no non-adaptable source in a skill's main source list
 - every repo a skill adapts from is listed in data/sources.json
 - data/scorecard.json has one row per skill
+- every agent file in agents/ declares the required output field from data/agent-contract.json
+  (assumptions and open questions) in its front matter and has its section; skills carry no
+  output contract, so there is nothing to check in them
 """
 import json
 import re
@@ -40,6 +43,30 @@ def front_matter(text):
         if sep:
             fm[key.strip()] = value.strip()
     return fm
+
+
+def check_agents(errors):
+    contract = load("agent-contract.json")["output_field"]
+    key, heading = contract["key"], contract["heading"]
+    files = sorted(p for p in (ROOT / "agents").glob("*.md") if p.name != "README.md")
+    if not files:
+        errors.append("agents/ has no agent files to check")
+    for path in files:
+        rel = path.relative_to(ROOT)
+        text = path.read_text(encoding="utf-8")
+        fm = front_matter(text)
+        if fm is None:
+            errors.append(f"{rel}: no front matter, so it cannot declare the required output field {key}")
+            continue
+        try:
+            declared = json.loads(fm.get("output_fields", "null"))
+        except json.JSONDecodeError:
+            declared = None
+        if not isinstance(declared, list) or key not in declared:
+            errors.append(f"{rel}: front matter must declare output_fields containing \"{key}\"")
+        if f"\n## Required output field: {heading}\n" not in text:
+            errors.append(f"{rel}: missing the section '## Required output field: {heading}'")
+    return len(files)
 
 
 def main():
@@ -141,10 +168,12 @@ def main():
     if sorted(r["skill_id"] for r in score) != sorted(active):
         errors.append("data/scorecard.json must have one row per active principle's skill")
 
+    agent_count = check_agents(errors)
+
     if errors:
         print("\n".join(sorted(set(errors))))
         return 1
-    print(f"skills OK: {len(folders)} skills, {len(active)} active principles, {len(aliases)} aliases")
+    print(f"skills OK: {len(folders)} skills, {len(active)} active principles, {len(aliases)} aliases; {agent_count} agent files declare the output field")
     return 0
 
 

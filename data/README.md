@@ -13,6 +13,7 @@ The machine-readable source of truth. Everything here is versioned (`schema_vers
 | `mapping.json` | Each principle's source files, pinned | Hand-written |
 | `licences.json` | The declared licence of every source repo and file (not this repo's licence) | Hand-written |
 | `scorecard.json` | One row per skill for the test-app workflow; `runs` is empty until a skill is scored | Hand-written |
+| `agent-contract.json` | The output field every agent must declare (assumptions and open questions) and the format of the shared surface register agents write it to | Hand-written |
 | `schemas/` | JSON schemas for the files above | Hand-written |
 
 Still to come: `refresh/` (reports from each refresh).
