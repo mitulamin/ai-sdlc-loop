@@ -8,6 +8,8 @@
   --card: #ffffff;
   --warn-bg: #fff6dd;
   --warn-line: #e0b83a;
+  --ok-bg: #e6f4ea;
+  --ok-line: #5aa469;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -21,6 +23,8 @@
     --card: #1b1e22;
     --warn-bg: #3a3118;
     --warn-line: #8a7020;
+    --ok-bg: #1b3324;
+    --ok-line: #3f7a4d;
   }
 }
 
@@ -175,4 +179,36 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
   .lp-cols { grid-template-columns: 1fr; }
   .lp-cta .btn { flex: 1 1 100%; text-align: center; }
   .lp-section { margin-top: 2.25rem; }
+}
+
+/* Skills: licence badges, merged-ID chips, per-skill meta lines */
+.lic { display: inline-block; font-size: .75rem; font-weight: 600; padding: 0 .45rem; border-radius: .3rem; border: 1px solid var(--line); background: var(--card); white-space: nowrap; }
+.lic-clean { border-color: var(--ok-line); background: var(--ok-bg); }
+.lic-rewritten, .lic-rebuilt { border-color: var(--warn-line); background: var(--warn-bg); }
+.alias { display: inline-block; font-size: .75rem; padding: 0 .4rem; margin-left: .25rem; border-radius: .3rem; border: 1px dashed var(--muted); color: var(--muted); white-space: nowrap; }
+.plist li > div { min-width: 0; }
+.skill-meta { margin: .2rem 0 0; font-size: .9rem; overflow-wrap: anywhere; }
+.skill-stmt, .lic-counts { display: block; font-size: .85rem; }
+#stable tbody tr:target { background: var(--accent-bg); }
+#stable td:nth-child(3) { overflow-wrap: anywhere; }
+@media (min-width: 40.01rem) {
+  #stable { font-size: .9rem; }
+  #stable th, #stable td { padding-left: .4rem; padding-right: .4rem; }
+  #stable td:nth-child(3) { min-width: 13rem; }
+  #stable td:nth-child(5), #stable td:nth-child(8), #stable td:nth-child(9) { white-space: nowrap; }
+  #stable td:nth-child(7) { min-width: 6.5rem; }
+}
+h2 .count { display: inline-block; }
+
+/* Stack the skills table into cards on narrow screens; each cell's column heading comes from data-label.
+   Sorting is for wide screens: the heading row, and its buttons, are not shown. */
+@media (max-width: 40rem) {
+  table.cards thead { display: none; }
+  table.cards, table.cards tbody, table.cards tr, table.cards td { display: block; width: 100%; }
+  table.cards tr { padding: .6rem .25rem; border-bottom: 1px solid var(--line); }
+  table.cards tr[hidden] { display: none; }
+  table.cards td { display: flex; gap: .75rem; padding: .2rem 0; border: 0; white-space: normal; }
+  table.cards td::before { content: attr(data-label); flex: none; width: 5.5rem; color: var(--muted); font-size: .85rem; padding-top: .1rem; }
+  table.cards td > * { min-width: 0; }
+  table.cards td:first-child { white-space: normal; }
 }

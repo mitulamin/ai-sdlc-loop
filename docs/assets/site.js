@@ -46,51 +46,64 @@
     rows.forEach(function (r) { body.appendChild(r); });
   }
 
+  // A .filters block with data-table="<id>" and data-noun="<plural>" filters that table's rows.
+  // Its search box has data-q, each select has data-attr="<name>" and matches the row's data-<name>
+  // (several values split by "|"), and its reset button has data-reset. The state is kept in the
+  // URL query so a filtered view can be shared.
   function initFilters() {
-    var table = document.getElementById("ptable");
-    if (!table) return;
-    var q = document.getElementById("q");
-    var cat = document.getElementById("cat");
-    var src = document.getElementById("src");
-    var reset = document.getElementById("reset");
-    var count = document.getElementById("result-count");
-    var rows = Array.prototype.slice.call(table.tBodies[0].rows);
+    var blocks = document.querySelectorAll(".filters[data-table]");
+    Array.prototype.forEach.call(blocks, function (block) {
+      var table = document.getElementById(block.getAttribute("data-table"));
+      if (!table) return;
+      var q = block.querySelector("[data-q]");
+      var selects = Array.prototype.slice.call(block.querySelectorAll("select[data-attr]"));
+      var reset = block.querySelector("[data-reset]");
+      var count = document.querySelector("[data-count]");
+      var noun = block.getAttribute("data-noun") || "rows";
+      var rows = Array.prototype.slice.call(table.tBodies[0].rows);
 
-    function apply() {
-      var terms = q.value.toLowerCase().split(/\s+/).filter(Boolean);
-      var shown = 0;
-      rows.forEach(function (row) {
-        var text = row.textContent.toLowerCase();
-        var ok = terms.every(function (t) { return text.indexOf(t) !== -1; });
-        if (ok && cat.value && row.getAttribute("data-cat") !== cat.value) ok = false;
-        if (ok && src.value && row.getAttribute("data-sources").split("|").indexOf(src.value) === -1) ok = false;
-        row.hidden = !ok;
-        if (ok) shown++;
-      });
-      count.textContent = shown + " of " + rows.length + " principles";
-      var params = new URLSearchParams();
-      if (q.value) params.set("q", q.value);
-      if (cat.value) params.set("cat", cat.value);
-      if (src.value) params.set("src", src.value);
-      var qs = params.toString();
-      if (window.history && history.replaceState) {
-        history.replaceState(null, "", location.pathname + (qs ? "?" + qs : ""));
+      function apply() {
+        var terms = q.value.toLowerCase().split(/\s+/).filter(Boolean);
+        var shown = 0;
+        rows.forEach(function (row) {
+          var text = row.textContent.toLowerCase();
+          var ok = terms.every(function (t) { return text.indexOf(t) !== -1; });
+          selects.forEach(function (sel) {
+            if (!ok || !sel.value) return;
+            var have = (row.getAttribute("data-" + sel.getAttribute("data-attr")) || "").split("|");
+            if (have.indexOf(sel.value) === -1) ok = false;
+          });
+          row.hidden = !ok;
+          if (ok) shown++;
+        });
+        count.textContent = shown === rows.length ? rows.length + " " + noun : shown + " of " + rows.length + " " + noun;
+        var params = new URLSearchParams();
+        if (q.value) params.set("q", q.value);
+        selects.forEach(function (sel) {
+          if (sel.value) params.set(sel.getAttribute("data-attr"), sel.value);
+        });
+        var qs = params.toString();
+        if (window.history && history.replaceState) {
+          history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash);
+        }
       }
-    }
 
-    var params = new URLSearchParams(location.search);
-    q.value = params.get("q") || "";
-    cat.value = params.get("cat") || "";
-    src.value = params.get("src") || "";
+      var params = new URLSearchParams(location.search);
+      q.value = params.get("q") || "";
+      selects.forEach(function (sel) {
+        sel.value = params.get(sel.getAttribute("data-attr")) || "";
+        if (sel.selectedIndex === -1) sel.value = "";
+      });
 
-    q.addEventListener("input", apply);
-    cat.addEventListener("change", apply);
-    src.addEventListener("change", apply);
-    reset.addEventListener("click", function () {
-      q.value = ""; cat.value = ""; src.value = "";
+      q.addEventListener("input", apply);
+      selects.forEach(function (sel) { sel.addEventListener("change", apply); });
+      reset.addEventListener("click", function () {
+        q.value = "";
+        selects.forEach(function (sel) { sel.value = ""; });
+        apply();
+      });
       apply();
     });
-    apply();
   }
 
   initTables();
