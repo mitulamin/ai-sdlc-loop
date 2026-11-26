@@ -1,0 +1,57 @@
+---
+name: load-only-needed-context
+description: Use when whenever the coordinator briefs a worker. Amalgamated skill for principle 8.1 (Agent operations).
+principles: [8.1]
+principle: "8.1 Load only the context the task needs, such as the relevant spec section"
+aliases: []
+status: draft, untested
+licence: CC-BY-SA-4.0
+sources: 11
+link_only_sources: 0
+---
+
+# 8.1 Load only needed context
+
+Principle 8.1 (Agent operations): Load only the context the task needs, such as the relevant spec section
+
+## When to use
+
+Whenever the coordinator briefs a worker.
+
+## Producer: dos and don'ts
+
+Do:
+- Include only the spec section, files and standards for this task
+- Point to files rather than pasting whole repos
+- Track a context budget
+
+Don't:
+- Dump the whole spec, history and all skills into every agent
+
+## Steps
+
+1. Select task
+2. Pick relevant context
+3. Brief worker
+4. Review what was unused
+
+## Adversarial reviewer (fresh context, tries to prove the work fails)
+
+- Find context in the brief the worker never used
+- Find needed context missing
+- Default verdict is FAIL until evidence shows otherwise; report findings to a file with P0-P3 severity.
+
+## How the source skills compare
+
+Addy context-engineering, agent-os inject-standards and muratcan context-optimization/fundamentals: load only the relevant spec section and standards. Core coordinator duty when filling blank-context agents.
+
+## Sources
+
+11 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE.md and ../../CREDITS.md).
+
+## Test plan
+
+- Test app: All three runs (harness and Learn)
+- Phase: Harness
+- Test order: slot 1 of 103
+- Record results in ../../scorecard.csv (criteria in ../../README.md)
