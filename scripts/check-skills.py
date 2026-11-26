@@ -14,8 +14,9 @@ Standard library only. Exits 1 on any error. Checks:
 - every repo a skill adapts from is listed in data/sources.json
 - data/scorecard.json has one row per skill
 - every agent file in agents/ declares the required output field from data/agent-contract.json
-  (assumptions and open questions) in its front matter and has its section; skills carry no
-  output contract, so there is nothing to check in them
+  (assumptions and open questions) in its front matter, and its section has the register-request
+  block and the instruction for agents that cannot write to the register
+- skill 1.1 (surface assumptions) carries that instruction; other skills carry no output contract
 """
 import json
 import re
@@ -48,6 +49,7 @@ def front_matter(text):
 def check_agents(errors):
     contract = load("agent-contract.json")["output_field"]
     key, heading = contract["key"], contract["heading"]
+    types = load("agent-contract.json")["register"]["types"]
     files = sorted(p for p in (ROOT / "agents").glob("*.md") if p.name != "README.md")
     if not files:
         errors.append("agents/ has no agent files to check")
@@ -64,8 +66,22 @@ def check_agents(errors):
             declared = None
         if not isinstance(declared, list) or key not in declared:
             errors.append(f"{rel}: front matter must declare output_fields containing \"{key}\"")
-        if f"\n## Required output field: {heading}\n" not in text:
+        start = text.find(f"\n## Required output field: {heading}\n")
+        if start < 0:
             errors.append(f"{rel}: missing the section '## Required output field: {heading}'")
+            continue
+        nxt = text.find("\n## ", start + 1)
+        section = text[start: nxt if nxt >= 0 else len(text)]
+        rb = contract["request_block"]
+        if rb["cannot_write_instruction"] not in section:
+            errors.append(f"{rel}: the '{heading}' section lacks the instruction for agents that cannot write to the register")
+        template = "\n".join([rb["header"]] + [f"[{t.upper()}: {rb['placeholder']}]" for t in types] + [rb["footer"]])
+        if template not in section:
+            errors.append(f"{rel}: the '{heading}' section lacks the register-request block with a line for each type")
+    instruction = contract["request_block"]["cannot_write_instruction"]
+    surface = next((e for e in load("skill-principle-map.json")["skills"] if e["principle_id"] == "1.1"), None)
+    if surface is not None and instruction not in (ROOT / surface["folder"] / "SKILL.md").read_text(encoding="utf-8"):
+        errors.append(f"{surface['folder']}/SKILL.md: must carry the instruction for agents that cannot write to the register: {instruction!r}")
     return len(files)
 
 

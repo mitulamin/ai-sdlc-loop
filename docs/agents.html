@@ -93,21 +93,34 @@ A phase loads the skills whose phase in <a href="https://github.com/mitulamin/ai
 <p>Each command also takes an optional <code>--register &lt;path&gt;</code> after the task, naming the register for the run.</p>
 <h2 id="assumptions">Assumptions and open questions</h2>
 <p>Every agent has one required output field, <code>assumptions_and_open_questions</code>: its output ends with a section headed &ldquo;Assumptions and open questions&rdquo;. It is required. An explicit None. is allowed when there are none; leaving the section out is not.
-<code>scripts/build-agents.py --check</code> and <code>scripts/check-skills.py</code> fail if an agent lacks it.</p>
+In that section the agent writes a register-request block, in the same format whether or not it can write to the register itself:</p>
+<pre><code>=== REGISTER REQUESTS ===
+[ASSUMPTION: &lt;one-line statement&gt;]
+[QUESTION: &lt;one-line statement&gt;]
+[BLOCKER: &lt;one-line statement&gt;]
+=== END REGISTER REQUESTS ===</code></pre>
+<p>One line per entry: the type in capitals, a colon, a space and a one-line statement, all inside square brackets. TYPE is any type in register.types, upper-cased, so adding a type to register.types is a data change only. Put None. alone between the delimiters when there are no entries. The block is identical whoever writes the register. Whoever writes it out copies each statement exactly: no summarising, merging, rewording, reordering or dropping.</p>
+<ul>
+<li><code>ASSUMPTION</code>: something you decided without being able to confirm it, and carried on with.</li>
+<li><code>QUESTION</code>: something you could not settle yourself and want answered, ideally with your recommended answer in the statement.</li>
+<li><code>BLOCKER</code>: something that stops you finishing, or finishing correctly, until it is resolved.</li>
+</ul>
+<p><strong>Agents that cannot write to the register themselves must emit the register-request block in their transcript. Any coordinator invoking such an agent must take those register requests as-is and write them out verbatim.</strong> Agents that can write to the register run <code>scripts/register.py ingest</code> on their own output. The agents with no shell (<code>harness-reviewer</code>, <code>plan-reviewer</code>, <code>design-reviewer</code>, <code>learn-reviewer</code>) emit the block in their findings file and in their final message, and the coordinator writes it out verbatim.
+<code>scripts/build-agents.py --check</code> and <code>scripts/check-skills.py</code> fail if an agent lacks the field, the block or the instruction.</p>
 <h3 id="register">The shared surface register</h3>
-<p>Agents also append each entry to a register, a plain file the coordinator treats as its inbox: it pulls the register, curates and de-dupes it, ranks what is open, batches it for the human, and records what it surfaced and what the human answered. It is never a required relay, because every raw entry stays readable, and answerable, by the human directly.
+<p>The register is a plain file the coordinator treats as its inbox: it pulls the register, rates, curates and de-dupes it, ranks what is open (blockers first), batches it for the human, and records what it surfaced and what the human answered. It is never a required relay, because every raw entry stays readable, and answerable, by the human directly.
 Commands that start a phase take <code>--register &lt;path&gt;</code>; the default is <code>.ai-sdlc/register.jsonl</code>.
 The format is JSON Lines: one JSON object per line, UTF-8, append-only. Never edit or delete a line; a change of state is a new line.</p>
 <div class="table-wrap">
 <table class="cards">
 <thead><tr><th scope="col">Event</th><th scope="col">What it is</th><th scope="col">Fields</th></tr></thead>
 <tbody>
-<tr><td data-label="Event"><code>declare</code></td><td data-label="What it is">An agent declares an assumption it made or a question it could not answer.</td><td data-label="Fields"><div><code>id</code>, <code>event</code>, <code>ts</code>, <code>agent</code>, <code>phase</code>, <code>type</code>, <code>text</code>, <code>impact</code>, <code>urgency</code>, <code>status</code>, <code>recommendation</code></div></td></tr>
-<tr><td data-label="Event"><code>update</code></td><td data-label="What it is">The coordinator or the human changes the state of an earlier entry.</td><td data-label="Fields"><div><code>id</code>, <code>event</code>, <code>ts</code>, <code>agent</code>, <code>phase</code>, <code>ref</code>, <code>status</code>, <code>note</code>, <code>answer</code>, <code>by</code></div></td></tr>
+<tr><td data-label="Event"><code>declare</code></td><td data-label="What it is">An agent declares an assumption it made, a question it could not answer, or a blocker. The text is the statement from its register-request block, verbatim.</td><td data-label="Fields"><div><code>id</code>, <code>event</code>, <code>ts</code>, <code>agent</code>, <code>phase</code>, <code>type</code>, <code>text</code>, <code>status</code>, <code>impact</code>, <code>urgency</code>, <code>recommendation</code>, <code>via</code></div></td></tr>
+<tr><td data-label="Event"><code>update</code></td><td data-label="What it is">The coordinator or the human changes the state of an earlier entry, or rates it.</td><td data-label="Fields"><div><code>id</code>, <code>event</code>, <code>ts</code>, <code>agent</code>, <code>phase</code>, <code>ref</code>, <code>status</code>, <code>note</code>, <code>answer</code>, <code>by</code>, <code>impact</code>, <code>urgency</code></div></td></tr>
 </tbody>
 </table>
 </div>
-<p>An entry is a <code>assumption</code> or a <code>question</code> with an impact and an urgency (low, medium, high) and a status (open, surfaced, answered, dismissed, duplicate). Field meanings, an example and the helper script are in <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/agents/README.md#the-shared-surface-register">agents/README.md</a>; the data is <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/agent-contract.json">data/agent-contract.json</a>.</p>
+<p>An entry has a type (assumption, question, blocker), the statement verbatim, and a status (open, surfaced, answered, dismissed, duplicate); impact and urgency (low, medium, high) are added when the coordinator rates it. Field meanings, an example and the helper script are in <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/agents/README.md#the-shared-surface-register">agents/README.md</a>; the data is <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/agent-contract.json">data/agent-contract.json</a>.</p>
 <p class="muted">Sources: <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/agents/">agents/</a> and <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/commands/">commands/</a>.</p>
 </main>
 <footer class="site-footer">

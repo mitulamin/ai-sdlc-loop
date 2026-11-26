@@ -254,6 +254,23 @@
       ],
       "summary": "Added data/agent-contract.json (schema 1.0.0, with data/schemas/agent-contract.schema.json): the required output field assumptions_and_open_questions for every agent and the append-only JSON Lines format of the shared surface register. scripts/build-agents.py renders the field and the coordinator's register-as-inbox rules into agents/ and commands/, every command takes --register <path> (default .ai-sdlc/register.jsonl), and build-agents --check and check-skills fail if an agent lacks the field. Added scripts/register.py. Documented in agents/README.md, the Using the agents and commands guide and the agents page. No existing schema changed, so no existing schema_version moved.",
       "reason": "Agents cannot ask the human mid-cycle, so their assumptions and open questions need a required, visible place that the coordinator and the human can both read."
+    },
+    {
+      "date": "2026-11-26",
+      "research_run": "run-1",
+      "type": "edit",
+      "ids": [
+        "agent-contract",
+        "agents",
+        "commands",
+        "scripts",
+        "skills",
+        "guides",
+        "site",
+        "1.1"
+      ],
+      "summary": "Replaced the JSON-lines register request with one register-request block for assumptions, open questions and blockers: === REGISTER REQUESTS ===, [TYPE: statement] lines (types come from register.types in data/agent-contract.json, so a new type is a data change only), === END REGISTER REQUESTS ===. blocker is a new register type; impact and urgency are optional on entries and the coordinator rates them; entries gain an optional via field. agent-contract.schema.json and data/agent-contract.json move to 1.1.0. Every agent definition carries the instruction for agents that cannot write to the register, and build-agents --check and check-skills fail without the field, the block or the instruction. scripts/register.py ingest parses the block and writes statements verbatim; register.py selftest (run by build-agents --check) round-trips every type. Skill 1.1 now uses the block and carries the instruction.",
+      "reason": "Agents with no shell cannot write the register, so every agent needs one format that the coordinator can mirror verbatim, and a way to declare blockers."
     }
   ]
 }

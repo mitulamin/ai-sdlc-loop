@@ -29,11 +29,29 @@ Your work is the project's agent harness: the always-on rules file, skill descri
 
 Every output file you write, your report included, ends with a section headed `## Assumptions and open questions`. It is required. An explicit None. is allowed when there are none; leaving the section out is not.
 
-List each assumption you made and each question you could not answer, one line each: say which it is, give its impact and urgency (low|medium|high) and, for a question, your recommended answer. Impact: what goes wrong if the assumption or the recommended answer is wrong: low is cosmetic or easy to undo, medium is rework in one phase, high is a wrong product, security or data risk, or rework across phases. Urgency: how soon the human's view is needed: low can wait for the end of the cycle, medium is needed before later phases rely on it, high blocks the work.
+In it, write a register-request block in exactly this format, without the code fence:
 
-Also write each entry to the shared surface register, so it can be read without waiting for anyone. The brief gives its path: the `--register` flag of the command (default `.ai-sdlc/register.jsonl`). Only append: never edit or delete a line. Format: [README.md#the-shared-surface-register](README.md#the-shared-surface-register).
+```text
+=== REGISTER REQUESTS ===
+[ASSUMPTION: <one-line statement>]
+[QUESTION: <one-line statement>]
+[BLOCKER: <one-line statement>]
+=== END REGISTER REQUESTS ===
+```
 
-Append one entry with `python scripts/register.py add --register <path> --agent harness-producer --phase "Harness" --type assumption|question --text "..." --impact low|medium|high --urgency low|medium|high [--recommendation "..."]`. If that script is not in your project, append the same fields as one JSON line yourself, in the format linked above.
+One line per entry: the type in capitals, a colon, a space and a one-line statement, all inside square brackets. TYPE is any type in register.types, upper-cased, so adding a type to register.types is a data change only. Put None. alone between the delimiters when there are no entries. The block is identical whoever writes the register. Whoever writes it out copies each statement exactly: no summarising, merging, rewording, reordering or dropping.
+
+- `ASSUMPTION`: something you decided without being able to confirm it, and carried on with.
+- `QUESTION`: something you could not settle yourself and want answered, ideally with your recommended answer in the statement.
+- `BLOCKER`: something that stops you finishing, or finishing correctly, until it is resolved.
+
+Say in the statement what is at stake if it matters and, for a question, your recommended answer. The coordinator rates impact and urgency when it curates.
+
+The shared surface register is where the entries go. The brief gives its path: the `--register` flag of the command (default `.ai-sdlc/register.jsonl`). It is append-only: never edit or delete a line. Format: [README.md#the-shared-surface-register](README.md#the-shared-surface-register).
+
+You can write to the register yourself. Once your output file is written, run `python scripts/register.py ingest <your output file> --register <path> --agent harness-producer --phase "Harness"`, which writes each statement in the block out verbatim. If that script is not in your project, append one JSON line per entry yourself, with the statement as `text`, in the format linked above.
+
+Agents that cannot write to the register themselves must emit the register-request block in their transcript. Any coordinator invoking such an agent must take those register requests as-is and write them out verbatim.
 
 ## Skills you load
 

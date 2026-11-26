@@ -2,21 +2,29 @@
 """Write to, read and validate the shared surface register (append-only JSON Lines).
 
 Usage:
-  scripts/register.py add --agent A --phase P --type assumption|question --text T --impact I --urgency U
-                          [--recommendation R] [--register PATH]
+  scripts/register.py add --agent A --phase P --type assumption|question|blocker --text T
+                          [--impact I] [--urgency U] [--recommendation R] [--via agent|coordinator] [--register PATH]
+  scripts/register.py ingest FILE|- --agent A --phase P [--via agent|coordinator] [--register PATH]
   scripts/register.py update --ref ID --status S [--note N] [--answer A] [--by coordinator|human]
-                             [--agent A] [--phase P] [--register PATH]
-  scripts/register.py ingest FILE [--agent A] [--phase P] [--register PATH]
+                             [--impact I] [--urgency U] [--agent A] [--phase P] [--register PATH]
   scripts/register.py list [--open] [--register PATH]
   scripts/register.py check [--register PATH]
+  scripts/register.py selftest
 
-Standard library only. The format, the allowed values and the default path come from
-data/agent-contract.json. Lines are only ever appended, in one write each, so agents running
-at the same time do not overwrite each other. `ingest` appends each declare line found in a
-findings or report file (for agents that have no shell). `list` reads the log and shows each
-entry with its current status; the register file itself stays readable without this script.
+Standard library only. The format, the allowed values, the register-request block and the
+default path come from data/agent-contract.json. Lines are only ever appended, in one write
+each, so agents running at the same time do not overwrite each other.
+
+`ingest` reads every register-request block in a file (or stdin, with -) and appends one
+declare line per [TYPE: statement] line (TYPE is any type in the contract: ASSUMPTION,
+QUESTION, BLOCKER), with the statement copied verbatim. It fails on a block it cannot parse, and on a file with no block at all, so
+nothing is dropped silently. `selftest` checks that the parser and the block writer
+round-trip all three tags. `list` shows each entry with its current status; the register
+file itself stays readable without this script.
 """
 import argparse
+import contextlib
+import io
 import json
 import os
 import re
@@ -26,7 +34,16 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-CONTRACT = json.loads((ROOT / "data" / "agent-contract.json").read_text(encoding="utf-8"))["register"]
+CONTRACT_DOC = json.loads((ROOT / "data" / "agent-contract.json").read_text(encoding="utf-8"))
+CONTRACT = CONTRACT_DOC["register"]
+
+
+REQUESTS = CONTRACT_DOC["output_field"]["request_block"]
+HEADER, FOOTER = REQUESTS["header"], REQUESTS["footer"]
+NONE_TEXT = CONTRACT_DOC["output_field"]["none_text"]
+TYPE_TO_TAG = {t: t.upper() for t in CONTRACT["types"]}
+TAG_TO_TYPE = {tag: t for t, tag in TYPE_TO_TAG.items()}
+LINE_RE = re.compile(r"\[(" + "|".join(re.escape(t) for t in TAG_TO_TYPE) + r"): (\S.*)\]")
 
 
 def now():
@@ -35,6 +52,46 @@ def now():
 
 def new_id():
     return "r-" + datetime.now(timezone.utc).strftime("%Y%m%d%H%M%S") + "-" + secrets.token_hex(2)
+
+
+def format_block(items):
+    """Write (type, text) pairs as a register-request block: the format agents emit."""
+    body = [f"[{TYPE_TO_TAG[t]}: {text}]" for t, text in items] or [NONE_TEXT]
+    return "\n".join([HEADER, *body, FOOTER]) + "\n"
+
+
+def parse_blocks(text):
+    """Return the (type, statement) pairs of every register-request block in text, in order.
+
+    A line is [TYPE: statement], with TYPE any type in the contract, upper-cased. Raises ValueError on
+    an unterminated block, a line inside a block that is not such a line or None., a None. mixed
+    with entries, or a block that still holds the template placeholder."""
+    items, inside, body, start = [], False, [], 0
+    for n, line in enumerate(text.splitlines(), 1):
+        s = line.strip()
+        if not inside:
+            if s == HEADER:
+                inside, body, start = True, [], n
+            continue
+        if s == FOOTER:
+            inside = False
+            real = [(n2, l) for n2, l in body if l.strip()]
+            if [l.strip() for _, l in real] == [NONE_TEXT]:
+                continue
+            for n2, l in real:
+                m = LINE_RE.fullmatch(l.rstrip())
+                if not m:
+                    raise ValueError(f"line {n2}: not a [{'|'.join(TAG_TO_TYPE)}: statement] line or {NONE_TEXT}: {l.strip()!r}")
+                if m[2] == REQUESTS["placeholder"]:
+                    raise ValueError(f"line {n2}: still the template placeholder {REQUESTS['placeholder']}")
+                items.append((TAG_TO_TYPE[m[1]], m[2]))
+            if not real:
+                raise ValueError(f"line {start}: empty block; write {NONE_TEXT} if there are no entries")
+        else:
+            body.append((n, line))
+    if inside:
+        raise ValueError(f"line {start}: block has no {FOOTER}")
+    return items
 
 
 def append(path, records):
@@ -58,6 +115,9 @@ def validate(rec, known_ids=None):
     for k in spec["required"]:
         if not isinstance(rec.get(k), str) or not rec[k].strip():
             errs.append(f"{k} is required and must be a non-empty string")
+    for k in spec.get("optional", []):
+        if k in rec and not isinstance(rec[k], str):
+            errs.append(f"{k} must be a string")
     allowed = set(spec["required"]) | set(spec.get("optional", []))
     for k in rec:
         if k not in allowed:
@@ -73,14 +133,17 @@ def validate(rec, known_ids=None):
     if event == "declare":
         if rec["type"] not in CONTRACT["types"]:
             errs.append(f"type must be one of {CONTRACT['types']}")
-        for k in ("impact", "urgency"):
-            if rec[k] not in CONTRACT[k]["values"]:
-                errs.append(f"{k} must be one of {CONTRACT[k]['values']}")
         if rec["status"] != "open":
             errs.append("a declared entry starts as open")
+        if "via" in rec and rec["via"] not in CONTRACT["via"]["values"]:
+            errs.append(f"via must be one of {CONTRACT['via']['values']}")
     else:
         if "by" in rec and rec["by"] not in CONTRACT["by"]:
             errs.append(f"by must be one of {CONTRACT['by']}")
+    for k in ("impact", "urgency"):
+        if k in rec and rec[k] not in CONTRACT[k]["values"]:
+            errs.append(f"{k} must be one of {CONTRACT[k]['values']}")
+    if event == "update":
         if known_ids is not None and rec["ref"] not in known_ids:
             errs.append(f"ref {rec['ref']} is not an earlier declared entry")
     return errs
@@ -98,11 +161,15 @@ def read(path):
             yield n, None, f"invalid JSON ({e.msg})"
 
 
-def declare_record(a):
-    rec = {"id": new_id(), "event": "declare", "ts": now(), "agent": a["agent"], "phase": a["phase"],
-           "type": a["type"], "text": a["text"], "impact": a["impact"], "urgency": a["urgency"], "status": "open"}
-    if a.get("recommendation"):
-        rec["recommendation"] = a["recommendation"]
+def declare_record(a, used=()):
+    rid = new_id()
+    while rid in used:
+        rid = new_id()
+    rec = {"id": rid, "event": "declare", "ts": now(), "agent": a["agent"], "phase": a["phase"],
+           "type": a["type"], "text": a["text"], "status": "open"}
+    for k in ("impact", "urgency", "recommendation", "via"):
+        if a.get(k):
+            rec[k] = a[k]
     return rec
 
 
@@ -121,7 +188,7 @@ def cmd_update(args):
     ids = {r["id"] for _, r, e in read(path) if r and r.get("event") == "declare"} if path.exists() else set()
     rec = {"id": new_id(), "event": "update", "ts": now(), "agent": args.agent or args.by or "coordinator",
            "phase": args.phase or "all", "ref": args.ref, "status": args.status}
-    for k in ("note", "answer", "by"):
+    for k in ("note", "answer", "by", "impact", "urgency"):
         if getattr(args, k):
             rec[k] = getattr(args, k)
     errs = validate(rec, ids)
@@ -133,28 +200,23 @@ def cmd_update(args):
 
 
 def cmd_ingest(args):
-    recs, bad = [], []
-    for n, line in enumerate(Path(args.file).read_text(encoding="utf-8").splitlines(), 1):
-        s = line.strip()
-        if not s.startswith("{"):
-            continue
-        try:
-            raw = json.loads(s)
-        except json.JSONDecodeError:
-            continue
-        if not isinstance(raw, dict) or raw.get("type") not in CONTRACT["types"]:
-            continue
-        rec = {"id": new_id(), "event": "declare", "ts": now(), "status": "open",
-               "agent": args.agent or raw.get("agent"), "phase": args.phase or raw.get("phase")}
-        rec.update({k: raw[k] for k in ("type", "text", "impact", "urgency", "recommendation") if k in raw})
+    text = sys.stdin.read() if args.file == "-" else Path(args.file).read_text(encoding="utf-8")
+    try:
+        items = parse_blocks(text)
+    except ValueError as e:
+        sys.exit(f"{args.file}: {e}")
+    if HEADER not in text:
+        sys.exit(f"{args.file}: no {HEADER} block found; if the agent has no entries it must still emit a block that says {NONE_TEXT}")
+    recs, used = [], set()
+    for t, statement in items:
+        rec = declare_record({"agent": args.agent, "phase": args.phase, "type": t, "text": statement, "via": args.via}, used)
+        used.add(rec["id"])
         errs = validate(rec)
         if errs:
-            bad.append(f"{args.file}:{n}: " + "; ".join(errs))
-        else:
-            recs.append(rec)
-    if bad:
-        sys.exit("\n".join(bad))
-    append(args.register, recs)
+            sys.exit(f"{args.file}: {statement!r}: " + "; ".join(errs))
+        recs.append(rec)
+    if recs:
+        append(args.register, recs)
     print(f"appended {len(recs)} entries")
     return 0
 
@@ -182,9 +244,10 @@ def cmd_list(args):
         status = latest[i]["status"] if i in latest else e["status"]
         if args.open and status not in ("open", "surfaced"):
             continue
-        rows.append((scale.get(e["impact"], 3), scale.get(e["urgency"], 3), e["ts"], i, status, e))
-    for _, _, _, i, status, e in sorted(rows):
-        print(f"{i}  {status:9}  {e['type']:10}  impact={e['impact']:6} urgency={e['urgency']:6} {e['agent']} ({e['phase']}): {e['text']}")
+        rating = {k: next((r[k] for r in (latest.get(i), e) if r and k in r), None) for k in ("impact", "urgency")}
+        rows.append((e["type"] != "blocker", scale.get(rating["impact"], 0), scale.get(rating["urgency"], 0), e["ts"], i, status, e, rating))
+    for *_, i, status, e, rating in sorted(rows, key=lambda r: r[:5]):
+        print(f"{i}  {status:9}  {e['type']:10}  impact={rating['impact'] or 'unrated':7} urgency={rating['urgency'] or 'unrated':7} {e['agent']} ({e['phase']}): {e['text']}")
     return 0
 
 
@@ -210,6 +273,57 @@ def cmd_check(args):
     return 0
 
 
+def selftest():
+    """Round-trip every contract type through the block writer and the parser, and check the rejects."""
+    problems = []
+    statements = {t: f"{t} statement with [brackets], a: colon, \u00e9 and  double  spaces ({n})" for n, t in enumerate(TYPE_TO_TAG)}
+    items = [(t, statements[t]) for t in TYPE_TO_TAG] * 2
+    block = format_block(items)
+    if parse_blocks(block) != items:
+        problems.append("a block with every type does not round-trip")
+    for t in TYPE_TO_TAG:
+        if parse_blocks(format_block([(t, statements[t])])) != [(t, statements[t])]:
+            problems.append(f"type {t} does not round-trip on its own")
+    wrapped = "Final answer.\n```text\n" + block + "```\nthanks\n" + format_block([])
+    if parse_blocks(wrapped) != items:
+        problems.append("a block inside a code fence and a None. block do not parse as written")
+    if parse_blocks(format_block([])) != []:
+        problems.append("a None. block must parse to no entries")
+    bad = {
+        "an unknown type": f"{HEADER}\n[GUESS: x]\n{FOOTER}\n",
+        "the old bare-tag form": f"{HEADER}\n[{next(iter(TAG_TO_TYPE))}] x\n{FOOTER}\n",
+        "no footer": f"{HEADER}\n[{next(iter(TAG_TO_TYPE))}: x]\n",
+        "None. mixed with entries": f"{HEADER}\n{NONE_TEXT}\n[{next(iter(TAG_TO_TYPE))}: x]\n{FOOTER}\n",
+        "the template placeholder": f"{HEADER}\n[{next(iter(TAG_TO_TYPE))}: {REQUESTS['placeholder']}]\n{FOOTER}\n",
+        "an empty block": f"{HEADER}\n{FOOTER}\n",
+    }
+    for what, text in bad.items():
+        try:
+            parse_blocks(text)
+            problems.append(f"{what} was accepted")
+        except ValueError:
+            pass
+    import tempfile
+    with tempfile.TemporaryDirectory() as d:
+        reg, src = Path(d) / "r.jsonl", Path(d) / "out.md"
+        src.write_text("report\n" + block, encoding="utf-8")
+        ns = argparse.Namespace(file=str(src), agent="selftest", phase="Test", via="coordinator", register=str(reg))
+        with contextlib.redirect_stdout(io.StringIO()):
+            cmd_ingest(ns)
+        got = [(r["type"], r["text"]) for _, r, _ in read(reg)]
+        if got != items:
+            problems.append("ingest did not write every statement verbatim and in order")
+        with contextlib.redirect_stdout(io.StringIO()):
+            checked = cmd_check(argparse.Namespace(register=str(reg)))
+        if checked != 0:
+            problems.append("ingested entries do not validate")
+    if problems:
+        print("\n".join(problems), file=sys.stderr)
+        return 1
+    print(f"register-request parser OK: {', '.join(TYPE_TO_TAG.values())} round-trip, verbatim ingest, rejects bad blocks")
+    return 0
+
+
 def main():
     default = CONTRACT["default_path"]
     p = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
@@ -224,25 +338,32 @@ def main():
     a.add_argument("--phase", required=True)
     a.add_argument("--type", required=True, choices=CONTRACT["types"])
     a.add_argument("--text", required=True)
-    a.add_argument("--impact", required=True, choices=CONTRACT["impact"]["values"])
-    a.add_argument("--urgency", required=True, choices=CONTRACT["urgency"]["values"])
+    a.add_argument("--impact", choices=CONTRACT["impact"]["values"])
+    a.add_argument("--urgency", choices=CONTRACT["urgency"]["values"])
     a.add_argument("--recommendation")
+    a.add_argument("--via", choices=CONTRACT["via"]["values"])
     u = common(sub.add_parser("update"))
     u.add_argument("--ref", required=True)
     u.add_argument("--status", required=True, choices=CONTRACT["statuses"]["values"])
     u.add_argument("--note")
     u.add_argument("--answer")
     u.add_argument("--by", choices=CONTRACT["by"])
+    u.add_argument("--impact", choices=CONTRACT["impact"]["values"])
+    u.add_argument("--urgency", choices=CONTRACT["urgency"]["values"])
     u.add_argument("--agent")
     u.add_argument("--phase")
     i = common(sub.add_parser("ingest"))
-    i.add_argument("file")
-    i.add_argument("--agent")
-    i.add_argument("--phase")
+    i.add_argument("file", help="a file, or - for stdin")
+    i.add_argument("--agent", required=True, help="the agent that emitted the block")
+    i.add_argument("--phase", required=True)
+    i.add_argument("--via", choices=CONTRACT["via"]["values"])
     ls = common(sub.add_parser("list"))
     ls.add_argument("--open", action="store_true", help="only entries still open or surfaced")
     common(sub.add_parser("check"))
+    sub.add_parser("selftest")
     args = p.parse_args()
+    if args.cmd == "selftest":
+        return selftest()
     return {"add": cmd_add, "update": cmd_update, "ingest": cmd_ingest, "list": cmd_list, "check": cmd_check}[args.cmd](args)
 
 

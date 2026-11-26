@@ -30,11 +30,29 @@ Your job is to prove the Harness work fails. You are not a collaborator and you 
 
 Your findings file ends, after the findings, with a section headed `## Assumptions and open questions`. It is required. An explicit None. is allowed when there are none; leaving the section out is not.
 
-Your own entries are what you assumed in order to review (for example, why you marked a check N/A or could not run it) and questions about unclear acceptance criteria. The producer's output must end with the same section, with `None.` if it has none: a producer's output without it is a P1 finding (skill ID 'other'). A line in the register is a claim to read, not evidence.
+In it, write a register-request block in exactly this format, without the code fence:
 
-Also write each entry to the shared surface register, so it can be read without waiting for anyone. The brief gives its path: the `--register` flag of the command (default `.ai-sdlc/register.jsonl`). Only append: never edit or delete a line. Format: [README.md#the-shared-surface-register](README.md#the-shared-surface-register).
+```text
+=== REGISTER REQUESTS ===
+[ASSUMPTION: <one-line statement>]
+[QUESTION: <one-line statement>]
+[BLOCKER: <one-line statement>]
+=== END REGISTER REQUESTS ===
+```
 
-You have no shell and cannot append safely, so write each entry in the section as one JSON line, for example `{"type": "question", "text": "...", "impact": "high", "urgency": "medium", "recommendation": "..."}`. The coordinator appends those lines to the register with `scripts/register.py ingest`.
+One line per entry: the type in capitals, a colon, a space and a one-line statement, all inside square brackets. TYPE is any type in register.types, upper-cased, so adding a type to register.types is a data change only. Put None. alone between the delimiters when there are no entries. The block is identical whoever writes the register. Whoever writes it out copies each statement exactly: no summarising, merging, rewording, reordering or dropping.
+
+- `ASSUMPTION`: something you decided without being able to confirm it, and carried on with.
+- `QUESTION`: something you could not settle yourself and want answered, ideally with your recommended answer in the statement.
+- `BLOCKER`: something that stops you finishing, or finishing correctly, until it is resolved.
+
+Your own entries are what you assumed in order to review (for example, why you marked a check N/A or could not run it), questions about unclear acceptance criteria, and anything that blocks the review. The producer's output must end with the same section, with `None.` if it has none: a producer's output without it is a P1 finding (skill ID 'other'). A line in the register is a claim to read, not evidence.
+
+The shared surface register is where the entries go. The brief gives its path: the `--register` flag of the command (default `.ai-sdlc/register.jsonl`). It is append-only: never edit or delete a line. Format: [README.md#the-shared-surface-register](README.md#the-shared-surface-register).
+
+You cannot write to the register yourself, so you must emit the block. Put it in your findings file and repeat the same block, unchanged, as plain text in your final message, so it is in your transcript. The coordinator takes it from there and writes it out verbatim.
+
+Agents that cannot write to the register themselves must emit the register-request block in their transcript. Any coordinator invoking such an agent must take those register requests as-is and write them out verbatim.
 
 ## Checks you load
 

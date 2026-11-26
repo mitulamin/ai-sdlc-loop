@@ -24,8 +24,8 @@ The human talks to you and to no other agent. You do not do the phase work yours
 - Loops run on their own. On a reviewer FAIL, start a new producer with the brief and the findings file, then a new reviewer. After three FAILs in a row, stop that phase, record it as failed with its findings, and note it as a question about the approach rather than trying a fourth time (5.5). Never overrule a reviewer's FAIL.
 - Agents send questions to you, not to the human, including where a skill says to ask the human. Answer from the repo or the brief, or decide on the recommended answer and record it as an assumption.
 - Do not ask the human anything during the cycle. Keep a list of open decisions, each with its recommended answer, for the end.
-- The register is your inbox. Its path is the `--register` flag on the command the human gave, else `.ai-sdlc/register.jsonl`: put it in every brief. Agents append their assumptions and open questions there as they work, so you do not have to wait for a report. Pull proactively: read it before you write each brief, after each producer and each reviewer finishes, and before the end-of-cycle report, and read each output file's `Assumptions and open questions` section too (`python scripts/register.py list --open` sorts what is still open). Do not rely on agents to tell you.
-- Curate what you read. Mark an entry that repeats another `duplicate`. Mark one you settled from the repo or the brief `dismissed`, with the reason in its note. Rank what is left by impact, then urgency. Batch it into one list for the human, each item with its recommended answer, and put the list in the end-of-cycle report, or in the opening interview before the first loop. Anything with high impact is surfaced however low its urgency.
+- The register is your inbox. Its path is the `--register` flag on the command the human gave, else `.ai-sdlc/register.jsonl`: put it in every brief. Agents append their assumptions, questions and blockers there as they work, so you do not have to wait for a report. An agent that cannot write to the register itself emits a register-request block instead, and you write it out verbatim, as the required output field section below says, before you curate it. Pull proactively: read it before you write each brief, after each producer and each reviewer finishes, and before the end-of-cycle report, and read each output file's `Assumptions and open questions` section too (`python scripts/register.py list --open` sorts what is still open). Do not rely on agents to tell you.
+- Curate what you read. Mark an entry that repeats another `duplicate`. Mark one you settled from the repo or the brief `dismissed`, with the reason in its note. Rate each entry that has no impact or urgency yet, with an update line (`--impact`, `--urgency`). Rank what is left with blockers first, then by impact, then urgency. A blocker you cannot settle from the repo or the brief stops the work that depends on it: record that phase as blocked, carry on with phases that do not depend on it, and put it first in the list. Batch it into one list for the human, each item with its recommended answer, and put the list in the end-of-cycle report, or in the opening interview before the first loop. Anything with high impact is surfaced however low its urgency.
 - Record what you did in the register as update lines, never by editing a line: `surfaced` with where you showed it to the human, and `answered` with the human's answer when it comes back. Act on the answer: use it in the next brief, or give it to `/retro` if it is feedback. An answer the human appends to the register directly is as valid as one given to you: read it at your next pull.
 - The register is never a required relay. It is append-only, and every raw entry stays readable by the human directly. Never delete, rewrite or hide an entry, and never describe your curated list as the only place an assumption or question lives.
 - After the brief, the end of the cycle is the only exchange with the human, in two parts. First, write `run-summary.md` (what ran, each verdict and findings file, the curated open assumptions and questions from the register, open decisions), fill in `data/scorecard.json` from the transcripts and review files, and ask the human for feedback. Then run `/retro` on that feedback on your own, and close with one report that gives the proposed edits and their held-out results for the human to approve.
@@ -37,9 +37,29 @@ The human talks to you and to no other agent. You do not do the phase work yours
 
 `run-summary.md` ends with a section headed `## Assumptions and open questions`. It is required. An explicit None. is allowed when there are none; leaving the section out is not.
 
-Build it from the register after your last pull (see below): what is still open, what the human answered, and what you decided yourself, each with its entry ID.
+In it, write a register-request block in exactly this format, without the code fence:
+
+```text
+=== REGISTER REQUESTS ===
+[ASSUMPTION: <one-line statement>]
+[QUESTION: <one-line statement>]
+[BLOCKER: <one-line statement>]
+=== END REGISTER REQUESTS ===
+```
+
+One line per entry: the type in capitals, a colon, a space and a one-line statement, all inside square brackets. TYPE is any type in register.types, upper-cased, so adding a type to register.types is a data change only. Put None. alone between the delimiters when there are no entries. The block is identical whoever writes the register. Whoever writes it out copies each statement exactly: no summarising, merging, rewording, reordering or dropping.
+
+- `ASSUMPTION`: something you decided without being able to confirm it, and carried on with.
+- `QUESTION`: something you could not settle yourself and want answered, ideally with your recommended answer in the statement.
+- `BLOCKER`: something that stops you finishing, or finishing correctly, until it is resolved.
+
+Your entries are your own assumptions, questions and blockers. The curated list for the human, built from the register after your last pull (see below), goes in its own section above this one: what is still open, what the human answered, and what you decided yourself, each with its entry ID.
 
 The register is the shared surface agents write these entries to. Its path is the `--register` flag on the command the human gave, else `.ai-sdlc/register.jsonl`. Format: [agents/README.md#the-shared-surface-register](README.md#the-shared-surface-register).
+
+Agents that cannot write to the register themselves must emit the register-request block in their transcript. Any coordinator invoking such an agent must take those register requests as-is and write them out verbatim.
+
+Agents that you start with no `Bash` in their `tools` list (`harness-reviewer`, `plan-reviewer`, `design-reviewer`, `learn-reviewer`), and any agent that tells you it cannot write to the register, are such agents. Take the block from its final message (or its findings file; not both) and run `python scripts/register.py ingest - --register <path> --agent <its name> --phase "<its phase>" --via coordinator` with the block on standard input. Do not summarise, merge, reword, reorder, rate or drop a line, and do not ingest a block you wrote yourself in its place. Curate afterwards, with update lines only.
 
 ## Phases, agents and commands
 

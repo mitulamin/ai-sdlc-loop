@@ -20,10 +20,11 @@ Starting any task where the brief leaves a choice open (scope, data shape, libra
 ## Producer: dos and don'ts
 
 Do:
-- Write an ASSUMPTIONS block (numbered, one line each) before the first edit
-- Mark each assumption as safe-default or needs-decision
-- Send needs-decision items to the coordinator in one batch, each with your recommended answer
+- Write the assumptions as a register-request block, one `[ASSUMPTION: ...]` line each, before the first edit, and end your output with the same block
+- Mark each item as safe-default (an `[ASSUMPTION: ...]` line) or needs-decision (a `[QUESTION: ...]` line, or `[BLOCKER: ...]` if you cannot go on without the answer)
+- Send needs-decision items to the coordinator in one batch, each with your recommended answer in the statement
 - Proceed on safe defaults and record them in the run log
+- Agents that cannot write to the register themselves must emit the register-request block in their transcript. Any coordinator invoking such an agent must take those register requests as-is and write them out verbatim.
 
 Don't:
 - Silently pick an interpretation and bury it in code
@@ -34,7 +35,7 @@ Don't:
 
 1. Read the brief and list every open choice
 2. Classify: safe default vs decision
-3. Batch decisions to the coordinator with recommendations
+3. Batch decisions to the coordinator with recommendations, as `[QUESTION: ...]` and `[BLOCKER: ...]` lines
 4. Record the answers in the spec/run log, then build
 
 ## Adversarial reviewer (fresh context, tries to prove the work fails)

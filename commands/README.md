@@ -18,4 +18,4 @@ There is one Review & ship phase, so `/review` and `/ship` run the same Review &
 
 The Harness skills have no command: the coordinator loads them, and starts the Harness producer and reviewer at the start of a run, to set up or check the project's agent harness, and when approved Learn edits are applied.
 
-Every command takes an optional `--register <path>` after the task. It names the shared surface register, where the run's agents append their assumptions and open questions and which the coordinator reads as its inbox. The default is `.ai-sdlc/register.jsonl`. The format is in [agents/README.md](../agents/README.md#the-shared-surface-register).
+Every command takes an optional `--register <path>` after the task. It names the shared surface register, where the run's agents write their assumptions, open questions and blockers and which the coordinator reads as its inbox. The default is `.ai-sdlc/register.jsonl`. The format is in [agents/README.md](../agents/README.md#the-shared-surface-register).

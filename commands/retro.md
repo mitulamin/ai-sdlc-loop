@@ -17,7 +17,7 @@ Task: $ARGUMENTS
 
 ## Register
 
-The shared surface register is where this run's agents write their assumptions and open questions. If the arguments above contain `--register <path>`, use that path and take the flag out of the task. Otherwise use the default, `.ai-sdlc/register.jsonl`. Put the path in every brief. Treat the register as your inbox and pull it proactively, as the [coordinator](../agents/coordinator.md) file says; its format is in [agents/README.md#the-shared-surface-register](../agents/README.md#the-shared-surface-register).
+The shared surface register is where this run's agents write their assumptions, open questions and blockers, as register-request blocks. If the arguments above contain `--register <path>`, use that path and take the flag out of the task. Otherwise use the default, `.ai-sdlc/register.jsonl`. Put the path in every brief. Treat the register as your inbox and pull it proactively, and write the register-request block of any agent that cannot write to it out verbatim, as the [coordinator](../agents/coordinator.md) file says; its format is in [agents/README.md#the-shared-surface-register](../agents/README.md#the-shared-surface-register).
 
 ## Loop
 
