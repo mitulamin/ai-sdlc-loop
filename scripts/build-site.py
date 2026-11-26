@@ -114,7 +114,7 @@ NAV = [
     ("path.html", "Learning path"),
     ("principles.html", "All principles"),
     ("skills.html", "Skills"),
-    ("sources.html", "Sources"),
+    ("sources.html", "Sources and licences"),
     ("guides/index.html", "Guides"),
 ]
 
@@ -151,9 +151,9 @@ def page(title, body, depth, active=None, description=""):
 </main>
 <footer class="site-footer">
 <div class="wrap">
-<p>{SITE_NAME}. Text is CC BY-SA 4.0 and code, including this site, is GPL-3.0; the project template is MIT.
+<p>{SITE_NAME}. Text and data, including the data copies in <code>docs/data/</code>, are CC BY-SA 4.0; code, including this site, is GPL-3.0; the project template is MIT.
 See <a href="{BLOB}LICENSE.md">LICENSE.md</a> and <a href="{BLOB}CREDITS.md">CREDITS.md</a>.
-No trackers, no external scripts. Generated from <a href="{BLOB}data/principles.json">data/principles.json</a>.</p>
+No trackers, no external scripts. Generated from <a href="{BLOB}data/">data/</a> by <a href="{BLOB}scripts/build-site.py">scripts/build-site.py</a>.</p>
 </div>
 </footer>
 <script src="{up}assets/site.js" defer></script>
@@ -351,7 +351,12 @@ class Site:
         n_principles = len(self.principles)
         n_cats = len(self.cats)
         n_sources = len(self.sdoc["repos"])
+        n_merged = len(self.aliases)
         first_cat = self.cats[0]
+        merged_links = ", ".join(
+            f'<a href="principles/{esc(a)}.html">{esc(a)} to {esc(t)}</a>'
+            for a, t in sorted(self.aliases.items(), key=lambda kv: pid_key(kv[0]))
+        )
         learn = self.cat_by_slug.get("learn")
         learn_ids = [p["id"] for p in self.by_cat.get("learn", [])]
         learn_range = f"{learn_ids[0]} to {learn_ids[-1]}" if learn_ids else ""
@@ -377,8 +382,10 @@ in {n_cats} categories. Use them to adopt agentic tools with less trial and erro
 </p>
 <dl class="lp-stats">
 <div><dt>Principles</dt><dd>{n_principles}</dd></div>
+<div><dt>Skills</dt><dd>{n_principles}</dd></div>
 <div><dt>Categories</dt><dd>{n_cats}</dd></div>
 <div><dt>Source repos</dt><dd>{n_sources}</dd></div>
+<div><dt>Merged IDs</dt><dd>{n_merged}</dd></div>
 </dl>
 </section>
 
@@ -390,7 +397,8 @@ in {n_cats} categories. Use them to adopt agentic tools with less trial and erro
 <p>The ideas for that are scattered across dozens of public repos: skills, sub-agents, slash commands and rules files. Many say the same thing in different words. Some contradict each other. Some are risky to install. And if you load them all, their descriptions alone use up the context window before the agent does anything useful.</p>
 </div>
 <div>
-<p>So I had a research bot read {n_sources} public repos and boil them down to {n_principles} numbered principles in {n_cats} categories. Each one is traceable to the repos it came from.</p>
+<p>So I had a research bot read {n_sources} public repos and boil them down to {n_principles} numbered principles in {n_cats} categories, with one amalgamated skill for each. Each one is traceable to the repos it came from.</p>
+<p>The research first found {n_principles + n_merged} principles. {n_merged} were duplicates and were merged into the principle that kept their content; IDs are never renumbered, so a merged ID still opens its survivor ({merged_links}). See <a href="{BLOB}MERGES.md">MERGES.md</a>.</p>
 <p>The principles are not the point. The point is the loop that produced them and the loop that keeps improving them. This repo is a base, not a finished product. Fork it, swap in your own principles, and let your own projects change it.</p>
 </div>
 </div>
@@ -428,9 +436,10 @@ in {n_cats} categories. Use them to adopt agentic tools with less trial and erro
 <h2 id="do">What you can do here</h2>
 <ul class="lp-cards lp-links">
 <li class="lp-card"><h3><a href="path.html">Follow the learning path</a></h3><p>Walk the {n_cats} stages in order, from planning to retrospective.</p></li>
-<li class="lp-card"><h3><a href="principles.html">Explore the principles</a></h3><p>Search, filter and sort all {n_principles}. Each links to its sources.</p></li>
+<li class="lp-card"><h3><a href="principles.html">Explore the principles</a></h3><p>Search, filter and sort all {n_principles}. Each links to its skill and sources.</p></li>
 <li class="lp-card"><h3><a href="categories/{esc(first_cat["slug"])}.html">Read the categories</a></h3><p>One page per category, with the principles that belong to it.</p></li>
-<li class="lp-card"><h3><a href="sources.html">Check the sources</a></h3><p>The {n_sources} repos the principles came from, with their licences.</p></li>
+<li class="lp-card"><h3><a href="skills.html">See the skills</a></h3><p>One skill per principle, with its test app, phase and slot in the run order.</p></li>
+<li class="lp-card"><h3><a href="sources.html">Check the sources and licences</a></h3><p>The licence of every source repo, with link-only sources listed separately.</p></li>
 <li class="lp-card"><h3><a href="guides/index.html">Read the guides</a></h3><p>Plain-language guides to the principles.</p></li>
 <li class="lp-card"><h3><a href="#start">Start a project</a></h3><p>Copy the template and run your first loop.</p></li>
 </ul>
@@ -821,38 +830,122 @@ Search, filter and click a column heading to sort. With JavaScript off you still
 <p class="muted">Machine-readable copies: <a href="data/skill-principle-map.json">skill-principle-map.json</a>, <a href="data/scorecard.csv">scorecard.csv</a>.</p>"""
         return page("Skills", body, 0, "skills.html", f"The {n} amalgamated skills with their test app, phase and slot.")
 
+    def id_links(self, ids, up=""):
+        return ", ".join(f'<a href="{up}principles/{esc(i)}.html">{esc(i)}</a>' for i in ids)
+
+    def skills_cell(self, ids):
+        if not ids:
+            return "<span class=\"muted\">none</span>"
+        return f"<details><summary>{len(ids)} skill{'s' if len(ids) != 1 else ''}</summary>{self.id_links(ids)}</details>"
+
+    def repo_cell(self, e):
+        return f'<a href="{esc(e["url"])}">{esc(e["name"])}</a>'
+
     def sources_page(self):
-        rows = []
-        for r in sorted(self.sdoc["repos"], key=lambda r: (r["owner"].lower(), r["repo"].lower())):
-            used = len(self.licences["repos"].get(f'{r["owner"]}/{r["repo"]}', {}).get("adapted_in_skills", []))
-            pin = r["pinned_sha"][:7] if r["pinned_sha"] else "not pinned yet"
-            rows.append(
-                f'<tr><td><a href="{esc(r["url"])}">{esc(r["owner"])}/{esc(r["repo"])}</a></td>'
-                f'<td>{esc(r["role"])}</td><td>{esc(r["licence"])}</td>'
-                f'<td data-sort="{used}">{used}</td><td>{esc(pin)}</td></tr>'
+        split = self.licences["split"]
+        n_link_only_files = sum(len(p["link_only"]) for p in self.principles)
+        def pin_cell(e):
+            pin = esc(e["pin"][:10])
+            return f'<a href="{esc(e["licence_file"])}">{pin}</a>' if e["licence_file"] else pin
+
+        adapted_rows = "".join(
+            f'<tr><td>{self.repo_cell(e)}'
+            + (' <span class="badge">link-only folder</span>' if e["link_only_in"] else "")
+            + f'</td><td>{esc("; ".join(e["licences"]))}</td>'
+            f'<td data-sort="{len(e["adapted_in"])}">{self.skills_cell(e["adapted_in"])}</td>'
+            f"<td>{pin_cell(e)}</td></tr>"
+            for e in self.adapted
+        )
+
+        def files_cell(e):
+            if not e["link_files"]:
+                return '<span class="muted">repo link only</span>'
+            items = "".join(
+                f'<li><a href="{esc(f["url"])}"><code>{esc(f["path"])}</code></a> '
+                f'<span class="muted">(skill {esc(f["principle"])}; {esc(f["why"])})</span></li>'
+                for f in e["link_files"]
             )
+            return f"<details><summary>{len(e['link_files'])} linked file{'s' if len(e['link_files']) != 1 else ''}</summary><ul>{items}</ul></details>"
+
+        link_rows = "".join(
+            f'<tr><td>{self.repo_cell(e)}'
+            + (' <span class="badge">only this folder</span>' if e["partial"] else "")
+            + f'</td><td>{esc(e["reason"])}</td>'
+            f'<td data-sort="{len(e["link_only_in"])}">{self.skills_cell(e["link_only_in"]) if e["link_only_in"] else "<span class=\"muted\">none, not used</span>"}</td>'
+            f"<td>{files_cell(e)}</td></tr>"
+            for e in self.link_only
+        )
+        unused_rows = "".join(
+            f'<tr><td>{self.repo_cell(e)}</td><td>{esc(e["role"])}</td><td>{esc("; ".join(e["licences"]))}</td></tr>'
+            for e in self.unused
+        )
         run = self.sdoc["research_run"]
         body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / Sources</nav>
-<h1>Source repos</h1>
-<p>The {len(self.sdoc["repos"])} public repos the principles were drawn from ({esc(run["id"])}, {esc(run["date"])}).
-Licences are as checked and may need your own review before you reuse anything; see
-<a href="{BLOB}ATTRIBUTIONS.md">ATTRIBUTIONS.md</a>. Curation lists are pointers to other sources and are never installed wholesale.</p>
+<h1>Sources and licences</h1>
+<p>Every skill was written from public repos whose licences allow adapting them. Sources that could not be adapted were never copied; they are only linked, and they are listed separately below.
+Licences were checked on {esc(self.licences["checked"])}. {esc(self.licences["disclaimer"])}</p>
+<div class="split">
+<div><h2>Text</h2><p>Skills, principles, guides and data: <strong>{esc(split["text"])}</strong>.</p></div>
+<div><h2>Code</h2><p>Scripts, this site and CI: <strong>{esc(split["code"])}</strong>.</p></div>
+</div>
+<p>See <a href="{BLOB}LICENSE.md">LICENSE.md</a>, <a href="{BLOB}CREDITS.md">CREDITS.md</a> (copyright notices and pinned commits) and <a href="{BLOB}ATTRIBUTIONS.md">ATTRIBUTIONS.md</a>.
+Each skill's <code>SOURCES.md</code> lists its files, pinned to a commit.</p>
+<ul class="lp-cards">
+<li class="lp-card"><h3>{len(self.adapted)}</h3><p>Adapted source repos</p></li>
+<li class="lp-card"><h3>{len(self.link_only)}</h3><p>Link-only source repos, whole or in part</p><p class="muted">{n_link_only_files} linked files across {sum(1 for p in self.principles if p["link_only"])} skills</p></li>
+<li class="lp-card"><h3>{len(self.unused)}</h3><p>Researched, not used</p></li>
+</ul>
+
+<h2 id="adapted">Adapted sources ({len(self.adapted)})</h2>
+<p>The licence allows adapting. The skill text is our own wording; the pinned commit is the version that was read. Repos marked <span class="badge">link-only folder</span> are also in the link-only list below, for one folder.</p>
+<div class="table-wrap">
+<table class="sortable">
+<thead><tr>
+<th scope="col" data-type="text">Repo</th>
+<th scope="col" data-type="text">Licence</th>
+<th scope="col" data-type="num">Skills adapted</th>
+<th scope="col" data-type="text">Pinned commit (opens its licence file)</th>
+</tr></thead>
+<tbody>
+{adapted_rows}
+</tbody>
+</table>
+</div>
+
+<div class="link-only" id="link-only">
+<h2>Link only: not copied or adapted ({len(self.link_only)})</h2>
+<p>No licence we can rely on, a proprietary or non-commercial licence, or a curation list. Nothing was copied or adapted from these. Where a skill leaned on one, its text was rewritten from adaptable sources and the link moved to &ldquo;Further reading (link only)&rdquo; in that skill's <code>SOURCES.md</code>.</p>
+<div class="table-wrap">
+<table class="sortable">
+<thead><tr>
+<th scope="col" data-type="text">Repo</th>
+<th scope="col" data-type="text">Licence situation</th>
+<th scope="col" data-type="num">Linked from skills</th>
+<th scope="col" data-type="text">What is linked</th>
+</tr></thead>
+<tbody>
+{link_rows}
+</tbody>
+</table>
+</div>
+</div>
+
+<h2 id="unused">Researched, not used ({len(self.unused)})</h2>
+<p>Read during research ({esc(run["id"])}, {esc(run["date"])}) but no skill was written from them. Nothing was copied.</p>
 <div class="table-wrap">
 <table class="sortable">
 <thead><tr>
 <th scope="col" data-type="text">Repo</th>
 <th scope="col" data-type="text">Role</th>
 <th scope="col" data-type="text">Licence</th>
-<th scope="col" data-type="num">Principles</th>
-<th scope="col" data-type="text">Pinned commit</th>
 </tr></thead>
 <tbody>
-{chr(10).join(rows)}
+{unused_rows}
 </tbody>
 </table>
 </div>
-<p class="muted">Machine-readable copy: <a href="data/sources.json">data/sources.json</a>.</p>"""
-        return page("Sources", body, 0, "sources.html")
+<p class="muted">Machine-readable copies: <a href="data/licences.json">licences.json</a>, <a href="data/mapping.json">mapping.json</a>, <a href="data/sources.json">sources.json</a>.</p>"""
+        return page("Sources and licences", body, 0, "sources.html", "The licence of every source repo, with link-only sources listed separately.")
 
     def guide_pages(self):
         out = {}

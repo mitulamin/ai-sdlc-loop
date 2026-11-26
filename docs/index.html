@@ -12,7 +12,7 @@
 <header class="site-header">
 <div class="wrap header-inner">
 <a class="brand" href="index.html">AI SDLC Loop</a>
-<nav aria-label="Main"><a href="index.html" aria-current="page">Home</a><a href="path.html">Learning path</a><a href="principles.html">All principles</a><a href="skills.html">Skills</a><a href="sources.html">Sources</a><a href="guides/index.html">Guides</a><a href="https://github.com/mitulamin/ai-sdlc-loop">GitHub</a></nav>
+<nav aria-label="Main"><a href="index.html" aria-current="page">Home</a><a href="path.html">Learning path</a><a href="principles.html">All principles</a><a href="skills.html">Skills</a><a href="sources.html">Sources and licences</a><a href="guides/index.html">Guides</a><a href="https://github.com/mitulamin/ai-sdlc-loop">GitHub</a></nav>
 </div>
 </header>
 <main id="main" class="wrap">
@@ -28,8 +28,10 @@ in 9 categories. Use them to adopt agentic tools with less trial and error, then
 </p>
 <dl class="lp-stats">
 <div><dt>Principles</dt><dd>103</dd></div>
+<div><dt>Skills</dt><dd>103</dd></div>
 <div><dt>Categories</dt><dd>9</dd></div>
 <div><dt>Source repos</dt><dd>41</dd></div>
+<div><dt>Merged IDs</dt><dd>5</dd></div>
 </dl>
 </section>
 
@@ -41,7 +43,8 @@ in 9 categories. Use them to adopt agentic tools with less trial and error, then
 <p>The ideas for that are scattered across dozens of public repos: skills, sub-agents, slash commands and rules files. Many say the same thing in different words. Some contradict each other. Some are risky to install. And if you load them all, their descriptions alone use up the context window before the agent does anything useful.</p>
 </div>
 <div>
-<p>So I had a research bot read 41 public repos and boil them down to 103 numbered principles in 9 categories. Each one is traceable to the repos it came from.</p>
+<p>So I had a research bot read 41 public repos and boil them down to 103 numbered principles in 9 categories, with one amalgamated skill for each. Each one is traceable to the repos it came from.</p>
+<p>The research first found 108 principles. 5 were duplicates and were merged into the principle that kept their content; IDs are never renumbered, so a merged ID still opens its survivor (<a href="principles/2.11.html">2.11 to 6.3</a>, <a href="principles/4.4.html">4.4 to 4.1</a>, <a href="principles/4.5.html">4.5 to 5.3</a>, <a href="principles/5.6.html">5.6 to 5.10</a>, <a href="principles/9.4.html">9.4 to 5.1</a>). See <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/MERGES.md">MERGES.md</a>.</p>
 <p>The principles are not the point. The point is the loop that produced them and the loop that keeps improving them. This repo is a base, not a finished product. Fork it, swap in your own principles, and let your own projects change it.</p>
 </div>
 </div>
@@ -94,9 +97,10 @@ in 9 categories. Use them to adopt agentic tools with less trial and error, then
 <h2 id="do">What you can do here</h2>
 <ul class="lp-cards lp-links">
 <li class="lp-card"><h3><a href="path.html">Follow the learning path</a></h3><p>Walk the 9 stages in order, from planning to retrospective.</p></li>
-<li class="lp-card"><h3><a href="principles.html">Explore the principles</a></h3><p>Search, filter and sort all 103. Each links to its sources.</p></li>
+<li class="lp-card"><h3><a href="principles.html">Explore the principles</a></h3><p>Search, filter and sort all 103. Each links to its skill and sources.</p></li>
 <li class="lp-card"><h3><a href="categories/plan-and-specify.html">Read the categories</a></h3><p>One page per category, with the principles that belong to it.</p></li>
-<li class="lp-card"><h3><a href="sources.html">Check the sources</a></h3><p>The 41 repos the principles came from, with their licences.</p></li>
+<li class="lp-card"><h3><a href="skills.html">See the skills</a></h3><p>One skill per principle, with its test app, phase and slot in the run order.</p></li>
+<li class="lp-card"><h3><a href="sources.html">Check the sources and licences</a></h3><p>The licence of every source repo, with link-only sources listed separately.</p></li>
 <li class="lp-card"><h3><a href="guides/index.html">Read the guides</a></h3><p>Plain-language guides to the principles.</p></li>
 <li class="lp-card"><h3><a href="#start">Start a project</a></h3><p>Copy the template and run your first loop.</p></li>
 </ul>
@@ -128,9 +132,9 @@ Details in <a href="https://github.com/mitulamin/ai-sdlc-loop#why-gplv3-and-cc-b
 </main>
 <footer class="site-footer">
 <div class="wrap">
-<p>AI SDLC Loop. Text is CC BY-SA 4.0 and code, including this site, is GPL-3.0; the project template is MIT.
+<p>AI SDLC Loop. Text and data, including the data copies in <code>docs/data/</code>, are CC BY-SA 4.0; code, including this site, is GPL-3.0; the project template is MIT.
 See <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/LICENSE.md">LICENSE.md</a> and <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/CREDITS.md">CREDITS.md</a>.
-No trackers, no external scripts. Generated from <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/principles.json">data/principles.json</a>.</p>
+No trackers, no external scripts. Generated from <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/">data/</a> by <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/scripts/build-site.py">scripts/build-site.py</a>.</p>
 </div>
 </footer>
 <script src="assets/site.js" defer></script>
