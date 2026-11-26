@@ -144,8 +144,8 @@ def page(title, body, depth, active=None, description=""):
 </main>
 <footer class="site-footer">
 <div class="wrap">
-<p>{SITE_NAME}. Written content is CC BY-SA 4.0 and code is GPL-3.0; the project template is MIT.
-See <a href="{REPO_URL}#readme">the README</a> and <a href="{REPO_URL}/blob/main/LICENSE-CONTENT">LICENSE-CONTENT</a>.
+<p>{SITE_NAME}. Text is CC BY-SA 4.0 and code, including this site, is GPL-3.0; the project template is MIT.
+See <a href="{BLOB}LICENSE.md">LICENSE.md</a> and <a href="{BLOB}CREDITS.md">CREDITS.md</a>.
 No trackers, no external scripts. Generated from <a href="{BLOB}data/principles.json">data/principles.json</a>.</p>
 </div>
 </footer>
@@ -159,17 +159,73 @@ def cat_link(cat, up=""):
     return f'<a href="{up}categories/{esc(cat["slug"])}.html">{esc(cat["name"])}</a>'
 
 
+def slugify(name):
+    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+
+
+def site_view(pdoc, sdoc, mapping, licences):
+    """Shape the kit's data/principles.json into the fields the pages use.
+
+    A principle's sources are the repos of its primary source files in
+    data/mapping.json, labelled as in data/sources.json where the repo is
+    listed there and by owner/repo otherwise.
+    """
+    cats = [{"number": c["id"], "slug": slugify(c["name"]), "name": c["name"]} for c in pdoc["categories"]]
+    slug_by_id = {c["number"]: c["slug"] for c in cats}
+    repo_by_name = {f'{r["owner"]}/{r["repo"]}'.lower(): r for r in sdoc["repos"]}
+    repo_by_label = {lab: r for r in sdoc["repos"] for lab in r["labels"]}
+    principles = []
+    for p in pdoc["principles"]:
+        labels = []
+        for s in mapping[p["id"]]["sources"]:
+            if not s["primary"]:
+                continue
+            r = repo_by_name.get(s["repo"].lower())
+            if r:
+                lab = r["labels"][0] if r["labels"] else s["repo"]
+                repo_by_label.setdefault(lab, r)
+            else:
+                lab = s["repo"]
+                owner, _, repo = s["repo"].partition("/")
+                info = licences["repos"].get(s["repo"], {})
+                repo_by_label.setdefault(lab, {
+                    "owner": owner, "repo": repo, "url": f"https://github.com/{s['repo']}",
+                    "licence": ", ".join(info.get("licences_seen", [])) or s["licence"], "labels": [lab],
+                })
+            if lab not in labels:
+                labels.append(lab)
+        aliases = [a["id"] for a in p["aliases"]]
+        notes = " ".join(f'Merged duplicate {a["id"]}: {a["statement"]}.' for a in p["aliases"])
+        if p["previous_statement"]:
+            notes += f' Previous wording: {p["previous_statement"]}.'
+        principles.append({
+            "id": p["id"],
+            "category": slug_by_id[p["category"]],
+            "number": pid_key(p["id"])[1],
+            "statement": p["statement"],
+            "sources": labels,
+            "status": "active",
+            "provenance": {"origin": "amalgamated-skills kit", "research_run": pdoc["version"], "merged_from": aliases, "notes": notes.strip()},
+            "aliases": aliases,
+            "distinct_from": (
+                [{"id": p["partial_overlap_with"], "difference": "Partial overlap; kept as a separate principle."}]
+                if p["partial_overlap_with"] else []
+            ),
+            "skill_folder": p["skill_folder"],
+        })
+    return cats, principles, repo_by_label
+
+
 class Site:
     def __init__(self):
         self.pdoc = load(DATA / "principles.json")
         self.sdoc = load(DATA / "sources.json")
-        self.cats = sorted(self.pdoc["categories"], key=lambda c: c["number"])
+        cats, principles, self.repo_by_label = site_view(
+            self.pdoc, self.sdoc, load(DATA / "mapping.json"), load(DATA / "licences.json")
+        )
+        self.cats = sorted(cats, key=lambda c: c["number"])
         self.cat_by_slug = {c["slug"]: c for c in self.cats}
-        self.principles = sorted(self.pdoc["principles"], key=lambda p: pid_key(p["id"]))
-        self.repo_by_label = {}
-        for r in self.sdoc["repos"]:
-            for lab in r["labels"]:
-                self.repo_by_label[lab] = r
+        self.principles = sorted(principles, key=lambda p: pid_key(p["id"]))
         self.by_cat = {c["slug"]: [p for p in self.principles if p["category"] == c["slug"]] for c in self.cats}
 
     def source_chips(self, p, up):
@@ -480,7 +536,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 <p>This principle was drawn from these repos. Licences are as checked on the <a href="../sources.html">sources page</a>.</p>
 <ul class="sources">{"".join(srcs)}</ul>
 <h2>Amalgamated skill</h2>
-<p>Not written yet. When it exists it will be linked here.</p>
+<p><a href="{BLOB}{esc(p["skill_folder"])}/SKILL.md">{esc(p["skill_folder"])}</a>, with its sources and their licences in <a href="{BLOB}{esc(p["skill_folder"])}/SOURCES.md">SOURCES.md</a>.</p>
 <p class="muted"><a href="{BLOB}principles/{esc(p["id"])}.md">View this principle as markdown on GitHub</a></p>
 {pager}"""
         return page(f'{p["id"]} {p["statement"]}', body, 1, "principles.html", p["statement"])
@@ -536,7 +592,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
     def sources_page(self):
         rows = []
         for r in sorted(self.sdoc["repos"], key=lambda r: (r["owner"].lower(), r["repo"].lower())):
-            used = sum(1 for p in self.principles if any(lab in r["labels"] for lab in p["sources"]))
+            used = sum(1 for p in self.principles if any(self.repo_by_label.get(lab) is r for lab in p["sources"]))
             pin = r["pinned_sha"][:7] if r["pinned_sha"] else "not pinned yet"
             rows.append(
                 f'<tr><td><a href="{esc(r["url"])}">{esc(r["owner"])}/{esc(r["repo"])}</a></td>'
