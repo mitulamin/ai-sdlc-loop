@@ -154,7 +154,7 @@ You can also use this repo as a GitHub template (**Use this template** on the re
 
 This is not a one-off. The research should be re-run about every six months, because the sources move, new ones appear and some disappear.
 
-Every source repo is pinned to a commit in `data/sources.json`. `scripts/refresh-sources.py` compares each pin with the upstream head and tells you what changed. Principles and skills carry their provenance, data files have versioned schemas, and generated files are kept apart from hand-written ones so a refresh does not overwrite human edits. Every merge, drop and change is logged in `CHANGELOG.md` and `data/changelog.json`.
+Every source file a skill was written from is pinned to a commit in its `SOURCES.md` and in `data/licences.json`. The research source repos are listed in `data/sources.json`, where repo-level pins are still to be set; `scripts/refresh-sources.py` compares each pin with the upstream head and tells you what changed. Principles record what was merged into them, skills list their sources, data files have schemas, and generated files are kept apart from hand-written ones so a refresh does not overwrite human edits. Every merge, drop and change is logged in `CHANGELOG.md` and `data/changelog.json`.
 
 The full process is in [UPDATING.md](UPDATING.md).
 

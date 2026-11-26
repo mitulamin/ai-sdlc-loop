@@ -10,7 +10,7 @@ This kit uses a split licence.
 | Also code, under the same licence: the JSON schemas in `data/schemas/` and the workflows in `.github/workflows/` | GNU GPL v3 only | `LICENSES/GPL-3.0-only.txt` |
 | The project template: everything under `template/`, code and writing, so a project made with `scripts/new-project.sh` starts under MIT | MIT | `template/LICENSE` |
 
-The root `LICENSE` file is a short pointer to this file. The principle statements shown on the generated site pages in `docs/` stay CC BY-SA 4.0 text.
+The root `LICENSE` file is a short pointer to this file. The principle statements shown on the generated site pages in `docs/`, and the data copies in `docs/data/`, stay CC BY-SA 4.0 text.
 
 Rules of thumb:
 - If you reuse or adapt the text, you must credit it, link the licence, say what you changed, and share your version under CC BY-SA 4.0. Credit the original authors too: see `CREDITS.md`.
