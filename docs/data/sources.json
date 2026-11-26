@@ -3,7 +3,7 @@
   "research_run": {
     "id": "run-1",
     "date": "2026-11-26",
-    "description": "Initial research by Rex (Grok bot): 41 repos, 108 principles."
+    "description": "Initial research by Rex (Grok bot): 41 repos, 108 principles (103 after the dedupe of 2026-11-26)."
   },
   "repos": [
     {

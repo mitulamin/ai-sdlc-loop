@@ -21,16 +21,15 @@ One file per principle. The list lives in [data/principles.json](../data/princip
 - [2.2](2.2.md) Choose seams deliberately; the seam is where tests and adapters attach
 - [2.3](2.3.md) Keep framework, persistence and vendor details out of business logic, behind adapters
 - [2.4](2.4.md) Separate orchestration (business rules) from reusable service operations
-- [2.5](2.5.md) Add a layer or abstraction only for a concrete benefit
+- [2.5](2.5.md) At design time, add a layer, interface or abstraction only when you can name the concrete benefit it brings today
 - [2.6](2.6.md) Record significant decisions as ADRs
 - [2.7](2.7.md) Design for failure: explicit timeouts, bounded retries with backoff, circuit breakers, bulkheads
 - [2.8](2.8.md) Bound every queue, cache, pool and result set, and decide what happens when full
 - [2.9](2.9.md) Define the contract first
 - [2.10](2.10.md) Use one consistent error shape across endpoints
-- [2.11](2.11.md) Validate input at the boundary; treat external responses as untrusted too
 - [2.12](2.12.md) Prefer adding over changing; assume every observable behaviour is depended on (Hyrum's law)
 - [2.13](2.13.md) Make retried writes safe with idempotency keys derived from intent
-- [2.14](2.14.md) Simple by default, complexity opt-in; avoid boolean flag parameters
+- [2.14](2.14.md) Design the API so the simple case is the default and advanced behaviour is opt-in, not switched on by boolean flags
 - [2.15](2.15.md) State failure modes, retryability, timeouts and versioning in the contract
 - [2.16](2.16.md) Keep a glossary of the domain language; one term per concept, used in code and tests
 - [2.17](2.17.md) Split the domain into bounded contexts and map how they relate
@@ -39,11 +38,11 @@ One file per principle. The list lives in [data/principles.json](../data/princip
 
 ## 3. Code craft
 
-- [3.1](3.1.md) Write the minimum code that solves the problem; nothing speculative
+- [3.1](3.1.md) When you write code, write the minimum that solves the stated problem, with no speculative features, options or hooks
 - [3.2](3.2.md) Make surgical changes: every changed line traces to the request
 - [3.3](3.3.md) Match the existing style and conventions
 - [3.4](3.4.md) Keep functions small and at one level of abstraction
-- [3.5](3.5.md) Keep parameters few; model the concept instead of passing flags
+- [3.5](3.5.md) Keep parameter lists short: when a signature grows, introduce a named type for the concept or split the function
 - [3.6](3.6.md) Separate commands from queries; no hidden side effects
 - [3.7](3.7.md) Comments explain why, never narrate what
 - [3.8](3.8.md) Prefer clarity over cleverness
@@ -52,33 +51,30 @@ One file per principle. The list lives in [data/principles.json](../data/princip
 - [3.11](3.11.md) Name the code smell and apply its standard remedy
 - [3.12](3.12.md) Use what's installed; never add a dependency for a few lines
 - [3.13](3.13.md) Never cut boundary validation, data-loss handling or security to save code
-- [3.14](3.14.md) One thing at a time, in vertical slices, keeping the build green
+- [3.14](3.14.md) Build in thin vertical slices, one at a time, each leaving the build green
 
 ## 4. Verify (testing)
 
-- [4.1](4.1.md) Write a failing test first and watch it fail
+- [4.1](4.1.md) Write one failing test first and watch it fail, then write the minimal code to pass; one seam per cycle, never all tests up front.
 - [4.2](4.2.md) Test behaviour through public interfaces, not implementation details
 - [4.3](4.3.md) No tautological tests that recompute the expected value the way the code does
-- [4.4](4.4.md) One seam, one test, one minimal implementation per cycle; never write all tests first
-- [4.5](4.5.md) Start every bug fix with a test that reproduces it
 - [4.6](4.6.md) Review suites for mock abuse, brittleness and coverage illusions; coverage is not quality
 - [4.7](4.7.md) Balance the test pyramid by size and cost
 - [4.8](4.8.md) Treat tests as production code: readable and deterministic
-- [4.9](4.9.md) No completion claims without fresh verification evidence
+- [4.9](4.9.md) Do not claim the work is done until you have just run the verification and read its output
 - [4.10](4.10.md) Mark anything you couldn't test as untested, with the reason; never skip silently
 
 ## 5. Debug and observe
 
-- [5.1](5.1.md) No fixes without root-cause investigation first
+- [5.1](5.1.md) No fixes without root-cause investigation first: trace back to the original trigger, not where the symptom showed up.
 - [5.2](5.2.md) Build a tight, deterministic pass/fail feedback loop before hunting the bug
-- [5.3](5.3.md) Reproduce, localise, reduce, fix, guard against recurrence, verify end to end
-- [5.4](5.4.md) Stop the line: don't build on a failing test or broken build
+- [5.3](5.3.md) Reproduce the bug with a failing test first, then localise, reduce, fix, keep the test as a guard, and verify end to end.
+- [5.4](5.4.md) When a test fails or the build breaks, stop and fix it before writing anything new
 - [5.5](5.5.md) After three failed fixes, question the architecture
-- [5.6](5.6.md) Redact secrets in any debug output you show
 - [5.7](5.7.md) Define what 'working' means before instrumenting
 - [5.8](5.8.md) Use structured logs with consistent levels
 - [5.9](5.9.md) Create a correlation ID at the boundary and attach it to every log line
-- [5.10](5.10.md) Never log secrets, tokens or full personal data
+- [5.10](5.10.md) Never log or display secrets, tokens or full personal data, including in debug output.
 - [5.11](5.11.md) Keep metric label cardinality low
 - [5.12](5.12.md) Every signal should help detect, localise or explain a problem
 - [5.13](5.13.md) Sample in the collector pipeline, not the SDK
@@ -89,7 +85,7 @@ One file per principle. The list lives in [data/principles.json](../data/princip
 
 - [6.1](6.1.md) Threat-model before hardening
 - [6.2](6.2.md) Sort actions into always do, ask first and never do
-- [6.3](6.3.md) Validate all external input, parameterise queries, encode output
+- [6.3](6.3.md) Validate all external input at the boundary, treat external API responses as untrusted too, parameterise queries and encode output.
 - [6.4](6.4.md) Never commit secrets; never trust client-side validation
 - [6.5](6.5.md) Report only issues that cross a real trust boundary, with evidence, a safe reproduction and the smallest fix
 - [6.6](6.6.md) Have a separate agent verify each finding before it is reported
@@ -98,28 +94,28 @@ One file per principle. The list lives in [data/principles.json](../data/princip
 
 ## 7. Review and ship
 
-- [7.1](7.1.md) Review early and often, using a separate reviewer subagent
+- [7.1](7.1.md) Review the work at the end of each phase, using a separate reviewer subagent that did not write it
 - [7.2](7.2.md) Review on five axes: correctness, readability, architecture, security, performance
 - [7.3](7.3.md) Approve when a change improves code health, not when it is perfect
 - [7.4](7.4.md) Review against both the standards and the spec, in parallel
 - [7.5](7.5.md) Rank findings by severity (P0-P3)
-- [7.6](7.6.md) Keep each change small and about one thing
+- [7.6](7.6.md) Keep each change, meaning one commit or pull request, small and about one thing, so it is easy to review and to revert
 - [7.7](7.7.md) One worktree and branch per task and per agent
 - [7.8](7.8.md) Never commit to main or force-push
 - [7.9](7.9.md) No quality gate is skippable: fix the code, don't disable the check
-- [7.10](7.10.md) Shift left, and ship in small, frequent batches
+- [7.10](7.10.md) Shift checks left and release in small, frequent batches, so problems show up early and each release carries little risk
 - [7.11](7.11.md) Give feature flags a lifecycle that ends in removing them
-- [7.12](7.12.md) Ship with before-and-after proof
+- [7.12](7.12.md) Attach before-and-after proof to each change you ship, such as test output, screenshots or measurements, so a reviewer can see the effect
 
 ## 8. Agent operations
 
-- [8.1](8.1.md) Load only the context the task needs, such as the relevant spec section
+- [8.1](8.1.md) At task time, give the agent only the context that task needs, such as the relevant spec section
 - [8.2](8.2.md) Keep one short always-on rules file: stack, commands, conventions, boundaries
-- [8.3](8.3.md) Progressive disclosure: short description always, body on trigger, references on demand
+- [8.3](8.3.md) When you write a skill, layer it: a short description that is always loaded, a body loaded on trigger, and references loaded on demand
 - [8.4](8.4.md) The skill description is the trigger; put the 'when to use' there
-- [8.5](8.5.md) Test skills with evals before trusting them
+- [8.5](8.5.md) Run a new or changed skill against evals before you rely on it
 - [8.6](8.6.md) Summarise progress when the context gets long
-- [8.7](8.7.md) Use fresh-context subagents for fact-finding and review
+- [8.7](8.7.md) Send fact-finding and bulk reading to fresh-context subagents and take back only a short summary, so the main context stays small
 - [8.8](8.8.md) Write reports to files, not into the chat
 - [8.9](8.9.md) Answer first, cut ceremony, keep code and errors verbatim
 - [8.10](8.10.md) Don't fight the harness: detect existing isolation and use native tools first
@@ -129,12 +125,11 @@ One file per principle. The list lives in [data/principles.json](../data/princip
 - [9.1](9.1.md) When the reviewer missed a mistake, give the reviewer a new rule; if the mistake is mechanical, build a lint, hook or CI check instead
 - [9.2](9.2.md) Enforce standards at review, not by loading them into the implementer's context
 - [9.3](9.3.md) Remove or clarify rules that don't change behaviour
-- [9.4](9.4.md) Trace back to the original trigger, not the place the symptom showed up
 - [9.5](9.5.md) Ask what conditions allowed the failure, not who caused it (blameless, 5 whys)
 - [9.6](9.6.md) Group failures by the mechanism behind them, not by error text
 - [9.7](9.7.md) Before hardening a skill, reproduce the failure as a baseline scenario and record the agent's excuses; then close the loophole and re-test
 - [9.8](9.8.md) Keep each learned edit small, to one surface, and keep behaviour that already passes
-- [9.9](9.9.md) Accept a rule change only if it measurably helps on held-out cases
+- [9.9](9.9.md) Accept a rule change coming out of a retrospective only if it measurably improves results on held-out cases it was not tuned on
 - [9.10](9.10.md) A human approves each learned change before it goes live
 - [9.11](9.11.md) Capture corrections as they happen; process them later in a batch
 - [9.12](9.12.md) Keep a record of every accepted and rejected edit

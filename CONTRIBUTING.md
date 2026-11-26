@@ -9,7 +9,7 @@ Small pull requests, one change each. Run `scripts/build-principles.py --check` 
 3. Run `scripts/build-principles.py`. Commit the generated `principles/` files.
 4. Add an entry to `data/changelog.json` and `CHANGELOG.md`.
 
-Do not renumber or delete principles. Merge or drop them by setting `status`. See [UPDATING.md](UPDATING.md).
+Do not renumber principles. Drop one by setting `status` to `dropped`. Merge one by folding it into the survivor, listing the old ID in the survivor's `aliases` and `provenance.merged_from`, and adding a row to [MERGES.md](MERGES.md). See [UPDATING.md](UPDATING.md).
 
 ## Add a source repo
 

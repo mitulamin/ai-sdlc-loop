@@ -434,6 +434,23 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
             else "No merges."
         )
         notes = f"<p>{esc(prov['notes'])}</p>" if prov["notes"] else ""
+        aliases = (
+            "<dt>Also known as</dt><dd>"
+            + ", ".join(f'<a href="{esc(a)}.html">{esc(a)}</a>' for a in p.get("aliases", []))
+            + " (merged into this principle)</dd>"
+            if p.get("aliases")
+            else ""
+        )
+        differs = (
+            "<h2>How it differs from related principles</h2>\n<ul>"
+            + "".join(
+                f'<li><a href="{esc(d["id"])}.html">{esc(d["id"])}</a>: {esc(d["difference"])}</li>'
+                for d in p["distinct_from"]
+            )
+            + "</ul>"
+            if p.get("distinct_from")
+            else ""
+        )
         prev = self.principles[idx - 1] if idx > 0 else None
         nxt = self.principles[idx + 1] if idx + 1 < len(self.principles) else None
         pager = '<nav class="pager" aria-label="Neighbouring principles">'
@@ -456,8 +473,9 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 <dt>Category</dt><dd><a href="../categories/{esc(c["slug"])}.html">{esc(c["name"])}</a></dd>
 <dt>Status</dt><dd>{esc(p["status"])}</dd>
 <dt>Origin</dt><dd>{esc(prov["origin"])}, research {esc(prov["research_run"])}. {merged}</dd>
-</dl>
+{aliases}</dl>
 {notes}
+{differs}
 <h2>Sources</h2>
 <p>This principle was drawn from these repos. Licences are as checked on the <a href="../sources.html">sources page</a>.</p>
 <ul class="sources">{"".join(srcs)}</ul>
@@ -466,6 +484,14 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 <p class="muted"><a href="{BLOB}principles/{esc(p["id"])}.md">View this principle as markdown on GitHub</a></p>
 {pager}"""
         return page(f'{p["id"]} {p["statement"]}', body, 1, "principles.html", p["statement"])
+
+    def alias_page(self, alias, target):
+        body = f"""<p class="pid-big">Principle {esc(alias)}</p>
+<h1>Merged into {esc(target["id"])}</h1>
+<p>Principle {esc(alias)} was merged into <a href="{esc(target["id"])}.html">principle {esc(target["id"])}</a>: {esc(target["statement"])}</p>
+<p>{esc(target["provenance"]["notes"])} See <a href="{BLOB}MERGES.md">MERGES.md</a>.</p>"""
+        refresh = f'<meta http-equiv="refresh" content="0; url={esc(target["id"])}.html">\n<link rel="canonical" href="{esc(target["id"])}.html">\n'
+        return page(f"Principle {alias} (merged)", body, 1, "principles.html").replace("</head>", refresh + "</head>", 1)
 
     def table_page(self):
         rows = []
@@ -587,6 +613,8 @@ Licences are as checked and may need your own review before you reuse anything; 
             files[f"categories/{c['slug']}.html"] = self.category_page(i)
         for i, p in enumerate(self.principles):
             files[f"principles/{p['id']}.html"] = self.principle_page(i)
+            for alias in p.get("aliases", []):
+                files[f"principles/{alias}.html"] = self.alias_page(alias, p)
         files.update(self.guide_pages())
         files["data/principles.json"] = canonical_json(self.pdoc)
         files["data/sources.json"] = canonical_json(self.sdoc)

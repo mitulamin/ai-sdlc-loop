@@ -6,7 +6,7 @@ This repo is meant to be refreshed about every six months, and sooner if a sourc
 
 1. **Pin everything.** Every source repo has a commit SHA in `data/sources.json`. Every link in a skill's `SOURCES.md` is pinned to a commit. Nothing points at a moving branch.
 2. **Keep generated and hand-written content apart.** A refresh may rewrite generated files. It must never touch hand-written ones.
-3. **IDs are permanent.** A principle ID is never renumbered or reused. Merged and dropped principles stay in `data/principles.json` with a status.
+3. **IDs are permanent.** A principle ID is never renumbered or reused. A dropped principle stays in `data/principles.json` with a status. A merged principle is removed from the list and its ID lives on as an alias of the survivor, so old links still resolve. Every merge is logged in `MERGES.md`.
 4. **Log every change.** Merges, drops, additions, edits and re-pins go in `data/changelog.json` and `CHANGELOG.md`.
 5. **Version the data.** Every data file has a `schema_version`, and every schema lives in `data/schemas/`.
 6. **A human approves the result.** A refresh is a pull request. It is never pushed straight to main.
@@ -24,6 +24,7 @@ This repo is meant to be refreshed about every six months, and sooner if a sourc
 | `data/refresh/<run-id>/` | Generated reports and proposals from a refresh | Refresh tooling; reviewed, then kept as the audit trail |
 | `skills/<id>-<slug>/SKILL.md` | Drafted from sources, then hand-edited | People. A refresh only produces a proposal for it, never an overwrite. |
 | `skills/<id>-<slug>/SOURCES.md` | Pinned links and dedupe summary | Refresh proposes; a person accepts |
+| `MERGES.md` | Hand-written log of merged principles | People |
 | `README.md`, `UPDATING.md`, `guides/`, `agents/`, `commands/` | Hand-written | People |
 
 Rules of thumb:
@@ -76,7 +77,8 @@ For each principle whose sources changed, update that skill's source list and de
 ### 5. Change the principles
 
 - **Add:** append a new number in the category. Set `provenance.origin` to `refresh` and `provenance.research_run` to the new run.
-- **Merge:** only if truly duplicate. Keep the clearer one, set `provenance.merged_from` on it, set the other's `status` to `merged`, and log both IDs.
+- **Merge:** only if truly duplicate. Keep the clearer one. Remove the other from `principles`, add its ID to the survivor's `aliases` and `provenance.merged_from`, combine the sources (no repeats) and fold the useful wording into the survivor's statement. Add a row to `MERGES.md` and a `merge` entry to `data/changelog.json`. `scripts/build-principles.py` and `scripts/build-site.py` write a small redirect page for each alias.
+- **Overlap, not duplicate:** keep both. Sharpen the wording and add a `distinct_from` note to each saying when to use it and how it differs from its partner.
 - **Drop:** set `status` to `dropped` and give the reason in `provenance.notes`.
 - **Edit wording:** allowed. Log it as an `edit`.
 
@@ -106,7 +108,7 @@ scripts/build-principles.py --check
 ### 9. Log and open the PR
 
 1. Add entries to `data/changelog.json` (types: `add`, `edit`, `merge`, `drop`, `pin`, `repin`, `schema`).
-2. Add a dated section to `CHANGELOG.md`.
+2. Add a dated section to `CHANGELOG.md`, and `MERGES.md` if you merged anything.
 3. Open a pull request. Say what moved, what was merged or dropped, and what needs a decision.
 
 ## Provenance
