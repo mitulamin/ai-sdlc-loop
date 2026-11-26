@@ -25,14 +25,15 @@ This repo is meant to be refreshed about every six months, and sooner if a sourc
 | `skills/<id>-<slug>/SKILL.md` | Drafted from sources, then hand-edited | People. A refresh only produces a proposal for it, never an overwrite. |
 | `skills/<id>-<slug>/SOURCES.md` | Pinned links and dedupe summary | Refresh proposes; a person accepts |
 | `MERGES.md` | Hand-written log of merged principles | People |
-| `README.md`, `UPDATING.md`, `guides/`, `agents/`, `commands/` | Hand-written | People |
+| `agents/*.md`, `commands/*.md` | Generated from `data/skill-principle-map.json` and the skills' `SKILL.md` | `scripts/build-agents.py`. The `GENERATED` marker is the first line of each README and the line after the front matter in the other files. `--check` catches hand edits and stale files. |
+| `README.md`, `UPDATING.md`, `guides/` | Hand-written | People |
 
 Rules of thumb:
 
-- If a file starts with the `GENERATED` marker, do not edit it. Change the input and regenerate.
+- If a file starts with the `GENERATED` marker, or has it right after its front matter, do not edit it. Change the input and regenerate.
 - If you want to add a human note to a generated page, put it in `data/notes/` and rebuild.
 - A refresh writes only to `data/refresh/<run-id>/`, to the pins in `data/sources.json`, and to generated files. Anything else it wants to change is written as a proposal in `data/refresh/<run-id>/` for a person to apply.
-- `scripts/build-principles.py --check` fails if a generated file is out of date, and `scripts/validate.py` checks the counts, aliases, slots and licences. Run both before every commit. CI runs `--check`.
+- `scripts/build-principles.py --check` and `scripts/build-agents.py --check` fail if a generated file is out of date, and `scripts/validate.py` checks the counts, aliases, slots and licences. Run all three before every commit. CI runs `--check`.
 
 ## The playbook
 
@@ -103,6 +104,8 @@ Only re-pin a repo whose changes you have actually handled.
 ```bash
 scripts/build-principles.py
 scripts/build-principles.py --check
+scripts/build-agents.py
+scripts/build-agents.py --check
 ```
 
 ### 9. Log and open the PR

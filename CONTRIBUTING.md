@@ -1,6 +1,6 @@
 # Contributing
 
-Small pull requests, one change each. Run `scripts/build-principles.py --check` and `scripts/validate.py` before you push.
+Small pull requests, one change each. Run `scripts/build-principles.py --check`, `scripts/build-agents.py --check` and `scripts/validate.py` before you push.
 
 ## Add or change a principle
 
@@ -35,7 +35,7 @@ Then update the table in the README, `scripts/README.md` and `CHANGELOG.md`.
 
 ## Add a skill
 
-One skill per principle, in `skills/<id>-<slug>/`, with `SKILL.md` (front matter with `principle:` and `licence: CC-BY-SA-4.0`) and `SOURCES.md` (every source file pinned to a commit, with its licence). A source with no usable licence goes under "Further reading (link only)" and nothing from it is copied or adapted. Register the folder in `data/skill-principle-map.json`, then run `scripts/validate.py`.
+One skill per principle, in `skills/<id>-<slug>/`, with `SKILL.md` (front matter with `principle:` and `licence: CC-BY-SA-4.0`) and `SOURCES.md` (every source file pinned to a commit, with its licence). A source with no usable licence goes under "Further reading (link only)" and nothing from it is copied or adapted. Register the folder in `data/skill-principle-map.json`, then run `scripts/build-agents.py` to wire it into the agents and commands for its phase, and `scripts/validate.py`.
 
 ## Which licence your contribution is under
 
