@@ -4,6 +4,19 @@ All notable changes to this repo. The machine-readable version of the data chang
 
 ## Unreleased
 
+### Wired agents and commands to skills by ID
+
+Added:
+
+- `scripts/build-agents.py`, which generates `agents/` and `commands/` from `data/skill-principle-map.json` and each skill's `SKILL.md`. `--check` fails if a generated file is stale, or names a retired or unknown principle ID.
+- `agents/coordinator.md`: the only agent the human talks to. It loads the Harness skills (8.x) and can look up all 103 principles. Loops run on their own, with at most three FAILs in a row per phase. The human is asked for feedback only at the end of the cycle, and that feedback goes to `/retro` and the Learn skills (9.x).
+- A producer and a strictly adversarial reviewer for each of the nine phases in the map: Harness, Plan, Design, Build, Verify, Debug, Secure, Review & ship and Learn. A phase loads the skills whose phase is that phase, plus the skills in the phase's main category, so the Debug agents also load 5.4, 5.10 and 5.15. Producers load each skill's When to use, Do and Don't lists together, and Steps. Reviewers load only the adversarial reviewer checks and the Don't list, start with a FAIL verdict, and write P0 to P3 findings to a file. Each agent's front matter lists `skills` (loaded) and `principles` (lookup: its skills, their partial-overlap partners and the Harness skills).
+- `commands/plan.md`, `design.md`, `build.md`, `verify.md` (Verify, then Debug for what fails), `review.md` (Secure, then Review & ship), `ship.md` (Review & ship) and `retro.md` (Learn). Each one lists the skills for its phases. Harness has no command: the coordinator runs it.
+
+Changed:
+
+- `README.md`, `UPDATING.md`, `CONTRIBUTING.md` and `scripts/README.md` now say that `agents/` and `commands/` are generated, and list `scripts/build-agents.py --check` with the other pre-commit checks.
+
 ### Imported the amalgamated-skills-103 kit
 
 The kit already contains the dedupe (108 principles to 103) and the licence cleanup, and supersedes the earlier drafts. See [IMPORT.md](IMPORT.md) and [MERGES.md](MERGES.md).
