@@ -7,8 +7,6 @@ category: debug-and-observe
 aliases: ["5.6"]
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 8
-link_only_sources: 2
 ---
 
 # 5.10 Never log secrets
@@ -52,7 +50,7 @@ Addy observability-and-instrumentation and security-and-hardening, ciembor relea
 
 ## Sources
 
-8 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Further reading (link only)
 
@@ -65,5 +63,5 @@ These sources have no usable licence for copying or adapting, so nothing in this
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Secure
-- Test order: slot 73 of 103
+- Test order: slot 73
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

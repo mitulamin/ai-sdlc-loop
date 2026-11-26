@@ -7,8 +7,6 @@ category: design-and-architecture
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 8
-link_only_sources: 0
 ---
 
 # 2.16 Domain glossary
@@ -49,11 +47,11 @@ Pocock domain-modeling (CONTEXT.md glossary), ciembor DDD/Distilled (ubiquitous 
 
 ## Sources
 
-8 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Design
-- Test order: slot 58 of 103
+- Test order: slot 58
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

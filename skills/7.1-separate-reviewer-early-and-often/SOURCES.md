@@ -5,7 +5,7 @@ Licence status: clean.
 
 ## Dedupe summary
 
-Superpowers requesting-code-review (with code-reviewer.md) and subagent-driven-development, Pocock code-review and many wshobson code-reviewer copies (six identical files) agree: a separate reviewer subagent after each task. PARTIAL overlap with 8.7; proposed sharpening: 7.1 owns review, 8.7 owns fact-finding.
+Superpowers requesting-code-review (with code-reviewer.md) and subagent-driven-development, Pocock code-review and many wshobson code-reviewer copies (identical files) agree: a separate reviewer subagent after each task. PARTIAL overlap with 8.7; proposed sharpening: 7.1 owns review, 8.7 owns fact-finding.
 
 ## Adapted sources (licence-clean)
 

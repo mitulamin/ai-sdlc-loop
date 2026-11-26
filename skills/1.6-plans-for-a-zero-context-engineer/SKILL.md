@@ -7,8 +7,6 @@ category: plan-and-specify
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 8
-link_only_sources: 0
 ---
 
 # 1.6 Plans for a zero context engineer
@@ -51,11 +49,11 @@ Superpowers writing-plans/executing-plans, spec-kit plan and EGM implementation-
 
 ## Sources
 
-8 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App A (CLI tool)
 - Phase: Plan
-- Test order: slot 14 of 103
+- Test order: slot 14
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

@@ -1,14 +1,12 @@
 ---
 name: eval-skills-before-trusting
-description: "Use when before adopting any skill (including these 103). Amalgamated skill for principle 8.5 (Agent operations)."
+description: "Use when before adopting any skill (including the skills in this repo). Amalgamated skill for principle 8.5 (Agent operations)."
 principles: ["8.5"]
 principle: "8.5 Run a new or changed skill against evals before you rely on it"
 category: agent-operations
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 17
-link_only_sources: 0
 ---
 
 # 8.5 Eval skills before trusting
@@ -17,7 +15,7 @@ Principle 8.5 (Agent operations): Run a new or changed skill against evals befor
 
 ## When to use
 
-Before adopting any skill (including these 103).
+Before adopting any skill (including the skills in this repo).
 
 ## Producer: dos and don'ts
 
@@ -47,11 +45,11 @@ Anthropic skill-creator with its grader/comparator/analyzer agents (blind compar
 
 ## Sources
 
-17 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
-- Test app: All three runs (harness and Learn)
+- Test app: All runs (harness and Learn)
 - Phase: Harness
-- Test order: slot 5 of 103
+- Test order: slot 5
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

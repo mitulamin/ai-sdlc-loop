@@ -7,8 +7,6 @@ category: secure
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 9
-link_only_sources: 0
 ---
 
 # 6.8 Audit dependencies before release
@@ -49,11 +47,11 @@ Addy security-and-hardening, Trail of Bits supply-chain-risk-auditor and wshobso
 
 ## Sources
 
-9 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App C (brownfield bug-fix and refactor)
 - Phase: Secure
-- Test order: slot 103 of 103
+- Test order: slot 103
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

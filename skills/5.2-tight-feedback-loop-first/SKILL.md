@@ -7,8 +7,6 @@ category: debug-and-observe
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 2
-link_only_sources: 0
 ---
 
 # 5.2 Tight feedback loop first
@@ -49,11 +47,11 @@ Pocock diagnosing-bugs (build a fast deterministic pass/fail loop first) and Sup
 
 ## Sources
 
-2 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App C (brownfield bug-fix and refactor)
 - Phase: Debug
-- Test order: slot 100 of 103
+- Test order: slot 100
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

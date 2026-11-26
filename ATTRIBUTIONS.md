@@ -2,13 +2,13 @@
 
 Every project this repo has used or referenced. The licence terms of this repo itself are in [NOTICE.md](NOTICE.md).
 
-## 1. Source repos (45)
+## 1. Source repos
 
 These are the repos the principles and skills are distilled from. The list mirrors [data/sources.json](data/sources.json), which is the source of truth for pins and licences.
 
-Licences were checked on 2026-11-26. Each is the repo-level licence as GitHub reports it (SPDX id), or, where GitHub reports none or "Other", a description naming the licence file. All 45 repos are pinned in `data/sources.json` (all to the commit they were reviewed at: 36 to the commit recorded in `data/licences.json`, and 9 to the review commits supplied with the Step 4 review, `pin_source: review-record` on every entry). Skills are now written from these sources. Each skill's `SOURCES.md` credits the files it draws on, linked at a pinned commit, with the licence, and [CREDITS.md](CREDITS.md) lists the credits per source with copyright lines. The per-file licence of every source repo is in [data/licences.json](data/licences.json). Before a file is borrowed, its own licence is checked again, because a repo can hold files under other terms. Borrowed content keeps its own licence and is not relicensed here. This is not legal advice.
+Licences were checked on 2026-11-26. Each is the repo-level licence as GitHub reports it (SPDX id), or, where GitHub reports none or "Other", a description naming the licence file. All repos are pinned in `data/sources.json`, each to the commit it was reviewed at: the commit recorded in `data/licences.json`, or the review commit supplied with the Step 4 review (`pin_source: review-record` on every entry). Skills are now written from these sources. Each skill's `SOURCES.md` credits the files it draws on, linked at a pinned commit, with the licence, and [CREDITS.md](CREDITS.md) lists the credits per source with copyright lines. The per-file licence of every source repo is in [data/licences.json](data/licences.json). Before a file is borrowed, its own licence is checked again, because a repo can hold files under other terms. Borrowed content keeps its own licence and is not relicensed here. This is not legal advice.
 
-### Skill sources (39)
+### Skill sources
 
 Repos with real skill, sub-agent, command or rules files we may borrow from.
 
@@ -54,7 +54,7 @@ Repos with real skill, sub-agent, command or rules files we may borrow from.
 | [victorsaly/sideshot](https://github.com/victorsaly/sideshot) | victorsaly | sideshot | skill-source | MIT |
 | [wshobson/agents](https://github.com/wshobson/agents) | wshobson | agents | skill-source | MIT |
 
-### Curation lists (6)
+### Curation lists
 
 Pointers to other sources. They help find real sources and are never installed wholesale.
 
@@ -75,7 +75,7 @@ Repos where the licence is missing, restrictive or mixed. None is dropped. Do no
 | --- | --- |
 | NousResearch/hermes-agent-self-evolution | No licence file at the repo root or elsewhere in the tree. The README says GEPA is MIT licensed, which is about a dependency, not this repo. |
 | anthropics/claude-code | Tool repository; mined for bundled plugins and commands. LICENSE.md says all rights reserved, use subject to Anthropic's Commercial Terms of Service. Not open source. |
-| anthropics/skills | No root licence. All 18 skill folders have a LICENSE.txt that opens with Apache License 2.0 text; there is also THIRD_PARTY_NOTICES.md. Re-check the exact folder at borrow time. |
+| anthropics/skills | No root licence. Every skill folder has a LICENSE.txt that opens with Apache License 2.0 text; there is also THIRD_PARTY_NOTICES.md. Re-check the exact folder at borrow time. |
 | hesreallyhim/awesome-claude-code | Not named as a curation list in the brief section 4; classified as curation-list on name. Confirm. GitHub reports Other. LICENSE file states Creative Commons Attribution-NonCommercial-NoDerivatives 4.0. Curation list, never copied. |
 | michaelshimeles/rstack | No root licence. before-and-after/LICENSE is PolyForm Shield License 1.0.0; greploop/, greploop-apps/ and unslop/ have MIT LICENSE files. Other skill folders have none. |
 | multica-ai/andrej-karpathy-skills | No licence file in the tree. The README has a License section that says MIT, but that is not a licence file. |

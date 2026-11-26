@@ -5,6 +5,7 @@ Usage: scripts/validate-data.py
 
 Needs the jsonschema package (pip install jsonschema). Exits 1 on any error,
 including a data file that has no schema, and a schema that is not valid.
+Also checks that each scorecard run's total is the sum of its scores.
 """
 import json
 import sys
@@ -18,6 +19,16 @@ except ImportError:
 ROOT = Path(__file__).resolve().parent.parent
 DATA = ROOT / "data"
 SCHEMAS = DATA / "schemas"
+
+
+def scorecard_totals(doc, rel):
+    errors = []
+    for row in doc.get("skills", []):
+        for i, run in enumerate(row.get("runs", [])):
+            scores = run.get("scores", {})
+            if isinstance(scores, dict) and run.get("total") != sum(v for v in scores.values() if isinstance(v, int)):
+                errors.append(f"{rel} at skill {row.get('skill_id')} run {i}: total {run.get('total')} is not the sum of the scores")
+    return errors
 
 
 def main():
@@ -43,6 +54,8 @@ def main():
         for err in sorted(validator.iter_errors(instance), key=lambda e: list(e.absolute_path)):
             where = "/".join(str(p) for p in err.absolute_path) or "(root)"
             errors.append(f"{data_file.relative_to(ROOT)} at {where}: {err.message}")
+        if data_file.name == "scorecard.json":
+            errors += scorecard_totals(instance, data_file.relative_to(ROOT))
         checked += 1
     for schema_file in sorted(SCHEMAS.glob("*.schema.json")):
         name = schema_file.name[: -len(".schema.json")]

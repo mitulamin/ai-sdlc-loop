@@ -3,7 +3,7 @@
   "research_run": {
     "id": "run-1",
     "date": "2026-11-26",
-    "description": "Initial research by Rex (Grok bot): 41 repos, 108 principles (103 after the dedupe of 2026-11-26)."
+    "description": "Initial research by Rex (Grok bot), before and after the dedupe of 2026-11-26."
   },
   "repos": [
     {
@@ -264,7 +264,7 @@
       "labels": [
         "Anthropic skill-creator"
       ],
-      "notes": "No root licence. All 18 skill folders have a LICENSE.txt that opens with Apache License 2.0 text; there is also THIRD_PARTY_NOTICES.md. Re-check the exact folder at borrow time."
+      "notes": "No root licence. Every skill folder has a LICENSE.txt that opens with Apache License 2.0 text; there is also THIRD_PARTY_NOTICES.md. Re-check the exact folder at borrow time."
     },
     {
       "owner": "buildermethods",

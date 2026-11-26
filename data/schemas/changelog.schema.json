@@ -7,7 +7,8 @@
   "required": ["schema_version", "entries"],
   "additionalProperties": false,
   "properties": {
-    "schema_version": { "const": "1.0.0" },
+    "schema_version": { "const": "1.1.0" },
+    "note": { "type": "string" },
     "entries": {
       "type": "array",
       "items": {

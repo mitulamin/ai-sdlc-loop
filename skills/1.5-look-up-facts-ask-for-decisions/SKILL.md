@@ -7,8 +7,6 @@ category: plan-and-specify
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 4
-link_only_sources: 0
 ---
 
 # 1.5 Look up facts ask for decisions
@@ -49,11 +47,11 @@ Pocock research and grilling, Superpowers brainstorming ('explore project contex
 
 ## Sources
 
-4 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App A (CLI tool)
 - Phase: Plan
-- Test order: slot 13 of 103
+- Test order: slot 13
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

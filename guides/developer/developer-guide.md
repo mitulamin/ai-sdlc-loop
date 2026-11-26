@@ -8,7 +8,7 @@ You will keep meeting named principles in reviews, design docs and incident writ
 
 SOLID, YAGNI, DRY and the twelve-factor app are covered in more depth in the companion paper, [Principles for Building Quality Software and Apps](quality-principles.md). This guide goes wider, into architecture, reliability, operations, delivery, security, and the laws that shape teams.
 
-Where a name matches one of the 103 principles this repo uses for building with agents, the entry says which one, so you can see how the idea is applied in practice. The [learning path](../../docs/path.html) walks all of them in order. If a word in an explanation is new to you, the [glossary](#words-this-guide-uses) at the end defines it.
+Where a name matches one of the principles this repo uses for building with agents, the entry says which one, so you can see how the idea is applied in practice. The [learning path](../../docs/path.html) walks all of them in order. If a word in an explanation is new to you, the [glossary](#words-this-guide-uses) at the end defines it.
 
 **A field guide, not a syllabus.** No one applies all of these at once. Learn the names, follow the link when the idea shows up in your work, and ask a teammate when two principles seem to disagree.
 
@@ -304,7 +304,7 @@ The twelve principles behind the Agile Manifesto are at [https://agilemanifesto.
 
 ## A good place to start
 
-If you only follow a handful of links this month, these six will repay the time. The rest will still be here when the name comes up.
+If you only follow a handful of links this month, these will repay the time. The rest will still be here when the name comes up.
 
 1. [Principles for Building Quality Software and Apps](quality-principles.md): the companion paper on SOLID, YAGNI, DRY and the twelve-factor app
 2. [The Zen of Python](https://peps.python.org/pep-0020/): peps.python.org

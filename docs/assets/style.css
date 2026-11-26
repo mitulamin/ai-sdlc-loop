@@ -151,10 +151,6 @@ code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .
 .lp-hero .lede { max-width: 40rem; color: var(--fg); }
 .lp-eyebrow { margin: 0; font-size: .85rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
 .lp-cta { display: flex; flex-wrap: wrap; gap: .75rem; margin: 1.5rem 0 0; }
-.lp-stats { display: flex; flex-wrap: wrap; gap: 1rem 2.5rem; margin: 2rem 0 0; padding-top: 1.25rem; border-top: 1px solid var(--line); }
-.lp-stats div { display: flex; flex-direction: column-reverse; }
-.lp-stats dt { color: var(--muted); font-size: .9rem; }
-.lp-stats dd { margin: 0; font-size: 2rem; font-weight: 700; line-height: 1.1; font-variant-numeric: tabular-nums; }
 
 .lp-section { margin-top: 3rem; scroll-margin-top: 1rem; }
 .lp-section h2 { margin-top: 0; font-size: 1.5rem; }

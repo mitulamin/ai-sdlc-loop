@@ -7,8 +7,6 @@ category: design-and-architecture
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 4
-link_only_sources: 0
 ---
 
 # 2.2 Deliberate seams
@@ -49,11 +47,11 @@ Pocock codebase-design, tdd and improve-codebase-architecture define a seam as t
 
 ## Sources
 
-4 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App A (CLI tool)
 - Phase: Design
-- Test order: slot 18 of 103
+- Test order: slot 18
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

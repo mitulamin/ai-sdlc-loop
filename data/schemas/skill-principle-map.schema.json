@@ -11,7 +11,7 @@
   "additionalProperties": false,
   "properties": {
     "schema_version": {
-      "const": "1.0.0"
+      "const": "2.0.0"
     },
     "skills": {
       "type": "array",
@@ -29,8 +29,6 @@
           "test_app",
           "slot",
           "licence_status",
-          "clean_sources",
-          "link_only_sources",
           "status"
         ],
         "properties": {
@@ -66,12 +64,8 @@
             "description": "slug of a phase in data/taxonomy.json"
           },
           "test_app": {
-            "enum": [
-              "A",
-              "B",
-              "C",
-              "All"
-            ]
+            "type": "string",
+            "pattern": "^([A-Z]|All)$"
           },
           "slot": {
             "type": "integer",
@@ -80,14 +74,6 @@
           "licence_status": {
             "type": "string",
             "minLength": 1
-          },
-          "clean_sources": {
-            "type": "integer",
-            "minimum": 0
-          },
-          "link_only_sources": {
-            "type": "integer",
-            "minimum": 0
           },
           "status": {
             "type": "string",

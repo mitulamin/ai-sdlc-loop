@@ -7,8 +7,6 @@ category: review-and-ship
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 4
-link_only_sources: 0
 ---
 
 # 7.4 Review against standards and spec
@@ -48,11 +46,11 @@ Pocock code-review (standards and spec, in parallel) and Superpowers subagent-dr
 
 ## Sources
 
-4 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Review & ship
-- Test order: slot 84 of 103
+- Test order: slot 84
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

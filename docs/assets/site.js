@@ -46,7 +46,7 @@
     rows.forEach(function (r) { body.appendChild(r); });
   }
 
-  // A .filters block with data-table="<id>" and data-noun="<plural>" filters that table's rows.
+  // A .filters block with data-table="<id>" filters that table's rows.
   // Its search box has data-q, each select has data-attr="<name>" and matches the row's data-<name>
   // (several values split by "|"), and its reset button has data-reset. The state is kept in the
   // URL query so a filtered view can be shared.
@@ -60,7 +60,6 @@
       var reset = block.querySelector("[data-reset]");
       var count = block.parentNode.querySelector("[data-count]");
       if (!q || !reset || !count) return;
-      var noun = block.getAttribute("data-noun") || "rows";
       var rows = Array.prototype.slice.call(table.tBodies[0].rows);
 
       function apply() {
@@ -77,7 +76,8 @@
           row.hidden = !ok;
           if (ok) shown++;
         });
-        count.textContent = shown === rows.length ? rows.length + " " + noun : shown + " of " + rows.length + " " + noun;
+        var filtered = terms.length > 0 || selects.some(function (sel) { return sel.value; });
+        count.textContent = filtered ? shown + " shown" : "";
         var params = new URLSearchParams();
         if (q.value) params.set("q", q.value);
         selects.forEach(function (sel) {

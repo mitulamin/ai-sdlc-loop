@@ -1,6 +1,6 @@
 # Testing the skills
 
-Each of the 103 principles has one amalgamated skill. Before any of them is trusted, it is tried out on three small app builds run by the coordinator and its agents, and scored keep, merge or drop. This guide explains the test apps, the run order, how a run works and how the scorecard is filled in.
+Each principle has one amalgamated skill. Before any of them is trusted, it is tried out on small app builds run by the coordinator and its agents, and scored keep, merge or drop. This guide explains the test apps, the run order, how a run works and how the scorecard is filled in.
 
 The live data is on the [skills page](../../docs/skills.html), which lists every skill with its slot, phase, test app, licence status and score. The machine-readable sources are [data/skill-principle-map.json](../../data/skill-principle-map.json) (slots, phases and test apps), [data/taxonomy.json](../../data/taxonomy.json) (phases, test apps and the run order) and [data/scorecard.json](../../data/scorecard.json) (scores and verdicts).
 
@@ -9,7 +9,7 @@ Sections:
 - [Words used in this guide](#words-used-in-this-guide)
 - [Where things stand](#where-things-stand)
 - [Merges and aliases](#merges-and-aliases)
-- [The three test apps](#the-three-test-apps)
+- [The test apps](#the-test-apps)
 - [Run order](#run-order)
 - [How each run works](#how-each-run-works)
 - [The keep, merge or drop scorecard](#the-keep-merge-or-drop-scorecard)
@@ -21,7 +21,7 @@ Sections:
 | Term | What it means here |
 | --- | --- |
 | Amalgamated skill | One skill per principle, written by combining the matching skill files from the source repos into a single `SKILL.md`. |
-| Slot | A skill's place in the test run order, from 1 to 103. |
+| Slot | A skill's place in the test run order. |
 | Test app | The small project a skill is first exercised on: A, B or C. Skills tagged All are exercised on every app. |
 | Run | One build of one test app through the loop, from brief to end-of-cycle review. |
 | Greenfield | A new project started from nothing. |
@@ -33,15 +33,15 @@ Sections:
 
 ## Where things stand
 
-There are 103 principles in 9 categories and one skill for each, drawn from 45 source repos. Every source repo is pinned to a full 40-character commit SHA in [data/sources.json](../../data/sources.json), and the [sources page](../../docs/sources.html) lists them with their licences.
+There is one skill for each principle, drawn from the source repos. Every source repo is pinned to a full 40-character commit SHA in [data/sources.json](../../data/sources.json), and the [sources page](../../docs/sources.html) lists them with their licences.
 
-All 103 skills are drafts and none has been run yet, so every row in the scorecard is empty. The skills page shows the current count as runs are scored.
+The skills are drafts and none has been run yet, so every row in the scorecard is empty. The skills page shows each skill's score as runs are scored.
 
 Each skill also has a licence status. Clean means every source could be adapted. Rewritten means some sources were link only, so the skill text was written in this repo's own words and those sources moved to Further reading. One skill, 7.12, was rebuilt from MIT-licensed sources. The status is on each skill's row on the skills page and on its principle page.
 
 ## Merges and aliases
 
-The research produced 108 principles; five duplicates were merged into survivors, leaving 103. The five merges were approved by Mitul, the repo's owner. Principle IDs were never renumbered: a retired ID stays as an alias on its survivor, and its old page redirects there. Do not treat a retired ID as a live principle.
+The dedupe pass found duplicate principles and merged each into a survivor. The merges were approved by Mitul, the repo's owner. Principle IDs were never renumbered: a retired ID stays as an alias on its survivor, and its old page redirects there. Do not treat a retired ID as a live principle.
 
 | Retired ID | Merged into | Survivor |
 | --- | --- | --- |
@@ -55,7 +55,7 @@ Each retired principle's dos, don'ts, steps, reviewer checks and sources were fo
 
 Some pairs overlap without being duplicates, so they were kept as separate skills with sharper wording: 2.14 and 3.5, 7.6 and 7.10, 7.1 and 8.7, 4.9 and 7.12, 3.14 and 5.4, 8.5 and 9.9, 8.1 and 8.3, and 2.5 and 3.1. These are the pairs most likely to earn a merge verdict if the runs cannot tell their effects apart.
 
-## The three test apps
+## The test apps
 
 Each app is small on purpose: big enough to exercise its skills for real, small enough to run often.
 
@@ -63,44 +63,42 @@ Each app is small on purpose: big enough to exercise its skills for real, small 
 
 A new `ledger` command-line tool that imports bank CSV files, sorts transactions into categories by rules, and prints monthly reports. It exercises planning, deep modules and seams, code craft and test-driven development, and the harness skills are set up here.
 
-- **Skills scored first here:** 22, plus the 21 that apply on every run
+- **Skills scored first here:** [the App A skills](../../docs/skills.html?app=A), plus [the skills tagged All](../../docs/skills.html?app=All)
 - **Size:** about 1 to 2 days of agent time
 
 ### App B: a small CRUD web app with auth, greenfield (run 2)
 
 `teamtasks`: sign-up and login, projects and tasks, a REST API on SQLite or Postgres, and a minimal UI. CRUD means create, read, update and delete, the four basic operations on stored records. It exercises specs and task breakdown, domain-driven design, API design, designing for failure, security, OpenTelemetry instrumentation, CI and shipping.
 
-- **Skills scored first here:** 49
+- **Skills scored first here:** [the App B skills](../../docs/skills.html?app=B)
 - **Size:** about 2 to 3 days of agent time
 
 ### App C: a brownfield fix and refactor (run 3)
 
 Fix one real open bug and do one small refactor in a small, well-tested open-source repo (for example pallets/click), as a pull request on a fork. It exercises debugging, surgical changes, Chesterton's fence, refactoring, test-suite review and a dependency audit.
 
-- **Skills scored first here:** 11
+- **Skills scored first here:** [the App C skills](../../docs/skills.html?app=C)
 - **Size:** about half a day to 1 day
 
 ### Skills tagged All
 
-The 21 skills tagged All are the Agent operations skills (the harness, 8.1 to 8.10) and the Learn skills (9.1 to 9.12, without the retired 9.4). They run in all three builds and get a score in each one. That adds up: 22 + 49 + 11 + 21 = 103.
+The [skills tagged All](../../docs/skills.html?app=All) are the Agent operations skills (the harness) and the Learn skills. They run in every build and get a score in each one.
 
 ## Run order
 
 This is the run order as written in [data/taxonomy.json](../../data/taxonomy.json):
 
-Skills are tested in slot order (1 to 103, see data/skill-principle-map.json): Agent operations (the harness) first, then the three test apps in order (A, B, C). Each app run walks Plan, Design, Build and Verify, then Debug, Secure and Review as needed. Learn is exercised on the first run (slots 33-43) so the retrospective is tested early. Skills tagged All apply on every run.
+Skills are tested in slot order, as set in data/skill-principle-map.json: Agent operations (the harness) first, then the test apps in order (A, B, C). Each app run walks Plan, Design, Build and Verify, then Debug, Secure and Review as needed. Learn is exercised on the first run so the retrospective is tested early. Skills tagged All apply on every run.
 
-In slot terms, from [data/skill-principle-map.json](../../data/skill-principle-map.json):
+In terms of the slots in [data/skill-principle-map.json](../../data/skill-principle-map.json), the order is:
 
-| Slots | Skills | Test app |
-| --- | --- | --- |
-| 1 to 10 | Agent operations (Harness phase) | All |
-| 11 to 32 | Plan, Design, Build, Verify, and 7.1 from Review & ship | A |
-| 33 to 43 | Learn | All |
-| 44 to 92 | Plan, Design, Build, Verify, Debug, Secure, Review & ship | B |
-| 93 to 103 | Build, Verify, Debug, and 6.8 from Secure | C |
+1. Agent operations (Harness phase), tagged All.
+2. App A: Plan, Design, Build, Verify, and 7.1 from Review & ship.
+3. Learn, tagged All, so the retrospective is tested on the first run.
+4. App B: Plan, Design, Build, Verify, Debug, Secure, and Review & ship.
+5. App C: Build, Verify, Debug, and 6.8 from Secure.
 
-Slots were renumbered after the merges so they run 1 to 103 without gaps. Principle IDs were not.
+The [run order on the skills page](../../docs/skills.html#run-order) lists every skill with its slot. Slots were renumbered after the merges so they run without gaps. Principle IDs were not.
 
 ## How each run works
 
@@ -116,7 +114,7 @@ Slots were renumbered after the merges so they run 1 to 103 without gaps. Princi
 
 ## The keep, merge or drop scorecard
 
-Each skill has one row in `data/scorecard.json`, in slot order. Each run adds an entry to that row's `runs`. Five criteria score 0, 1 or 2, so a run's total is out of 10, and a separate harm flag is yes or no.
+Each skill has one row in `data/scorecard.json`, in slot order. Each run adds an entry to that row's `runs`. Each criterion scores 0 to 2, a run's total is the sum of the scores, and a separate harm flag is yes or no. The maximum total is 2 for each criterion, and the verdict rules use the total as a share of that maximum, so they still hold if a criterion is added.
 
 | Criterion | Field | What a 2 looks like | Evidence |
 | --- | --- | --- | --- |
@@ -131,14 +129,14 @@ A score of 1 means partly: for example, the skill loaded but late, or the produc
 
 The verdict rules:
 
-- **Keep:** 7 or more out of 10 in at least two runs, with no harm flag.
+- **Keep:** a total of 70% or more of the maximum in at least two runs, with no harm flag.
 - **Merge:** its effect cannot be told apart from another skill's.
-- **Drop:** never triggered, or scored 4 or less in every run where it applied.
+- **Drop:** never triggered, or a total of 40% or less of the maximum in every run where it applied.
 - **The human's end-of-run note overrides any score.** It is stored as `human_note` on the run, and the final decision as `verdict`.
 
 ## A worked scoring example
 
-Suppose skill 5.8 (structured logs) is first scored on App B. It triggered when the producer added logging (2). The producer used structured logs with levels but skipped one endpoint (1). The reviewer's check caught the missing endpoint (2). The fix made a failing request easy to trace (2). It cost little (2). That is 9 out of 10 with no harm, and the run entry looks like this:
+Suppose skill 5.8 (structured logs) is first scored on App B. It triggered when the producer added logging (2). The producer used structured logs with levels but skipped one endpoint (1). The reviewer's check caught the missing endpoint (2). The fix made a failing request easy to trace (2). It cost little (2). That is a total of 9, 90% of the maximum, with no harm, and the run entry looks like this:
 
 ```
 {
@@ -158,7 +156,7 @@ Suppose skill 5.8 (structured logs) is first scored on App B. It triggered when 
 }
 ```
 
-One run is not enough for a keep: the rule needs 7 or more in at least two runs. A skill tagged All, such as 8.8 (reports to files), gets an entry on every app, so it reaches two runs sooner. A skill that never triggers on any run where it applied is dropped, whatever its other scores.
+One run is not enough for a keep: the rule needs 70% or more of the maximum in at least two runs. A skill tagged All, such as 8.8 (reports to files), gets an entry on every app, so it reaches two runs sooner. A skill that never triggers on any run where it applied is dropped, whatever its other scores.
 
 ## Caveats
 

@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "note": "Categories are defined in data/principles.json; this file adds subgroups, phases, roles, commands and test apps. Principle IDs only; retired IDs resolve through aliases in data/principles.json.",
   "subgroups": [
     {
@@ -299,30 +299,26 @@
       "id": "A",
       "run": 1,
       "name": "CLI tool, greenfield",
-      "example": "a ledger CLI that imports bank CSVs, categorises them by rules and prints monthly reports",
-      "skills": 22
+      "example": "a ledger CLI that imports bank CSVs, categorises them by rules and prints monthly reports"
     },
     {
       "id": "B",
       "run": 2,
       "name": "Small CRUD web app with auth, greenfield",
-      "example": "teamtasks: sign-up and login, projects and tasks, a REST API, SQLite or Postgres, a minimal UI",
-      "skills": 49
+      "example": "teamtasks: sign-up and login, projects and tasks, a REST API, SQLite or Postgres, a minimal UI"
     },
     {
       "id": "C",
       "run": 3,
       "name": "Brownfield fix and refactor",
-      "example": "fix one real open bug and do one small refactor in a small, well-tested open-source repo (for example pallets/click), as a PR on a fork",
-      "skills": 11
+      "example": "fix one real open bug and do one small refactor in a small, well-tested open-source repo (for example pallets/click), as a PR on a fork"
     },
     {
       "id": "All",
       "run": null,
-      "name": "All three runs (harness and Learn)",
-      "example": "skills that apply to every run: the harness and the Learn loop",
-      "skills": 21
+      "name": "All runs (harness and Learn)",
+      "example": "skills that apply to every run: the harness and the Learn loop"
     }
   ],
-  "run_order": "Skills are tested in slot order (1 to 103, see data/skill-principle-map.json): Agent operations (the harness) first, then the three test apps in order (A, B, C). Each app run walks Plan, Design, Build and Verify, then Debug, Secure and Review as needed. Learn is exercised on the first run (slots 33-43) so the retrospective is tested early. Skills tagged All apply on every run."
+  "run_order": "Skills are tested in slot order, as set in data/skill-principle-map.json: Agent operations (the harness) first, then the test apps in order (A, B, C). Each app run walks Plan, Design, Build and Verify, then Debug, Secure and Review as needed. Learn is exercised on the first run so the retrospective is tested early. Skills tagged All apply on every run."
 }

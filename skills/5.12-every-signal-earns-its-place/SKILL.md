@@ -7,8 +7,6 @@ category: debug-and-observe
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 4
-link_only_sources: 0
 ---
 
 # 5.12 Every signal earns its place
@@ -46,11 +44,11 @@ dash0 otel-instrumentation/semantic-conventions/collector: every signal should h
 
 ## Sources
 
-4 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Debug
-- Test order: slot 70 of 103
+- Test order: slot 70
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

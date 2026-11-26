@@ -1,14 +1,14 @@
 # Using the agents and commands
 
-How to run the loop in this repo: who you talk to, what each of the 19 agents and 7 commands does, the rules the loop follows, and how to keep it cheap. The agent and command files in [agents/](../../agents/README.md) and [commands/](../../commands/README.md) are the source of truth; this guide explains them. The [agents page](../../docs/agents.html) lists every agent and command with the skills it loads.
+How to run the loop in this repo: who you talk to, what each agent and command does, the rules the loop follows, and how to keep it cheap. The agent and command files in [agents/](../../agents/README.md) and [commands/](../../commands/README.md) are the source of truth; this guide explains them. The [agents page](../../docs/agents.html) lists every agent and command with the skills it loads.
 
 Sections:
 
 - [Why the loop works this way](#why-the-loop-works-this-way)
 - [Words used in this guide](#words-used-in-this-guide)
 - [Before you start](#before-you-start)
-- [The 19 agents](#the-19-agents)
-- [The 7 commands](#the-7-commands)
+- [The agents](#the-agents)
+- [The commands](#the-commands)
 - [What producers and reviewers load](#what-producers-and-reviewers-load)
 - [The rules of the loop](#the-rules-of-the-loop)
 - [The phase model and the Learn loop](#the-phase-model-and-the-learn-loop)
@@ -27,7 +27,7 @@ The aim is loops that run on their own from start to finish, come back to the hu
 | --- | --- |
 | Agent | An AI model run with a set of instructions (an agent file) and tools, doing one job. |
 | Coordinator | The one agent the human talks to. It plans, writes briefs, starts other agents and decides what happens next. It does not do the phase work itself. |
-| Phase | One stage of the loop, such as Plan or Verify. There are nine. Each phase is run by a producer and checked by a reviewer. |
+| Phase | One stage of the loop, such as Plan or Verify. Each phase is run by a producer and checked by a reviewer. |
 | Producer | The agent that does a phase's work, such as writing the plan or the code. |
 | Adversarial reviewer | A separate agent whose job is to prove the producer's work fails. It is not a collaborator. |
 | Skill | One folder in `skills/` per principle, with a `SKILL.md` that holds When to use, Do and Don't lists, Steps and adversarial reviewer checks. |
@@ -44,11 +44,11 @@ The aim is loops that run on their own from start to finish, come back to the hu
 - **A coding-agent tool that can start subagents and run slash commands.** The agent and command files are plain markdown with front matter. Load them the way your tool expects; this repo does not install them for you. Skill [8.10](../../docs/principles/8.10.html) says to use your tool's own isolation and features rather than work around them.
 - **A project with a short always-on rules file.** The template's `AGENTS.md` is a starting point: run `scripts/new-project.sh` to create a project from it (see the [home page](../../docs/index.html)). Keep it to stack, commands, conventions and hard boundaries, as skill [8.2](../../docs/principles/8.2.html) says.
 - **Somewhere for run files.** Briefs, outputs, findings files and the end-of-cycle `run-summary.md` are written to files, not pasted into the chat (skill [8.8](../../docs/principles/8.8.html)). Scores go in [data/scorecard.json](../../data/scorecard.json).
-- **Principle IDs resolve through aliases.** Five retired IDs are aliases of the principle they were merged into: 4.4 is now [4.1](../../docs/principles/4.1.html), 4.5 is [5.3](../../docs/principles/5.3.html), 9.4 is [5.1](../../docs/principles/5.1.html), 5.6 is [5.10](../../docs/principles/5.10.html) and 2.11 is [6.3](../../docs/principles/6.3.html). The coordinator resolves an alias before it briefs anyone with it.
+- **Principle IDs resolve through aliases.** Retired IDs are aliases of the principle they were merged into: 4.4 is now [4.1](../../docs/principles/4.1.html), 4.5 is [5.3](../../docs/principles/5.3.html), 9.4 is [5.1](../../docs/principles/5.1.html), 5.6 is [5.10](../../docs/principles/5.10.html) and 2.11 is [6.3](../../docs/principles/6.3.html). The coordinator resolves an alias before it briefs anyone with it.
 
-## The 19 agents
+## The agents
 
-There is one coordinator, plus a producer and an adversarial reviewer for each of the nine phases. Each phase loads the skills whose phase in [data/skill-principle-map.json](../../data/skill-principle-map.json) is that phase, so a category can feed more than one phase.
+There is one coordinator, plus a producer and an adversarial reviewer for each phase. Each phase loads the skills whose phase in [data/skill-principle-map.json](../../data/skill-principle-map.json) is that phase, so a category can feed more than one phase.
 
 | Phase | Producer (role) | Reviewer | Started by | Skills from |
 | --- | --- | --- | --- | --- |
@@ -62,9 +62,9 @@ There is one coordinator, plus a producer and an adversarial reviewer for each o
 | Review & ship | [review-and-ship-producer](../../agents/review-and-ship-producer.md) (release manager) | [review-and-ship-reviewer](../../agents/review-and-ship-reviewer.md) | `/review`, `/ship` | Review and ship, plus 5.15 |
 | Learn | [learn-producer](../../agents/learn-producer.md) (learner) | [learn-reviewer](../../agents/learn-reviewer.md) | `/retro` | Learn |
 
-The [coordinator](../../agents/coordinator.md) loads the Agent operations skills (8.1 to 8.10) itself, because they govern how every agent in the loop runs. It starts the Harness producer and reviewer at the start of a run, to set up or check the project's agent harness, and again when approved Learn edits are applied.
+The [coordinator](../../agents/coordinator.md) loads the Agent operations skills itself, because they govern how every agent in the loop runs. It starts the Harness producer and reviewer at the start of a run, to set up or check the project's agent harness, and again when approved Learn edits are applied.
 
-## The 7 commands
+## The commands
 
 You give a command to the coordinator, and only to the coordinator. It runs each phase's loop on its own and reports at the end of the cycle.
 
@@ -134,7 +134,7 @@ An illustration of a cycle on a small command-line app, the kind of project [Tes
 
 ## Keeping token cost down
 
-Every token an agent reads costs time and money, and a crowded context makes the agent worse at its job. The biggest warning: the [sources](../../docs/sources.html) include two very large catalogues, sickn33/agentic-awesome-skills (about 22 million tokens of skill text) and affaan-m/ECC (about 2.5 million). Never load either wholesale. Even installing many of their skills costs you, because every installed skill's description sits in context on every turn.
+Every token an agent reads costs time and money, and a crowded context makes the agent worse at its job. The biggest warning: the [sources](../../docs/sources.html) include very large catalogues, such as sickn33/agentic-awesome-skills and affaan-m/ECC, each with millions of tokens of skill text. Never load either wholesale. Even installing many of their skills costs you, because every installed skill's description sits in context on every turn.
 
 1. **Keep the always-on file tiny.** An `AGENTS.md` or `CLAUDE.md` is paid for on every turn. Aim for 1,000 to 2,000 tokens with stack, commands, conventions and hard boundaries only ([8.2](../../docs/principles/8.2.html)).
 2. **Put everything else in on-demand skills.** Only a skill's name and description are always loaded, about 100 words each; the body loads when the skill is triggered ([8.3](../../docs/principles/8.3.html)). Anthropic's skill-creator suggests keeping a `SKILL.md` under 500 lines.

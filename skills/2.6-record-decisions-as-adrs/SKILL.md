@@ -7,8 +7,6 @@ category: design-and-architecture
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 7
-link_only_sources: 0
 ---
 
 # 2.6 Record decisions as adrs
@@ -50,11 +48,11 @@ Addy documentation-and-adrs, wshobson architecture-decision-records and Pocock i
 
 ## Sources
 
-7 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Design
-- Test order: slot 49 of 103
+- Test order: slot 49
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

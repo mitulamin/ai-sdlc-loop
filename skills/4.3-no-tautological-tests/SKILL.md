@@ -7,8 +7,6 @@ category: verify
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 2
-link_only_sources: 0
 ---
 
 # 4.3 No tautological tests
@@ -47,11 +45,11 @@ Pocock tdd and tests.md: never compute the expected value the same way the code 
 
 ## Sources
 
-2 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App A (CLI tool)
 - Phase: Verify
-- Test order: slot 28 of 103
+- Test order: slot 28
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

@@ -7,8 +7,6 @@ category: learn
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 1
-link_only_sources: 0
 ---
 
 # 9.3 Prune rules that dont change behaviour
@@ -46,11 +44,11 @@ Pocock retro: remove or clarify rules that do not change behaviour. Few other fi
 
 ## Sources
 
-1 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
-- Test app: All three runs (harness and Learn)
+- Test app: All runs (harness and Learn)
 - Phase: Learn
-- Test order: slot 35 of 103
+- Test order: slot 35
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

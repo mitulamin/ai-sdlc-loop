@@ -7,8 +7,6 @@ category: review-and-ship
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 36
-link_only_sources: 1
 ---
 
 # 7.5 Severity ranked findings
@@ -45,7 +43,7 @@ sanyuan code-review-expert (P0-P3 with merge-blocking rules); Trail of Bits revi
 
 ## Sources
 
-36 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Further reading (link only)
 
@@ -57,5 +55,5 @@ These sources have no usable licence for copying or adapting, so nothing in this
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Review & ship
-- Test order: slot 85 of 103
+- Test order: slot 85
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

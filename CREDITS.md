@@ -57,4 +57,4 @@ Not used as sources, link only if ever cited: anthropics/claude-code (proprietar
 
 ## Where ideas came from but were not copied
 
-The 108 original principle statements came from the research catalogue. A few of them (for example 1.7, 3.1, 3.2 and 7.12) first appeared in sources that are now link only. Ideas are not copyrightable, and the statements are short, but if you want a clean slate, reword them.
+The original principle statements came from the research catalogue. A few of them (for example 1.7, 3.1, 3.2 and 7.12) first appeared in sources that are now link only. Ideas are not copyrightable, and the statements are short, but if you want a clean slate, reword them.

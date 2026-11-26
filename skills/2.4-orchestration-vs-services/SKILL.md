@@ -7,8 +7,6 @@ category: design-and-architecture
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 5
-link_only_sources: 2
 ---
 
 # 2.4 Orchestration vs services
@@ -52,7 +50,7 @@ Fowler's PoEAA and Vernon's Implementing DDD (both via the ciembor rule books) d
 
 ## Sources
 
-5 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Further reading (link only)
 
@@ -65,5 +63,5 @@ These sources have no usable licence for copying or adapting, so nothing in this
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Design
-- Test order: slot 47 of 103
+- Test order: slot 47
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

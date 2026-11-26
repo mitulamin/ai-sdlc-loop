@@ -1,6 +1,6 @@
 # docs
 
-The static website (GitHub Pages): a landing page that explains the project, a learning path through the 103 principles, a page per category (with its subgroups and skills), a page per principle, a searchable and sortable table, a skills page with the run order and filters for phase, test app and licence status, an agents page with the agents and commands and the skills each loads, the list of source repos and the developer guide pages. Client-side JavaScript only, no build step to view it, no external scripts or trackers. Open `docs/index.html` in a browser to try it. The landing page is `index.html` and the learning path is `path.html`.
+The static website (GitHub Pages): a landing page that explains the project, a learning path through the principles, a page per category (with its subgroups and skills), a page per principle, a searchable and sortable table, a skills page with the run order and filters for phase, test app and licence status, an agents page with the agents and commands and the skills each loads, the list of source repos and the developer guide pages. Client-side JavaScript only, no build step to view it, no external scripts or trackers. Open `docs/index.html` in a browser to try it. The landing page is `index.html` and the learning path is `path.html`.
 
 ## Generated and hand-written
 

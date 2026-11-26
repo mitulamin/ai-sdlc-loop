@@ -2,6 +2,8 @@
 
 All notable changes to this repo. The machine-readable version of the data changes is in [data/changelog.json](data/changelog.json). Process: [UPDATING.md](UPDATING.md).
 
+Counts in entries are as of the entry date.
+
 ## Unreleased
 
 ### Added
@@ -42,6 +44,9 @@ All notable changes to this repo. The machine-readable version of the data chang
 
 - `scripts/build-site.py`: a guide link to a file under `docs/` (such as `../../docs/agents.html`) becomes the site-relative link (`../../agents.html`), guide headings get GitHub-style ids so section links work on GitHub and the site, the guides listing follows the order of the links in `guides/developer/README.md`, the build fails on a `cursor.com/canvas` link in a guide, the landing page lists the guides, and the learning path's "Read the developer guide" link opens the Developer Guide. Long links in guide paragraphs and lists wrap on narrow screens (`docs/assets/style.css`). The five merged-ID redirect pages are unchanged.
 - README status and `guides/developer/` row now list the developer guides as done.
+- Hard-coded counts of principles, skills, categories, phases, agents, commands and source repos are gone from the generated site, the generated agent files, the READMEs, `ATTRIBUTIONS.md`, `CREDITS.md`, the skills and the developer guides, so they cannot go stale as the collections change. `scripts/build-site.py` and `scripts/build-agents.py` no longer write these totals into pages; the landing page stats block is removed; principle pages show the run slot without "of N" and the licence badge with a link to the skill's `SOURCES.md` instead of source counts; scores show as a share of the maximum; and the table filters show "N shown" only while a filter is active (`docs/assets/site.js`). Ordinals such as stage, phase, slot and run numbers stay. `NOTICE.md` now says all 45 source repos were checked.
+- The verdict rules in the testing guide use the total as a share of the maximum (keep at 70% or more in at least two runs, drop at 40% or less), and `scripts/validate-data.py` checks that each scorecard run's total is the sum of its scores.
+- Schemas: `data/schemas/taxonomy.schema.json` 2.0.0 drops `test_apps[].skills`; `data/schemas/skill-principle-map.schema.json` 2.0.0 drops `clean_sources` and `link_only_sources`; `data/schemas/scorecard.schema.json` 1.1.0 drops the fixed maximum on `total`; and all three accept any single capital letter or `All` as a test app. `data/schemas/changelog.schema.json` 1.1.0 adds an optional top-level `note`. To migrate, delete the removed fields, set the new `schema_version` in each data file, and update `SCHEMA_VERSIONS` in any script that reads them. The skills' `sources:` and `link_only_sources:` front matter lines are removed too.
 
 - Merged five duplicate principles, taking the count from 108 to 103 (dedupe pass by Rex). The old ID stays as an alias on the survivor, no other principle was renumbered, and the old principle pages redirect to the survivor. Details and reasons are in [MERGES.md](MERGES.md).
   - 4.4 into 4.1 (one test per cycle is a rule within red-green TDD).

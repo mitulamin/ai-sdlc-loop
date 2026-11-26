@@ -7,8 +7,6 @@ category: design-and-architecture
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 5
-link_only_sources: 0
 ---
 
 # 2.3 Framework out of business logic
@@ -49,11 +47,11 @@ ciembor clean-architecture, PoEAA and DDD rules agree: keep framework, persisten
 
 ## Sources
 
-5 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Design
-- Test order: slot 46 of 103
+- Test order: slot 46
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

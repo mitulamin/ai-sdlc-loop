@@ -7,8 +7,6 @@ category: code-craft
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 2
-link_only_sources: 1
 ---
 
 # 3.3 Match existing conventions
@@ -49,7 +47,7 @@ Addy code-simplification ('follow project conventions') and agent-os discover-st
 
 ## Sources
 
-2 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Further reading (link only)
 
@@ -61,5 +59,5 @@ These sources have no usable licence for copying or adapting, so nothing in this
 
 - Test app: App C (brownfield bug-fix and refactor)
 - Phase: Build
-- Test order: slot 94 of 103
+- Test order: slot 94
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

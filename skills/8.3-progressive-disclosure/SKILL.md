@@ -7,8 +7,6 @@ category: agent-operations
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 6
-link_only_sources: 0
 ---
 
 # 8.3 Progressive disclosure
@@ -45,11 +43,11 @@ Anthropic skill-creator and plugin-dev skill-development, Stratos core and murat
 
 ## Sources
 
-6 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
-- Test app: All three runs (harness and Learn)
+- Test app: All runs (harness and Learn)
 - Phase: Harness
-- Test order: slot 3 of 103
+- Test order: slot 3
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

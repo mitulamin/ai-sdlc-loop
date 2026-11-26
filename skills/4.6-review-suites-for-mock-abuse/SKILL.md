@@ -7,8 +7,6 @@ category: verify
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 5
-link_only_sources: 0
 ---
 
 # 4.6 Review suites for mock abuse
@@ -49,11 +47,11 @@ brooks-lint brooks-test (both copies), Pocock tdd/mocking.md, Addy TDD and Anthr
 
 ## Sources
 
-5 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App C (brownfield bug-fix and refactor)
 - Phase: Verify
-- Test order: slot 98 of 103
+- Test order: slot 98
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

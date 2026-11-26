@@ -7,8 +7,6 @@ category: plan-and-specify
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 29
-link_only_sources: 0
 ---
 
 # 1.2 Spec before code
@@ -47,15 +45,15 @@ Don't:
 
 ## How the source skills compare
 
-Nine source files (Addy spec-driven-development, spec-kit specify, OpenSpec propose, cc-sdd requirements, Pocock to-spec, agent-os shape-spec) agree on a written spec as the source of truth; they differ on artefacts (spec.md vs proposal+tasks vs requirements/design/tasks). Amalgam: one short spec.md with goal, non-goals, acceptance criteria and open questions; the human gate moves to the coordinator's end-of-run review, per the independent-loop principle.
+Several source files (Addy spec-driven-development, spec-kit specify, OpenSpec propose, cc-sdd requirements, Pocock to-spec, agent-os shape-spec) agree on a written spec as the source of truth; they differ on artefacts (spec.md vs proposal+tasks vs requirements/design/tasks). Amalgam: one short spec.md with goal, non-goals, acceptance criteria and open questions; the human gate moves to the coordinator's end-of-run review, per the independent-loop principle.
 
 ## Sources
 
-29 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Plan
-- Test order: slot 44 of 103
+- Test order: slot 44
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

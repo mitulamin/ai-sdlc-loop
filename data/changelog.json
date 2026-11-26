@@ -1,5 +1,6 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
+  "note": "Counts in entries are as of the entry date.",
   "entries": [
     {
       "date": "2026-11-26",
@@ -201,6 +202,32 @@
       ],
       "summary": "Added four developer guides in guides/developer/ (Developer Guide, Principles for Building Quality Software and Apps, Using the agents and commands, Testing the skills) and replaced the stub index. Published by scripts/build-site.py, which now rewrites guide links to files under docs/ as site-relative links, gives guide headings GitHub-style ids, orders the guides listing by the index, and fails on cursor.com/canvas links in a guide. Counts, aliases, the run order and the scorecard follow data/principles.json, data/taxonomy.json, data/skill-principle-map.json and data/scorecard.json; no principle, skill or source changed.",
       "reason": "Publish the plain-language guides the site and README promised."
+    },
+    {
+      "date": "2026-11-26",
+      "research_run": "run-1",
+      "type": "schema",
+      "ids": [
+        "taxonomy",
+        "skill-principle-map",
+        "scorecard",
+        "changelog"
+      ],
+      "summary": "taxonomy.schema.json 2.0.0 drops test_apps[].skills; skill-principle-map.schema.json 2.0.0 drops clean_sources and link_only_sources; scorecard.schema.json 1.1.0 drops the fixed maximum on total; all three accept any single capital letter or All as a test app; changelog.schema.json 1.1.0 adds an optional top-level note. scripts/validate-data.py checks that each scorecard run's total is the sum of its scores.",
+      "reason": "Stored counts and fixed totals go stale as skills, sources and criteria change."
+    },
+    {
+      "date": "2026-11-26",
+      "research_run": "run-1",
+      "type": "edit",
+      "ids": [
+        "skills",
+        "guides",
+        "site",
+        "agents"
+      ],
+      "summary": "Removed hard-coded collection counts from the generated site and agent files (via scripts/build-site.py and scripts/build-agents.py), the READMEs, ATTRIBUTIONS.md, CREDITS.md, the skills (front matter source counts, 'of N' slots, skill 8.5's total) and the developer guides; reworded the taxonomy run_order and the sources research_run description without counts; verdict rules now use a share of the maximum score. NOTICE.md says all 45 source repos were checked.",
+      "reason": "Counts written into prose go stale whenever a principle, skill or source is added, merged or dropped."
     }
   ]
 }

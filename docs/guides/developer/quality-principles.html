@@ -38,9 +38,9 @@
 <h2 id="a-working-map">A working map</h2>
 <p>Software quality is less a matter of memorising acronyms than of making small, consistent choices: keep each piece simple and focused, depend on abstractions rather than details, build only what you need now, and make the running system easy to change, test and operate. This paper is a practical landscape, written for someone building AI-first products and an AI software development team, who wants working awareness rather than an academic survey.</p>
 <p>Principles are not laws. They often conflict, and the skill is judging which one to favour in the moment. Robert C. Martin put it plainly: following the rules on the paint can will not teach you how to paint, but you had better know them before you decide when to break them. For a wider map of named principles beyond this core set, see the <a href="developer-guide.html">Developer Guide</a>.</p>
-<p>Where an idea here matches one of the 103 principles this repo uses for building with agents, the text links to it, so you can see the idea turned into a rule an agent can follow. All of them are on the <a href="../../principles.html">principles page</a>.</p>
+<p>Where an idea here matches one of the principles this repo uses for building with agents, the text links to it, so you can see the idea turned into a rule an agent can follow. All of them are on the <a href="../../principles.html">principles page</a>.</p>
 <h2 id="keep-it-simple">Keep it simple</h2>
-<p>Most lasting systems stay changeable because they stay small in the places that matter. These five ideas are the everyday discipline behind that.</p>
+<p>Most lasting systems stay changeable because they stay small in the places that matter. These ideas are the everyday discipline behind that.</p>
 <h3 id="kiss">KISS</h3>
 <p>Keep It Simple, Stupid: prefer the design that works and remains easy to understand. Cleverness is a cost. In practice, a clear loop often beats a framework, and a single well-named function often beats a hierarchy built for a future that has not arrived.</p>
 <p>On this site: principle <a href="../../principles/3.8.html">3.8</a>, prefer clarity over cleverness.</p>
@@ -117,7 +117,7 @@
 <p>Convention versus explicit configuration, and KISS versus completeness, follow the same pattern. Defaults and simple paths should carry the common case. Be ready to be explicit, or a little more thorough, when the domain, the failure mode or the security boundary actually requires it.</p>
 <h2 id="using-these-with-ai-coding-agents">Using these with AI coding agents</h2>
 <p>If you are encoding these ideas as agent skills or always-on rules, a short, opinionated subset beats a catalogue. Every skill description sits in context on every turn, so prefer a handful of rules the agent must follow, and keep the rest on demand.</p>
-<p>This repo does exactly that: one skill per principle, loaded only by the phase that needs it. <a href="using-the-agents.html">Using the agents and commands</a> explains how the agents load them, and the <a href="../../skills.html">skills page</a> lists all 103.</p>
+<p>This repo does exactly that: one skill per principle, loaded only by the phase that needs it. <a href="using-the-agents.html">Using the agents and commands</a> explains how the agents load them, and the <a href="../../skills.html">skills page</a> lists them all.</p>
 <h3 id="prefer-surgical-change">Prefer surgical change</h3>
 <p>Ask for the smallest change that satisfies the request. That is KISS, YAGNI and the Boy Scout Rule in one instruction, and it counters the agent&#x27;s habit of scaffolding frameworks and helpers &quot;just in case&quot;.</p>
 <p>On this site: principles <a href="../../principles/3.1.html">3.1</a> (write the minimum) and <a href="../../principles/3.2.html">3.2</a> (every changed line traces to the request).</p>

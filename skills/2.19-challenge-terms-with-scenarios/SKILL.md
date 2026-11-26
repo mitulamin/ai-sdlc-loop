@@ -7,8 +7,6 @@ category: design-and-architecture
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 3
-link_only_sources: 0
 ---
 
 # 2.19 Challenge terms with scenarios
@@ -49,11 +47,11 @@ Pocock domain-modeling ('invent edge-case scenarios'), grill-with-docs and Force
 
 ## Sources
 
-3 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Design
-- Test order: slot 61 of 103
+- Test order: slot 61
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

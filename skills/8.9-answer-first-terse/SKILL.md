@@ -7,8 +7,6 @@ category: agent-operations
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 22
-link_only_sources: 0
 ---
 
 # 8.9 Answer first terse
@@ -48,11 +46,11 @@ caveman family (caveman, ultracave, megacave, caveman-compress): answer first, c
 
 ## Sources
 
-22 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
-- Test app: All three runs (harness and Learn)
+- Test app: All runs (harness and Learn)
 - Phase: Harness
-- Test order: slot 9 of 103
+- Test order: slot 9
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

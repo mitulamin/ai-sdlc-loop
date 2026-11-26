@@ -7,8 +7,6 @@ category: review-and-ship
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 4
-link_only_sources: 3
 ---
 
 # 7.12 Before and after proof
@@ -59,7 +57,7 @@ pr-evidence (ArefMozafari), pr-visuals pr-screenshots (michalklejdysz), sideshot
 
 ## Sources
 
-4 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Further reading (link only)
 
@@ -73,5 +71,5 @@ These sources have no usable licence for copying or adapting, so nothing in this
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Review & ship
-- Test order: slot 92 of 103
+- Test order: slot 92
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

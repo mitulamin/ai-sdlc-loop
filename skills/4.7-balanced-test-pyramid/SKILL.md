@@ -7,8 +7,6 @@ category: verify
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 3
-link_only_sources: 0
 ---
 
 # 4.7 Balanced test pyramid
@@ -49,11 +47,11 @@ Addy test-driven-development and test-engineer, wshobson test-automator/tdd-orch
 
 ## Sources
 
-3 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App B (CRUD web app with auth)
 - Phase: Verify
-- Test order: slot 65 of 103
+- Test order: slot 65
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

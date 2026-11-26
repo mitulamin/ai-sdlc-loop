@@ -22,11 +22,11 @@ Software quality is less a matter of memorising acronyms than of making small, c
 
 Principles are not laws. They often conflict, and the skill is judging which one to favour in the moment. Robert C. Martin put it plainly: following the rules on the paint can will not teach you how to paint, but you had better know them before you decide when to break them. For a wider map of named principles beyond this core set, see the [Developer Guide](developer-guide.md).
 
-Where an idea here matches one of the 103 principles this repo uses for building with agents, the text links to it, so you can see the idea turned into a rule an agent can follow. All of them are on the [principles page](../../docs/principles.html).
+Where an idea here matches one of the principles this repo uses for building with agents, the text links to it, so you can see the idea turned into a rule an agent can follow. All of them are on the [principles page](../../docs/principles.html).
 
 ## Keep it simple
 
-Most lasting systems stay changeable because they stay small in the places that matter. These five ideas are the everyday discipline behind that.
+Most lasting systems stay changeable because they stay small in the places that matter. These ideas are the everyday discipline behind that.
 
 ### KISS
 
@@ -193,7 +193,7 @@ Convention versus explicit configuration, and KISS versus completeness, follow t
 
 If you are encoding these ideas as agent skills or always-on rules, a short, opinionated subset beats a catalogue. Every skill description sits in context on every turn, so prefer a handful of rules the agent must follow, and keep the rest on demand.
 
-This repo does exactly that: one skill per principle, loaded only by the phase that needs it. [Using the agents and commands](using-the-agents.md) explains how the agents load them, and the [skills page](../../docs/skills.html) lists all 103.
+This repo does exactly that: one skill per principle, loaded only by the phase that needs it. [Using the agents and commands](using-the-agents.md) explains how the agents load them, and the [skills page](../../docs/skills.html) lists them all.
 
 ### Prefer surgical change
 

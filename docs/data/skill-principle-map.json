@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "2.0.0",
   "skills": [
     {
       "folder": "skills/1.1-surface-assumptions",
@@ -11,8 +11,6 @@
       "test_app": "A",
       "slot": 11,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 7,
-      "link_only_sources": 2,
       "status": "draft, untested"
     },
     {
@@ -25,8 +23,6 @@
       "test_app": "B",
       "slot": 44,
       "licence_status": "clean",
-      "clean_sources": 29,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -39,8 +35,6 @@
       "test_app": "B",
       "slot": 45,
       "licence_status": "clean",
-      "clean_sources": 17,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -53,8 +47,6 @@
       "test_app": "A",
       "slot": 12,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 15,
-      "link_only_sources": 1,
       "status": "draft, untested"
     },
     {
@@ -67,8 +59,6 @@
       "test_app": "A",
       "slot": 13,
       "licence_status": "clean",
-      "clean_sources": 4,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -81,8 +71,6 @@
       "test_app": "A",
       "slot": 14,
       "licence_status": "clean",
-      "clean_sources": 8,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -95,8 +83,6 @@
       "test_app": "A",
       "slot": 15,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 13,
-      "link_only_sources": 1,
       "status": "draft, untested"
     },
     {
@@ -109,8 +95,6 @@
       "test_app": "A",
       "slot": 16,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 4,
-      "link_only_sources": 1,
       "status": "draft, untested"
     },
     {
@@ -123,8 +107,6 @@
       "test_app": "A",
       "slot": 17,
       "licence_status": "clean",
-      "clean_sources": 5,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -137,8 +119,6 @@
       "test_app": "A",
       "slot": 18,
       "licence_status": "clean",
-      "clean_sources": 4,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -151,8 +131,6 @@
       "test_app": "B",
       "slot": 46,
       "licence_status": "clean",
-      "clean_sources": 5,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -165,8 +143,6 @@
       "test_app": "B",
       "slot": 47,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 5,
-      "link_only_sources": 2,
       "status": "draft, untested"
     },
     {
@@ -179,8 +155,6 @@
       "test_app": "B",
       "slot": 48,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 4,
-      "link_only_sources": 2,
       "status": "draft, untested"
     },
     {
@@ -193,8 +167,6 @@
       "test_app": "B",
       "slot": 49,
       "licence_status": "clean",
-      "clean_sources": 7,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -207,8 +179,6 @@
       "test_app": "B",
       "slot": 50,
       "licence_status": "clean",
-      "clean_sources": 4,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -221,8 +191,6 @@
       "test_app": "B",
       "slot": 51,
       "licence_status": "clean",
-      "clean_sources": 2,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -235,8 +203,6 @@
       "test_app": "B",
       "slot": 52,
       "licence_status": "clean",
-      "clean_sources": 11,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -249,8 +215,6 @@
       "test_app": "B",
       "slot": 53,
       "licence_status": "clean",
-      "clean_sources": 3,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -263,8 +227,6 @@
       "test_app": "B",
       "slot": 54,
       "licence_status": "clean",
-      "clean_sources": 18,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -277,8 +239,6 @@
       "test_app": "B",
       "slot": 55,
       "licence_status": "clean",
-      "clean_sources": 5,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -291,8 +251,6 @@
       "test_app": "B",
       "slot": 56,
       "licence_status": "clean",
-      "clean_sources": 3,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -305,8 +263,6 @@
       "test_app": "B",
       "slot": 57,
       "licence_status": "clean",
-      "clean_sources": 4,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -319,8 +275,6 @@
       "test_app": "B",
       "slot": 58,
       "licence_status": "clean",
-      "clean_sources": 8,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -333,8 +287,6 @@
       "test_app": "B",
       "slot": 59,
       "licence_status": "clean",
-      "clean_sources": 6,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -347,8 +299,6 @@
       "test_app": "B",
       "slot": 60,
       "licence_status": "clean",
-      "clean_sources": 7,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -361,8 +311,6 @@
       "test_app": "B",
       "slot": 61,
       "licence_status": "clean",
-      "clean_sources": 3,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -375,8 +323,6 @@
       "test_app": "A",
       "slot": 19,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 4,
-      "link_only_sources": 1,
       "status": "draft, untested"
     },
     {
@@ -389,8 +335,6 @@
       "test_app": "C",
       "slot": 93,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 3,
-      "link_only_sources": 1,
       "status": "draft, untested"
     },
     {
@@ -403,8 +347,6 @@
       "test_app": "C",
       "slot": 94,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 2,
-      "link_only_sources": 1,
       "status": "draft, untested"
     },
     {
@@ -417,8 +359,6 @@
       "test_app": "A",
       "slot": 20,
       "licence_status": "clean",
-      "clean_sources": 2,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -431,8 +371,6 @@
       "test_app": "A",
       "slot": 21,
       "licence_status": "clean",
-      "clean_sources": 2,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -445,8 +383,6 @@
       "test_app": "A",
       "slot": 22,
       "licence_status": "clean",
-      "clean_sources": 2,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -459,8 +395,6 @@
       "test_app": "A",
       "slot": 23,
       "licence_status": "clean",
-      "clean_sources": 3,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -473,8 +407,6 @@
       "test_app": "A",
       "slot": 24,
       "licence_status": "clean",
-      "clean_sources": 3,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -487,8 +419,6 @@
       "test_app": "C",
       "slot": 95,
       "licence_status": "clean",
-      "clean_sources": 3,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -501,8 +431,6 @@
       "test_app": "C",
       "slot": 96,
       "licence_status": "clean",
-      "clean_sources": 21,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -515,8 +443,6 @@
       "test_app": "C",
       "slot": 97,
       "licence_status": "clean",
-      "clean_sources": 10,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -529,8 +455,6 @@
       "test_app": "A",
       "slot": 25,
       "licence_status": "clean",
-      "clean_sources": 2,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -543,8 +467,6 @@
       "test_app": "B",
       "slot": 62,
       "licence_status": "clean",
-      "clean_sources": 2,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -557,8 +479,6 @@
       "test_app": "B",
       "slot": 63,
       "licence_status": "clean",
-      "clean_sources": 8,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -573,8 +493,6 @@
       "test_app": "A",
       "slot": 26,
       "licence_status": "clean",
-      "clean_sources": 22,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -587,8 +505,6 @@
       "test_app": "A",
       "slot": 27,
       "licence_status": "clean",
-      "clean_sources": 7,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -601,8 +517,6 @@
       "test_app": "A",
       "slot": 28,
       "licence_status": "clean",
-      "clean_sources": 2,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -615,8 +529,6 @@
       "test_app": "C",
       "slot": 98,
       "licence_status": "clean",
-      "clean_sources": 5,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -629,8 +541,6 @@
       "test_app": "B",
       "slot": 65,
       "licence_status": "clean",
-      "clean_sources": 3,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -643,8 +553,6 @@
       "test_app": "A",
       "slot": 29,
       "licence_status": "clean",
-      "clean_sources": 4,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -657,8 +565,6 @@
       "test_app": "A",
       "slot": 30,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 3,
-      "link_only_sources": 1,
       "status": "draft, untested"
     },
     {
@@ -671,8 +577,6 @@
       "test_app": "A",
       "slot": 31,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 2,
-      "link_only_sources": 2,
       "status": "draft, untested"
     },
     {
@@ -687,8 +591,6 @@
       "test_app": "C",
       "slot": 99,
       "licence_status": "clean",
-      "clean_sources": 19,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -701,8 +603,6 @@
       "test_app": "C",
       "slot": 100,
       "licence_status": "clean",
-      "clean_sources": 2,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -717,8 +617,6 @@
       "test_app": "C",
       "slot": 101,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 13,
-      "link_only_sources": 1,
       "status": "draft, untested"
     },
     {
@@ -731,8 +629,6 @@
       "test_app": "B",
       "slot": 64,
       "licence_status": "clean",
-      "clean_sources": 2,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -745,8 +641,6 @@
       "test_app": "C",
       "slot": 102,
       "licence_status": "clean",
-      "clean_sources": 1,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -759,8 +653,6 @@
       "test_app": "B",
       "slot": 66,
       "licence_status": "clean",
-      "clean_sources": 11,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -773,8 +665,6 @@
       "test_app": "B",
       "slot": 67,
       "licence_status": "clean",
-      "clean_sources": 6,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -787,8 +677,6 @@
       "test_app": "B",
       "slot": 68,
       "licence_status": "clean",
-      "clean_sources": 5,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -803,8 +691,6 @@
       "test_app": "B",
       "slot": 73,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 8,
-      "link_only_sources": 2,
       "status": "draft, untested"
     },
     {
@@ -817,8 +703,6 @@
       "test_app": "B",
       "slot": 69,
       "licence_status": "clean",
-      "clean_sources": 3,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -831,8 +715,6 @@
       "test_app": "B",
       "slot": 70,
       "licence_status": "clean",
-      "clean_sources": 4,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -845,8 +727,6 @@
       "test_app": "B",
       "slot": 71,
       "licence_status": "clean",
-      "clean_sources": 6,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -859,8 +739,6 @@
       "test_app": "B",
       "slot": 72,
       "licence_status": "clean",
-      "clean_sources": 36,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -873,8 +751,6 @@
       "test_app": "B",
       "slot": 81,
       "licence_status": "clean",
-      "clean_sources": 6,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -887,8 +763,6 @@
       "test_app": "B",
       "slot": 74,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 13,
-      "link_only_sources": 6,
       "status": "draft, untested"
     },
     {
@@ -901,8 +775,6 @@
       "test_app": "B",
       "slot": 75,
       "licence_status": "clean",
-      "clean_sources": 1,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -917,8 +789,6 @@
       "test_app": "B",
       "slot": 76,
       "licence_status": "clean",
-      "clean_sources": 16,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -931,8 +801,6 @@
       "test_app": "B",
       "slot": 77,
       "licence_status": "clean",
-      "clean_sources": 5,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -945,8 +813,6 @@
       "test_app": "B",
       "slot": 78,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 21,
-      "link_only_sources": 2,
       "status": "draft, untested"
     },
     {
@@ -959,8 +825,6 @@
       "test_app": "B",
       "slot": 79,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 13,
-      "link_only_sources": 2,
       "status": "draft, untested"
     },
     {
@@ -973,8 +837,6 @@
       "test_app": "B",
       "slot": 80,
       "licence_status": "clean",
-      "clean_sources": 4,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -987,8 +849,6 @@
       "test_app": "C",
       "slot": 103,
       "licence_status": "clean",
-      "clean_sources": 9,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1001,8 +861,6 @@
       "test_app": "A",
       "slot": 32,
       "licence_status": "clean",
-      "clean_sources": 35,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1015,8 +873,6 @@
       "test_app": "B",
       "slot": 82,
       "licence_status": "clean",
-      "clean_sources": 4,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1029,8 +885,6 @@
       "test_app": "B",
       "slot": 83,
       "licence_status": "clean",
-      "clean_sources": 1,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1043,8 +897,6 @@
       "test_app": "B",
       "slot": 84,
       "licence_status": "clean",
-      "clean_sources": 4,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1057,8 +909,6 @@
       "test_app": "B",
       "slot": 85,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 36,
-      "link_only_sources": 1,
       "status": "draft, untested"
     },
     {
@@ -1071,8 +921,6 @@
       "test_app": "B",
       "slot": 86,
       "licence_status": "clean",
-      "clean_sources": 2,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1085,8 +933,6 @@
       "test_app": "B",
       "slot": 87,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 7,
-      "link_only_sources": 2,
       "status": "draft, untested"
     },
     {
@@ -1099,8 +945,6 @@
       "test_app": "B",
       "slot": 88,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 3,
-      "link_only_sources": 1,
       "status": "draft, untested"
     },
     {
@@ -1113,8 +957,6 @@
       "test_app": "B",
       "slot": 89,
       "licence_status": "clean",
-      "clean_sources": 4,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1127,8 +969,6 @@
       "test_app": "B",
       "slot": 90,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 34,
-      "link_only_sources": 2,
       "status": "draft, untested"
     },
     {
@@ -1141,8 +981,6 @@
       "test_app": "B",
       "slot": 91,
       "licence_status": "clean",
-      "clean_sources": 5,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1155,8 +993,6 @@
       "test_app": "B",
       "slot": 92,
       "licence_status": "rebuilt from MIT sources; original sources link-only",
-      "clean_sources": 4,
-      "link_only_sources": 3,
       "status": "draft, untested"
     },
     {
@@ -1169,8 +1005,6 @@
       "test_app": "All",
       "slot": 1,
       "licence_status": "clean",
-      "clean_sources": 11,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1183,8 +1017,6 @@
       "test_app": "All",
       "slot": 2,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 19,
-      "link_only_sources": 2,
       "status": "draft, untested"
     },
     {
@@ -1197,8 +1029,6 @@
       "test_app": "All",
       "slot": 3,
       "licence_status": "clean",
-      "clean_sources": 6,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1211,8 +1041,6 @@
       "test_app": "All",
       "slot": 4,
       "licence_status": "clean",
-      "clean_sources": 11,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1225,8 +1053,6 @@
       "test_app": "All",
       "slot": 5,
       "licence_status": "clean",
-      "clean_sources": 17,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1239,8 +1065,6 @@
       "test_app": "All",
       "slot": 6,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 23,
-      "link_only_sources": 1,
       "status": "draft, untested"
     },
     {
@@ -1253,8 +1077,6 @@
       "test_app": "All",
       "slot": 7,
       "licence_status": "clean",
-      "clean_sources": 54,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1267,8 +1089,6 @@
       "test_app": "All",
       "slot": 8,
       "licence_status": "clean",
-      "clean_sources": 5,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1281,8 +1101,6 @@
       "test_app": "All",
       "slot": 9,
       "licence_status": "clean",
-      "clean_sources": 22,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1295,8 +1113,6 @@
       "test_app": "All",
       "slot": 10,
       "licence_status": "clean",
-      "clean_sources": 2,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1309,8 +1125,6 @@
       "test_app": "All",
       "slot": 33,
       "licence_status": "clean",
-      "clean_sources": 4,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1323,8 +1137,6 @@
       "test_app": "All",
       "slot": 34,
       "licence_status": "clean",
-      "clean_sources": 2,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1337,8 +1149,6 @@
       "test_app": "All",
       "slot": 35,
       "licence_status": "clean",
-      "clean_sources": 1,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1351,8 +1161,6 @@
       "test_app": "All",
       "slot": 36,
       "licence_status": "clean",
-      "clean_sources": 3,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1365,8 +1173,6 @@
       "test_app": "All",
       "slot": 37,
       "licence_status": "clean",
-      "clean_sources": 1,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1379,8 +1185,6 @@
       "test_app": "All",
       "slot": 38,
       "licence_status": "clean",
-      "clean_sources": 2,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1393,8 +1197,6 @@
       "test_app": "All",
       "slot": 39,
       "licence_status": "clean",
-      "clean_sources": 3,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1407,8 +1209,6 @@
       "test_app": "All",
       "slot": 40,
       "licence_status": "rewritten, link-only sources moved to Further reading",
-      "clean_sources": 6,
-      "link_only_sources": 1,
       "status": "draft, untested"
     },
     {
@@ -1421,8 +1221,6 @@
       "test_app": "All",
       "slot": 41,
       "licence_status": "clean",
-      "clean_sources": 10,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1435,8 +1233,6 @@
       "test_app": "All",
       "slot": 42,
       "licence_status": "clean",
-      "clean_sources": 3,
-      "link_only_sources": 0,
       "status": "draft, untested"
     },
     {
@@ -1449,8 +1245,6 @@
       "test_app": "All",
       "slot": 43,
       "licence_status": "clean",
-      "clean_sources": 8,
-      "link_only_sources": 0,
       "status": "draft, untested"
     }
   ]

@@ -7,8 +7,6 @@ category: code-craft
 aliases: []
 status: "draft, untested"
 licence: CC-BY-SA-4.0
-sources: 2
-link_only_sources: 0
 ---
 
 # 3.5 Few parameters no flags
@@ -49,11 +47,11 @@ ciembor clean-code and refactoring-guru (long parameter list, flag argument smel
 
 ## Sources
 
-2 licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
+The licence-clean source files are listed with their licences and pinned links in SOURCES.md. Text here is written in our own words and released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md).
 
 ## Test plan
 
 - Test app: App A (CLI tool)
 - Phase: Build
-- Test order: slot 21 of 103
+- Test order: slot 21
 - Record results in ../../data/scorecard.json (criteria in ../../README.md)

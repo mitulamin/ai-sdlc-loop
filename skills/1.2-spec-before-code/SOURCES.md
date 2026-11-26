@@ -5,7 +5,7 @@ Licence status: clean.
 
 ## Dedupe summary
 
-Nine source files (Addy spec-driven-development, spec-kit specify, OpenSpec propose, cc-sdd requirements, Pocock to-spec, agent-os shape-spec) agree on a written spec as the source of truth; they differ on artefacts (spec.md vs proposal+tasks vs requirements/design/tasks). Amalgam: one short spec.md with goal, non-goals, acceptance criteria and open questions; the human gate moves to the coordinator's end-of-run review, per the independent-loop principle.
+Several source files (Addy spec-driven-development, spec-kit specify, OpenSpec propose, cc-sdd requirements, Pocock to-spec, agent-os shape-spec) agree on a written spec as the source of truth; they differ on artefacts (spec.md vs proposal+tasks vs requirements/design/tasks). Amalgam: one short spec.md with goal, non-goals, acceptance criteria and open questions; the human gate moves to the coordinator's end-of-run review, per the independent-loop principle.
 
 ## Adapted sources (licence-clean)
 
