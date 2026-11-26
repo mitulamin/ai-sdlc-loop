@@ -6,7 +6,7 @@ It is a base, not a finished product. Fork it, copy it, strip out what you do no
 
 ## Status
 
-This repo is being built in phases. Right now it has the structure, the 108 principles as data and one file each, the list of 41 source repos, and the process for keeping all of it fresh. Skills, agents, commands, the website and CI come next. Each folder has a short README that says what will go in it.
+This repo is being built in phases. Right now it has the structure, the 103 principles as data and one file each, the list of 41 source repos, and the process for keeping all of it fresh. Skills, agents, commands, the website and CI come next. Each folder has a short README that says what will go in it.
 
 ## How this came about
 
@@ -14,7 +14,7 @@ At Shravi Limited we are building aidev, a software engineering team in a box. I
 
 The ideas for that are scattered across dozens of public repos: skills, sub-agents, slash commands, rules files. Lots of them say the same thing in different words. Some contradict each other. Some are risky to install. And if you load them all, the descriptions alone eat your context window before the agent does anything useful.
 
-So I had a research bot, Rex, read 41 public repos covering roughly 1,060 skills, sub-agents and commands. The result was 108 principles in 9 categories. This repo turns that research into something you can use, and something that can be redone as the field moves.
+So I had a research bot, Rex, read 41 public repos covering roughly 1,060 skills, sub-agents and commands. The result was 108 principles in 9 categories, and a dedupe pass merged five duplicates, leaving 103 (see [MERGES.md](MERGES.md)). This repo turns that research into something you can use, and something that can be redone as the field moves.
 
 ## What it aims to do
 
@@ -24,7 +24,7 @@ So I had a research bot, Rex, read 41 public repos covering roughly 1,060 skills
 4. Let you start a new project from a template with all of that wired in.
 5. Learn from every project, and get better each time.
 
-The point is not my 108 principles. The point is the loop that produced them and the loop that keeps improving them. Swap in your own.
+The point is not my 103 principles. The point is the loop that produced them and the loop that keeps improving them. Swap in your own.
 
 ## From prompt to context to harness
 
@@ -70,6 +70,7 @@ A change only goes live if it helps on cases held out from the one that caused i
 | Path | What it holds |
 | --- | --- |
 | `principles/` | One file per principle. Generated from `data/principles.json`. |
+| `MERGES.md` | Log of principles merged into others, with the old ID, the new ID, the reason and the date. |
 | `data/` | The source of truth: principles, source repos, changelog, JSON schemas. |
 | `skills/` | One amalgamated skill per principle, with a `SOURCES.md` next to each. Coming in the next phase. |
 | `agents/` | Coordinator, a producer and a reviewer per phase, and the roles. Coming. |

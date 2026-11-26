@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "categories": [
     {
       "number": 1,
@@ -257,7 +257,7 @@
       "id": "2.5",
       "category": "design-and-architecture",
       "number": 5,
-      "statement": "Add a layer or abstraction only for a concrete benefit",
+      "statement": "At design time, add a layer, interface or abstraction only when you can name the concrete benefit it brings today",
       "sources": [
         "rstack",
         "Karpathy",
@@ -269,7 +269,13 @@
         "research_run": "run-1",
         "merged_from": [],
         "notes": ""
-      }
+      },
+      "distinct_from": [
+        {
+          "id": "3.1",
+          "difference": "Use it when you draw boundaries and choose structure. 3.1 is about how much code you write inside that structure."
+        }
+      ]
     },
     {
       "id": "2.6",
@@ -354,23 +360,6 @@
       }
     },
     {
-      "id": "2.11",
-      "category": "design-and-architecture",
-      "number": 11,
-      "statement": "Validate input at the boundary; treat external responses as untrusted too",
-      "sources": [
-        "Addy",
-        "ciembor"
-      ],
-      "status": "active",
-      "provenance": {
-        "origin": "initial-research",
-        "research_run": "run-1",
-        "merged_from": [],
-        "notes": ""
-      }
-    },
-    {
       "id": "2.12",
       "category": "design-and-architecture",
       "number": 12,
@@ -406,7 +395,7 @@
       "id": "2.14",
       "category": "design-and-architecture",
       "number": 14,
-      "statement": "Simple by default, complexity opt-in; avoid boolean flag parameters",
+      "statement": "Design the API so the simple case is the default and advanced behaviour is opt-in, not switched on by boolean flags",
       "sources": [
         "Stratos",
         "ciembor"
@@ -417,7 +406,13 @@
         "research_run": "run-1",
         "merged_from": [],
         "notes": ""
-      }
+      },
+      "distinct_from": [
+        {
+          "id": "3.5",
+          "difference": "Use it when you design an interface or choose defaults. 3.5 is about the shape of one function signature once it has grown."
+        }
+      ]
     },
     {
       "id": "2.15",
@@ -505,7 +500,7 @@
       "id": "3.1",
       "category": "code-craft",
       "number": 1,
-      "statement": "Write the minimum code that solves the problem; nothing speculative",
+      "statement": "When you write code, write the minimum that solves the stated problem, with no speculative features, options or hooks",
       "sources": [
         "Karpathy",
         "ponytail",
@@ -517,7 +512,13 @@
         "research_run": "run-1",
         "merged_from": [],
         "notes": ""
-      }
+      },
+      "distinct_from": [
+        {
+          "id": "2.5",
+          "difference": "Use it when you write the code itself. 2.5 is about whether to introduce a layer or abstraction in the design."
+        }
+      ]
     },
     {
       "id": "3.2",
@@ -574,7 +575,7 @@
       "id": "3.5",
       "category": "code-craft",
       "number": 5,
-      "statement": "Keep parameters few; model the concept instead of passing flags",
+      "statement": "Keep parameter lists short: when a signature grows, introduce a named type for the concept or split the function",
       "sources": [
         "ciembor"
       ],
@@ -584,7 +585,13 @@
         "research_run": "run-1",
         "merged_from": [],
         "notes": ""
-      }
+      },
+      "distinct_from": [
+        {
+          "id": "2.14",
+          "difference": "Use it when you write or refactor a signature with many parameters or a flag. 2.14 is the wider design question of what the default behaviour is and how options are opted into."
+        }
+      ]
     },
     {
       "id": "3.6",
@@ -722,7 +729,7 @@
       "id": "3.14",
       "category": "code-craft",
       "number": 14,
-      "statement": "One thing at a time, in vertical slices, keeping the build green",
+      "statement": "Build in thin vertical slices, one at a time, each leaving the build green",
       "sources": [
         "Addy"
       ],
@@ -732,13 +739,19 @@
         "research_run": "run-1",
         "merged_from": [],
         "notes": ""
-      }
+      },
+      "distinct_from": [
+        {
+          "id": "5.4",
+          "difference": "Use it when you plan the order of the work. 5.4 is what you do when the build goes red in the middle of it."
+        }
+      ]
     },
     {
       "id": "4.1",
       "category": "verify",
       "number": 1,
-      "statement": "Write a failing test first and watch it fail",
+      "statement": "Write one failing test first and watch it fail, then write the minimal code to pass; one seam per cycle, never all tests up front.",
       "sources": [
         "Superpowers",
         "Addy",
@@ -748,9 +761,14 @@
       "provenance": {
         "origin": "initial-research",
         "research_run": "run-1",
-        "merged_from": [],
-        "notes": ""
-      }
+        "merged_from": [
+          "4.4"
+        ],
+        "notes": "Merged 4.4 into this principle on 2026-11-26. One test per cycle is a rule within red-green TDD."
+      },
+      "aliases": [
+        "4.4"
+      ]
     },
     {
       "id": "4.2",
@@ -776,41 +794,6 @@
       "number": 3,
       "statement": "No tautological tests that recompute the expected value the way the code does",
       "sources": [
-        "Pocock"
-      ],
-      "status": "active",
-      "provenance": {
-        "origin": "initial-research",
-        "research_run": "run-1",
-        "merged_from": [],
-        "notes": ""
-      }
-    },
-    {
-      "id": "4.4",
-      "category": "verify",
-      "number": 4,
-      "statement": "One seam, one test, one minimal implementation per cycle; never write all tests first",
-      "sources": [
-        "Pocock"
-      ],
-      "status": "active",
-      "provenance": {
-        "origin": "initial-research",
-        "research_run": "run-1",
-        "merged_from": [],
-        "notes": ""
-      }
-    },
-    {
-      "id": "4.5",
-      "category": "verify",
-      "number": 5,
-      "statement": "Start every bug fix with a test that reproduces it",
-      "sources": [
-        "Addy",
-        "Karpathy",
-        "caveman",
         "Pocock"
       ],
       "status": "active",
@@ -873,7 +856,7 @@
       "id": "4.9",
       "category": "verify",
       "number": 9,
-      "statement": "No completion claims without fresh verification evidence",
+      "statement": "Do not claim the work is done until you have just run the verification and read its output",
       "sources": [
         "Superpowers",
         "rstack"
@@ -884,7 +867,13 @@
         "research_run": "run-1",
         "merged_from": [],
         "notes": ""
-      }
+      },
+      "distinct_from": [
+        {
+          "id": "7.12",
+          "difference": "Use it at the moment you are about to say the work is done. 7.12 is about the evidence you attach to a change you hand over for review or release."
+        }
+      ]
     },
     {
       "id": "4.10",
@@ -906,7 +895,7 @@
       "id": "5.1",
       "category": "debug-and-observe",
       "number": 1,
-      "statement": "No fixes without root-cause investigation first",
+      "statement": "No fixes without root-cause investigation first: trace back to the original trigger, not where the symptom showed up.",
       "sources": [
         "Superpowers",
         "Addy"
@@ -915,9 +904,14 @@
       "provenance": {
         "origin": "initial-research",
         "research_run": "run-1",
-        "merged_from": [],
-        "notes": ""
-      }
+        "merged_from": [
+          "9.4"
+        ],
+        "notes": "Merged 9.4 into this principle on 2026-11-26. Same technique, same source (the Superpowers debugging skill)."
+      },
+      "aliases": [
+        "9.4"
+      ]
     },
     {
       "id": "5.2",
@@ -939,23 +933,31 @@
       "id": "5.3",
       "category": "debug-and-observe",
       "number": 3,
-      "statement": "Reproduce, localise, reduce, fix, guard against recurrence, verify end to end",
+      "statement": "Reproduce the bug with a failing test first, then localise, reduce, fix, keep the test as a guard, and verify end to end.",
       "sources": [
-        "Addy"
+        "Addy",
+        "Karpathy",
+        "caveman",
+        "Pocock"
       ],
       "status": "active",
       "provenance": {
         "origin": "initial-research",
         "research_run": "run-1",
-        "merged_from": [],
-        "notes": ""
-      }
+        "merged_from": [
+          "4.5"
+        ],
+        "notes": "Merged 4.5 into this principle on 2026-11-26. The reproducing test is the first step of 5.3."
+      },
+      "aliases": [
+        "4.5"
+      ]
     },
     {
       "id": "5.4",
       "category": "debug-and-observe",
       "number": 4,
-      "statement": "Stop the line: don't build on a failing test or broken build",
+      "statement": "When a test fails or the build breaks, stop and fix it before writing anything new",
       "sources": [
         "Addy"
       ],
@@ -965,7 +967,13 @@
         "research_run": "run-1",
         "merged_from": [],
         "notes": ""
-      }
+      },
+      "distinct_from": [
+        {
+          "id": "3.14",
+          "difference": "Use it when something turns red. 3.14 is about how you slice and order work so the build stays green in the first place."
+        }
+      ]
     },
     {
       "id": "5.5",
@@ -974,22 +982,6 @@
       "statement": "After three failed fixes, question the architecture",
       "sources": [
         "Superpowers"
-      ],
-      "status": "active",
-      "provenance": {
-        "origin": "initial-research",
-        "research_run": "run-1",
-        "merged_from": [],
-        "notes": ""
-      }
-    },
-    {
-      "id": "5.6",
-      "category": "debug-and-observe",
-      "number": 6,
-      "statement": "Redact secrets in any debug output you show",
-      "sources": [
-        "Pocock"
       ],
       "status": "active",
       "provenance": {
@@ -1053,18 +1045,24 @@
       "id": "5.10",
       "category": "debug-and-observe",
       "number": 10,
-      "statement": "Never log secrets, tokens or full personal data",
+      "statement": "Never log or display secrets, tokens or full personal data, including in debug output.",
       "sources": [
         "Addy",
-        "ciembor (Release It!)"
+        "ciembor (Release It!)",
+        "Pocock"
       ],
       "status": "active",
       "provenance": {
         "origin": "initial-research",
         "research_run": "run-1",
-        "merged_from": [],
-        "notes": ""
-      }
+        "merged_from": [
+          "5.6"
+        ],
+        "notes": "Merged 5.6 into this principle on 2026-11-26. Same rule."
+      },
+      "aliases": [
+        "5.6"
+      ]
     },
     {
       "id": "5.11",
@@ -1183,17 +1181,23 @@
       "id": "6.3",
       "category": "secure",
       "number": 3,
-      "statement": "Validate all external input, parameterise queries, encode output",
+      "statement": "Validate all external input at the boundary, treat external API responses as untrusted too, parameterise queries and encode output.",
       "sources": [
-        "Addy"
+        "Addy",
+        "ciembor"
       ],
       "status": "active",
       "provenance": {
         "origin": "initial-research",
         "research_run": "run-1",
-        "merged_from": [],
-        "notes": ""
-      }
+        "merged_from": [
+          "2.11"
+        ],
+        "notes": "Merged 2.11 into this principle on 2026-11-26. Same rule."
+      },
+      "aliases": [
+        "2.11"
+      ]
     },
     {
       "id": "6.4",
@@ -1279,7 +1283,7 @@
       "id": "7.1",
       "category": "review-and-ship",
       "number": 1,
-      "statement": "Review early and often, using a separate reviewer subagent",
+      "statement": "Review the work at the end of each phase, using a separate reviewer subagent that did not write it",
       "sources": [
         "Superpowers"
       ],
@@ -1289,7 +1293,13 @@
         "research_run": "run-1",
         "merged_from": [],
         "notes": ""
-      }
+      },
+      "distinct_from": [
+        {
+          "id": "8.7",
+          "difference": "Use it when a phase has produced something to check. Its job is review quality. 8.7 is about keeping context small while gathering facts."
+        }
+      ]
     },
     {
       "id": "7.2",
@@ -1359,7 +1369,7 @@
       "id": "7.6",
       "category": "review-and-ship",
       "number": 6,
-      "statement": "Keep each change small and about one thing",
+      "statement": "Keep each change, meaning one commit or pull request, small and about one thing, so it is easy to review and to revert",
       "sources": [
         "Addy"
       ],
@@ -1369,7 +1379,13 @@
         "research_run": "run-1",
         "merged_from": [],
         "notes": ""
-      }
+      },
+      "distinct_from": [
+        {
+          "id": "7.10",
+          "difference": "Use it when you cut a commit or open a pull request. 7.10 is about how often you release and when checks run."
+        }
+      ]
     },
     {
       "id": "7.7",
@@ -1424,7 +1440,7 @@
       "id": "7.10",
       "category": "review-and-ship",
       "number": 10,
-      "statement": "Shift left, and ship in small, frequent batches",
+      "statement": "Shift checks left and release in small, frequent batches, so problems show up early and each release carries little risk",
       "sources": [
         "Addy"
       ],
@@ -1434,7 +1450,13 @@
         "research_run": "run-1",
         "merged_from": [],
         "notes": ""
-      }
+      },
+      "distinct_from": [
+        {
+          "id": "7.6",
+          "difference": "Use it when you plan the pipeline and release cadence. 7.6 is about the size and focus of each individual change."
+        }
+      ]
     },
     {
       "id": "7.11",
@@ -1456,7 +1478,7 @@
       "id": "7.12",
       "category": "review-and-ship",
       "number": 12,
-      "statement": "Ship with before-and-after proof",
+      "statement": "Attach before-and-after proof to each change you ship, such as test output, screenshots or measurements, so a reviewer can see the effect",
       "sources": [
         "rstack"
       ],
@@ -1466,13 +1488,19 @@
         "research_run": "run-1",
         "merged_from": [],
         "notes": ""
-      }
+      },
+      "distinct_from": [
+        {
+          "id": "4.9",
+          "difference": "Use it when you open the pull request or release. 4.9 is the habit of checking before you claim done, even when nothing is being shipped."
+        }
+      ]
     },
     {
       "id": "8.1",
       "category": "agent-operations",
       "number": 1,
-      "statement": "Load only the context the task needs, such as the relevant spec section",
+      "statement": "At task time, give the agent only the context that task needs, such as the relevant spec section",
       "sources": [
         "Addy",
         "agent-os"
@@ -1483,7 +1511,13 @@
         "research_run": "run-1",
         "merged_from": [],
         "notes": ""
-      }
+      },
+      "distinct_from": [
+        {
+          "id": "8.3",
+          "difference": "Use it when you start a task and decide what to load. 8.3 is about how a skill is laid out so that it can be loaded in layers."
+        }
+      ]
     },
     {
       "id": "8.2",
@@ -1506,7 +1540,7 @@
       "id": "8.3",
       "category": "agent-operations",
       "number": 3,
-      "statement": "Progressive disclosure: short description always, body on trigger, references on demand",
+      "statement": "When you write a skill, layer it: a short description that is always loaded, a body loaded on trigger, and references loaded on demand",
       "sources": [
         "Anthropic skill-creator",
         "ciembor",
@@ -1518,7 +1552,13 @@
         "research_run": "run-1",
         "merged_from": [],
         "notes": ""
-      }
+      },
+      "distinct_from": [
+        {
+          "id": "8.1",
+          "difference": "Use it when you author or restructure a skill. 8.1 is about what you hand the agent for a given task."
+        }
+      ]
     },
     {
       "id": "8.4",
@@ -1540,7 +1580,7 @@
       "id": "8.5",
       "category": "agent-operations",
       "number": 5,
-      "statement": "Test skills with evals before trusting them",
+      "statement": "Run a new or changed skill against evals before you rely on it",
       "sources": [
         "Anthropic skill-creator",
         "wshobson"
@@ -1551,7 +1591,13 @@
         "research_run": "run-1",
         "merged_from": [],
         "notes": ""
-      }
+      },
+      "distinct_from": [
+        {
+          "id": "9.9",
+          "difference": "Use it when a skill is first written or edited. 9.9 is about deciding whether a rule change that came out of a retrospective is kept."
+        }
+      ]
     },
     {
       "id": "8.6",
@@ -1573,7 +1619,7 @@
       "id": "8.7",
       "category": "agent-operations",
       "number": 7,
-      "statement": "Use fresh-context subagents for fact-finding and review",
+      "statement": "Send fact-finding and bulk reading to fresh-context subagents and take back only a short summary, so the main context stays small",
       "sources": [
         "Pocock",
         "Superpowers",
@@ -1586,7 +1632,13 @@
         "research_run": "run-1",
         "merged_from": [],
         "notes": ""
-      }
+      },
+      "distinct_from": [
+        {
+          "id": "7.1",
+          "difference": "Use it when you need to explore or look something up and the main context is filling. Its job is context size. 7.1 is about independent review of finished work."
+        }
+      ]
     },
     {
       "id": "8.8",
@@ -1685,22 +1737,6 @@
       }
     },
     {
-      "id": "9.4",
-      "category": "learn",
-      "number": 4,
-      "statement": "Trace back to the original trigger, not the place the symptom showed up",
-      "sources": [
-        "Superpowers"
-      ],
-      "status": "active",
-      "provenance": {
-        "origin": "initial-research",
-        "research_run": "run-1",
-        "merged_from": [],
-        "notes": ""
-      }
-    },
-    {
       "id": "9.5",
       "category": "learn",
       "number": 5,
@@ -1769,7 +1805,7 @@
       "id": "9.9",
       "category": "learn",
       "number": 9,
-      "statement": "Accept a rule change only if it measurably helps on held-out cases",
+      "statement": "Accept a rule change coming out of a retrospective only if it measurably improves results on held-out cases it was not tuned on",
       "sources": [
         "muratcankoylan",
         "SkillOpt",
@@ -1781,7 +1817,13 @@
         "research_run": "run-1",
         "merged_from": [],
         "notes": ""
-      }
+      },
+      "distinct_from": [
+        {
+          "id": "8.5",
+          "difference": "Use it when a retrospective proposes changing a rule. 8.5 is the basic check that any skill works before you trust it."
+        }
+      ]
     },
     {
       "id": "9.10",
