@@ -24,6 +24,8 @@ All notable changes to this repo. The machine-readable version of the data chang
 
 ### Changed
 
+- The learning site's visible name is "AI SDLC Loop" (page titles, header and footer). The repo name and URLs are unchanged.
+
 - `scripts/new-project.sh` takes a profile argument (`scripts/new-project.sh <target-dir> [profile]`, default `solo`), shows usage with `--help` or on bad input, and still refuses a target that is not empty. It copies the base, then applies the profile.
 
 - Guides folder is `guides/developer/`. The guides cover everything, including what experienced developers already know.

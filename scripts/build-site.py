@@ -22,7 +22,7 @@ DOCS = ROOT / "docs"
 GUIDES = ROOT / "guides" / "developer"
 REPO_URL = "https://github.com/mitulamin/ai-sdlc-loop"
 BLOB = REPO_URL + "/blob/main/"
-SITE_NAME = "ai-sdlc-loop"
+SITE_NAME = "AI SDLC Loop"
 
 GENERATED_DIRS = ["categories", "principles", "guides"]
 GENERATED_FILES = [
@@ -141,7 +141,7 @@ def page(title, body, depth, active=None, description=""):
 </main>
 <footer class="site-footer">
 <div class="wrap">
-<p>Written content is CC BY-SA 4.0 and code is GPL-3.0; the project template is MIT.
+<p>{SITE_NAME}. Written content is CC BY-SA 4.0 and code is GPL-3.0; the project template is MIT.
 See <a href="{REPO_URL}#readme">the README</a> and <a href="{REPO_URL}/blob/main/LICENSE-CONTENT">LICENSE-CONTENT</a>.
 No trackers, no external scripts. Generated from <a href="{BLOB}data/principles.json">data/principles.json</a>.</p>
 </div>
