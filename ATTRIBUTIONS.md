@@ -74,7 +74,7 @@ Projects and works this repo points to or relies on, but does not copy from. Lin
 | Creative Commons, CC BY-SA 4.0 | Licence for the written content | [LICENSE-CONTENT](LICENSE-CONTENT) | [creativecommons.org/licenses/by-sa/4.0](https://creativecommons.org/licenses/by-sa/4.0/) |
 | Free Software Foundation, GNU GPL v3 | Licence for the code | [LICENSE](LICENSE) | [gnu.org/licenses/gpl-3.0](https://www.gnu.org/licenses/gpl-3.0.html) |
 | Free Software Foundation, GNU AGPL v3 | The alternative licence mentioned in the README | README, "Why GPLv3" | [gnu.org/licenses/agpl-3.0](https://www.gnu.org/licenses/agpl-3.0.html) |
-| "Release It!" by Michael Nygard | Book on designing software that survives production | Cited by ciembor/agent-rules-books; principles 2.7, 2.8, 2.15, 5.8, 5.9, 5.10 and 5.14 | [Pragmatic Bookshelf, 2nd edition](https://pragprog.com/titles/mnee2/release-it-second-edition/) (edition cited by ciembor: to be confirmed) |
+| "Release It!" by Michael T. Nygard | Book on designing software that survives production | Cited by ciembor/agent-rules-books; principles 2.7, 2.8, 2.15, 5.8, 5.9, 5.10 and 5.14 | [Pragmatic Bookshelf](https://pragprog.com/titles/mnee2/release-it-second-edition/) |
 | Hyrum's Law | Observation that every observable behaviour of an interface ends up depended on | Principle 2.12 | [hyrumslaw.com](https://www.hyrumslaw.com/) |
 | Chesterton's fence | Idea from G. K. Chesterton: understand why something exists before removing it | Principle 3.9 | [Wikipedia](https://en.wikipedia.org/wiki/Chesterton%27s_fence) |
 | Five whys | Root-cause technique from Toyota | Principle 9.5 | [Wikipedia](https://en.wikipedia.org/wiki/Five_whys) |
