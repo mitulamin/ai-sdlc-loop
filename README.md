@@ -108,8 +108,30 @@ The full process is in [UPDATING.md](UPDATING.md).
 
 If you use this for yourself or your organisation, the intended path is: copy it, replace the principles and sources with the ones you trust, run your own projects through the loop, and let your own Learn loop reshape it. If you find something that would help everyone, send it back. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Licence and sources
+## Why GPLv3, and CC BY-SA for the writing
 
-This repo is under the licence in [LICENSE](LICENSE). Content borrowed from other repos keeps its own licence and is credited next to the skill that uses it. See [NOTICE.md](NOTICE.md).
+I am not a lawyer, and this is not legal advice. If you think this is the wrong licence for the intent, open an issue. I am open to discussing a better one.
+
+I want the widest use, without restricting anyone. People should be able to include this in their own projects, and companies should be able to use it for private software development. I do not want someone to take this, add proprietary work on top, and lock that work into their own systems. If you benefit from open source, contribute back.
+
+This is a tool for builders, not a consumer end product. I want it kept open rather than closed down into an end product.
+
+MIT would have been my first choice. There is a clear push and pull between open and proprietary software today, and individuals' generosity is being used for financial gain. I want to back open source, so I chose GPLv3 for the code. The licence text is in [LICENSE](LICENSE).
+
+GPL-3.0 covers `scripts/`, `data/schemas/`, and the tooling.
+
+In short: private internal use and modification by a company is allowed, with no duty to publish, because the duties start when you distribute. Anyone who distributes a work that includes this code must release the whole combined work under GPLv3, with source. Hosted or SaaS use that never distributes the code does not start those duties. AGPL-3.0 is the licence that closes that gap. I could discuss it. I am not choosing it here.
+
+`template/` copies carry the licence with them, so a new project spun up from the template inherits it when the project is distributed. Prose in `template/` is under the content licence below. Code that lands in `template/` later is GPL-3.0.
+
+The writing is CC BY-SA 4.0. The full text is in [LICENSE-CONTENT](LICENSE-CONTENT). You can share and adapt it with attribution. Share-alike means derived text stays under CC BY-SA 4.0, so it stays open.
+
+CC BY-SA 4.0 covers `README.md`, `UPDATING.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `NOTICE.md`, prose in `template/`, the principle statements and notes in `principles/`, `docs/` and `guides/`, the other markdown in this repo, and the data files `data/principles.json`, `data/sources.json`, `data/changelog.json` and `data/notes/`.
+
+Those data files sit with the writing because they hold the research. The principle statements in `data/principles.json` are text. `data/sources.json` and `data/changelog.json` are the record around them. The schemas in `data/schemas/` stay GPL-3.0 with the tooling. Each file is under one licence.
+
+Borrowed source repos keep their own licences. They are not relicensed here. Attribution is in [NOTICE.md](NOTICE.md).
+
+## Sources
 
 I never install the big curation lists wholesale. They overload context and contain files I would not trust. Anything borrowed gets scanned before it goes in.

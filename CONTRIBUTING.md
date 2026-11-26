@@ -19,6 +19,14 @@ Add it to `data/sources.json` with `role` `skill-source` or `curation-list`, `li
 
 Skills arrive in the next phase. The rules will be added here then: one skill per principle, `SKILL.md` plus `SOURCES.md`, sources pinned to a commit, licence and attribution kept.
 
+## Which licence your contribution is under
+
+By contributing, you agree your contribution is licensed on the same split as the repo. This is not legal advice. The detail is in [NOTICE.md](NOTICE.md) and the README section [Why GPLv3, and CC BY-SA for the writing](README.md#why-gplv3-and-cc-by-sa-for-the-writing).
+
+- A script, a schema, workflow tooling, or other program code is under GPL-3.0 ([LICENSE](LICENSE)). That includes `scripts/` and `data/schemas/`.
+- Writing is under CC BY-SA 4.0 ([LICENSE-CONTENT](LICENSE-CONTENT)). That includes docs, guides, principle statements and notes, `template/` prose, skill and agent markdown, and `data/principles.json`, `data/sources.json`, `data/changelog.json` and `data/notes/`.
+- Do not add material you cannot license that way. Borrowed files keep their own licence and their attribution.
+
 ## Rules
 
 - Never hand-edit a file that starts with a `GENERATED` marker.
