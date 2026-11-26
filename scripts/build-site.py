@@ -120,6 +120,25 @@ NAV = [
 ]
 
 
+def label_cells(body):
+    """Give each cell of a .sortable table its column heading as data-label, so the stylesheet can stack rows on narrow screens."""
+
+    def table(m):
+        t = m.group(0)
+        heads = [html.unescape(re.sub(r"<[^>]+>", "", h)).strip() for h in re.findall(r"<th[ >].*?</th>", t, re.S)]
+        if not heads:
+            return t
+
+        def row(r):
+            cells = iter(heads)
+            return re.sub(r"<td(?=[ >])", lambda c: f'<td data-label="{esc(next(cells, ""))}"', r.group(0))
+
+        head, sep, rest = t.partition("<tbody>")
+        return head + sep + re.sub(r"<tr[ >].*?</tr>", row, rest, flags=re.S)
+
+    return re.sub(r'<table[^>]*class="sortable".*?</table>', table, body, flags=re.S)
+
+
 def page(title, body, depth, active=None, description=""):
     """Wrap body in the site chrome. depth is the folder depth below docs/."""
     up = "../" * depth
@@ -149,7 +168,7 @@ def page(title, body, depth, active=None, description=""):
 </div>
 </header>
 <main id="main" class="wrap">
-{body}
+{label_cells(body)}
 </main>
 <footer class="site-footer">
 <div class="wrap">
@@ -715,7 +734,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 IDs are never renumbered, so a merged ID is kept as an alias and opens the principle it was merged into.
 Search, filter and click a column heading to sort. With JavaScript off you still get the full table.</p>
 <div class="filters" role="search" data-table="ptable">
-<label>Search <input data-q type="search" placeholder="Statement or ID, e.g. test or 4.4" autocomplete="off"></label>
+<label>Search <input data-q type="search" placeholder="e.g. test or 4.4" autocomplete="off"></label>
 <label>Category <select data-attr="cat"><option value="">All categories</option>{cat_opts}</select></label>
 <label>Phase <select data-attr="phase"><option value="">All phases</option>{self.phase_options()}</select></label>
 <label>Test app <select data-attr="app"><option value="">All apps</option>{self.app_options()}</select></label>
