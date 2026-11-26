@@ -11,13 +11,16 @@
 #   message  glob on the matched text (case-insensitive; wrap in * to match a substring)
 #   reason   why the finding is a false positive
 #
-# An entry that matches nothing fails CI, so this file cannot go stale and hide
-# a future finding. Add an entry only after reading the finding, never to get
+# Every entry must suppress at least one finding for each glob in its `skill`
+# list, or CI fails, so this file cannot go stale and hide a future finding.
+# Unknown keys are rejected. `message` is matched against the matched text of
+# the finding, so keep it as exact as the finding allows. Add an entry only after reading the finding, never to get
 # a red build green. Scan version: skillspector 2.13.7 (pinned in ci.yml).
 exceptions:
   - skill: "*"
     id: "AS3"
     path: "SOURCES.md"
+    message: "skills/*/SKILL.md"
     reason: >-
       SOURCES.md lists pinned links to upstream source files, and those upstream paths
       contain skills/<name>/SKILL.md. Nothing reads or lists installed skills.
@@ -31,73 +34,73 @@ exceptions:
   - skill: "6.5-*"
     id: "YR4"
     path: "SOURCES.md"
-    message: "*burpsuite*"
+    message: "burpsuite; burpsuite; burpsuite"
     reason: >-
       The match is inside upstream file paths in the source links. No offensive tool
       is referenced or used.
   - skill: "6.6-*"
     id: "YR4"
     path: "SOURCES.md"
-    message: "*burpsuite*"
+    message: "burpsuite; burpsuite; burpsuite"
     reason: >-
       The match is inside upstream file paths in the source links. No offensive tool
       is referenced or used.
   - skill: "7.5-*"
     id: "YR4"
     path: "SOURCES.md"
-    message: "*burpsuite*"
+    message: "burpsuite; burpsuite; burpsuite"
     reason: >-
       The match is inside upstream file paths in the source links. No offensive tool
       is referenced or used.
   - skill: "6.7-*"
     id: "P1"
     path: "SKILL.md"
-    message: "*ignore previous instructions*"
+    message: "ignore previous instructions"
     reason: >-
       The skill teaches agents not to follow "ignore previous instructions" text found
       in data. The phrase appears only inside a Don't.
   - skill: "6.4-*"
     id: "PE3"
     path: "SKILL.md"
-    message: "*.env*"
+    message: ".env*"
     reason: >-
       The skill tells agents to add .env to .gitignore. It does not read or send the file.
   - skill: "9.11-*"
     id: "RA1"
     path: "SKILL.md"
-    message: "*Edit skill*"
+    message: "Edit skill"
     reason: >-
       "Edit skills mid-run on each correction" is a Don't. The skill queues corrections
       and applies them later, with human approval (9.10).
   - skill: "1.4-*"
     id: "EA2"
     path: "SKILL.md"
-    message: "*without checking*"
+    message: "without checking"
     reason: >-
       "without checking" sits inside a Don't that forbids treating agreement as given
       without checking.
   - skill: "1.6-*"
     id: "EA2"
     path: "SKILL.md"
-    message: "*no verification*"
+    message: "no verification"
     reason: >-
       The adversarial reviewer is told to find plan steps that have no verification command.
   - skill: "3.9-*"
     id: "EA2"
     path: "SKILL.md"
-    message: "*without checking*"
+    message: "without checking"
     reason: >-
       "without checking" sits inside a Don't that forbids deleting code without checking
       callers and history.
   - skill: "6.2-*"
     id: "EA2"
     path: "SKILL.md"
-    message: "*without asking*"
+    message: "without asking"
     reason: >-
       The adversarial reviewer is told to find ask-first actions taken without asking.
   - skill: "9.10-*"
     id: "EA2"
     path: "SKILL.md"
-    message: "*no approval*"
+    message: "no approval"
     reason: >-
       The adversarial reviewer is told to find live changes with no approval record.

@@ -23,7 +23,7 @@ pip install "skillspector==2.13.7"
 python3 scripts/skillspector-scan.py
 ```
 
-[SkillSpector](https://github.com/NVIDIA/SkillSpector) is NVIDIA's open-source scanner for agent skills (Apache-2.0, on PyPI). CI runs it static only (`--no-llm`), so no skill text leaves the runner and no API key is needed. It fails on any finding and on incomplete coverage. SkillSpector refuses a baseline for a recursive scan, so `scripts/skillspector-scan.py` runs it once per skill folder. The findings we reviewed and accepted as false positives are in `.github/skillspector-exceptions.yaml`, each with a reason; an exception that matches nothing fails the scan. SkillSpector is pinned to 2.13.7, so bump the pin and re-review the exceptions together.
+[SkillSpector](https://github.com/NVIDIA/SkillSpector) is NVIDIA's open-source scanner for agent skills (Apache-2.0, on PyPI). CI runs it static only (`--no-llm`), so no skill text leaves the runner and no API key is needed. It fails on any finding and on incomplete coverage. SkillSpector refuses a baseline for a recursive scan, so `scripts/skillspector-scan.py` runs it once per skill folder. The findings we reviewed and accepted as false positives are in `.github/skillspector-exceptions.yaml`, each with a reason; an exception that suppresses nothing for one of its skill globs fails the scan, and so does an unknown key. The script also checks the SkillSpector version, so bump `SCANNER_VERSION` in the script, the pin in `ci.yml` and re-review the exceptions together.
 
 ## GitHub Pages
 

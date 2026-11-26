@@ -12,6 +12,8 @@ licences and scorecard row count. This script adds:
   and no retired ID;
 - every skills/*/SKILL.md starts with front matter that parses as YAML, with
   the keys the other scripts rely on;
+- no skill folder holds a symlink or other non-regular file, and no SOURCES.md is empty;
+- the alias map is exactly the five merges in MERGES.md (4.4, 4.5, 9.4, 5.6, 2.11);
 - every data/*.json has a schema in data/schemas/ (and the reverse).
 
 Usage: scripts/check-kit-layout.py
@@ -32,6 +34,7 @@ except ImportError:
 ROOT = Path(__file__).resolve().parent.parent
 EXPECTED_PRINCIPLES = 103
 EXPECTED_ALIASES = 5
+RETIRED = {"4.4": "4.1", "4.5": "5.3", "9.4": "5.1", "5.6": "5.10", "2.11": "6.3"}
 FRONT_MATTER_KEYS = ("name", "description", "principles", "principle", "aliases", "licence")
 
 errors = []
@@ -45,7 +48,10 @@ def need(cond, msg):
 def main():
     index = json.loads((ROOT / "data" / "principles.json").read_text(encoding="utf-8"))
     ids = [p["id"] for p in index["principles"]]
-    retired = set(index["aliases"])
+    retired = set(RETIRED)
+    need(index["aliases"] == RETIRED, f"data/principles.json: aliases are {index['aliases']}, expected {RETIRED}")
+    need(len(set(ids)) == len(ids), "data/principles.json: duplicate principle IDs")
+    need(not (set(ids) & retired), f"data/principles.json: retired IDs listed as principles: {sorted(set(ids) & retired)}")
     need(len(ids) == EXPECTED_PRINCIPLES, f"data/principles.json: expected {EXPECTED_PRINCIPLES} principles, got {len(ids)}")
     need(len(retired) == EXPECTED_ALIASES, f"data/principles.json: expected {EXPECTED_ALIASES} aliases, got {len(retired)}")
 
@@ -65,7 +71,7 @@ def main():
             continue
         prefix_ids.append(m.group(1))
         if m.group(1) in retired:
-            errors.append(f"skills/{d}: folder for retired ID {m.group(1)} (resolve it to {index['aliases'][m.group(1)]})")
+            errors.append(f"skills/{d}: folder for retired ID {m.group(1)} (resolve it to {RETIRED[m.group(1)]})")
     need(sorted(prefix_ids) == sorted(ids), "skills/: folder IDs differ from principle IDs, or two folders share an ID")
 
     rows = list(csv.DictReader((ROOT / "scorecard.csv").open(encoding="utf-8", newline="")))
@@ -75,6 +81,10 @@ def main():
     need(not (set(sc_ids) & retired), f"scorecard.csv: retired IDs present: {sorted(set(sc_ids) & retired)}")
 
     for d in folders:
+        for f in sorted((ROOT / "skills" / d).rglob("*")):
+            need(f.is_dir() or (f.is_file() and not f.is_symlink()), f"{f.relative_to(ROOT)}: not a regular file (SkillSpector skips symlinks)")
+        sources = ROOT / "skills" / d / "SOURCES.md"
+        need(sources.exists() and sources.stat().st_size > 0, f"skills/{d}/SOURCES.md is missing or empty")
         skill = ROOT / "skills" / d / "SKILL.md"
         if not skill.exists():
             continue
