@@ -22,10 +22,10 @@ For each phase, in order: Verify, Debug.
 1. Pick, from the phase's skills below, only the ones that apply to the task (1.8, 8.1). Write the brief to a file: the task, the acceptance criteria, the files to read, the skill IDs that apply, and where to write the output and the review.
 2. Start the phase's producer in a fresh context with the brief (8.7).
 3. Start the phase's reviewer in a fresh context with the brief's task and acceptance criteria and the producer's output, not its transcript or reasoning.
-4. On FAIL, start a new producer with the brief and the findings file, then a new reviewer. After three FAILs in a row, stop the phase and record it as failed with its findings (5.5).
-5. On PASS, record the output and the review file for the end-of-cycle summary. Do not ask the human anything here.
+4. On a reviewer FAIL, start a new producer with the brief and the findings file, then a new reviewer. After three FAILs in a row, stop the phase and record it as failed with its findings (5.5).
+5. On PASS, record the output and the review file for the coordinator's end-of-cycle report. Do not ask the human anything here.
 
-Run the Debug loop only for failures the Verify loop found, then run the Verify loop again on the fix.
+The Debug loop runs only when the Verify output shows failing behaviour (a failing test, a bug or an unexpected result), and only for those failures. Then run the Verify loop again on the fix.
 
 ## Phases and the skills they load
 

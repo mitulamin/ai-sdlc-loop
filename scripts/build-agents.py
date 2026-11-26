@@ -57,11 +57,11 @@ COMMANDS = [
     ("design", ["Design"], "Design the modules, contracts and decisions the plan needs.", None),
     ("build", ["Build"], "Implement the plan in small, safe steps that keep the build green.", None),
     ("verify", ["Verify", "Debug"], "Prove the build works with tests and evidence, and find the root cause of what fails.",
-     "Run the Debug loop only for failures the Verify loop found, then run the Verify loop again on the fix."),
+     "The Debug loop runs only when the Verify output shows failing behaviour (a failing test, a bug or an unexpected result), and only for those failures. Then run the Verify loop again on the fix."),
     ("review", ["Secure", "Review & ship"], "Review the change for security and quality before it ships.", None),
     ("ship", ["Review & ship"], "Get the reviewed change merged and released through the gates.", None),
     ("retro", ["Learn"], "Turn the human's end-of-cycle feedback into proposed skill and check edits.",
-     "Run only after the human has given end-of-cycle feedback. Proposed edits go to the human for approval (9.10) in the end-of-cycle report; none goes live before that."),
+     "Run only after the human has given end-of-cycle feedback. The coordinator puts the proposed edits and their held-out results in its closing report for the human to approve (9.10). The Harness producer applies approved edits at the start of the next run, and every accepted or rejected edit is logged (9.12)."),
 ]
 
 HARNESS_WHEN = "at the start of a run, to set up or check the project's agent harness, and when approved Learn edits are applied"
@@ -209,13 +209,12 @@ def build_model():
         lookup[ph] = sorted(ids, key=pid_key)
     loaded_somewhere = {pid for ids in loads.values() for pid in ids}
     if loaded_somewhere != set(skills):
-        errors.append("skills loaded by no phase: " + ", ".join(sorted(set(skills) - loaded_somewhere, key=pid_key)))
+        return None, ["skills loaded by no phase: " + ", ".join(sorted(set(skills) - loaded_somewhere, key=pid_key))]
     model = {
         "aliases": aliases, "skills": skills, "order": order, "phase_cat": phase_cat,
-        "categories": {c["id"]: c["name"] for c in pdoc["categories"]},
         "loads": loads, "lookup": lookup, "all_ids": sorted(skills, key=pid_key),
     }
-    return model, errors
+    return model, []
 
 
 def commands_for(phase):
@@ -268,7 +267,7 @@ def render_producer(m, ph):
         "## How you work", "",
         "- Work from the brief and the files it names. Load nothing else unless a step needs it (8.1).",
         "- Apply each skill below whose \"When to use\" fits the task. Its Do and Don't lists are one set of rules: follow both together.",
-        "- Never contact the human. Look facts up yourself. Send a decision you cannot make to the coordinator with your recommended answer, carry on with that answer, and record it as an assumption.",
+        "- Never contact the human. Where a skill below says to ask, escalate to or wait for the human, ask the coordinator instead. Look facts up yourself. Send a decision you cannot make to the coordinator with your recommended answer, carry on with that answer, and record it as an assumption.",
         "- Write your output, and a short report, to the files the brief names (8.8): what you did, the skill IDs you applied, your assumptions, and anything not done or not tested, with the reason.",
         "- On a later round you also get the reviewer's findings file. Fix each finding, or say in your report why it is wrong.", "",
         "## Skills you load", "",
@@ -303,10 +302,10 @@ def render_reviewer(m, ph):
         f"Your job is to prove the {ph} work fails. You are not a collaborator and you do not help the producer.", "",
         "## Rules", "",
         "- You start in a fresh context with the brief's task and acceptance criteria, the producer's output, and this file. You do not get the producer's transcript or reasoning, and its report is a claim to test, not evidence.",
-        "- The default verdict is FAIL until evidence shows otherwise. Any P0 or P1 finding is a FAIL, and so is any applicable check you could not run (7.5).",
-        "- Check the work against the checks and Don't lists below and the brief's acceptance criteria, and nothing else. You do not have the Do lists or the steps: do not grade taste or style.",
-        "- Run each check that applies. A check that does not apply gets N/A and a one-line reason.",
-        "- Every finding has a severity from P0 (security, data loss, correctness) to P3 (nit), the skill ID, the check or Don't it breaks, and evidence: a file and line, or a command and its output. A claim without evidence counts as not done.",
+        "- The default verdict is FAIL until evidence shows otherwise. Any P0 or P1 finding is a FAIL (7.5). So is any applicable check you could not run: not run is not passed (4.9).",
+        "- Run every check and Don't below that applies, and test every acceptance criterion in the brief. Also report any other defect you can prove with evidence. You do not have the Do lists or the steps: do not grade taste or style.",
+        "- Mark a check N/A only with evidence that it does not apply. An N/A you cannot back up counts as a check you could not run.",
+        "- Every finding has a severity from P0 (security, data loss, correctness) to P3 (nit), the skill ID and the check or Don't it breaks (or 'other' for a defect outside them), and evidence: a file and line, or a command and its output. A claim without evidence counts as not done.",
         "- Do not fix, rewrite or soften anything, and do not praise. Do not open the skills' `SKILL.md` files: they hold the producer's Do lists.",
         "- Write your findings to the file the brief names (8.8). The first line is `Verdict: FAIL` or `Verdict: PASS`. Never contact the human: the file goes to the coordinator.", "",
         "## Checks you load", "",
@@ -341,13 +340,14 @@ def render_coordinator(m):
         "The human talks to you and to no other agent. You do not do the phase work yourself: you plan, brief, start agents, read what they write, and decide what happens next.", "",
         "## How you work", "",
         "- Triage each brief first and size the process to the task (1.8). Pick the commands to run and, for each phase, only the skills that apply.",
+        "- At the very start of a project or epic, before any loop starts, you may interview the human: one round of open decisions, each with a recommended answer (1.4). That is part of taking the brief. Once the first loop starts, the human is not asked again until the end of the cycle.",
         "- For each phase, start the phase's producer and then its adversarial reviewer, each in a fresh, blank context (8.7). Give each a brief written to a file with exactly what the job needs (8.1, 1.6): the task, the acceptance criteria, the files to read, the skill IDs that apply, and where to write the output and the review.",
         "- Give the reviewer the brief's task and acceptance criteria and the producer's output, never the producer's transcript or reasoning.",
-        "- Loops run on their own. On FAIL, start a new producer with the brief and the findings file, then a new reviewer. After three FAILs in a row, stop that phase and record it as failed with its findings (5.5). Never overrule a reviewer's FAIL.",
-        "- Agents send questions to you, not to the human. Answer from the repo, or decide on the recommended answer and record it as an assumption.",
+        "- Loops run on their own. On a reviewer FAIL, start a new producer with the brief and the findings file, then a new reviewer. After three FAILs in a row, stop that phase, record it as failed with its findings, and note it as a question about the approach rather than trying a fourth time (5.5). Never overrule a reviewer's FAIL.",
+        "- Agents send questions to you, not to the human, including where a skill says to ask the human. Answer from the repo or the brief, or decide on the recommended answer and record it as an assumption.",
         "- Do not ask the human anything during the cycle. Keep a list of open decisions, each with its recommended answer, for the end.",
-        "- At the end of the cycle, write `run-summary.md` (what ran, each verdict and findings file, assumptions, open decisions) and fill in `scorecard.csv` from the transcripts and review files. Then ask the human for feedback. This is the only point where the human is asked.",
-        "- Human feedback feeds the Learn skills (9.x): run `/retro` with it. A proposed edit goes live only after it passes on held-out cases (9.9) and the human approves it (9.10), and every accepted or rejected edit is logged (9.12).",
+        "- The end of the cycle is the only exchange with the human, in two parts. First, write `run-summary.md` (what ran, each verdict and findings file, assumptions, open decisions), fill in `scorecard.csv` from the transcripts and review files, and ask the human for feedback. Then run `/retro` on that feedback on your own, and close with one report that gives the proposed edits and their held-out results for the human to approve.",
+        "- Human feedback feeds only the Learn skills (9.x). A proposed edit goes live only after it passes on held-out cases (9.9) and the human approves it (9.10). Every accepted or rejected edit is logged (9.12), and the Harness producer applies the approved ones at the start of the next run.",
         f"- Start the Harness producer and reviewer {HARNESS_WHEN}.",
         "- Resolve any principle ID through `aliases` in [data/principles.json](../data/principles.json) before you look it up or brief anyone with it.", "",
         "## Phases, agents and commands", "",
@@ -390,8 +390,8 @@ def render_command(m, name, phases, purpose, note):
         "1. Pick, from the phase's skills below, only the ones that apply to the task (1.8, 8.1). Write the brief to a file: the task, the acceptance criteria, the files to read, the skill IDs that apply, and where to write the output and the review.",
         "2. Start the phase's producer in a fresh context with the brief (8.7).",
         "3. Start the phase's reviewer in a fresh context with the brief's task and acceptance criteria and the producer's output, not its transcript or reasoning.",
-        "4. On FAIL, start a new producer with the brief and the findings file, then a new reviewer. After three FAILs in a row, stop the phase and record it as failed with its findings (5.5).",
-        "5. On PASS, record the output and the review file for the end-of-cycle summary. Do not ask the human anything here.", "",
+        "4. On a reviewer FAIL, start a new producer with the brief and the findings file, then a new reviewer. After three FAILs in a row, stop the phase and record it as failed with its findings (5.5).",
+        "5. On PASS, record the output and the review file for the coordinator's end-of-cycle report. Do not ask the human anything here.", "",
     ]
     if note:
         lines += [note, ""]
@@ -428,6 +428,8 @@ def render_commands_index(m):
              "| Command | Phases | What it is for |", "| --- | --- | --- |"]
     for name, phases, purpose, _ in COMMANDS:
         lines.append(f"| [/{name}]({name}.md) | {', '.join(phases)} | {purpose} |")
+    shared = sorted({ph for _, phases, _, _ in COMMANDS for ph in phases if len(commands_for(ph)) > 1})
+    lines += [""] + [f"The map has one {ph} phase, so {' and '.join(f'`{c}`' for c in commands_for(ph))} run the same {ph} producer and reviewer, each on its own task." for ph in shared]
     lines += ["", f"The {COORDINATOR_PHASE} skills have no command: the coordinator loads them, and starts the {COORDINATOR_PHASE} producer and reviewer {HARNESS_WHEN}.", ""]
     return "\n".join(lines)
 
@@ -437,14 +439,17 @@ def check_ids(path, text, m, errors):
     retired = re.compile(r"(?<![\d.])(" + "|".join(re.escape(a) for a in m["aliases"]) + r")(?![\d])")
     for hit in retired.finditer(text):
         errors.append(f"{path}: retired id {hit[1]} (use {m['aliases'][hit[1]]})")
-    for hit in re.finditer(r"\((\d+\.\d+)(?:, (\d+\.\d+))*\)", body):
-        for pid in ID_RE.findall(hit[0]):
-            if pid not in m["skills"]:
-                errors.append(f"{path}: cites unknown principle {pid}")
+    for pid in ID_RE.findall(body):
+        if pid not in m["skills"] and pid not in m["aliases"]:
+            errors.append(f"{path}: names unknown principle {pid}")
 
 
 def main():
-    check = "--check" in sys.argv[1:]
+    args = sys.argv[1:]
+    if args not in ([], ["--check"]):
+        print(__doc__.split("\n\n")[1], file=sys.stderr)
+        return 2
+    check = bool(args)
     m, errors = build_model()
     if errors:
         print("\n".join(errors), file=sys.stderr)

@@ -14,4 +14,6 @@ Slash commands for the main loop. The human gives them to the [coordinator](../a
 | [/ship](ship.md) | Review & ship | Get the reviewed change merged and released through the gates. |
 | [/retro](retro.md) | Learn | Turn the human's end-of-cycle feedback into proposed skill and check edits. |
 
+The map has one Review & ship phase, so `/review` and `/ship` run the same Review & ship producer and reviewer, each on its own task.
+
 The Harness skills have no command: the coordinator loads them, and starts the Harness producer and reviewer at the start of a run, to set up or check the project's agent harness, and when approved Learn edits are applied.
