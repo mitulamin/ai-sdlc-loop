@@ -56,4 +56,4 @@ ciembor clean-code and refactoring-guru (long parameter list, flag argument smel
 - Test app: App A (CLI tool)
 - Phase: Build
 - Test order: slot 21 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

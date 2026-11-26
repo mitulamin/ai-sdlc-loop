@@ -13,6 +13,8 @@ Statuses: unpinned, unchanged, changed, missing (git could not reach the repo: r
 
 This is a stub for the first step of the refresh playbook in UPDATING.md. It does not clone
 repos, diff files, dedupe or re-score. It tells you which repos need that work.
+A re-pin also records the new commit's date (commit_date) from the GitHub API, using GITHUB_TOKEN when set;
+if that call fails, commit_date is left out and `scripts/validate-data.py` still passes.
 Standard library and git only.
 """
 import argparse
@@ -20,6 +22,7 @@ import json
 import os
 import subprocess
 import sys
+import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from datetime import date
 from pathlib import Path
@@ -43,6 +46,19 @@ def upstream_head(url):
         elif line.endswith("\tHEAD"):
             sha = line.split("\t")[0]
     return sha, branch
+
+
+def commit_date(repo, sha):
+    """Committer date (YYYY-MM-DD) of sha from the GitHub API, or None if it cannot be fetched."""
+    headers = {"Accept": "application/vnd.github+json", "User-Agent": "ai-sdlc-loop-refresh-sources"}
+    if os.environ.get("GITHUB_TOKEN"):
+        headers["Authorization"] = "Bearer " + os.environ["GITHUB_TOKEN"]
+    url = f"https://api.github.com/repos/{repo['owner']}/{repo['repo']}/commits/{sha}"
+    try:
+        with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=30) as resp:
+            return json.load(resp)["commit"]["committer"]["date"][:10]
+    except (OSError, ValueError, KeyError):
+        return None
 
 
 def inspect(repo):
@@ -104,6 +120,13 @@ def main():
                 repo["pinned_sha"] = e["upstream_sha"]
                 repo["default_branch"] = e["default_branch"]
                 repo["pinned_at"] = date.today().isoformat()
+                repo["pin_source"] = "github-head"
+                when = commit_date(repo, e["upstream_sha"])
+                if when:
+                    repo["commit_date"] = when
+                else:
+                    repo.pop("commit_date", None)
+                    print(f"Could not fetch the commit date for {name}; commit_date left out.", file=sys.stderr)
                 changed += 1
         SOURCES.write_text(json.dumps(doc, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
         print(f"Updated {changed} pin(s). Log it in data/changelog.json and CHANGELOG.md.")

@@ -56,4 +56,4 @@ Pocock codebase-design, tdd and improve-codebase-architecture define a seam as t
 - Test app: App A (CLI tool)
 - Phase: Design
 - Test order: slot 18 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

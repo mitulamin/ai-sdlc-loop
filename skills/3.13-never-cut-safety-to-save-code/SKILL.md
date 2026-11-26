@@ -55,4 +55,4 @@ ponytail's 'never cut' list (validation at trust boundaries, data-loss handling,
 - Test app: App B (CRUD web app with auth)
 - Phase: Build
 - Test order: slot 62 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

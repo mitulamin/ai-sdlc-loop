@@ -56,4 +56,4 @@ ciembor clean-code and code-complete: small functions at one level of abstractio
 - Test app: App A (CLI tool)
 - Phase: Build
 - Test order: slot 20 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

@@ -53,4 +53,4 @@ wshobson postmortem-writing and steipete five: ask what conditions allowed the f
 - Test app: All three runs (harness and Learn)
 - Phase: Learn
 - Test order: slot 36 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

@@ -80,7 +80,7 @@ A change only goes live if it helps on cases held out from the one that caused i
 | `guides/developer/` | Plain-language guides to the principles. Coming. |
 | `docs/` | The static website (GitHub Pages), generated from `data/`. |
 | `template/` | The shared base a new project copies, and `template/profiles/` with the solo, small-team and large-org overlays. |
-| `scripts/` | `build-principles.py`, `build-agents.py`, `build-site.py`, `validate-data.py`, `check-skills.py`, `check-links.py`, `refresh-sources.py`, `new-project.sh`. See [scripts/README.md](scripts/README.md). |
+| `scripts/` | `build-principles.py`, `build-agents.py`, `build-site.py`, `validate-data.py`, `check-skills.py`, `check-links.py`, `skillspector-scan.py`, `refresh-sources.py`, `new-project.sh`. See [scripts/README.md](scripts/README.md). |
 
 ## Start a new project from the template
 

@@ -8,9 +8,9 @@ Usage:
   scripts/build-site.py --check  exit 1 if any generated file is stale (for CI)
 
 Standard library only. Hand-written files in docs/ are never touched:
-docs/assets/style.css, docs/assets/site.js, docs/.nojekyll and docs/README.md.
-Everything else under docs/ is generated; edits are overwritten and extra
-files in generated folders are reported as stale.
+docs/assets/style.css, docs/assets/site.js, docs/assets/brand/, docs/.nojekyll
+and docs/README.md. Everything else under docs/ is generated; edits are
+overwritten and extra files in generated folders are reported as stale.
 """
 import html
 import importlib.util
@@ -26,6 +26,7 @@ GUIDES = ROOT / "guides" / "developer"
 PROFILES = ROOT / "template" / "profiles"
 REPO_URL = "https://github.com/mitulamin/ai-sdlc-loop"
 BLOB = REPO_URL + "/blob/main/"
+SITE_ORIGIN = "https://mitulamin.github.io/ai-sdlc-loop"
 SITE_NAME = "AI SDLC Loop"
 
 GENERATED_DIRS = ["categories", "principles", "guides"]
@@ -155,7 +156,7 @@ BRAND = "assets/brand/"
 
 
 def page(
-    title, body, depth, active=None, description="", nav_items=None, generated_from=DEFAULT_GENERATED_FROM, brand=True
+    title, body, depth, active=None, description="", nav_items=None, generated_from=DEFAULT_GENERATED_FROM, brand=True, page_path=""
 ):
     """Wrap body in the site chrome. depth is the folder depth below docs/.
 
@@ -173,18 +174,21 @@ def page(
     head_extra = logo = ""
     if brand:
         full_title = f"{title} | {SITE_NAME}"
+        og_url = f"{SITE_ORIGIN}/" if not page_path or page_path == "index.html" else f"{SITE_ORIGIN}/{page_path}"
+        og_image = f"{SITE_ORIGIN}/{BRAND}ai-sdlc-loop-photographic.jpg"
         head_extra = f"""<link rel="icon" href="{up}{BRAND}ai-sdlc-loop.ico" sizes="any">
 <link rel="icon" href="{up}{BRAND}ai-sdlc-loop.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="{up}{BRAND}ai-sdlc-loop-512.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{SITE_NAME}">
+<meta property="og:url" content="{esc(og_url)}">
 <meta property="og:title" content="{esc(full_title)}">
 <meta property="og:description" content="{desc}">
-<meta property="og:image" content="{up}{BRAND}ai-sdlc-loop-photographic.jpg">
+<meta property="og:image" content="{esc(og_image)}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{esc(full_title)}">
 <meta name="twitter:description" content="{desc}">
-<meta name="twitter:image" content="{up}{BRAND}ai-sdlc-loop-photographic.jpg">
+<meta name="twitter:image" content="{esc(og_image)}">
 """
         logo = f'<img class="brand-logo" src="{up}{BRAND}ai-sdlc-loop.svg" alt="AI SDLC Loop logo" width="28" height="28">'
     return f"""<!doctype html>
@@ -436,6 +440,7 @@ Details in <a href="{REPO_URL}#why-gplv3-and-cc-by-sa-for-the-writing">the READM
             0,
             "index.html",
             f"{n_principles} software engineering principles distilled from {n_researched} public repos, and a template to start your own agentic loop.",
+            page_path="index.html",
         )
 
     def path_page(self):
@@ -498,7 +503,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 <li>Want to know where an idea came from? Every principle links to the source repos it was drawn from, and the <a href="sources.html">sources page</a> lists all of them with their licences.</li>
 </ul>
 </section>"""
-        return page("Learning path", body, 0, "path.html")
+        return page("Learning path", body, 0, "path.html", page_path="path.html")
 
     def category_page(self, i):
         c = self.cats[i]
@@ -571,7 +576,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 {taxonomy}
 {sections_html}
 {pager}"""
-        return page(c["name"], body, 1, "path.html", tag)
+        return page(c["name"], body, 1, "path.html", tag, page_path=f"categories/{c['slug']}.html")
 
     def principle_page(self, idx):
         p = self.principles[idx]
@@ -654,7 +659,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 {skills_html}
 <p class="muted"><a href="{BLOB}principles/{esc(p["id"])}.md">View this principle as markdown on GitHub</a></p>
 {pager}"""
-        return page(f'{p["id"]} {p["statement"]}', body, 1, "principles.html", p["statement"])
+        return page(f'{p["id"]} {p["statement"]}', body, 1, "principles.html", p["statement"], page_path=f"principles/{p['id']}.html")
 
     def alias_page(self, alias, target):
         body = f"""<p class="pid-big">Principle {esc(alias)}</p>
@@ -702,7 +707,7 @@ Work through the nine stages in order, or jump straight to the one you need.</p>
 </table>
 </div>
 <p class="muted">Machine-readable copy: <a href="data/principles.json">data/principles.json</a>.</p>"""
-        return page("All principles", body, 0, "principles.html")
+        return page("All principles", body, 0, "principles.html", page_path="principles.html")
 
     def skills_page(self):
         n = len(self.skills)
@@ -816,7 +821,7 @@ Licence status says whether every source could be adapted (clean), or whether li
             f'<a href="{BLOB}data/taxonomy.json">data/taxonomy.json</a> and <a href="{BLOB}data/scorecard.json">data/scorecard.json</a>'
         )
         return page("Skills", body, 0, "skills.html", f"The {n} amalgamated skills with their phase, test app, slot and licence status.",
-                    generated_from=generated_from)
+                    generated_from=generated_from, page_path="skills.html")
 
     def agents_page(self):
         mod, m = load_agent_model()
@@ -895,22 +900,44 @@ A phase loads the skills whose phase in <a href="{BLOB}data/skill-principle-map.
         )
         return page("Agents", body, 0, "agents.html",
                     f"The {n_agents} agents and {len(cmd_rows)} slash commands of the loop, with the skills each one loads.",
-                    generated_from=generated_from)
+                    generated_from=generated_from, page_path="agents.html")
 
     def sources_page(self):
         rows = []
+        n_head = sum(1 for r in self.sdoc["repos"] if r.get("pin_source") == "github-head")
+        n_recorded = sum(1 for r in self.sdoc["repos"] if r.get("pinned_sha")) - n_head
+        if n_head:
+            pin_note = (f"{n_recorded} pins are the commits the sources were reviewed at and {n_head} are the default-branch HEAD when pinned. "
+                        "Each pin shows the commit date and the date it was pinned.")
+        else:
+            pin_note = (f"All {n_recorded} pins are the commits the sources were reviewed at. "
+                        "Each pin shows the commit date and the date it was pinned.")
         for r in sorted(self.sdoc["repos"], key=lambda r: (r["owner"].lower(), r["repo"].lower())):
             used = sum(1 for p in self.principles if any(lab in r["labels"] for lab in p["sources"]))
-            pin = r["pinned_sha"][:7] if r["pinned_sha"] else "not pinned yet"
+            sha = r["pinned_sha"]
+            if sha:
+                parts = []
+                if r.get("commit_date"):
+                    parts.append(f'committed {esc(r["commit_date"])}')
+                if r.get("pinned_at"):
+                    parts.append(f'pinned {esc(r["pinned_at"])}')
+                if r.get("pin_source") == "github-head":
+                    parts.append("default-branch HEAD when pinned")
+                pin_html = f'<a href="{esc(r["url"])}/tree/{esc(sha)}"><code>{esc(sha[:7])}</code></a> <span class="muted">({", ".join(parts)})</span>'
+                pin_sort = sha
+            else:
+                pin_html = "not pinned yet"
+                pin_sort = ""
             rows.append(
                 f'<tr><td><a href="{esc(r["url"])}">{esc(r["owner"])}/{esc(r["repo"])}</a></td>'
                 f'<td>{esc(r["role"])}</td><td>{esc(r["licence"])}</td>'
-                f'<td data-sort="{used}">{used}</td><td>{esc(pin)}</td></tr>'
+                f'<td data-sort="{used}">{used}</td><td data-sort="{esc(pin_sort)}">{pin_html}</td></tr>'
             )
         run = self.sdoc["research_run"]
         body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / Sources</nav>
 <h1>Source repos</h1>
 <p>{self.n_sources} sources cited: the {self.n_researched} public repos the principles were drawn from ({esc(run["id"])}, {esc(run["date"])}), plus {self.n_sources - self.n_researched} added later for skill 7.12.
+{pin_note}
 Licences are as checked and may need your own review before you reuse anything; see
 <a href="{BLOB}ATTRIBUTIONS.md">ATTRIBUTIONS.md</a>. Curation lists are pointers to other sources and are never installed wholesale.</p>
 <div class="table-wrap">
@@ -928,7 +955,7 @@ Licences are as checked and may need your own review before you reuse anything; 
 </table>
 </div>
 <p class="muted">Machine-readable copy: <a href="data/sources.json">data/sources.json</a>.</p>"""
-        return page("Sources", body, 0, "sources.html")
+        return page("Sources", body, 0, "sources.html", page_path="sources.html")
 
     def guide_pages(self):
         out = {}
@@ -950,7 +977,7 @@ Licences are as checked and may need your own review before you reuse anything; 
             body_html = render_markdown(text, f.parent)
             out[f"guides/developer/{slug}.html"] = page(
                 title, f'<nav class="crumbs" aria-label="Breadcrumb"><a href="../../index.html">Home</a> / <a href="../index.html">Guides</a> / {esc(title)}</nav>\n{banner}\n<article class="prose">{body_html}</article>',
-                2, "guides/index.html",
+                2, "guides/index.html", page_path=f"guides/developer/{slug}.html",
             )
             entries.append((slug, title, stub))
         badge = ' <span class="badge">stub</span>'
@@ -964,7 +991,7 @@ Licences are as checked and may need your own review before you reuse anything; 
 <h2>Developer guides</h2>
 <ul>{listing}</ul>
 <p class="muted">Source: <a href="{BLOB}guides/developer/">guides/developer/</a>. A page marked stub holds placeholder text until the guide is written.</p>"""
-        out["guides/index.html"] = page("Guides", body, 1, "guides/index.html")
+        out["guides/index.html"] = page("Guides", body, 1, "guides/index.html", page_path="guides/index.html")
         return out
 
     def build(self):

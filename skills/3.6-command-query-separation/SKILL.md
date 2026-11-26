@@ -56,4 +56,4 @@ ciembor clean-code and pragmatic-programmer: a function either changes state or 
 - Test app: App A (CLI tool)
 - Phase: Build
 - Test order: slot 22 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

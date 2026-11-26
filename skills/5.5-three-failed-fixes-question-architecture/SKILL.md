@@ -55,4 +55,4 @@ Superpowers systematic-debugging only: after three failed fixes, stop and questi
 - Test app: App C (brownfield bug-fix and refactor)
 - Phase: Debug
 - Test order: slot 102 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

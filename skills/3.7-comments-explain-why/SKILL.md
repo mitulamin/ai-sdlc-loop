@@ -56,4 +56,4 @@ ciembor clean-code and Ousterhout, plus Anthropic pr-review-toolkit comment-anal
 - Test app: App A (CLI tool)
 - Phase: Build
 - Test order: slot 23 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

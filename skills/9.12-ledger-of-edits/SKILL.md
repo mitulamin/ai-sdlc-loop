@@ -51,4 +51,4 @@ muratcan self-improvement-loops, SkillOpt (adoption records) and Trail of Bits s
 - Test app: All three runs (harness and Learn)
 - Phase: Learn
 - Test order: slot 43 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

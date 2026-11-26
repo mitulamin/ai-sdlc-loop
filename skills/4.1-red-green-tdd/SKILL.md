@@ -63,4 +63,4 @@ Superpowers test-driven-development (iron law: no code without a failing test), 
 - Test app: App A (CLI tool)
 - Phase: Verify
 - Test order: slot 26 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

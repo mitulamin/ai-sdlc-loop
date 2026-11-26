@@ -53,4 +53,4 @@ dash0 otel-instrumentation/semantic-conventions/collector: every signal should h
 - Test app: App B (CRUD web app with auth)
 - Phase: Debug
 - Test order: slot 70 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

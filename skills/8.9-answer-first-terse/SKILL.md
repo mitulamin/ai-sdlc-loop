@@ -55,4 +55,4 @@ caveman family (caveman, ultracave, megacave, caveman-compress): answer first, c
 - Test app: All three runs (harness and Learn)
 - Phase: Harness
 - Test order: slot 9 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

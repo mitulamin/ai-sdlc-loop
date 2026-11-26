@@ -58,4 +58,4 @@ Addy planning-and-task-breakdown, Pocock to-tickets/wayfinder, spec-kit tasks an
 - Test app: App B (CRUD web app with auth)
 - Phase: Plan
 - Test order: slot 45 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

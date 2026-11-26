@@ -56,4 +56,4 @@ Addy observability-and-instrumentation and wshobson slo-implementation/slo-imple
 - Test app: App B (CRUD web app with auth)
 - Phase: Debug
 - Test order: slot 66 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

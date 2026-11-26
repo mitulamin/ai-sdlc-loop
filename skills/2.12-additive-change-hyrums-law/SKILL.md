@@ -56,4 +56,4 @@ Addy api-and-interface-design and deprecation-and-migration lead; wshobson ADRs 
 - Test app: App B (CRUD web app with auth)
 - Phase: Design
 - Test order: slot 54 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

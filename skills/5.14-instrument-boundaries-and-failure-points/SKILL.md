@@ -53,4 +53,4 @@ ciembor release-it, Addy observability and dash0 otel-instrumentation: instrumen
 - Test app: App B (CRUD web app with auth)
 - Phase: Debug
 - Test order: slot 72 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

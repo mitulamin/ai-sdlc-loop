@@ -55,4 +55,4 @@ Pocock code-review (standards and spec, in parallel) and Superpowers subagent-dr
 - Test app: App B (CRUD web app with auth)
 - Phase: Review & ship
 - Test order: slot 84 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

@@ -67,4 +67,4 @@ These sources have no usable licence for copying or adapting, so nothing in this
 - Test app: App C (brownfield bug-fix and refactor)
 - Phase: Debug
 - Test order: slot 101 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

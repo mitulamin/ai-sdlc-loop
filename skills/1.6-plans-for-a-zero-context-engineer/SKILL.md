@@ -58,4 +58,4 @@ Superpowers writing-plans/executing-plans, spec-kit plan and EGM implementation-
 - Test app: App A (CLI tool)
 - Phase: Plan
 - Test order: slot 14 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

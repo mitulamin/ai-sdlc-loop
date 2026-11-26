@@ -33,6 +33,8 @@
           "default_branch": { "type": ["string", "null"] },
           "pinned_sha": { "type": ["string", "null"], "pattern": "^[0-9a-f]{40}$" },
           "pinned_at": { "type": ["string", "null"], "format": "date" },
+          "commit_date": { "type": ["string", "null"], "format": "date", "description": "Committer date (YYYY-MM-DD) of pinned_sha" },
+          "pin_source": { "type": ["string", "null"], "enum": ["review-record", "github-head", null], "description": "How pinned_sha was obtained: review-record (the commit the repo was reviewed at, from data/licences.json or the Step 4 review) or github-head (default-branch HEAD at pinning time, for a repo with no review commit)" },
           "labels": { "type": "array", "items": { "type": "string" }, "description": "Short names used for this repo in principle sources" },
           "notes": { "type": "string" }
         }

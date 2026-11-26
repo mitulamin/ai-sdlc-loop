@@ -56,4 +56,4 @@ Addy incremental-implementation and /build, Pocock to-tickets (tracer bullets) a
 - Test app: App B (CRUD web app with auth)
 - Phase: Build
 - Test order: slot 63 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

@@ -55,4 +55,4 @@ Addy context-engineering, agent-os inject-standards and muratcan context-optimiz
 - Test app: All three runs (harness and Learn)
 - Phase: Harness
 - Test order: slot 1 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

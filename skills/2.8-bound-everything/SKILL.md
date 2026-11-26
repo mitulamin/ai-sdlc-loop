@@ -56,4 +56,4 @@ ciembor release-it and designing-data-intensive-applications: bound every queue,
 - Test app: App B (CRUD web app with auth)
 - Phase: Design
 - Test order: slot 51 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

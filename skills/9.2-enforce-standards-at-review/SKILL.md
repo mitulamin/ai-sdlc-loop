@@ -52,4 +52,4 @@ Pocock retro and agent-os index-standards: keep standards in the reviewer's cont
 - Test app: All three runs (harness and Learn)
 - Phase: Learn
 - Test order: slot 34 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)

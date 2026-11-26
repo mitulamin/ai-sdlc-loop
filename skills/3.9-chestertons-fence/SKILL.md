@@ -56,4 +56,4 @@ Addy code-simplification (Chesterton's fence), Feathers' Working Effectively wit
 - Test app: App C (brownfield bug-fix and refactor)
 - Phase: Build
 - Test order: slot 95 of 103
-- Record results in ../../scorecard.csv (criteria in ../../README.md)
+- Record results in ../../data/scorecard.json (criteria in ../../README.md)
