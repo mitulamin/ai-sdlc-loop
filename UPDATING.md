@@ -33,7 +33,7 @@ Rules of thumb:
 - If a file starts with the `GENERATED` marker, or has it right after its front matter, do not edit it. Change the input and regenerate.
 - If you want to add a human note to a generated page, put it in `data/notes/` and rebuild.
 - A refresh writes only to `data/refresh/<run-id>/`, to the pins in `data/sources.json`, and to generated files. Anything else it wants to change is written as a proposal in `data/refresh/<run-id>/` for a person to apply.
-- `scripts/build-principles.py --check` and `scripts/build-agents.py --check` fail if a generated file is out of date, and `scripts/validate.py` checks the counts, aliases, slots and licences. Run all three before every commit. CI runs `--check`.
+- `scripts/build-principles.py --check` and `scripts/build-agents.py --check` fail if a generated file is out of date, and `scripts/validate.py` checks the counts, aliases, slots and licences. Run all three before every commit. CI runs `build-principles.py --check`; `build-agents.py --check` is not in CI yet.
 
 ## The playbook
 
