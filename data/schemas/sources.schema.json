@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mitulamin/ai-sdlc-loop/data/schemas/sources.schema.json",
+  "title": "Sources",
+  "description": "The upstream repos the principles and skills are distilled from, each pinned to a commit.",
+  "type": "object",
+  "required": ["schema_version", "research_run", "repos"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "research_run": {
+      "type": "object",
+      "required": ["id", "date", "description"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "date": { "type": "string", "format": "date" },
+        "description": { "type": "string" }
+      }
+    },
+    "repos": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["owner", "repo", "url", "role", "licence", "default_branch", "pinned_sha", "pinned_at", "labels", "notes"],
+        "additionalProperties": false,
+        "properties": {
+          "owner": { "type": "string" },
+          "repo": { "type": "string" },
+          "url": { "type": "string", "format": "uri" },
+          "role": { "enum": ["skill-source", "curation-list"], "description": "skill-source: real skill, agent and command files we may borrow from. curation-list: a pointer to other sources, never installed wholesale." },
+          "licence": { "type": "string", "description": "SPDX identifier, or TBD until checked" },
+          "default_branch": { "type": ["string", "null"] },
+          "pinned_sha": { "type": ["string", "null"], "pattern": "^[0-9a-f]{40}$" },
+          "pinned_at": { "type": ["string", "null"], "format": "date" },
+          "labels": { "type": "array", "items": { "type": "string" }, "description": "Short names used for this repo in principle sources" },
+          "notes": { "type": "string" }
+        }
+      }
+    }
+  }
+}

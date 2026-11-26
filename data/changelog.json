@@ -1,0 +1,13 @@
+{
+  "schema_version": "1.0.0",
+  "entries": [
+    {
+      "date": "2026-11-26",
+      "research_run": "run-1",
+      "type": "import",
+      "ids": ["principles", "sources"],
+      "summary": "Imported 108 principles in 9 categories and 41 source repos from the initial research. No merges, no drops. Source repos are not pinned yet.",
+      "reason": "Starting point for the repo."
+    }
+  ]
+}
