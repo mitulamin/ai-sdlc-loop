@@ -1,0 +1,561 @@
+{
+  "schema_version": "1.0.0",
+  "research_run": {
+    "id": "run-1",
+    "date": "2026-11-26",
+    "description": "Initial research by Rex (Grok bot): 41 repos, 108 principles."
+  },
+  "repos": [
+    {
+      "owner": "BayramAnnakov",
+      "repo": "claude-reflect",
+      "url": "https://github.com/BayramAnnakov/claude-reflect",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "claude-reflect"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "DietrichGebert",
+      "repo": "ponytail",
+      "url": "https://github.com/DietrichGebert/ponytail",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "ponytail"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "Fission-AI",
+      "repo": "OpenSpec",
+      "url": "https://github.com/Fission-AI/OpenSpec",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "OpenSpec"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "ForceInjection",
+      "repo": "domain-driven-design-skills",
+      "url": "https://github.com/ForceInjection/domain-driven-design-skills",
+      "role": "skill-source",
+      "licence": "Apache-2.0",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "ForceInjection DDD"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "JuliusBrussee",
+      "repo": "caveman",
+      "url": "https://github.com/JuliusBrussee/caveman",
+      "role": "skill-source",
+      "licence": "Apache-2.0",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "caveman"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "Kulaxyz",
+      "repo": "self-learning-skills",
+      "url": "https://github.com/Kulaxyz/self-learning-skills",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [],
+      "notes": ""
+    },
+    {
+      "owner": "NousResearch",
+      "repo": "hermes-agent-self-evolution",
+      "url": "https://github.com/NousResearch/hermes-agent-self-evolution",
+      "role": "skill-source",
+      "licence": "no licence file found",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "hermes-self-evolution"
+      ],
+      "notes": "No licence file at the repo root or elsewhere in the tree. The README says GEPA is MIT licensed, which is about a dependency, not this repo."
+    },
+    {
+      "owner": "PatrickJS",
+      "repo": "awesome-cursorrules",
+      "url": "https://github.com/PatrickJS/awesome-cursorrules",
+      "role": "curation-list",
+      "licence": "CC0-1.0",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [],
+      "notes": "Not named as a curation list in the brief section 4; classified as curation-list on name. Confirm."
+    },
+    {
+      "owner": "VoltAgent",
+      "repo": "awesome-agent-skills",
+      "url": "https://github.com/VoltAgent/awesome-agent-skills",
+      "role": "curation-list",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [],
+      "notes": ""
+    },
+    {
+      "owner": "VoltAgent",
+      "repo": "awesome-claude-code-subagents",
+      "url": "https://github.com/VoltAgent/awesome-claude-code-subagents",
+      "role": "curation-list",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [],
+      "notes": ""
+    },
+    {
+      "owner": "addyosmani",
+      "repo": "agent-skills",
+      "url": "https://github.com/addyosmani/agent-skills",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "Addy"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "affaan-m",
+      "repo": "ECC",
+      "url": "https://github.com/affaan-m/ECC",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "ECC"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "agamm",
+      "repo": "claude-code-owasp",
+      "url": "https://github.com/agamm/claude-code-owasp",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [],
+      "notes": ""
+    },
+    {
+      "owner": "agentsmd",
+      "repo": "agents.md",
+      "url": "https://github.com/agentsmd/agents.md",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "agents.md"
+      ],
+      "notes": "A format specification more than a skill collection; kept as skill-source because principle 8.2 cites it."
+    },
+    {
+      "owner": "anthropics",
+      "repo": "claude-code",
+      "url": "https://github.com/anthropics/claude-code",
+      "role": "skill-source",
+      "licence": "LICENSE.md (all rights reserved)",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [],
+      "notes": "Tool repository; mined for bundled plugins and commands. LICENSE.md says all rights reserved, use subject to Anthropic's Commercial Terms of Service. Not open source."
+    },
+    {
+      "owner": "anthropics",
+      "repo": "claude-plugins-official",
+      "url": "https://github.com/anthropics/claude-plugins-official",
+      "role": "skill-source",
+      "licence": "Apache-2.0",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "Anthropic plugins"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "anthropics",
+      "repo": "skills",
+      "url": "https://github.com/anthropics/skills",
+      "role": "skill-source",
+      "licence": "per-skill LICENSE.txt (Apache License 2.0 text)",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "Anthropic skill-creator"
+      ],
+      "notes": "No root licence. All 18 skill folders have a LICENSE.txt that opens with Apache License 2.0 text; there is also THIRD_PARTY_NOTICES.md. Re-check the exact folder at borrow time."
+    },
+    {
+      "owner": "buildermethods",
+      "repo": "agent-os",
+      "url": "https://github.com/buildermethods/agent-os",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "agent-os"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "ciembor",
+      "repo": "agent-rules-books",
+      "url": "https://github.com/ciembor/agent-rules-books",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "ciembor",
+        "ciembor (Release It!)"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "cloudflare",
+      "repo": "security-audit-skill",
+      "url": "https://github.com/cloudflare/security-audit-skill",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "Cloudflare"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "dash0hq",
+      "repo": "agent-skills",
+      "url": "https://github.com/dash0hq/agent-skills",
+      "role": "skill-source",
+      "licence": "Apache-2.0",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "dash0"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "github",
+      "repo": "spec-kit",
+      "url": "https://github.com/github/spec-kit",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "spec-kit"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "google",
+      "repo": "elephant-goldfish-model",
+      "url": "https://github.com/google/elephant-goldfish-model",
+      "role": "skill-source",
+      "licence": "Apache-2.0",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "egm"
+      ],
+      "notes": "Abbreviated egm in principle sources."
+    },
+    {
+      "owner": "gotalab",
+      "repo": "cc-sdd",
+      "url": "https://github.com/gotalab/cc-sdd",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "cc-sdd"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "hesreallyhim",
+      "repo": "awesome-claude-code",
+      "url": "https://github.com/hesreallyhim/awesome-claude-code",
+      "role": "curation-list",
+      "licence": "LICENSE (CC BY-NC-ND 4.0)",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [],
+      "notes": "Not named as a curation list in the brief section 4; classified as curation-list on name. Confirm. GitHub reports Other. LICENSE file states Creative Commons Attribution-NonCommercial-NoDerivatives 4.0. Curation list, never copied."
+    },
+    {
+      "owner": "hyhmrright",
+      "repo": "brooks-lint",
+      "url": "https://github.com/hyhmrright/brooks-lint",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "brooks-lint"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "mattpocock",
+      "repo": "skills",
+      "url": "https://github.com/mattpocock/skills",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "Pocock"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "michaelshimeles",
+      "repo": "rstack",
+      "url": "https://github.com/michaelshimeles/rstack",
+      "role": "skill-source",
+      "licence": "per-skill LICENSE files (MIT, PolyForm Shield 1.0.0)",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "rstack"
+      ],
+      "notes": "No root licence. before-and-after/LICENSE is PolyForm Shield License 1.0.0; greploop/, greploop-apps/ and unslop/ have MIT LICENSE files. Other skill folders have none."
+    },
+    {
+      "owner": "microsoft",
+      "repo": "SkillOpt",
+      "url": "https://github.com/microsoft/SkillOpt",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "SkillOpt"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "microsoft",
+      "repo": "skills",
+      "url": "https://github.com/microsoft/skills",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [],
+      "notes": ""
+    },
+    {
+      "owner": "multica-ai",
+      "repo": "andrej-karpathy-skills",
+      "url": "https://github.com/multica-ai/andrej-karpathy-skills",
+      "role": "skill-source",
+      "licence": "no licence file found",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "Karpathy"
+      ],
+      "notes": "No licence file in the tree. The README has a License section that says MIT, but that is not a licence file."
+    },
+    {
+      "owner": "muratcankoylan",
+      "repo": "Agent-Skills-for-Context-Engineering",
+      "url": "https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "muratcankoylan"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "obra",
+      "repo": "superpowers",
+      "url": "https://github.com/obra/superpowers",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "Superpowers"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "ollygarden",
+      "repo": "opentelemetry-agent-skills",
+      "url": "https://github.com/ollygarden/opentelemetry-agent-skills",
+      "role": "skill-source",
+      "licence": "Apache-2.0",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [],
+      "notes": ""
+    },
+    {
+      "owner": "peterfriese",
+      "repo": "Stratos",
+      "url": "https://github.com/peterfriese/Stratos",
+      "role": "skill-source",
+      "licence": "LICENSE (Apache License 2.0 text)",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "Stratos"
+      ],
+      "notes": "GitHub reports Other. LICENSE file is the Apache License 2.0 text."
+    },
+    {
+      "owner": "sanyuan0704",
+      "repo": "sanyuan-skills",
+      "url": "https://github.com/sanyuan0704/sanyuan-skills",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "sanyuan"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "sickn33",
+      "repo": "agentic-awesome-skills",
+      "url": "https://github.com/sickn33/agentic-awesome-skills",
+      "role": "curation-list",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [],
+      "notes": "Named as a curation list in the brief section 4 although it contains skill files. Never install wholesale."
+    },
+    {
+      "owner": "steipete",
+      "repo": "agent-rules",
+      "url": "https://github.com/steipete/agent-rules",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [],
+      "notes": "Repo is archived on GitHub."
+    },
+    {
+      "owner": "trailofbits",
+      "repo": "skills",
+      "url": "https://github.com/trailofbits/skills",
+      "role": "skill-source",
+      "licence": "CC-BY-SA-4.0",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "trailofbits"
+      ],
+      "notes": ""
+    },
+    {
+      "owner": "travisvn",
+      "repo": "awesome-claude-skills",
+      "url": "https://github.com/travisvn/awesome-claude-skills",
+      "role": "curation-list",
+      "licence": "no licence file found",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [],
+      "notes": "Not named as a curation list in the brief section 4; classified as curation-list on name. Confirm. No licence file in the tree."
+    },
+    {
+      "owner": "wshobson",
+      "repo": "agents",
+      "url": "https://github.com/wshobson/agents",
+      "role": "skill-source",
+      "licence": "MIT",
+      "default_branch": null,
+      "pinned_sha": null,
+      "pinned_at": null,
+      "labels": [
+        "wshobson"
+      ],
+      "notes": ""
+    }
+  ]
+}

@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learning path | AI SDLC Loop</title>
+<meta name="description" content="A learning path through 108 software principles for agentic loops.">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="site-header">
+<div class="wrap header-inner">
+<a class="brand" href="index.html">AI SDLC Loop</a>
+<nav aria-label="Main"><a href="index.html" aria-current="page">Learning path</a><a href="principles.html">All principles</a><a href="sources.html">Sources</a><a href="guides/index.html">Guides</a><a href="https://github.com/mitulamin/ai-sdlc-loop">GitHub</a></nav>
+</div>
+</header>
+<main id="main" class="wrap">
+<section class="hero">
+<h1>A learning path through 108 software principles</h1>
+<p class="lede">These principles were distilled from 41 public repos of agent skills, sub-agents and commands.
+They are the base of a loop that builds software with agents and learns from each project.
+Work through the nine stages in order, or jump straight to the one you need.</p>
+<form class="search" action="principles.html" method="get" role="search">
+<label for="home-q" class="sr">Search principles</label>
+<input id="home-q" name="q" type="search" placeholder="Search principles, e.g. test, secret, review" autocomplete="off">
+<button type="submit">Search</button>
+</form>
+<p class="quick"><a href="categories/plan-and-specify.html">Start at stage 1</a>
+<a href="principles.html">Browse the table</a>
+<a href="guides/index.html">Read the developer guide</a></p>
+</section>
+<section>
+<h2>The nine stages</h2>
+<p>The order follows a project from idea to retrospective. Stage 9 feeds back into stage 1 of the next project.</p>
+<ol class="steps">
+<li class="step">
+<div class="step-num" aria-hidden="true">1</div>
+<div class="step-body">
+<h3><a href="categories/plan-and-specify.html">Plan and specify</a> <span class="count">8 principles</span></h3>
+<p class="tag">Decide what you are building before any code exists.</p>
+<p>Everything later depends on this. A vague ask turns into confident, wrong code, so this stage is about surfacing assumptions, asking questions and agreeing a spec.</p>
+<p class="sample">Start with <a href="principles/1.1.html">1.1</a>: State assumptions; when something is unclear, stop and ask rather than pick silently</p>
+</div>
+</li><li class="step">
+<div class="step-num" aria-hidden="true">2</div>
+<div class="step-body">
+<h3><a href="categories/design-and-architecture.html">Design and architecture</a> <span class="count">19 principles</span></h3>
+<p class="tag">Shape the code so it is easy to change and easy to test.</p>
+<p>Once you know what to build, decide where the boundaries go. Good seams and small interfaces make the next three stages cheaper.</p>
+<p class="sample">Start with <a href="principles/2.1.html">2.1</a>: Design deep modules: a lot of behaviour behind a small interface</p>
+</div>
+</li><li class="step">
+<div class="step-num" aria-hidden="true">3</div>
+<div class="step-body">
+<h3><a href="categories/code-craft.html">Code craft</a> <span class="count">14 principles</span></h3>
+<p class="tag">Write the smallest change that does the job, in the style already there.</p>
+<p>This is the day-to-day work of building. The theme is restraint: no speculative code, no drive-by edits.</p>
+<p class="sample">Start with <a href="principles/3.1.html">3.1</a>: Write the minimum code that solves the problem; nothing speculative</p>
+</div>
+</li><li class="step">
+<div class="step-num" aria-hidden="true">4</div>
+<div class="step-body">
+<h3><a href="categories/verify.html">Verify (testing)</a> <span class="count">10 principles</span></h3>
+<p class="tag">Prove the code does what you said it would.</p>
+<p>Tests are how an agent, or you, can tell working from broken without guessing. These principles cover what to test and how to keep tests honest.</p>
+<p class="sample">Start with <a href="principles/4.1.html">4.1</a>: Write a failing test first and watch it fail</p>
+</div>
+</li><li class="step">
+<div class="step-num" aria-hidden="true">5</div>
+<div class="step-body">
+<h3><a href="categories/debug-and-observe.html">Debug and observe</a> <span class="count">15 principles</span></h3>
+<p class="tag">When something breaks, find the cause before you change anything.</p>
+<p>Debugging is a method, not a hunch. Build a fast feedback loop, reproduce, narrow down, fix, then guard against it coming back.</p>
+<p class="sample">Start with <a href="principles/5.1.html">5.1</a>: No fixes without root-cause investigation first</p>
+</div>
+</li><li class="step">
+<div class="step-num" aria-hidden="true">6</div>
+<div class="step-body">
+<h3><a href="categories/secure.html">Secure</a> <span class="count">8 principles</span></h3>
+<p class="tag">Treat security as part of building, not a final pass.</p>
+<p>Threat-model early, validate what comes in, keep secrets out of the repo, and be explicit about what is always, sometimes and never allowed.</p>
+<p class="sample">Start with <a href="principles/6.1.html">6.1</a>: Threat-model before hardening</p>
+</div>
+</li><li class="step">
+<div class="step-num" aria-hidden="true">7</div>
+<div class="step-body">
+<h3><a href="categories/review-and-ship.html">Review and ship</a> <span class="count">12 principles</span></h3>
+<p class="tag">Get a second pair of eyes on the work, then release it safely.</p>
+<p>Review is where mistakes are caught cheaply. Shipping is where they get expensive. These principles cover both.</p>
+<p class="sample">Start with <a href="principles/7.1.html">7.1</a>: Review early and often, using a separate reviewer subagent</p>
+</div>
+</li><li class="step">
+<div class="step-num" aria-hidden="true">8</div>
+<div class="step-body">
+<h3><a href="categories/agent-operations.html">Agent operations</a> <span class="count">10 principles</span></h3>
+<p class="tag">Run the agents themselves well.</p>
+<p>Context is limited and expensive. This stage is about what an agent sees, how skills are loaded, and how work is split between a coordinator and the agents it starts.</p>
+<p class="sample">Start with <a href="principles/8.1.html">8.1</a>: Load only the context the task needs, such as the relevant spec section</p>
+</div>
+</li><li class="step">
+<div class="step-num" aria-hidden="true">9</div>
+<div class="step-body">
+<h3><a href="categories/learn.html">Learn</a> <span class="count">12 principles</span></h3>
+<p class="tag">Turn what went wrong into a better loop.</p>
+<p>The loop gets better only if mistakes change the rules. This closes the cycle and feeds back into stage one of the next project.</p>
+<p class="sample">Start with <a href="principles/9.1.html">9.1</a>: When the reviewer missed a mistake, give the reviewer a new rule; if the mistake is mechanical, build a lint, hook or CI check instead</p>
+</div>
+</li>
+</ol>
+</section>
+<section>
+<h2>How to use this</h2>
+<ul>
+<li>New to this? Read the stages in order and open a few principles in each.</li>
+<li>Looking for something specific? <a href="principles.html">Search and filter</a> all 108 principles, or sort the table.</li>
+<li>Want to know where an idea came from? Every principle links to the source repos it was drawn from, and the <a href="sources.html">sources page</a> lists all of them with their licences.</li>
+</ul>
+</section>
+</main>
+<footer class="site-footer">
+<div class="wrap">
+<p>AI SDLC Loop. Written content is CC BY-SA 4.0 and code is GPL-3.0; the project template is MIT.
+See <a href="https://github.com/mitulamin/ai-sdlc-loop#readme">the README</a> and <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/LICENSE-CONTENT">LICENSE-CONTENT</a>.
+No trackers, no external scripts. Generated from <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/principles.json">data/principles.json</a>.</p>
+</div>
+</footer>
+<script src="assets/site.js" defer></script>
+</body>
+</html>
