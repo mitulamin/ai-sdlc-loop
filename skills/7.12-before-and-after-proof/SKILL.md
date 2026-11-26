@@ -1,6 +1,6 @@
 ---
 name: before-and-after-proof
-description: Use when shipping any user-visible change: UI, CLI output, generated files. Amalgamated skill for principle 7.12 (Review and ship).
+description: "Use when shipping any user-visible change: UI, CLI output, generated files. Amalgamated skill for principle 7.12 (Review and ship)."
 principles: [7.12]
 principle: "7.12 Ship with before-and-after proof"
 aliases: []
