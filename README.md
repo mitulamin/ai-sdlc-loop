@@ -6,7 +6,7 @@ It is a base, not a finished product. Fork it, copy it, strip out what you do no
 
 ## Status
 
-This repo is being built in phases. Right now it has the structure, the 103 principles as data and one file each, the list of 41 source repos, and the process for keeping all of it fresh. Skills, agents, commands, the website and CI come next. Each folder has a short README that says what will go in it.
+This repo is being built in phases. Right now it has the 103 principles as data and one file each, one amalgamated skill per principle (103, imported from the amalgamated-skills kit, see [IMPORT.md](IMPORT.md)), the skill-to-principle map, the licence record for every source, the list of 41 source repos, and the process for keeping all of it fresh. Wiring the agents and slash commands to the skills, and showing the skills on the website, come next. Each folder has a short README that says what will go in it.
 
 ## How this came about
 
@@ -69,16 +69,55 @@ A change only goes live if it helps on cases held out from the one that caused i
 
 | Path | What it holds |
 | --- | --- |
-| `principles/` | One file per principle. Generated from `data/principles.json`. |
-| `MERGES.md` | Log of principles merged into others, with the old ID, the new ID, the reason and the date. |
-| `data/` | The source of truth: principles, source repos, changelog, JSON schemas. |
-| `skills/` | One amalgamated skill per principle, with a `SOURCES.md` next to each. Coming in the next phase. |
+| `skills/<id>-<slug>/` | One amalgamated skill per principle (103): `SKILL.md` (when to use, the producer's dos and don'ts together, steps, adversarial reviewer checks, how the sources compare, test slot) and `SOURCES.md` (every source file, pinned to a commit, with its licence, plus any link-only reading). |
+| `principles/<id>.md` | One file per principle (103). Generated from `data/` by `scripts/build-principles.py`. |
+| `data/principles.json` | The index of the 103 principles, with `aliases` for the 5 retired IDs. |
+| `data/skill-principle-map.json` | Skill folder to principle, aliases, category, test app, phase, slot and licence status. The single source for wiring skills by ID. |
+| `data/mapping.json`, `data/licences.json` | Principle to source files; licence per repo and per source. |
+| `data/sources.json`, `data/changelog.json`, `data/schemas/` | The 41 research source repos and their pins, the machine-readable change log, and the JSON schemas. |
+| `scorecard.csv` | One row per skill, filled in during the test runs. |
+| `MERGES.md` | The five duplicate principles merged into survivors (108 to 103), and what was folded in. |
+| `CREDITS.md` | The sources the skills were adapted from, with licence, copyright notice and pinned commit, and the link-only sources. |
+| `LICENSE.md`, `LICENSES/` | The licence split and the full licence texts. |
+| `IMPORT.md` | How the amalgamated-skills kit was imported. |
 | `agents/` | Coordinator, a producer and a reviewer per phase, and the roles. Coming. |
 | `commands/` | Slash commands for the main loop: plan, design, build, verify, review, ship, retro. Coming. |
 | `guides/developer/` | Plain-language guides to the principles. Coming. |
-| `docs/` | The static website (GitHub Pages). Coming. |
+| `docs/` | The static website (GitHub Pages). |
 | `template/` | The shared base a new project copies, and `template/profiles/` with the solo, small-team and large-org overlays. |
-| `scripts/` | `build-principles.py`, `refresh-sources.py`, `new-project.sh`. |
+| `scripts/` | `validate.py` (checks the kit: 103 principles, 103 skills, 5 aliases, slots, licences), `build-principles.py`, `build-site.py`, `validate-data.py`, `check-links.py`, `refresh-sources.py`, `new-project.sh`. |
+
+## Dedup verdict
+- 108 principles became 103. Five true duplicates were merged into survivors (IDs not renumbered; old IDs are aliases): 4.4 into 4.1, 4.5 into 5.3, 9.4 into 5.1, 5.6 into 5.10, 2.11 into 6.3. See `MERGES.md`.
+- 8 partial overlaps remain as separate principles: 2.14/3.5, 7.6/7.10, 7.1/8.7, 4.9/7.12, 3.14/5.4, 8.5/9.9, 8.1/8.3, 2.5/3.1.
+- Source files: 1,000 engineering items, of which 70 are identical copies (mostly wshobson agents repeated across plugins); copies are counted once.
+- How files were mapped: a regex per principle over each file's name, description and body, kept only when the category also matched, plus primary files picked by hand from the sources the principle cites. Keyword matches are candidates and some big lists include loosely related files.
+
+## Testing the skills
+
+The test-app workflow comes after the import. Run order is by `slot` in `data/skill-principle-map.json`, and scoring is in `scorecard.csv`.
+
+### Test apps
+- Run 1, App A: CLI tool, greenfield (for example a `ledger` CLI that imports bank CSVs, categorises them by rules and prints monthly reports). 22 skills first.
+- Run 2, App B: a small CRUD web app with auth, greenfield (for example "teamtasks": sign-up and login, projects and tasks, a REST API, SQLite or Postgres, a minimal UI). 49 skills first.
+- Run 3, App C: brownfield. Fix one real open bug and do one small refactor in a small, well-tested open-source repo (for example pallets/click), as a PR on a fork. 11 skills first.
+- Skills marked "All" (Agent operations and Learn, 21 skills) run in all three runs and are scored in each.
+
+### How a run works (the coordinator model)
+1. Mitul gives the brief to the top coordinator only.
+2. The coordinator triages the brief (1.8) and loads only the skills for that run and phase. It briefs fresh, blank-context producer agents with the dos and don'ts plus the relevant context (8.1, 1.6).
+3. Each phase has a strictly adversarial reviewer in a fresh context, using the skill's reviewer checks. Its default verdict is FAIL, and it writes findings to files (8.8).
+4. Loops run on their own until the phase's checks pass. No human input during the run.
+5. At the end, the coordinator fills in `scorecard.csv` from the transcripts and reviewer files, and writes `run-summary.md`.
+6. Human feedback, about 30 minutes: Mitul tries the app, reads the summary, and marks each skill keep, merge or drop, with notes.
+7. Learn step (9.x skills): corrections are queued (9.11) and grouped by mechanism (9.6). Small edits are proposed, one surface each (9.8), and tested on held-out tasks (9.9). Mitul approves them (9.10) and they are logged in `learn-ledger.md` (9.12). The next run uses the edited skills.
+
+### Scorecard (`scorecard.csv`, one row per skill per run)
+Each criterion is scored 0, 1 or 2: triggered, followed, reviewer_caught, outcome, cost. harm_flag is Y if the skill caused wrong work, a loop or bloat.
+- KEEP: 7 or more out of 10 in at least two runs, with no harm flag.
+- MERGE: its effect is indistinguishable from another skill's.
+- DROP: it never triggered, or scored 4 or less in every run where it applied.
+- The human note overrides any of these.
 
 ## Start a new project from the template
 
@@ -123,7 +162,21 @@ The full process is in [UPDATING.md](UPDATING.md).
 
 If you use this for yourself or your organisation, the intended path is: copy it, replace the principles and sources with the ones you trust, run your own projects through the loop, and let your own Learn loop reshape it. If you find something that would help everyone, send it back. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
-## Why GPLv3, and CC BY-SA for the writing
+## Licence
+
+Text is CC BY-SA 4.0 and code is GPLv3. The split, file by file, is in [LICENSE.md](LICENSE.md), and the full texts are in [LICENSES/](LICENSES/). Credits for every source the skills were adapted from are in [CREDITS.md](CREDITS.md).
+
+| What | Licence | Full text |
+| --- | --- | --- |
+| Skills, principles, guides, the data in `data/`, `scorecard.csv`, and the other writing | CC BY-SA 4.0 | [LICENSES/CC-BY-SA-4.0.txt](LICENSES/CC-BY-SA-4.0.txt) |
+| Scripts, the GitHub Pages site in `docs/`, CI, `data/schemas/` and other tooling | GPL-3.0-only | [LICENSES/GPL-3.0-only.txt](LICENSES/GPL-3.0-only.txt) |
+| Everything under `template/` | MIT | [template/LICENSE](template/LICENSE) |
+
+### Licence cleanup
+- Text is CC BY-SA 4.0 and code is GPLv3 (`LICENSE.md`). Sources with no usable licence are link only and were not copied or adapted: michaelshimeles/rstack, multica-ai/andrej-karpathy-skills, NousResearch/hermes-agent-self-evolution, anthropics/skills doc-coauthoring, anthropics/claude-plugins-official plugins/claude-security (and, if ever cited, anthropics/claude-code, hesreallyhim/awesome-claude-code, travisvn/awesome-claude-skills and sickn33's bundled third-party skills).
+- 24 skills had link-only sources. Their text was rewritten from clean sources where it leaned on them, the sources moved to "Further reading (link only)", and 7.12 was rebuilt from four MIT repos. See `CREDITS.md` and `data/licences.json`.
+
+### Why GPLv3, and CC BY-SA for the writing
 
 I am not a lawyer, and this is not legal advice. If you think this is the wrong licence for the intent, open an issue. I am open to discussing a better one.
 
@@ -131,21 +184,15 @@ I want the widest use, without restricting anyone. People should be able to incl
 
 This is a tool for builders, not a consumer end product. I want it kept open rather than closed down into an end product.
 
-MIT would have been my first choice. There is a clear push and pull between open and proprietary software today, and individuals' generosity is being used for financial gain. I want to back open source, so I chose GPLv3 for the code. The licence text is in [LICENSE](LICENSE).
-
-GPL-3.0 covers `scripts/`, `data/schemas/`, and the tooling.
+MIT would have been my first choice. There is a clear push and pull between open and proprietary software today, and individuals' generosity is being used for financial gain. I want to back open source, so I chose GPLv3 for the code: `scripts/`, the GitHub Pages site in `docs/`, CI, `data/schemas/` and the tooling.
 
 In short: private internal use and modification by a company is allowed, with no duty to publish, because the duties start when you distribute. Anyone who distributes a work that includes this code must release the whole combined work under GPLv3, with source. Hosted or SaaS use that never distributes the code does not start those duties. AGPL-3.0 is the licence that closes that gap. I could discuss it. I am not choosing it here.
 
-Everything under `template/` is MIT, code and writing. The text is in [template/LICENSE](template/LICENSE). The template is meant to be copied into a new project, and GPL would stop someone who wants to start an MIT project from using it. `scripts/new-project.sh` copies the base and the profile you pick, including that licence, so the new project starts under MIT.
+Everything under `template/` is MIT, code and writing. The template is meant to be copied into a new project, and GPL would stop someone who wants to start an MIT project from using it. `scripts/new-project.sh` copies the base and the profile you pick, including that licence, so the new project starts under MIT.
 
-The writing is CC BY-SA 4.0. The full text is in [LICENSE-CONTENT](LICENSE-CONTENT). You can share and adapt it with attribution. Share-alike means derived text stays under CC BY-SA 4.0, so it stays open.
+The writing is CC BY-SA 4.0: the skills, the principles, the guides, the data files in `data/` and `scorecard.csv`, and the markdown in this repo outside `template/`. You can share and adapt it with attribution. Share-alike means derived text stays under CC BY-SA 4.0, so it stays open. CC BY-SA 4.0 can absorb text from MIT, Apache-2.0, CC BY and CC BY-SA sources, which is why the skills could be written from them.
 
-CC BY-SA 4.0 covers `README.md`, `UPDATING.md`, `CONTRIBUTING.md`, `CHANGELOG.md`, `NOTICE.md`, `ATTRIBUTIONS.md`, the principle statements and notes in `principles/`, `docs/` and `guides/`, the other markdown in this repo outside `template/`, and the data files `data/principles.json`, `data/sources.json`, `data/changelog.json` and `data/notes/`.
-
-Those data files sit with the writing because they hold the research. The principle statements in `data/principles.json` are text. `data/sources.json` and `data/changelog.json` are the record around them. The schemas in `data/schemas/` stay GPL-3.0 with the tooling. Each file is under one licence.
-
-Borrowed source repos keep their own licences. They are not relicensed here. Attribution is in [NOTICE.md](NOTICE.md), and every project I used or referenced is linked in [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
+Borrowed source repos keep their own licences. They are not relicensed here. The sources each skill adapts are credited in its `SOURCES.md` and in [CREDITS.md](CREDITS.md), the licensing notes are in [NOTICE.md](NOTICE.md), and every project I used or referenced is linked in [ATTRIBUTIONS.md](ATTRIBUTIONS.md).
 
 ## Sources
 
