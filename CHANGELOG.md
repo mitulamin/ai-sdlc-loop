@@ -4,6 +4,18 @@ All notable changes to this repo. The machine-readable version of the data chang
 
 ## Unreleased
 
+### CI for the skills kit
+
+Added:
+
+- `.github/workflows/ci.yml` now runs `python3 scripts/validate.py` and fails unless it prints exactly `OK: 103 principles, 103 skills, 5 aliases, licences clean`. It sits alongside the JSON schema validation (`scripts/validate-data.py`, which fails on any `data/*.json` without a schema), the generated-file checks and the link checker.
+- `scripts/check-kit-layout.py`: the kit checks `validate.py` does not make. 103 `principles/<id>.md` files and none for a retired ID, no `skills/` folder or `scorecard.csv` row for a retired ID, scorecard IDs equal to the principle IDs, every `SKILL.md` front matter parses as YAML, and every data file has a schema.
+- A `skillspector` CI job that scans `skills/` with [NVIDIA SkillSpector](https://github.com/NVIDIA/SkillSpector) 2.13.7 (static only, `--no-llm`), through `scripts/skillspector-scan.py`. It fails on any finding and on incomplete coverage. The 484 findings on the first run were all reviewed and are false positives (links to upstream `skills/<name>/SKILL.md` paths, and Don'ts that quote the bad behaviour); they are listed with reasons in `.github/skillspector-exceptions.yaml`, and CI fails on an exception that matches nothing.
+
+Fixed:
+
+- `skills/7.12-before-and-after-proof/SKILL.md`: the unquoted `description` contained `: `, so the front matter was not valid YAML (found by SkillSpector). The description is now quoted.
+
 ### Imported the amalgamated-skills-103 kit
 
 The kit already contains the dedupe (108 principles to 103) and the licence cleanup, and supersedes the earlier drafts. See [IMPORT.md](IMPORT.md) and [MERGES.md](MERGES.md).
