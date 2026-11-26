@@ -9,7 +9,7 @@ Run the same checks locally:
 ```
 pip install jsonschema
 python scripts/validate-data.py
-scripts/build-principles --check
+scripts/build-principles.py --check
 scripts/build-site.py --check
 python scripts/check-links.py
 ```

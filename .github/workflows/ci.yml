@@ -21,7 +21,7 @@ jobs:
       - name: Validate data/*.json against data/schemas/
         run: python scripts/validate-data.py
       - name: Generated principles/*.md are up to date
-        run: python scripts/build-principles --check
+        run: python scripts/build-principles.py --check
       - name: Generated docs/ site is up to date
         run: python scripts/build-site.py --check
       - name: Check internal links in docs/ and markdown

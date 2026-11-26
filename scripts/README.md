@@ -2,7 +2,7 @@
 
 | Script | What it does |
 | --- | --- |
-| `build-principles` | Regenerates `principles/*.md` from `data/principles.json`. `--check` fails if anything is stale. |
+| `build-principles.py` | Regenerates `principles/*.md` from `data/principles.json`. `--check` fails if anything is stale. |
 | `refresh-sources.py` | Compares each pinned SHA in `data/sources.json` with the upstream head. `--pin` and `--repin` move pins. |
 | `build-site.py` | Regenerates the static site in `docs/` from `data/` and `guides/developer/`. `--check` fails if anything is stale. |
 | `validate-data.py` | Validates every `data/*.json` against `data/schemas/`. Needs `pip install jsonschema`. |

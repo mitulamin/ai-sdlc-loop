@@ -1,12 +1,12 @@
 # Contributing
 
-Small pull requests, one change each. Run `scripts/build-principles --check` before you push.
+Small pull requests, one change each. Run `scripts/build-principles.py --check` before you push.
 
 ## Add or change a principle
 
 1. Edit `data/principles.json`. Take the next number in the category, set `status` to `active`, and fill in `sources` and `provenance` (`origin`: `contributed`).
 2. Every label in `sources` must be listed under `labels` for a repo in `data/sources.json`. Add the repo there first if it is new.
-3. Run `scripts/build-principles`. Commit the generated `principles/` files.
+3. Run `scripts/build-principles.py`. Commit the generated `principles/` files.
 4. Add an entry to `data/changelog.json` and `CHANGELOG.md`.
 
 Do not renumber or delete principles. Merge or drop them by setting `status`. See [UPDATING.md](UPDATING.md).
