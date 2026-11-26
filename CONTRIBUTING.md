@@ -13,7 +13,7 @@ Do not renumber or delete principles. Merge or drop them by setting `status`. Se
 
 ## Add a source repo
 
-Add it to `data/sources.json` with `role` `skill-source` or `curation-list`, `licence` `TBD`, and `pinned_sha` `null`. Then run `scripts/refresh-sources --repin owner/repo` once you have looked at it.
+Add it to `data/sources.json` with `role` `skill-source` or `curation-list`, `licence` `TBD`, and `pinned_sha` `null`. Then run `scripts/refresh-sources.sh --repin owner/repo` once you have looked at it.
 
 ## Add a skill
 
