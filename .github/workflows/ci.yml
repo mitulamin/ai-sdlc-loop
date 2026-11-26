@@ -16,13 +16,32 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Install jsonschema
-        run: python -m pip install jsonschema
+      - name: Install jsonschema and PyYAML
+        run: python -m pip install jsonschema pyyaml
       - name: Validate data/*.json against data/schemas/
         run: python scripts/validate-data.py
+      - name: Validate the kit (103 principles, 103 skills, 5 aliases, licences clean)
+        run: |
+          out="$(python3 scripts/validate.py)"
+          echo "$out"
+          test "$out" = "OK: 103 principles, 103 skills, 5 aliases, licences clean"
+      - name: Check the kit layout (principle files, retired IDs, scorecard, SKILL.md front matter)
+        run: python3 scripts/check-kit-layout.py
       - name: Generated principles/*.md are up to date
         run: python scripts/build-principles.py --check
       - name: Generated docs/ site is up to date
         run: python scripts/build-site.py --check
       - name: Check internal links in docs/ and markdown
         run: python scripts/check-links.py
+
+  skillspector:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install SkillSpector (NVIDIA, Apache-2.0)
+        run: python -m pip install "skillspector==2.13.7"
+      - name: Scan skills/ with SkillSpector (static, no LLM, fails on any unexplained finding)
+        run: python3 scripts/skillspector-scan.py
