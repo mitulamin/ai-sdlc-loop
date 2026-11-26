@@ -5,9 +5,22 @@
       "date": "2026-11-26",
       "research_run": "run-1",
       "type": "import",
-      "ids": ["principles", "sources"],
+      "ids": [
+        "principles",
+        "sources"
+      ],
       "summary": "Imported 108 principles in 9 categories and 41 source repos from the initial research. No merges, no drops. Source repos are not pinned yet.",
       "reason": "Starting point for the repo."
+    },
+    {
+      "date": "2026-11-26",
+      "research_run": "run-1",
+      "type": "edit",
+      "ids": [
+        "sources"
+      ],
+      "summary": "Checked the licence of all 41 source repos and recorded it in data/sources.json. 25 MIT, 6 Apache-2.0, 1 CC0-1.0, 1 CC-BY-SA-4.0, 3 no licence file found, 5 described by licence file. Pins still unset.",
+      "reason": "Licences must be known before any content is borrowed."
     }
   ]
 }

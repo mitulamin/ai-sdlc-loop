@@ -6,7 +6,7 @@ Every project this repo has used or referenced. The licence terms of this repo i
 
 These are the repos the principles and skills are distilled from. The list mirrors [data/sources.json](data/sources.json), which is the source of truth for pins and licences.
 
-Licences have not been checked yet. They are checked in phase 3, before any borrowed content is used. Until then each reads "not yet checked", and nothing from these repos is copied into this repo. Once checked, each skill's `SOURCES.md` will credit the exact files used, linked at a pinned commit, with the licence. Borrowed content keeps its own licence and is not relicensed here.
+Licences were checked on 2026-11-26. Each is the repo-level licence as GitHub reports it (SPDX id), or, where GitHub reports none or "Other", a description naming the licence file. Pins are still unset, so these licences are for the default branch on that date. Nothing from these repos is copied into this repo yet. Before a file is borrowed, its own licence is checked again, because a repo can hold files under other terms. Once borrowed, each skill's `SOURCES.md` credits the exact files, linked at a pinned commit, with the licence. Borrowed content keeps its own licence and is not relicensed here. This is not legal advice.
 
 ### Skill sources (35)
 
@@ -14,41 +14,41 @@ Repos with real skill, sub-agent, command or rules files we may borrow from.
 
 | Link | Owner | Repo | Role | Licence |
 | --- | --- | --- | --- | --- |
-| [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | addyosmani | agent-skills | skill-source | not yet checked |
-| [affaan-m/ECC](https://github.com/affaan-m/ECC) | affaan-m | ECC | skill-source | not yet checked |
-| [agamm/claude-code-owasp](https://github.com/agamm/claude-code-owasp) | agamm | claude-code-owasp | skill-source | not yet checked |
-| [agentsmd/agents.md](https://github.com/agentsmd/agents.md) | agentsmd | agents.md | skill-source | not yet checked |
-| [anthropics/claude-code](https://github.com/anthropics/claude-code) | anthropics | claude-code | skill-source | not yet checked |
-| [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) | anthropics | claude-plugins-official | skill-source | not yet checked |
-| [anthropics/skills](https://github.com/anthropics/skills) | anthropics | skills | skill-source | not yet checked |
-| [BayramAnnakov/claude-reflect](https://github.com/BayramAnnakov/claude-reflect) | BayramAnnakov | claude-reflect | skill-source | not yet checked |
-| [buildermethods/agent-os](https://github.com/buildermethods/agent-os) | buildermethods | agent-os | skill-source | not yet checked |
-| [ciembor/agent-rules-books](https://github.com/ciembor/agent-rules-books) | ciembor | agent-rules-books | skill-source | not yet checked |
-| [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) | cloudflare | security-audit-skill | skill-source | not yet checked |
-| [dash0hq/agent-skills](https://github.com/dash0hq/agent-skills) | dash0hq | agent-skills | skill-source | not yet checked |
-| [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | DietrichGebert | ponytail | skill-source | not yet checked |
-| [Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec) | Fission-AI | OpenSpec | skill-source | not yet checked |
-| [ForceInjection/domain-driven-design-skills](https://github.com/ForceInjection/domain-driven-design-skills) | ForceInjection | domain-driven-design-skills | skill-source | not yet checked |
-| [github/spec-kit](https://github.com/github/spec-kit) | github | spec-kit | skill-source | not yet checked |
-| [google/elephant-goldfish-model](https://github.com/google/elephant-goldfish-model) | google | elephant-goldfish-model | skill-source | not yet checked |
-| [gotalab/cc-sdd](https://github.com/gotalab/cc-sdd) | gotalab | cc-sdd | skill-source | not yet checked |
-| [hyhmrright/brooks-lint](https://github.com/hyhmrright/brooks-lint) | hyhmrright | brooks-lint | skill-source | not yet checked |
-| [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | JuliusBrussee | caveman | skill-source | not yet checked |
-| [Kulaxyz/self-learning-skills](https://github.com/Kulaxyz/self-learning-skills) | Kulaxyz | self-learning-skills | skill-source | not yet checked |
-| [mattpocock/skills](https://github.com/mattpocock/skills) | mattpocock | skills | skill-source | not yet checked |
-| [michaelshimeles/rstack](https://github.com/michaelshimeles/rstack) | michaelshimeles | rstack | skill-source | not yet checked |
-| [microsoft/SkillOpt](https://github.com/microsoft/SkillOpt) | microsoft | SkillOpt | skill-source | not yet checked |
-| [microsoft/skills](https://github.com/microsoft/skills) | microsoft | skills | skill-source | not yet checked |
-| [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) | multica-ai | andrej-karpathy-skills | skill-source | not yet checked |
-| [muratcankoylan/Agent-Skills-for-Context-Engineering](https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering) | muratcankoylan | Agent-Skills-for-Context-Engineering | skill-source | not yet checked |
-| [NousResearch/hermes-agent-self-evolution](https://github.com/NousResearch/hermes-agent-self-evolution) | NousResearch | hermes-agent-self-evolution | skill-source | not yet checked |
-| [obra/superpowers](https://github.com/obra/superpowers) | obra | superpowers | skill-source | not yet checked |
-| [ollygarden/opentelemetry-agent-skills](https://github.com/ollygarden/opentelemetry-agent-skills) | ollygarden | opentelemetry-agent-skills | skill-source | not yet checked |
-| [peterfriese/Stratos](https://github.com/peterfriese/Stratos) | peterfriese | Stratos | skill-source | not yet checked |
-| [sanyuan0704/sanyuan-skills](https://github.com/sanyuan0704/sanyuan-skills) | sanyuan0704 | sanyuan-skills | skill-source | not yet checked |
-| [steipete/agent-rules](https://github.com/steipete/agent-rules) | steipete | agent-rules | skill-source | not yet checked |
-| [trailofbits/skills](https://github.com/trailofbits/skills) | trailofbits | skills | skill-source | not yet checked |
-| [wshobson/agents](https://github.com/wshobson/agents) | wshobson | agents | skill-source | not yet checked |
+| [addyosmani/agent-skills](https://github.com/addyosmani/agent-skills) | addyosmani | agent-skills | skill-source | MIT |
+| [affaan-m/ECC](https://github.com/affaan-m/ECC) | affaan-m | ECC | skill-source | MIT |
+| [agamm/claude-code-owasp](https://github.com/agamm/claude-code-owasp) | agamm | claude-code-owasp | skill-source | MIT |
+| [agentsmd/agents.md](https://github.com/agentsmd/agents.md) | agentsmd | agents.md | skill-source | MIT |
+| [anthropics/claude-code](https://github.com/anthropics/claude-code) | anthropics | claude-code | skill-source | LICENSE.md (all rights reserved) |
+| [anthropics/claude-plugins-official](https://github.com/anthropics/claude-plugins-official) | anthropics | claude-plugins-official | skill-source | Apache-2.0 |
+| [anthropics/skills](https://github.com/anthropics/skills) | anthropics | skills | skill-source | per-skill LICENSE.txt (Apache License 2.0 text) |
+| [BayramAnnakov/claude-reflect](https://github.com/BayramAnnakov/claude-reflect) | BayramAnnakov | claude-reflect | skill-source | MIT |
+| [buildermethods/agent-os](https://github.com/buildermethods/agent-os) | buildermethods | agent-os | skill-source | MIT |
+| [ciembor/agent-rules-books](https://github.com/ciembor/agent-rules-books) | ciembor | agent-rules-books | skill-source | MIT |
+| [cloudflare/security-audit-skill](https://github.com/cloudflare/security-audit-skill) | cloudflare | security-audit-skill | skill-source | MIT |
+| [dash0hq/agent-skills](https://github.com/dash0hq/agent-skills) | dash0hq | agent-skills | skill-source | Apache-2.0 |
+| [DietrichGebert/ponytail](https://github.com/DietrichGebert/ponytail) | DietrichGebert | ponytail | skill-source | MIT |
+| [Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec) | Fission-AI | OpenSpec | skill-source | MIT |
+| [ForceInjection/domain-driven-design-skills](https://github.com/ForceInjection/domain-driven-design-skills) | ForceInjection | domain-driven-design-skills | skill-source | Apache-2.0 |
+| [github/spec-kit](https://github.com/github/spec-kit) | github | spec-kit | skill-source | MIT |
+| [google/elephant-goldfish-model](https://github.com/google/elephant-goldfish-model) | google | elephant-goldfish-model | skill-source | Apache-2.0 |
+| [gotalab/cc-sdd](https://github.com/gotalab/cc-sdd) | gotalab | cc-sdd | skill-source | MIT |
+| [hyhmrright/brooks-lint](https://github.com/hyhmrright/brooks-lint) | hyhmrright | brooks-lint | skill-source | MIT |
+| [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) | JuliusBrussee | caveman | skill-source | Apache-2.0 |
+| [Kulaxyz/self-learning-skills](https://github.com/Kulaxyz/self-learning-skills) | Kulaxyz | self-learning-skills | skill-source | MIT |
+| [mattpocock/skills](https://github.com/mattpocock/skills) | mattpocock | skills | skill-source | MIT |
+| [michaelshimeles/rstack](https://github.com/michaelshimeles/rstack) | michaelshimeles | rstack | skill-source | per-skill LICENSE files (MIT, PolyForm Shield 1.0.0) |
+| [microsoft/SkillOpt](https://github.com/microsoft/SkillOpt) | microsoft | SkillOpt | skill-source | MIT |
+| [microsoft/skills](https://github.com/microsoft/skills) | microsoft | skills | skill-source | MIT |
+| [multica-ai/andrej-karpathy-skills](https://github.com/multica-ai/andrej-karpathy-skills) | multica-ai | andrej-karpathy-skills | skill-source | no licence file found |
+| [muratcankoylan/Agent-Skills-for-Context-Engineering](https://github.com/muratcankoylan/Agent-Skills-for-Context-Engineering) | muratcankoylan | Agent-Skills-for-Context-Engineering | skill-source | MIT |
+| [NousResearch/hermes-agent-self-evolution](https://github.com/NousResearch/hermes-agent-self-evolution) | NousResearch | hermes-agent-self-evolution | skill-source | no licence file found |
+| [obra/superpowers](https://github.com/obra/superpowers) | obra | superpowers | skill-source | MIT |
+| [ollygarden/opentelemetry-agent-skills](https://github.com/ollygarden/opentelemetry-agent-skills) | ollygarden | opentelemetry-agent-skills | skill-source | Apache-2.0 |
+| [peterfriese/Stratos](https://github.com/peterfriese/Stratos) | peterfriese | Stratos | skill-source | LICENSE (Apache License 2.0 text) |
+| [sanyuan0704/sanyuan-skills](https://github.com/sanyuan0704/sanyuan-skills) | sanyuan0704 | sanyuan-skills | skill-source | MIT |
+| [steipete/agent-rules](https://github.com/steipete/agent-rules) | steipete | agent-rules | skill-source | MIT |
+| [trailofbits/skills](https://github.com/trailofbits/skills) | trailofbits | skills | skill-source | CC-BY-SA-4.0 |
+| [wshobson/agents](https://github.com/wshobson/agents) | wshobson | agents | skill-source | MIT |
 
 ### Curation lists (6)
 
@@ -56,12 +56,29 @@ Pointers to other sources. They help find real sources and are never installed w
 
 | Link | Owner | Repo | Role | Licence |
 | --- | --- | --- | --- | --- |
-| [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code) | hesreallyhim | awesome-claude-code | curation-list | not yet checked |
-| [PatrickJS/awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) | PatrickJS | awesome-cursorrules | curation-list | not yet checked |
-| [sickn33/agentic-awesome-skills](https://github.com/sickn33/agentic-awesome-skills) | sickn33 | agentic-awesome-skills | curation-list | not yet checked |
-| [travisvn/awesome-claude-skills](https://github.com/travisvn/awesome-claude-skills) | travisvn | awesome-claude-skills | curation-list | not yet checked |
-| [VoltAgent/awesome-agent-skills](https://github.com/VoltAgent/awesome-agent-skills) | VoltAgent | awesome-agent-skills | curation-list | not yet checked |
-| [VoltAgent/awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents) | VoltAgent | awesome-claude-code-subagents | curation-list | not yet checked |
+| [hesreallyhim/awesome-claude-code](https://github.com/hesreallyhim/awesome-claude-code) | hesreallyhim | awesome-claude-code | curation-list | LICENSE (CC BY-NC-ND 4.0) |
+| [PatrickJS/awesome-cursorrules](https://github.com/PatrickJS/awesome-cursorrules) | PatrickJS | awesome-cursorrules | curation-list | CC0-1.0 |
+| [sickn33/agentic-awesome-skills](https://github.com/sickn33/agentic-awesome-skills) | sickn33 | agentic-awesome-skills | curation-list | MIT |
+| [travisvn/awesome-claude-skills](https://github.com/travisvn/awesome-claude-skills) | travisvn | awesome-claude-skills | curation-list | no licence file found |
+| [VoltAgent/awesome-agent-skills](https://github.com/VoltAgent/awesome-agent-skills) | VoltAgent | awesome-agent-skills | curation-list | MIT |
+| [VoltAgent/awesome-claude-code-subagents](https://github.com/VoltAgent/awesome-claude-code-subagents) | VoltAgent | awesome-claude-code-subagents | curation-list | MIT |
+
+### Licence flags
+
+Repos where the licence is missing, restrictive or mixed. None is dropped. Do not copy content from them until the point is settled.
+
+| Repo | Finding |
+| --- | --- |
+| NousResearch/hermes-agent-self-evolution | No licence file at the repo root or elsewhere in the tree. The README says GEPA is MIT licensed, which is about a dependency, not this repo. |
+| anthropics/claude-code | Tool repository; mined for bundled plugins and commands. LICENSE.md says all rights reserved, use subject to Anthropic's Commercial Terms of Service. Not open source. |
+| anthropics/skills | No root licence. All 18 skill folders have a LICENSE.txt that opens with Apache License 2.0 text; there is also THIRD_PARTY_NOTICES.md. Re-check the exact folder at borrow time. |
+| hesreallyhim/awesome-claude-code | Not named as a curation list in the brief section 4; classified as curation-list on name. Confirm. GitHub reports Other. LICENSE file states Creative Commons Attribution-NonCommercial-NoDerivatives 4.0. Curation list, never copied. |
+| michaelshimeles/rstack | No root licence. before-and-after/LICENSE is PolyForm Shield License 1.0.0; greploop/, greploop-apps/ and unslop/ have MIT LICENSE files. Other skill folders have none. |
+| multica-ai/andrej-karpathy-skills | No licence file in the tree. The README has a License section that says MIT, but that is not a licence file. |
+| peterfriese/Stratos | LICENSE file is the Apache License 2.0 text; GitHub reports Other. |
+| steipete/agent-rules | Repo is archived on GitHub. |
+| trailofbits/skills | CC-BY-SA-4.0. Share-alike: usable only in this repo's CC BY-SA 4.0 writing with attribution, not in `template/` (MIT). Check per file. |
+| travisvn/awesome-claude-skills | Not named as a curation list in the brief section 4; classified as curation-list on name. Confirm. No licence file in the tree. |
 
 ## 2. Referenced, not sourced
 
@@ -87,8 +104,8 @@ Projects and works this repo points to or relies on, but does not copy from. Lin
 
 When a new source is used:
 
-1. Add the repo to [data/sources.json](data/sources.json) with its role and `licence` set to `TBD`, then add its row to section 1 here.
-2. Check its licence. Put the SPDX identifier in `data/sources.json` and replace "not yet checked" here. Do not borrow from a repo whose licence is unchecked or incompatible.
+1. Add the repo to [data/sources.json](data/sources.json) with its role and `licence` set to `TBD`, then add its row to section 1 here, also reading `TBD`.
+2. Check its licence. Put the SPDX identifier in `data/sources.json` and replace `TBD` here. Add it to the licence flags if it is missing, restrictive or mixed. Do not borrow from a repo whose licence is unchecked or incompatible.
 3. Pin the commit (`scripts/refresh-sources --repin owner/repo`).
 4. Credit each borrowed file in the `SOURCES.md` next to the skill that uses it: link at the pinned commit, licence, and what was taken.
 5. For a book, tool or idea that is only referenced, add a row to section 2 with a real link. If you cannot verify a link, write "link to be confirmed".

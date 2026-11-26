@@ -61,7 +61,7 @@ For each `changed` repo, compare the pinned commit with upstream head and list t
 git diff --name-status <pinned_sha> <upstream_sha>
 ```
 
-Also check whether the licence changed. Update `licence` in `data/sources.json` (an SPDX identifier, or `TBD` until checked).
+Also check whether the licence changed. Update `licence` in `data/sources.json` (an SPDX identifier where GitHub reports one, otherwise a description naming the licence file).
 
 New sources found through the curation lists are added to `data/sources.json` only as `skill-source` entries pointing at the real repo. Never add a curation list's contents wholesale.
 

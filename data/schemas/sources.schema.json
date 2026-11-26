@@ -29,7 +29,7 @@
           "repo": { "type": "string" },
           "url": { "type": "string", "format": "uri" },
           "role": { "enum": ["skill-source", "curation-list"], "description": "skill-source: real skill, agent and command files we may borrow from. curation-list: a pointer to other sources, never installed wholesale." },
-          "licence": { "type": "string", "description": "SPDX identifier, or TBD until checked" },
+          "licence": { "type": "string", "description": "SPDX identifier where GitHub reports one; otherwise a description naming the licence file, or \"no licence file found\". TBD only before the check" },
           "default_branch": { "type": ["string", "null"] },
           "pinned_sha": { "type": ["string", "null"], "pattern": "^[0-9a-f]{40}$" },
           "pinned_at": { "type": ["string", "null"], "format": "date" },
