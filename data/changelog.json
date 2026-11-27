@@ -303,6 +303,20 @@
       ],
       "summary": "Added data/harnesses.json (schema data/schemas/harnesses.schema.json) and scripts/install-harness.py. scripts/new-project.sh --harness <name> now installs the skills, agents and loop commands into a new project in the project-level layout of Cursor, Claude Code, OpenCode, Pi or GitHub Copilot in VS Code. The default, none, keeps the old behaviour. Paths must stay inside the project, and nothing is written to a harness's user or global settings. Loop commands carry an sdlc- prefix. Installed copies are MIT, like template/, except files adapted from share-alike sources (found from the per-source licences in data/licences.json), which keep CC BY-SA 4.0 and carry a NOTICE.md and the licence text in their own skill folder. Each file has a provenance comment stating its licence, and each SOURCES.md carries the copyright lines and licence links of its MIT and Apache sources. The project root holds only the template's MIT LICENSE. Added scripts/check-new-project.py to CI, which also asserts the licence of every installed file. Added the Use page (guides/use.md, published as docs/use.html), the last site nav item before the GitHub link, whose harness table and sections build-site.py generates from data/harnesses.json. Updated the README start section, the licence section and the folder READMEs.",
       "reason": "Starting a project in a given harness meant copying and adapting the agent, command and skill files by hand. Keeping each harness's layout as data, generated from the same sources, lets every harness get the same loop without a second copy to maintain."
+    },
+    {
+      "date": "2026-11-27",
+      "research_run": "run-1",
+      "type": "add",
+      "ids": [
+        "scripts",
+        "template",
+        "guides",
+        "site",
+        "ci"
+      ],
+      "summary": "Added scripts/bootstrap.sh, a one-command Bootstrap for Cursor for solo developers and non-coders, run from inside a checkout. It asks where to put the project (home, Documents if it exists, or the folder next to the checkout) and what to call it, never inside the checkout, then runs new-project.sh for the solo profile and the Cursor harness, adds START-HERE.md and an always-on rule from the new template/bootstrap/ folder with a first-time note also at the top of the project's AGENTS.md, and runs a local git init on main, leaving the first commit to the agent. No GitHub, no accounts, no remote. It checks for git and python3 and does not install them; AI_SDLC_BOOTSTRAP_LOCATION and AI_SDLC_BOOTSTRAP_NAME skip the questions. new-project.sh now leaves template/bootstrap/ out of new projects. Added scripts/check-bootstrap.py to CI (fake home, copy of the checkout without .git as curl gives). Added a Bootstrap for Cursor section to the Use page, opening with why Bootstrap exists (hand the person to a Cursor agent that can handhold them), then requirements, a curl download or manual clone, and the questions; updated the README, scripts/README.md, CONTRIBUTING.md and the landing page.",
+      "reason": "Solo developers and non-coders need a start that does not mean choosing a profile, a harness and a target path by hand, or knowing what to say to the agent first. Teams keep new-project.sh."
     }
   ]
 }

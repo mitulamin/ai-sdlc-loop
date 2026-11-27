@@ -85,7 +85,7 @@ A change only goes live if it helps on cases held out from the one that caused i
 | `guides/developer/` | Plain-language guides: the Developer Guide to named principles, Principles for Building Quality Software and Apps, using the agents and commands, and testing the skills. Published on the site by `scripts/build-site.py`. |
 | `guides/use.md` | The Use page: start a new project in your coding harness and run your first loop. Published on the site by `scripts/build-site.py`. |
 | `docs/` | The static website (GitHub Pages), generated from `data/`. |
-| `template/` | The shared base a new project copies, and `template/profiles/` with the solo, small-team and large-org overlays. |
+| `template/` | The shared base a new project copies, `template/profiles/` with the solo, small-team and large-org overlays, and `template/bootstrap/` with the two files only `scripts/bootstrap.sh` adds. |
 | `scripts/` | The build, check, register and refresh scripts, and the new-project script with its harness installer. See [scripts/README.md](scripts/README.md). |
 
 ## Start a new project from the template
@@ -107,6 +107,10 @@ scripts/new-project.sh --help                                   # usage, the pro
 The script copies the shared base from `template/`, applies the profile on top, and runs `git init`. It refuses a target folder that is not empty. Then edit the new project's `AGENTS.md` (stack, commands, conventions, boundaries), read its `PROCESS.md`, and start your first loop.
 
 `--harness <name>` also installs this repo's skills, agents and loop commands into the folders that harness reads inside the project, in the format it expects, so you can start the coordinator straight away. `--help` lists the harnesses, and the layout for each is in [data/harnesses.json](data/harnesses.json). The default, `none`, installs no harness files. The script writes only inside the new project, never to your home folder or a harness's user settings.
+
+### Solo, in Cursor, in one step
+
+If you work alone, or you are not a coder, and you use Cursor, run `./scripts/bootstrap.sh` from inside your checkout instead. It asks where to put the project and what to call it, sets up the solo template and the Cursor files, adds an always-on rule and a `START-HERE.md` brief so the agent works through the project's coordinator, makes a local git repository with no commits yet (the agent makes the first one with you; no GitHub, no accounts, no remote), and opens Cursor. You need Python 3, Git and Cursor, plus cURL if you download rather than clone. See [Bootstrap for Cursor](guides/use.md#bootstrap-for-cursor). Teams and larger organisations should keep using `new-project.sh`.
 
 ### Pick a profile
 
