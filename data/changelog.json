@@ -327,6 +327,19 @@
       ],
       "summary": "README.md links the learning site (https://mitulamin.github.io/ai-sdlc-loop/) just after the introduction. The Use page link later in the README stays. The alpha status badge, warning and title are unchanged. The site is generated independently of the README, so docs/ is unchanged.",
       "reason": "The GitHub Pages site was only linked from the Use page, deep in the README."
+    },
+    {
+      "date": "2026-11-27",
+      "research_run": "run-1",
+      "type": "edit",
+      "ids": [
+        "agents",
+        "scripts",
+        "ci",
+        "releasing"
+      ],
+      "summary": "Extended the SkillSpector CI scan from skills/ to agents/, commands/, template/ and a throwaway install for each harness, and added a required pre-release scan with the LLM analyzers on (RELEASING.md, scripts/skillspector-llm-scan.py) with a per-finding record. Reworded the reviewer agents' loads label in scripts/build-agents.py so SkillSpector's static parser can read every reviewer file.",
+      "reason": "The static scan covered only skills, but agents, commands, the template and the installed harness files are what an agent actually reads. A model-assisted pass catches intent that static rules miss, and needs a key and a person to triage, so it is a release step rather than a CI job."
     }
   ]
 }

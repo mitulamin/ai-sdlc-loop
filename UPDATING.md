@@ -69,7 +69,7 @@ New sources found through the curation lists are added to `data/sources.json` on
 
 ### 3. Scan anything new (not built yet)
 
-Run NVIDIA SkillSpector over every new or changed file that could be borrowed. Do not carry forward anything that fails.
+Run NVIDIA SkillSpector over every new or changed file that could be borrowed. Do not carry forward anything that fails. The scan of what this repo ships is `python scripts/skillspector-scan.py` (static, in CI), and the model-assisted scan before every release is described in [RELEASING.md](RELEASING.md).
 
 ### 4. Re-collect and re-dedupe (not built yet)
 
@@ -128,6 +128,10 @@ To change a schema:
 2. Bump `schema_version` in the schema, in every data file that uses it, and in the scripts that read it.
 3. Add a `schema` entry to `data/changelog.json` and a note in `CHANGELOG.md` saying how to migrate.
 4. A breaking change bumps the major version.
+
+## Releases
+
+A release or tag has its own required checks, including a SkillSpector scan with the LLM analyzers on. The steps, the exact command and how findings are recorded are in [RELEASING.md](RELEASING.md).
 
 ## Cadence
 

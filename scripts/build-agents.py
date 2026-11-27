@@ -445,7 +445,7 @@ def render_reviewer(m, ph):
         ("phase", json.dumps(name)),
         ("commands", commands_for(m, slug)),
         ("tools", REVIEWER_TOOLS_WITH_BASH if slug in REVIEWERS_WITH_BASH else REVIEWER_TOOLS_READ_ONLY),
-        ("loads", ["Adversarial reviewer", "Producer: dos and don'ts (the Don't list only)"]),
+        ("loads", ["Adversarial reviewer", "Producer: dos and don'ts (only the things not to do)"]),
         ("skills", m["loads"][slug]),
         ("principles", m["lookup"][slug]),
         ("output_fields", [field_key(m)]),

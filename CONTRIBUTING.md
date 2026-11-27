@@ -46,6 +46,10 @@ There is one skill per principle, in `skills/<id>-<slug>/`, with a `SKILL.md` an
 - Add the skill to `data/skill-principle-map.json` and, if it draws on new files, to `data/mapping.json`, `data/licences.json` and `CREDITS.md`.
 - Run `python scripts/check-skills.py`, then `python scripts/build-principles.py` and `python scripts/build-site.py` so the principle page links the skill, and `python scripts/build-agents.py` so the agents and commands for its phase load it. Do not edit `agents/` or `commands/` by hand.
 
+## Add a SkillSpector exception
+
+CI scans everything agent-facing that this repo ships (skills, agents, commands, the template and what each harness install writes) with SkillSpector, and fails on any finding no entry explains. Read the finding in context first. If it is a real problem, fix the source: `agents/` and `commands/` are generated, so change `data/` or `scripts/build-agents.py`, not the generated file. Only for a genuine false positive, add an entry to `.github/skillspector-exceptions.yaml` with its rule, file, matched text, source line and a reason, as the header of that file describes. Releases have a further, model-assisted scan: see [RELEASING.md](RELEASING.md).
+
 ## Which licence your contribution is under
 
 By contributing, you agree your contribution is licensed on the same split as the repo. This is not legal advice. The detail is in [NOTICE.md](NOTICE.md) and the README section [Why GPLv3, and CC BY-SA for the writing](README.md#why-gplv3-and-cc-by-sa-for-the-writing).
