@@ -1,6 +1,6 @@
 # Use the AI SDLC Loop in your coding harness
 
-This page takes you from nothing to your first loop in a new project. It covers the coding harnesses the project script supports. A harness is the coding agent you work in, such as Cursor or Claude Code. Pick yours in [Harness by harness](#harness-by-harness) when the steps below send you there.
+This page takes you from nothing to your first loop in a new project. It covers the coding harnesses the project script supports. A harness is the coding agent you work in, such as Cursor or Claude Code. Pick yours in [Harness by harness](#harness-by-harness) when the steps below send you there. On your own, or new to code, and using Cursor? Skip to [Bootstrap for Cursor](#bootstrap-for-cursor).
 
 The project is alpha. The agents and commands work, but they have not been tested in every harness on real projects yet. Tell us what breaks: [open an issue](https://github.com/mitulamin/ai-sdlc-loop/issues).
 
@@ -130,18 +130,59 @@ file and a malformed row, and the README shows how to run it.
 
 Then ask for the next feature the same way. Keep each request to one outcome you can check. The smaller the request, the shorter each loop and the easier the review.
 
-## Bootstrap for Cursor (planned)
+## Bootstrap for Cursor
 
-**Planned, not yet available.** There is no `scripts/bootstrap.sh` yet. This describes a path we intend to add for solo developers and non-coders who use Cursor and want the loop without setting anything up by hand.
+For solo developers and people who do not code, using Cursor. Bootstrap asks two questions, sets up a new project, and opens it in Cursor. Then you tell the agent what you want to build.
 
-You would run one command in an empty folder. It would:
+### Before you start
 
-- copy the solo template and install the coordinator, agents, skills and `/sdlc-*` commands into the project's `.cursor/` folder;
-- add an always-on Cursor rule and a `START-HERE.md` brief, so the agent knows what was set up and works through the project's coordinator for every step of the SDLC;
-- run a local `git init` only: no GitHub, no accounts and no remote;
-- open Cursor, so you can just say what you want to build.
+You need:
 
-Until then, and for teams and larger organisations, `new-project.sh` stays the route, as described in the steps above.
+- Python 3
+- Git
+- cURL, if you download with the command below
+- Cursor, signed in
+
+Bootstrap does not install any of them. If Python 3 or Git is missing it stops and tells you in plain words. On Windows, run it in WSL.
+
+### Get it and run it
+
+Either download the repo with one command:
+
+```bash
+curl -fsSL https://github.com/mitulamin/ai-sdlc-loop/archive/refs/heads/main.tar.gz | tar -xz
+cd ai-sdlc-loop-main
+```
+
+or clone it from its [Git URL](https://github.com/mitulamin/ai-sdlc-loop):
+
+```bash
+git clone https://github.com/mitulamin/ai-sdlc-loop
+cd ai-sdlc-loop
+```
+
+Then, from inside that folder, run:
+
+```bash
+./scripts/bootstrap.sh
+```
+
+### What it asks, and what it does
+
+It asks where you would like the project to be put, with the full path beside each choice: your home folder, your Documents folder (only if you have one), or the folder next to the one you are in. Then it asks what to call the project, which becomes the folder's name, and suggests one. If a folder of that name is already there and not empty, it says so and asks again. It never puts the project inside the ai-sdlc-loop folder.
+
+Then it:
+
+- copies the solo template and installs the coordinator, agents, skills and `/sdlc-*` commands into the project's `.cursor/` folder;
+- adds an always-on Cursor rule and a `START-HERE.md` brief, with a short first-time note at the top of the rule and of `AGENTS.md`. They tell the agent what was set up and to work through the project's coordinator for every step of the SDLC. It talks in plain language, asks what you want to build one question at a time, fills in `AGENTS.md`, shows you the plan before it writes any code, and makes a commit for each step you approve;
+- runs a local `git init` on `main` and leaves the first commit to the agent, which shows you what will be committed first. It creates no GitHub repository, no accounts and no remote, and nothing is sent anywhere;
+- opens Cursor if its `cursor` command is available, and otherwise tells you to open the folder yourself.
+
+Everything is written inside the new project. Bootstrap sets no Cursor or editor settings, model choices or workspace files, and changes nothing in your own Cursor setup. The rule stays on, and once `AGENTS.md` is filled in the agent skips the interview and starts from what you ask for.
+
+To skip the questions, for example in a script, set `AI_SDLC_BOOTSTRAP_LOCATION` to `home`, `documents`, `parent` or the full path of an existing folder, and `AI_SDLC_BOOTSTRAP_NAME` to the folder name.
+
+Teams and larger organisations should use `new-project.sh` and the steps above, which give you a choice of profile and harness.
 
 ## Harness by harness
 
@@ -240,7 +281,7 @@ The script writes only inside the new project. A few things are still done by th
 
 The project you create is MIT, from `template/`, and your code stays yours.
 
-The copies of skills, agents and commands the script installs are MIT, like `template/` and the rest of your project, except files adapted from share-alike sources, which keep CC BY-SA 4.0 and carry their notice and licence text. Your project root holds one licence, the MIT `LICENSE`, and no project-wide notice.
+The copies of skills, agents and commands the script installs are MIT, like `template/` and the rest of your project, except files adapted from share-alike sources, which keep CC BY-SA 4.0 and carry their notice and licence text. Your project root holds one licence, the MIT `LICENSE`, and no project-wide notice. The bootstrap installs the same files for Cursor, and its `START-HERE.md` and always-on rule come from `template/`, so they are MIT too.
 
 - Every installed file starts with a comment that names the file it came from and states the licence of that file.
 - Every skill keeps its `SOURCES.md`. It credits the open-source projects the skill draws on, with the copyright lines and licence links their MIT and Apache licences ask for, and says where material was modified.

@@ -436,6 +436,7 @@ scripts/new-project.sh ../my-new-project small-team
 scripts/new-project.sh ../my-new-project large-org
 scripts/new-project.sh --harness claude-code ../my-new-project  # with a harness</code></pre>
 <p>Add <code>--harness &lt;name&gt;</code> to install the skills, agents and loop commands in the layout your coding harness reads, inside the new project. Then edit the new project's <code>AGENTS.md</code>, read its <code>PROCESS.md</code>, and start your first loop. The <a href="{USE_PAGE}">Use page</a> walks through it for each harness.</p>
+<p>Working alone, or new to code, and using Cursor? Run <a href="{BLOB}scripts/bootstrap.sh"><code>scripts/bootstrap.sh</code></a> from inside your checkout instead. It asks where to put the project, sets up the solo template and the Cursor files, makes a local git repository, and opens Cursor, with no GitHub and no accounts. See <a href="{USE_PAGE}#bootstrap-for-cursor">Bootstrap for Cursor</a>.</p>
 </section>
 
 <section class="lp-section lp-final" aria-labelledby="next">

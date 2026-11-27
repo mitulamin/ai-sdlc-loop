@@ -31,7 +31,7 @@ To check a change, run the script once per profile into a temp folder and look a
 for p in solo small-team large-org; do scripts/new-project.sh "$(mktemp -d)/x" "$p"; done
 ```
 
-Then run `python scripts/check-new-project.py`, which CI also runs: it creates a project for every harness and fails if one breaks. Update the table in the README, `scripts/README.md` and `CHANGELOG.md`.
+Then run `python scripts/check-new-project.py`, which CI also runs: it creates a project for every harness and fails if one breaks. If you change the template or the Cursor layout, also run `python scripts/check-bootstrap.py`, which CI runs too: it checks the Bootstrap for Cursor. Update the table in the README, `scripts/README.md` and `CHANGELOG.md`.
 
 ## Add or change a harness
 

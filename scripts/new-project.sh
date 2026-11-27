@@ -93,8 +93,8 @@ fi
 
 mkdir -p "$target"
 
-# Base: everything in template/ except the profiles folder.
-find "$root/template" -mindepth 1 -maxdepth 1 ! -name profiles -exec cp -a {} "$target/" \;
+# Base: everything in template/ except the profiles folder and the bootstrap files, which only bootstrap.sh uses.
+find "$root/template" -mindepth 1 -maxdepth 1 ! -name profiles ! -name bootstrap -exec cp -a {} "$target/" \;
 
 # Profile: omit listed paths from the base, then add or replace files from the overlay.
 omit="$profiles_dir/$profile/omit"

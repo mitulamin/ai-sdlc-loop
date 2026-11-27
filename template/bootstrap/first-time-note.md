@@ -1,0 +1,1 @@
+If this is the first time you are reading this project, here is a note for you: it was set up by Bootstrap from ai-sdlc-loop. Read `START-HERE.md`, then act as the project coordinator (see `.cursor/agents`) and follow the loop. If `AGENTS.md` is not filled in yet, start the interview; otherwise carry on from the current plan.
