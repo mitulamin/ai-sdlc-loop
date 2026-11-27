@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Use the AI SDLC Loop in your coding harness | AI SDLC Loop</title>
+<meta name="description" content="Start a new project with the AI SDLC Loop in your coding harness, then run your first loop.">
+<link rel="icon" href="assets/brand/ai-sdlc-loop.ico" sizes="any">
+<link rel="icon" href="assets/brand/ai-sdlc-loop.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/brand/ai-sdlc-loop-512.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AI SDLC Loop">
+<meta property="og:url" content="https://mitulamin.github.io/ai-sdlc-loop/use.html">
+<meta property="og:title" content="Use the AI SDLC Loop in your coding harness | AI SDLC Loop">
+<meta property="og:description" content="Start a new project with the AI SDLC Loop in your coding harness, then run your first loop.">
+<meta property="og:image" content="https://mitulamin.github.io/ai-sdlc-loop/assets/brand/ai-sdlc-loop-photographic.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Use the AI SDLC Loop in your coding harness | AI SDLC Loop">
+<meta name="twitter:description" content="Start a new project with the AI SDLC Loop in your coding harness, then run your first loop.">
+<meta name="twitter:image" content="https://mitulamin.github.io/ai-sdlc-loop/assets/brand/ai-sdlc-loop-photographic.jpg">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="alpha-ribbon" aria-hidden="true"><span class="alpha-ribbon__band">Alpha</span></div>
+<p class="sr">This project is a work in progress and is considered alpha. It has not been fully tested yet.</p>
+<header class="site-header">
+<div class="wrap header-inner">
+<a class="brand" href="index.html"><img class="brand-logo" src="assets/brand/ai-sdlc-loop.svg" alt="AI SDLC Loop logo" width="28" height="28">AI SDLC Loop</a>
+<nav aria-label="Main"><a href="index.html">Home</a><a href="path.html">Learning path</a><a href="principles.html">All principles</a><a href="skills.html">Skills</a><a href="agents.html">Agents</a><a href="sources.html">Sources</a><a href="guides/index.html">Guides</a><a href="use.html" aria-current="page">Use</a><a href="https://github.com/mitulamin/ai-sdlc-loop">GitHub</a></nav>
+</div>
+</header>
+<main id="main" class="wrap">
+<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / Use</nav>
+<article class="prose"><h1 id="use-the-ai-sdlc-loop-in-your-coding-harness">Use the AI SDLC Loop in your coding harness</h1>
+<p>This page takes you from nothing to your first loop in a new project. It covers the coding harnesses the project script supports. A harness is the coding agent you work in, such as Cursor or Claude Code. Pick yours in <a href="#harness-by-harness">Harness by harness</a> when the steps below send you there.</p>
+<p>The project is alpha. The agents and commands work, but they have not been tested in every harness on real projects yet. Tell us what breaks: <a href="https://github.com/mitulamin/ai-sdlc-loop/issues">open an issue</a>.</p>
+<h2 id="what-you-need">What you need</h2>
+<ul><li>git and bash. On Windows, use WSL or Git Bash.</li><li>Python 3, for any harness other than <code>none</code>. The installer uses the standard library only.</li><li>Your harness, installed and signed in. Each harness section below links to its install guide.</li></ul>
+<h2 id="1-clone-this-repo">1. Clone this repo</h2>
+<pre><code>git clone https://github.com/mitulamin/ai-sdlc-loop
+cd ai-sdlc-loop</code></pre>
+<p>You run the script from this clone. Your new project is a separate folder and a separate git repository.</p>
+<h2 id="2-create-your-project">2. Create your project</h2>
+<p>Give the script a target folder, an optional profile, and your harness:</p>
+<pre><code>scripts/new-project.sh --harness claude-code ../my-app              # solo, the default profile
+scripts/new-project.sh --harness cursor ../my-app small-team
+scripts/new-project.sh ../my-app large-org --harness=copilot-vscode  # options can go anywhere
+scripts/new-project.sh ../my-app                                     # no harness: the template only
+scripts/new-project.sh --help                                        # every profile and harness</code></pre>
+<p><code>--help</code> lists the profile names and the harness IDs. The IDs are also in the table in the next step. A profile sets how much ceremony you get: gates, roles, review and ownership. See <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/README.md#pick-a-profile">Pick a profile</a> in the README. If you are unsure, start with the default and add ceremony later.</p>
+<p>The script copies the shared base from <code>template/</code>, applies the profile, installs the harness files, and runs <code>git init</code>. It refuses a target folder that is not empty, and it checks the harness name before it creates anything.</p>
+<p>Everything is written inside the new project. The script never writes to your home folder or to a harness&#x27;s user or global settings, so it cannot change your other projects. Delete the folder and nothing is left behind.</p>
+<h2 id="3-what-gets-installed-where">3. What gets installed where</h2>
+<p>From the template you get the always-on rules file <code>AGENTS.md</code>, the process for your profile in <code>PROCESS.md</code>, a <code>README.md</code>, a <code>CHANGELOG.md</code>, an MIT <code>LICENSE</code>, and the profile&#x27;s extra files.</p>
+<p>With a harness you also get this repo&#x27;s skills, agents and loop commands, written to the folders that harness reads from its project, with the front matter and file names it expects:</p>
+<ul><li><strong>Skills</strong>: one folder per skill, each with its <code>SKILL.md</code> and the <code>SOURCES.md</code> that credits where it came from.</li><li><strong>Agents</strong>: the coordinator, and a producer and an adversarial reviewer for each phase.</li><li><strong>Loop commands</strong>: one per loop step, named with the <code>sdlc-</code> prefix.</li></ul>
+<div class="table-wrap"><table><thead><tr><th>Harness</th><th><code>--harness</code></th><th>Rules file</th><th>Skills</th><th>Agents</th><th>Loop commands</th><th>Also written</th></tr></thead><tbody><tr><td><a href="#cursor">Cursor</a></td><td><code>cursor</code></td><td><code>AGENTS.md</code></td><td><code>.cursor/skills/&lt;skill&gt;/SKILL.md</code></td><td><code>.cursor/agents/&lt;agent&gt;.md</code></td><td><code>.cursor/skills/sdlc-&lt;command&gt;/SKILL.md</code></td><td>nothing else</td></tr><tr><td><a href="#claude-code">Claude Code</a></td><td><code>claude-code</code></td><td><code>CLAUDE.md</code></td><td><code>.claude/skills/&lt;skill&gt;/SKILL.md</code></td><td><code>.claude/agents/&lt;agent&gt;.md</code></td><td><code>.claude/skills/sdlc-&lt;command&gt;/SKILL.md</code></td><td><code>CLAUDE.md</code>, <code>.claude/settings.json</code></td></tr><tr><td><a href="#opencode">OpenCode</a></td><td><code>opencode</code></td><td><code>AGENTS.md</code></td><td><code>.opencode/skills/&lt;skill&gt;/SKILL.md</code></td><td><code>.opencode/agents/&lt;agent&gt;.md</code></td><td><code>.opencode/commands/sdlc-&lt;command&gt;.md</code></td><td><code>.opencode/opencode.json</code></td></tr><tr><td><a href="#pi">Pi</a></td><td><code>pi</code></td><td><code>AGENTS.md</code></td><td><code>.pi/skills/&lt;skill&gt;/SKILL.md</code></td><td><code>.pi/agents/&lt;agent&gt;.md</code></td><td><code>.pi/prompts/sdlc-&lt;command&gt;.md</code></td><td>nothing else</td></tr><tr><td><a href="#github-copilot-in-vs-code">GitHub Copilot in VS Code</a></td><td><code>copilot-vscode</code></td><td><code>AGENTS.md</code></td><td><code>.github/skills/&lt;skill&gt;/SKILL.md</code></td><td><code>.github/agents/&lt;agent&gt;.agent.md</code></td><td><code>.github/skills/sdlc-&lt;command&gt;/SKILL.md</code></td><td>nothing else</td></tr></tbody></table></div>
+<p>Every harness also gets <code>.ai-sdlc/</code>, with the licence notice, a copy of the content licence, and reference pages for the agents and commands.</p>
+<p>The layout for each harness is data, in <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/harnesses.json">data/harnesses.json</a>, and <code>scripts/install-harness.py</code> builds the files from <code>skills/</code>, <code>agents/</code> and <code>commands/</code>. They are the single source: to change what a project gets, change them and create the project again.</p>
+<p>The installed agents, commands and skills link to each other inside the project. Where they point at something that stays in this repo, such as a data file, the link goes to this repo on GitHub, pinned to the commit you installed from.</p>
+<h3 id="why-the-commands-have-a-prefix">Why the commands have a prefix</h3>
+<p>Some harnesses already use the plain names. Claude Code has its own <code>/review</code> and <code>/ship</code>, and Cursor has its own <code>/review</code>, so a project command with the same name would not run, or would hide the built-in one. The prefix keeps every loop command the same in every harness: <code>/sdlc-plan</code>, <code>/sdlc-design</code>, and so on. The loop commands column in the table shows the exact form.</p>
+<h2 id="4-make-it-yours-agentsmd-and-processmd">4. Make it yours: AGENTS.md and PROCESS.md</h2>
+<p>Open the new project and edit <code>AGENTS.md</code> first. Every agent reads it on every task, so keep it short and only write lines that change what an agent does:</p>
+<ul><li><strong>Stack</strong>: the language, framework and main libraries.</li><li><strong>Commands</strong>: how to install, build, test, lint and run. Agents run these, so they must work from a clean checkout.</li><li><strong>Conventions</strong>: naming, layout, and the patterns to follow.</li><li><strong>Boundaries</strong>: what agents always do, what they ask about first, and what they never do.</li></ul>
+<p>Claude Code reads <code>CLAUDE.md</code>, not <code>AGENTS.md</code>, so the Claude Code layout adds a <code>CLAUDE.md</code> that imports <code>AGENTS.md</code>. Keep editing <code>AGENTS.md</code>.</p>
+<p>Then read <code>PROCESS.md</code>. It is your profile&#x27;s process: branches, reviews, gates and who signs off. Change it to match how you work. Fill in <code>ROLES.md</code> too, if your profile has one.</p>
+<p>Commit before you start the loop, so the first run starts from a clean tree:</p>
+<pre><code>cd ../my-app
+git add -A
+git commit -m &quot;Start from the AI SDLC Loop template&quot;</code></pre>
+<h2 id="5-start-the-first-loop">5. Start the first loop</h2>
+<p>You talk to one agent, the coordinator. It plans the work, starts a producer and an adversarial reviewer for each phase in fresh contexts, lets each loop run until the reviewer passes the work, and comes back to you only at the end of the cycle. How you reach it depends on the harness: see <strong>Start the coordinator</strong> in your harness&#x27;s section below.</p>
+<p>The loop is a set of slash commands, run in order. Each takes a task, or the path to a brief:</p>
+<ul><li><code>/sdlc-plan</code>: turn the brief into a spec and a plan with checkable goals.</li><li><code>/sdlc-design</code>: design the modules, contracts and decisions the plan needs.</li><li><code>/sdlc-build</code>: implement the plan in small steps that keep the build green.</li><li><code>/sdlc-verify</code>: prove it works with tests and evidence, and find the root cause of what fails.</li><li><code>/sdlc-review</code>: review the change for security and quality.</li><li><code>/sdlc-ship</code>: get the reviewed change merged and released through your gates.</li><li><code>/sdlc-retro</code>: turn your feedback at the end of the cycle into proposed edits to the skills and checks.</li></ul>
+<p>You can give the coordinator the whole job in one command and let it decide which phases to run, or run the commands one at a time and read the output between them. <a href="agents.html">The commands</a> on the site describe each one, and the installed project has the same reference in <code>.ai-sdlc/commands.md</code>.</p>
+<p>Agents write their assumptions, open questions and blockers to a shared register, <code>.ai-sdlc/register.jsonl</code> by default, and the coordinator reads it as its inbox. Add <code>--register &lt;path&gt;</code> after a command&#x27;s task to use another file. You can read the register at any time, and anything you add to it counts as an answer.</p>
+<p>At the end of the cycle the coordinator writes <code>run-summary.md</code> with what ran, each reviewer&#x27;s verdict, and the open questions with a recommended answer for each, then asks for your feedback. Give it, and it runs <code>/sdlc-retro</code> on its own. Proposed edits to skills go live only after they pass held-out tests and you approve them.</p>
+<h2 id="6-your-first-request-a-worked-example">6. Your first request: a worked example</h2>
+<p>Say you want a small command-line tool that turns a CSV file into JSON.</p>
+<ol><li>Create the project: <code>scripts/new-project.sh --harness claude-code ../csv2json</code></li><li>In <code>../csv2json/AGENTS.md</code>, set the stack (for example Python 3.12 and pytest), the test command (<code>pytest</code>), and a boundary such as &quot;Never add a dependency without asking first&quot;. Commit.</li><li>Start your harness in <code>../csv2json</code> and reach the coordinator as your harness section says.</li><li>Type one request, with the outcome you want and how you will know it works:</li></ol>
+<pre><code>/sdlc-plan Build csv2json, a command-line tool that reads a CSV file and prints JSON to stdout.
+Each row becomes an object keyed by the header row. A malformed row is reported on stderr with
+its line number, and the tool exits non-zero. Done means: tests cover a normal file, an empty
+file and a malformed row, and the README shows how to run it.</code></pre>
+<ol><li>The coordinator sizes the job. It may ask you a few questions first, each with a recommended answer, such as what to do with an empty header. This is the only time it asks before the end of the cycle.</li><li>The plan producer writes a spec and a plan with numbered, testable goals, and the plan reviewer tries to fail it. Then carry on with <code>/sdlc-design</code>, <code>/sdlc-build</code>, <code>/sdlc-verify</code>, <code>/sdlc-review</code> and <code>/sdlc-ship</code>, each on the plan the last step wrote, or ask the coordinator to run them all.</li><li>Read <code>run-summary.md</code>, answer the open questions, and say what you would change. The coordinator runs the retro and proposes edits for you to approve.</li></ol>
+<p>Then ask for the next feature the same way. Keep each request to one outcome you can check. The smaller the request, the shorter each loop and the easier the review.</p>
+<h2 id="harness-by-harness">Harness by harness</h2>
+<p>Each section says what to install first, how the rules file is read, how to reach the coordinator, and where the harness works differently from the others. Each also links the official docs the layout follows.</p>
+<h3 id="cursor">Cursor</h3>
+<p>Cursor editor, CLI and Cloud Agents. Install Cursor and sign in. Create a project with <code>--harness cursor</code>.</p>
+<p><strong>Rules file.</strong> Cursor reads <code>AGENTS.md</code> at the project root as an always-on rules file. No other files are written.</p>
+<p><strong>Start the coordinator.</strong> Open Agent chat in the project and type a loop command, such as <code>/sdlc-plan</code>. The command tells the main agent to act as the coordinator, which starts the producers and reviewers as subagents.</p>
+<p><strong>Where it differs from the other harnesses:</strong></p>
+<ul><li>Cursor now treats slash commands as skills: the loop commands are skills with <code>disable-model-invocation</code> set, so they run only when the human types them. Legacy <code>.cursor/commands/</code> files still load, but the docs point new commands to skills.</li><li>Cursor has no setting that makes a custom agent the main agent, so each loop command tells the main agent to act as the coordinator. Cursor lets the main agent and its direct subagents start subagents, which is the depth the loop needs.</li><li>Cursor subagents take <code>readonly</code> rather than a tools list, and the reviewers must write their findings file, so reviewer tool limits stay a prompt rule, as in this repo&#x27;s <code>agents/</code>.</li></ul>
+<p><strong>Official docs:</strong> <a href="https://cursor.com/download">install</a>, <a href="https://cursor.com/docs/context/rules">rules</a>, <a href="https://cursor.com/docs/context/skills">skills and commands</a>, <a href="https://cursor.com/docs/context/subagents">agents</a>.</p>
+<h3 id="claude-code">Claude Code</h3>
+<p>Anthropic&#x27;s Claude Code CLI, IDE extensions and desktop app. Install Claude Code, sign in, and check it with <code>claude --version</code>. Create a project with <code>--harness claude-code</code>.</p>
+<p><strong>Rules file.</strong> Claude Code reads <code>CLAUDE.md</code>. The installed <code>CLAUDE.md</code> imports <code>AGENTS.md</code> with <code>@AGENTS.md</code>, so <code>AGENTS.md</code> stays the one rules file you edit. Also written: <code>CLAUDE.md</code>, <code>.claude/settings.json</code>.</p>
+<p><strong>Start the coordinator.</strong> Run <code>claude</code> in the project. The project settings make the coordinator the session&#x27;s main agent, so type a loop command, such as <code>/sdlc-plan</code>, straight away.</p>
+<p><strong>Where it differs from the other harnesses:</strong></p>
+<ul><li>Claude Code has merged custom commands into skills, so the loop commands are skills with <code>disable-model-invocation</code> set. Legacy <code>.claude/commands/</code> files still work.</li><li>Claude Code reserves <code>/ship</code> for a bundled skill and keeps <code>/review</code> as a bundled alias, so commands with those names would not run. That is why the loop commands carry a prefix.</li><li>The coordinator is the main session agent through the <code>agent</code> key in the project&#x27;s <code>.claude/settings.json</code>. Remove that key, or start <code>claude</code> with <code>--agent</code> and another name, to work without it.</li></ul>
+<p><strong>Official docs:</strong> <a href="https://code.claude.com/docs/en/setup">install</a>, <a href="https://code.claude.com/docs/en/memory">rules</a>, <a href="https://code.claude.com/docs/en/skills">skills and commands</a>, <a href="https://code.claude.com/docs/en/sub-agents">agents</a>.</p>
+<h3 id="opencode">OpenCode</h3>
+<p>The OpenCode terminal agent, desktop app and IDE extension. Install OpenCode and connect a model provider. Create a project with <code>--harness opencode</code>.</p>
+<p><strong>Rules file.</strong> OpenCode reads <code>AGENTS.md</code> from the project root. Also written: <code>.opencode/opencode.json</code>.</p>
+<p><strong>Start the coordinator.</strong> Run <code>opencode</code> in the project. The project config makes the coordinator the default agent, and each loop command, such as <code>/sdlc-plan</code>, selects it too.</p>
+<p><strong>Where it differs from the other harnesses:</strong></p>
+<ul><li>OpenCode agents carry permissions, not a tools list. A reviewer without Bash gets a rule that denies <code>shell</code>; the agent name comes from the file name.</li><li>The loop commands keep the shared prefix so they read the same in every harness, although OpenCode lets a project command replace a built-in one.</li></ul>
+<p><strong>Official docs:</strong> <a href="https://opencode.ai/docs/">install</a>, <a href="https://opencode.ai/docs/rules/">rules</a>, <a href="https://opencode.ai/docs/skills/">skills</a>, <a href="https://opencode.ai/docs/agents/">agents</a>, <a href="https://opencode.ai/docs/commands/">commands</a>, <a href="https://opencode.ai/docs/config/">config</a>.</p>
+<h3 id="pi">Pi</h3>
+<p>The pi coding agent (pi.dev). Install Pi, check it with <code>pi --version</code>, and run <code>/login</code> in Pi to choose a model provider. Create a project with <code>--harness pi</code>.</p>
+<p><strong>Rules file.</strong> Pi reads <code>AGENTS.md</code> from the working directory and its parents as a context file. No other files are written.</p>
+<p><strong>Start the coordinator.</strong> Run <code>pi</code> in the project and grant project trust, which Pi needs before it loads <code>.pi/</code>. Then type a loop command, such as <code>/sdlc-plan</code>. The command tells the session to act as the coordinator.</p>
+<p><strong>Where it differs from the other harnesses:</strong></p>
+<ul><li>Pi has no built-in subagents. The agents go to <code>.pi/agents/</code>, the project folder that Pi subagent extensions read. Install one into the project with <code>pi install -l</code>, or let the coordinator start each agent as a separate <code>pi --print --no-session</code> process with <code>--append-system-prompt</code> pointing at the agent file.</li><li>Pi calls slash commands prompt templates. Each loop command is a template in <code>.pi/prompts/</code> that tells the session to act as the coordinator.</li><li>Pi loads <code>.pi/</code> only after you grant project trust.</li></ul>
+<p><strong>Official docs:</strong> <a href="https://docs.pi.dev/latest/quickstart">install</a>, <a href="https://docs.pi.dev/latest/configuration">rules</a>, <a href="https://docs.pi.dev/latest/skills">skills</a>, <a href="https://pi.dev/packages/@tintinweb/pi-subagents">agents</a>, <a href="https://docs.pi.dev/latest/prompt-templates">commands</a>, <a href="https://docs.pi.dev/latest/cli">CLI</a>.</p>
+<h3 id="github-copilot-in-vs-code">GitHub Copilot in VS Code</h3>
+<p>GitHub Copilot chat in Visual Studio Code, Copilot harness. Install VS Code and sign in to GitHub Copilot. Create a project with <code>--harness copilot-vscode</code>.</p>
+<p><strong>Rules file.</strong> The Copilot harness reads <code>AGENTS.md</code> (or <code>.github/copilot-instructions.md</code>) as the project instructions file. No other files are written.</p>
+<p><strong>Start the coordinator.</strong> Open the project in VS Code, choose the Copilot harness in Chat, pick <code>coordinator</code> from the Agent dropdown, and type a loop command, such as <code>/sdlc-plan</code>.</p>
+<p><strong>Where it differs from the other harnesses:</strong></p>
+<ul><li>Prompt files (<code>.github/prompts/*.prompt.md</code>) run only in the Local harness, which VS Code has deprecated, so the loop commands are skills with <code>disable-model-invocation</code> set, which the Copilot harness runs as slash commands.</li><li>Producers and reviewers set <code>user-invocable</code> to false, so only the coordinator shows in the Agent dropdown; the coordinator starts them as subagents.</li><li>Reviewer tools map to the Copilot aliases <code>read</code>, <code>search</code>, <code>edit</code> and <code>execute</code>. The <code>edit</code> tool is there so a reviewer can write its findings file; not editing the work stays a prompt rule.</li></ul>
+<p><strong>Official docs:</strong> <a href="https://code.visualstudio.com/docs/setup/copilot">install</a>, <a href="https://code.visualstudio.com/docs/copilot/customization/custom-instructions">rules</a>, <a href="https://code.visualstudio.com/docs/copilot/customization/agent-skills">skills</a>, <a href="https://code.visualstudio.com/docs/agents/reference/custom-agent-file-reference">agents</a>, <a href="https://code.visualstudio.com/docs/copilot/customization/prompt-files">commands</a>, <a href="https://code.visualstudio.com/docs/agents/run/subagents">subagents</a>.</p>
+<h2 id="staying-inside-the-project">Staying inside the project</h2>
+<p>The script writes only inside the new project. A few things are still done by the harness or by you:</p>
+<ul><li>Most harnesses ask you to trust a folder the first time you open it, and remember your answer in their own settings. That is the harness&#x27;s record, not a file the script writes. Pi loads <code>.pi/</code> only after you trust the project.</li><li>Pi has no subagents of its own. If you add a Pi subagent extension, install it into the project with <code>pi install -l</code>, so it lands in the project&#x27;s <code>.pi/</code> and not your user settings.</li><li>Claude Code makes the coordinator the main agent through the project&#x27;s <code>.claude/settings.json</code>. Your own user settings still apply on top, as they do in any project.</li></ul>
+<h2 id="licences-of-the-installed-files">Licences of the installed files</h2>
+<p>The project you create is MIT, from <code>template/</code>, and your code stays yours.</p>
+<p>The skills, agents and commands a harness gets are copies of this repo&#x27;s writing, which is CC BY-SA 4.0. They keep that licence in your project, so the script carries the licence with them:</p>
+<ul><li><code>.ai-sdlc/NOTICE.md</code> names the source and the commit, lists the folders it covers, says what was changed, and explains the terms.</li><li><code>.ai-sdlc/LICENSE-CONTENT</code> is the licence text.</li><li>Every installed file starts with a comment that names the file it came from and points to the notice.</li><li>Every skill keeps its <code>SOURCES.md</code>, which credits the open-source projects it draws on.</li></ul>
+<p>If you edit the installed files, your edits are CC BY-SA 4.0 too, and you can share them on the same terms. Your own code and docs are not affected, and with no harness nothing CC BY-SA is copied. The scripts in this repo are GPL-3.0 and are not copied into your project.</p>
+<h2 id="things-that-stay-in-this-repo">Things that stay in this repo</h2>
+<p>The agents mention a few tools and files that live in this repo, not in your project:</p>
+<ul><li><code>scripts/register.py</code> sorts and curates the register. It is not copied. The agents can append register lines themselves, and you can run it from your clone of this repo with <code>--register</code> pointing at your project&#x27;s register.</li><li><code>data/scorecard.json</code> is where the coordinator records how each skill did. A new project has no such file until the coordinator creates one. Let it, or say in <code>AGENTS.md</code> that this project keeps no scorecard.</li><li>Links to principles go to the matching installed skill, and links to data files go to this repo on GitHub.</li></ul>
+<p>To pick up a newer version of the skills and agents, create a fresh project from an updated clone and compare, or copy the changed files across, keeping the notice.</p></article>
+</main>
+<footer class="site-footer">
+<div class="wrap">
+<p>AI SDLC Loop. Written content is CC BY-SA 4.0 and code is GPL-3.0; the project template is MIT.
+See <a href="https://github.com/mitulamin/ai-sdlc-loop#readme">the README</a> and <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/LICENSE-CONTENT">LICENSE-CONTENT</a>.
+No trackers, no external scripts. Generated from <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/guides/use.md">guides/use.md</a> and <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/harnesses.json">data/harnesses.json</a>.</p>
+</div>
+</footer>
+<script src="assets/site.js" defer></script>
+</body>
+</html>

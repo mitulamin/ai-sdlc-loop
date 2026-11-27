@@ -31,7 +31,11 @@ To check a change, run the script once per profile into a temp folder and look a
 for p in solo small-team large-org; do scripts/new-project.sh "$(mktemp -d)/x" "$p"; done
 ```
 
-Then update the table in the README, `scripts/README.md` and `CHANGELOG.md`.
+Then run `python scripts/check-new-project.py`, which CI also runs: it creates a project for every harness and fails if one breaks. Update the table in the README, `scripts/README.md` and `CHANGELOG.md`.
+
+## Add or change a harness
+
+The layout for each coding harness is data in `data/harnesses.json`, checked by `data/schemas/harnesses.schema.json`. To add a harness, add an entry and follow its current official docs: where it reads project skills, agents and commands, the file names and front matter, its tool names, and how a session reaches the coordinator. Link those docs in the entry. Keep every path inside the project, never in a user or global folder; the schema refuses an absolute path, `..` or `~`. Write a note for every concept the harness lacks and what you did instead. Then run `python scripts/validate-data.py`, `python scripts/check-new-project.py` and `scripts/build-site.py`, which regenerates the harness table and sections on the Use page.
 
 ## Add a skill
 
