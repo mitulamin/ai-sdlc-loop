@@ -16,9 +16,12 @@ jobs:
           python3 - <<'PY'
           import os, json, time, urllib.request, urllib.error
           key = os.environ["NVIDIA_INFERENCE_KEY"]
-          models = ["z-ai/glm-5.3-flash", "meta/llama-3.3-70b-instruct", "nvidia/llama-3.3-nemotron-super-49b-v1.5", "meta/llama-3.1-8b-instruct", "openai/gpt-oss-120b", "deepseek-ai/deepseek-v3.2"]
+          models = ["minimaxai/minimax-m3.1-flash","mistralai/mistral-large-4-1t-a52b","moonshotai/kimi-k3.1-pro","nvidia/nemotron-3-ultra-550b-a55b","nvidia/nemotron-3.5-lightning-30b-a3b","nvidia/nemotron-3.5-bolt-e4b","google/gemma-3-12b-it","poolside/laguna-xs-2.1","stepfun-ai/step-5-preview","glm-low"]
           for m in models:
-              body = json.dumps({"model": m, "messages": [{"role": "user", "content": "Say ok"}], "max_tokens": 16}).encode()
+              extra = {}
+              if m == "glm-low":
+                  m = "z-ai/glm-5.3-flash"; extra = {"reasoning_effort": "low"}
+              body = json.dumps({**extra, "model": m, "messages": [{"role": "user", "content": "Say ok"}], "max_tokens": 16}).encode()
               req = urllib.request.Request("https://integrate.api.nvidia.com/v1/chat/completions", data=body, method="POST",
                   headers={"Authorization": "Bearer " + key, "Content-Type": "application/json"})
               t = time.time()
