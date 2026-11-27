@@ -241,7 +241,7 @@ On this site: principle [7.10](../../docs/principles/7.10.html), shift checks le
 
 If you can only measure a few things about a user-facing service, the SRE book's monitoring chapter says to measure these four. Latency: how long requests take, with failed requests tracked separately, because a fast error can make the average look healthy. Traffic: how much demand the system is under, such as requests per second. Errors: the rate of requests that fail, including ones that return success but the wrong content. Saturation: how full the service is, measured on the resource that runs out first, because many systems slow down well before they hit 100 per cent. The set is a default to start from, not a limit; add what your system needs. See [https://sre.google/sre-book/monitoring-distributed-systems/](https://sre.google/sre-book/monitoring-distributed-systems/).
 
-On this site: principles [5.14](../../docs/principles/5.14.html) (instrument boundaries and failure points: latency, errors, saturation) and [5.12](../../docs/principles/5.12.html) (every signal should help detect, localise or explain a problem). Add traffic alongside them: it is the denominator that turns an error count into an error rate, and a sudden drop in it is often the first sign of an outage.
+On this site: principles [5.14](../../docs/principles/5.14.html) (instrument boundaries and failure points: the four golden signals plus retries and breaker state) and [5.12](../../docs/principles/5.12.html) (every signal should help detect, localise or explain a problem). Traffic is part of 5.14: it is the denominator that turns an error count into an error rate, and a sudden drop in it is often the first sign of an outage.
 
 ### SLIs, SLOs and SLAs
 

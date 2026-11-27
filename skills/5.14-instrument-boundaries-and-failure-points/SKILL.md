@@ -2,7 +2,7 @@
 name: instrument-boundaries-and-failure-points
 description: "Use when adding observability to outbound calls and entry points. Amalgamated skill for principle 5.14 (Debug and observe)."
 principles: ["5.14"]
-principle: "5.14 Instrument boundaries and failure points: latency, errors, saturation, retries, breaker state"
+principle: "5.14 Instrument boundaries and failure points: latency, traffic, errors, saturation, retries, breaker state"
 category: debug-and-observe
 aliases: []
 status: "draft, untested"
@@ -11,7 +11,7 @@ licence: CC-BY-SA-4.0
 
 # 5.14 Instrument boundaries and failure points
 
-Principle 5.14 (Debug and observe / Observability and logging): Instrument boundaries and failure points: latency, errors, saturation, retries, breaker state
+Principle 5.14 (Debug and observe / Observability and logging): Instrument boundaries and failure points: latency, traffic, errors, saturation, retries, breaker state
 
 ## When to use
 
@@ -20,8 +20,8 @@ Adding observability to outbound calls and entry points.
 ## Producer: dos and don'ts
 
 Do:
-- Measure latency and errors at every boundary
-- Expose retries, breaker state and pool saturation
+- Measure all four golden signals at every boundary: latency, traffic, errors and saturation
+- Expose retries and breaker state alongside them
 
 Don't:
 - Instrument only the happy path inside functions
@@ -37,12 +37,13 @@ Don't:
 
 Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
 
-- [ ] Are latency and errors measured at every boundary?
+- [ ] Are latency, traffic, errors and saturation (the four golden signals) measured at every boundary, with traffic as the denominator that turns an error count into a rate?
 - [ ] Are retries, breaker state and pool saturation exposed, so that an injected failure shows up in a signal?
 
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Inject a failure: does any signal show it?
+- Check the four golden signals (latency, traffic, errors, saturation) exist at each boundary: is there a request-rate signal, so an error count can be read as a rate and a sudden drop in demand is visible?
 - Default verdict is FAIL until evidence shows otherwise; report findings to a file with P0-P3 severity.
 
 ## How the source skills compare

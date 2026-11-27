@@ -66,4 +66,4 @@ Skill IDs: 5.1, 5.2, 5.3, 5.5, 5.7, 5.8, 5.9, 5.11, 5.12, 5.13, 5.14.
 - [5.11 low-cardinality-metrics](../skills/5.11-low-cardinality-metrics/SKILL.md): Keep metric label cardinality low
 - [5.12 every-signal-earns-its-place](../skills/5.12-every-signal-earns-its-place/SKILL.md): Every signal should help detect, localise or explain a problem
 - [5.13 sample-in-the-collector](../skills/5.13-sample-in-the-collector/SKILL.md): Sample in the collector pipeline, not the SDK
-- [5.14 instrument-boundaries-and-failure-points](../skills/5.14-instrument-boundaries-and-failure-points/SKILL.md): Instrument boundaries and failure points: latency, errors, saturation, retries, breaker state
+- [5.14 instrument-boundaries-and-failure-points](../skills/5.14-instrument-boundaries-and-failure-points/SKILL.md): Instrument boundaries and failure points: latency, traffic, errors, saturation, retries, breaker state

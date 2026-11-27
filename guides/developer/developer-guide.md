@@ -222,7 +222,7 @@ These principles are about running the system once it is in production, and abou
 
 If you can only measure a few things about a user-facing service, measure these: latency (how long requests take, with failures tracked separately), traffic (how much demand there is), errors (the rate of requests that fail, including ones that return the wrong content) and saturation (how full the service is, on the resource that runs out first). [https://sre.google/sre-book/monitoring-distributed-systems/](https://sre.google/sre-book/monitoring-distributed-systems/)
 
-On this site: principles [5.14](../../docs/principles/5.14.html) (instrument boundaries and failure points) and [5.12](../../docs/principles/5.12.html) (every signal should help detect, localise or explain a problem). Add traffic to the list in 5.14: it turns an error count into a rate.
+On this site: principles [5.14](../../docs/principles/5.14.html) (instrument boundaries and failure points) and [5.12](../../docs/principles/5.12.html) (every signal should help detect, localise or explain a problem). Principle 5.14 covers all four signals, traffic included: it turns an error count into a rate.
 
 ### Symptom-based alerting
 
