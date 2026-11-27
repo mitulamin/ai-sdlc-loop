@@ -58,6 +58,12 @@ Richard Gabriel's essay argues that a simpler design that ships and can evolve o
 
 On this site: principle [3.1](../../docs/principles/3.1.html), write the minimum that solves the stated problem.
 
+### Simplicity in production systems
+
+The SRE book treats simplicity as a reliability feature: every line, dependency and option is another place to fail. Prefer boring, well-understood technology, small stable APIs and frequent small releases, and delete dead code rather than keeping it. [https://sre.google/sre-book/simplicity/](https://sre.google/sre-book/simplicity/)
+
+On this site: principles [3.1](../../docs/principles/3.1.html) (write the minimum), [3.8](../../docs/principles/3.8.html) (clarity over cleverness) and [3.12](../../docs/principles/3.12.html) (never add a dependency for a few lines).
+
 For SOLID, YAGNI, DRY, KISS, composition over inheritance and related design tensions, see the companion paper, [Principles for Building Quality Software and Apps](quality-principles.md).
 
 ## Architecture and data
@@ -108,27 +114,43 @@ On this site: a related practice in the skill for principle [2.12](../../docs/pr
 
 ## Reliability
 
-Google's Site Reliability Engineering books are the usual home for several of these ideas. The others are named patterns for staying up when something, inevitably, goes wrong.
+Google's Site Reliability Engineering books are the usual home for several of these ideas: Site Reliability Engineering, The Site Reliability Workbook, and Building Secure and Reliable Systems, all free at [https://sre.google/books/](https://sre.google/books/). The others are named patterns for staying up when something, inevitably, goes wrong. Entries from the SRE books are spread across this guide where they fit best: simplicity under Design, monitoring and incident work under Operations and observability, and release engineering under Testing and delivery. The [companion paper](quality-principles.md#reliability-and-sre) goes into more depth on each of them.
 
-### SLOs and SLIs
+### SRE and DevOps
 
-A service level indicator is a measurement of how the service is doing for users, such as request latency or error rate. A service level objective is the target you set for that indicator. You cannot manage reliability by gut feel alone; you need a number that reflects the user experience. [https://sre.google/sre-book/service-level-objectives/](https://sre.google/sre-book/service-level-objectives/)
+DevOps is a set of ideas: shared ownership between the people who build and run a system, treating failure as normal, gradual change, automation and measurement. Google's description of SRE is "class SRE implements interface DevOps": SRE is one concrete way to put those ideas into practice, with specific tools such as SLOs, error budgets and a cap on toil. You can take the practices without the job title. [https://sre.google/workbook/how-sre-relates/](https://sre.google/workbook/how-sre-relates/)
+
+### SLIs, SLOs and SLAs
+
+A service level indicator (SLI) is a measurement of how the service is doing for users, such as request latency or error rate. A service level objective (SLO) is the target you set for that indicator. A service level agreement (SLA) is a contract with users that says what happens, often financially, if the target is missed; if nothing happens, it is an SLO. You cannot manage reliability by gut feel alone; you need a number that reflects the user experience. [https://sre.google/sre-book/service-level-objectives/](https://sre.google/sre-book/service-level-objectives/) The Workbook's chapter on putting them into practice is at [https://sre.google/workbook/implementing-slos/](https://sre.google/workbook/implementing-slos/).
 
 On this site: principle [5.7](../../docs/principles/5.7.html), define what "working" means before instrumenting.
+
+### Embracing risk
+
+Perfect reliability is the wrong target: each extra nine costs far more than the last, and users often cannot tell the difference. Decide how reliable the service needs to be, then spend the rest of the margin on shipping change. [https://sre.google/sre-book/embracing-risk/](https://sre.google/sre-book/embracing-risk/)
+
+On this site: principle [1.8](../../docs/principles/1.8.html), size the process to the task.
 
 ### Error budgets
 
 An error budget is the gap between perfect reliability and your SLO: the amount of unreliability you are willing to spend on change and risk. When the budget is gone, you slow feature work and focus on reliability. This is how SRE turns "is it safe to launch?" into a shared, numeric conversation. [https://sre.google/sre-book/embracing-risk/](https://sre.google/sre-book/embracing-risk/)
 
+An error-budget policy writes down, before anyone is under pressure, what happens when the budget is spent: which releases pause, who can grant an exception, and how disagreements are escalated. The Workbook has a worked example. [https://sre.google/workbook/error-budget-policy/](https://sre.google/workbook/error-budget-policy/)
+
+On this site: principles [7.9](../../docs/principles/7.9.html) (no quality gate is skippable) and [7.10](../../docs/principles/7.10.html) (release in small, frequent batches).
+
 ### Toil
 
-In SRE, toil is manual, repetitive, automatable operational work that grows as the service grows and leaves no lasting improvement. The published aim at Google is to keep it below half of an SRE's time, so people can do engineering that makes the next incident less likely. [https://sre.google/sre-book/eliminating-toil/](https://sre.google/sre-book/eliminating-toil/)
+In SRE, toil is manual, repetitive, automatable operational work that grows as the service grows and leaves no lasting improvement. The published aim at Google is to keep it below half of an SRE's time, so people can do engineering that makes the next incident less likely. Toil is not simply work you dislike: a task that needs judgement, or teaches you something new each time, is not toil. Measure it, automate the biggest recurring sources first, and treat a growing toil share as a reliability risk. [https://sre.google/sre-book/eliminating-toil/](https://sre.google/sre-book/eliminating-toil/) The Workbook adds practical advice on measuring and removing it: [https://sre.google/workbook/eliminating-toil/](https://sre.google/workbook/eliminating-toil/).
+
+On this site: principle [9.1](../../docs/principles/9.1.html), when a mistake is mechanical, build a lint, hook or CI check instead.
 
 ### Blameless postmortems
 
-After an incident, write down what happened, what the impact was, what caused it, and what you will change, on the assumption that everyone involved meant well and was working with the information they had. You cannot fix people; you can fix systems and processes. [https://sre.google/sre-book/postmortem-culture/](https://sre.google/sre-book/postmortem-culture/)
+After an incident, write down what happened, what the impact was, what caused it, and what you will change, on the assumption that everyone involved meant well and was working with the information they had. You cannot fix people; you can fix systems and processes. A postmortem only pays off if its action items are tracked to completion and the write-up is shared. [https://sre.google/sre-book/postmortem-culture/](https://sre.google/sre-book/postmortem-culture/) The Workbook covers how to build the habit in a team: [https://sre.google/workbook/postmortem-culture/](https://sre.google/workbook/postmortem-culture/).
 
-On this site: principle [9.5](../../docs/principles/9.5.html), ask what conditions allowed the failure, not who caused it.
+On this site: principles [9.5](../../docs/principles/9.5.html) (ask what conditions allowed the failure, not who caused it) and [9.6](../../docs/principles/9.6.html) (group failures by the mechanism behind them).
 
 ### Chaos engineering
 
@@ -158,6 +180,24 @@ When a consumer cannot keep up, it should signal the producer to slow down, rath
 
 On this site: principle [2.8](../../docs/principles/2.8.html), bound every queue, cache, pool and result set, and decide what happens when full.
 
+### Handling overload and cascading failures
+
+Every service has a load it cannot serve, so decide what it does then: shed the excess, serve higher-priority requests first and degrade gracefully, rather than slowing down for everyone. A cascading failure is what happens when one overloaded or restarting replica pushes its load onto the rest, which then fail in turn, often made worse by retries. Defences include load testing past the expected peak, bounded queues, capped retries and failing fast. [https://sre.google/sre-book/handling-overload/](https://sre.google/sre-book/handling-overload/) and [https://sre.google/sre-book/addressing-cascading-failures/](https://sre.google/sre-book/addressing-cascading-failures/)
+
+On this site: principles [2.7](../../docs/principles/2.7.html) (design for failure) and [2.8](../../docs/principles/2.8.html) (bound every queue and decide what happens when full).
+
+### Load balancing
+
+Spreading requests over several replicas lets a service scale out and survive losing one, but a naive balancer can keep sending work to a sick or busy backend. Use health checks, prefer policies that account for how loaded each backend is, and let a backend drain before it stops. The SRE book covers traffic reaching a datacentre and traffic shared inside one. [https://sre.google/sre-book/load-balancing-frontend/](https://sre.google/sre-book/load-balancing-frontend/) and [https://sre.google/sre-book/load-balancing-datacenter/](https://sre.google/sre-book/load-balancing-datacenter/)
+
+On this site: principle [2.7](../../docs/principles/2.7.html), design for failure.
+
+### Reliability and security together
+
+Building Secure and Reliable Systems treats the goals as one design problem: limiting blast radius, designing for recovery and keeping systems easy to understand help with both. Its chapters on resilience, recovery and mitigating denial-of-service attacks are good starting points. [https://google.github.io/building-secure-and-reliable-systems/raw/ch08.html](https://google.github.io/building-secure-and-reliable-systems/raw/ch08.html) and [https://google.github.io/building-secure-and-reliable-systems/raw/ch09.html](https://google.github.io/building-secure-and-reliable-systems/raw/ch09.html)
+
+On this site: principles [6.1](../../docs/principles/6.1.html) (threat-model before hardening) and [2.7](../../docs/principles/2.7.html) (design for failure).
+
 ### Idempotency
 
 An operation is idempotent if doing it once or several times leaves the same result. That is what makes retries safe for payments, creates and other writes. Stripe's API docs are a clear practical explanation. [https://docs.stripe.com/api/idempotent_requests](https://docs.stripe.com/api/idempotent_requests)
@@ -174,11 +214,39 @@ On this site: principle [2.7](../../docs/principles/2.7.html), which asks for bo
 
 Peter Deutsch and colleagues listed eight assumptions first-time builders of distributed systems make, all of which turn out false: that the network is reliable, latency is zero, bandwidth is infinite, the network is secure, the topology does not change, there is one administrator, transport is free, and the network is homogeneous. James Gosling's page preserves the list. [https://nighthacks.com/jag/res/Fallacies.html](https://nighthacks.com/jag/res/Fallacies.html)
 
-Google also publishes a short workbook chapter on how to run an error-budget policy in practice: [https://sre.google/workbook/error-budget-policy/](https://sre.google/workbook/error-budget-policy/).
-
 ## Operations and observability
 
 These principles are about running the system once it is in production, and about being able to ask why it misbehaved without guessing.
+
+### The four golden signals
+
+If you can only measure a few things about a user-facing service, measure these: latency (how long requests take, with failures tracked separately), traffic (how much demand there is), errors (the rate of requests that fail, including ones that return the wrong content) and saturation (how full the service is, on the resource that runs out first). [https://sre.google/sre-book/monitoring-distributed-systems/](https://sre.google/sre-book/monitoring-distributed-systems/)
+
+On this site: principles [5.14](../../docs/principles/5.14.html) (instrument boundaries and failure points) and [5.12](../../docs/principles/5.12.html) (every signal should help detect, localise or explain a problem). Add traffic to the list in 5.14: it turns an error count into a rate.
+
+### Symptom-based alerting
+
+Alert on symptoms, which users would notice, and use causes for diagnosis. A page that wakes someone should be urgent and actionable; everything else belongs on a dashboard or in a ticket. Alerting on how fast the error budget is burning catches real outages quickly and ignores blips. [https://sre.google/workbook/alerting-on-slos/](https://sre.google/workbook/alerting-on-slos/)
+
+On this site: principle [5.15](../../docs/principles/5.15.html), every alert ships with a minimal runbook.
+
+### Being on call and emergency response
+
+Being on call is part of owning a service, and it has to be sustainable: enough people in the rotation, training before the pager, written procedures and time to do project work. Responding well to an emergency is mostly staying calm, telling people early and following practised steps. [https://sre.google/sre-book/being-on-call/](https://sre.google/sre-book/being-on-call/) and [https://sre.google/sre-book/emergency-response/](https://sre.google/sre-book/emergency-response/)
+
+On this site: principles [5.15](../../docs/principles/5.15.html) (every alert ships with a runbook) and [5.4](../../docs/principles/5.4.html) (when something breaks, stop and fix it before writing anything new).
+
+### Incident management
+
+Treat a major incident as a coordination problem as well as a technical one: declare it early, name one incident commander, separate the people fixing from the people communicating, keep a live record, and hand over explicitly. Mitigate first, then find the root cause. [https://sre.google/sre-book/managing-incidents/](https://sre.google/sre-book/managing-incidents/) The Workbook has case studies: [https://sre.google/workbook/incident-response/](https://sre.google/workbook/incident-response/).
+
+On this site: principles [5.15](../../docs/principles/5.15.html) (runbooks) and [9.5](../../docs/principles/9.5.html) (blameless review afterwards).
+
+### Capacity planning and demand forecasting
+
+Make sure there will be enough of the right resources when demand arrives: forecast demand (organic growth and planned launches), plan the supply, review the plan, provision, and repeat, because assumptions keep changing. The traffic and saturation signals are the raw data. [https://sre.google/sre-book/software-engineering-in-sre/](https://sre.google/sre-book/software-engineering-in-sre/) and, for a worked sizing example, [https://sre.google/workbook/non-abstract-design/](https://sre.google/workbook/non-abstract-design/)
+
+On this site: principle [2.8](../../docs/principles/2.8.html), bound every queue, cache, pool and result set.
 
 ### Observability: logs, metrics and traces
 
@@ -194,7 +262,7 @@ Define servers, networks and related infrastructure in versioned files, and appl
 
 Once a server or container is deployed, you do not patch it in place; you build a new one and replace the old. This avoids snowflake machines that nobody can reproduce. [https://martinfowler.com/bliki/ImmutableServer.html](https://martinfowler.com/bliki/ImmutableServer.html)
 
-For how a service should treat config, logs, processes and deploys, see the twelve-factor app in the [companion paper](quality-principles.md), or read the methodology itself at [https://12factor.net/](https://12factor.net/). Google's SRE chapter on monitoring distributed systems is also a strong official companion to the observability primer: [https://sre.google/sre-book/monitoring-distributed-systems/](https://sre.google/sre-book/monitoring-distributed-systems/).
+For how a service should treat config, logs, processes and deploys, see the twelve-factor app in the [companion paper](quality-principles.md), or read the methodology itself at [https://12factor.net/](https://12factor.net/). Google's SRE chapter on monitoring distributed systems is also a strong official companion to the observability primer, and is the source of the golden signals above: [https://sre.google/sre-book/monitoring-distributed-systems/](https://sre.google/sre-book/monitoring-distributed-systems/).
 
 ## Testing and delivery
 
@@ -217,6 +285,12 @@ On this site: principles [5.4](../../docs/principles/5.4.html) (when the build b
 Keep the software in a state where you can release it at any time, with a repeatable pipeline from commit to a production-ready build. You may still choose when to go live; the point is that the path is already proven. The site for Humble and Farley's book is the usual starting point. [https://continuousdelivery.com/](https://continuousdelivery.com/)
 
 On this site: principle [7.10](../../docs/principles/7.10.html), shift checks left and release in small, frequent batches.
+
+### Release engineering and canarying
+
+Releases are a reliability tool, because most outages follow a change. Release engineering aims for self-service, reproducible builds and policy enforced by the pipeline. A progressive rollout releases to a small slice first, watches the golden signals, and widens only if they stay healthy; the small slice is a canary. [https://sre.google/sre-book/release-engineering/](https://sre.google/sre-book/release-engineering/) and [https://sre.google/workbook/canarying-releases/](https://sre.google/workbook/canarying-releases/)
+
+On this site: principles [7.10](../../docs/principles/7.10.html) (small, frequent batches) and [7.11](../../docs/principles/7.11.html) (feature flags have a lifecycle).
 
 ### Trunk-based development
 
@@ -342,5 +416,10 @@ Short definitions of terms the entries above use without stopping to explain.
 | Pipeline | The automated steps that build, test and deploy each change. |
 | Refactor | Change the structure of code without changing what it does. |
 | Incident | An event where the service fails or degrades for users and someone has to respond. |
+| SLI, SLO, SLA | Service level indicator (a measurement), objective (a target for it) and agreement (a contract with consequences if it is missed). |
+| Error budget | The amount of unreliability an SLO allows, which you can spend on change and risk. |
+| Toil | Manual, repetitive, automatable operational work that grows with the service and leaves nothing lasting behind. |
+| Canary | A small slice of production that gets a change first, so a bad release hurts few users. |
+| Load shedding | Deliberately rejecting some requests when overloaded, so the rest can still be served. |
 | Blast radius | How much of the system, or how many users, a failure or an experiment can affect. |
 | Credential | A secret that proves identity, such as a password, API key or token. |
