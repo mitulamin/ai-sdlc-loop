@@ -1297,7 +1297,7 @@
       "id": "5.14",
       "category": "debug-and-observe",
       "number": 14,
-      "statement": "Instrument boundaries and failure points: latency, errors, saturation, retries, breaker state",
+      "statement": "Instrument boundaries and failure points: latency, traffic, errors, saturation, retries, breaker state",
       "sources": [
         "ciembor (Release It!)"
       ],

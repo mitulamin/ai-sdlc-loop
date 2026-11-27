@@ -383,6 +383,21 @@
       ],
       "summary": "Every skill gained a Self-check section: questions the producer answers yes, no or N/A with evidence before handing off. Producers load it and end their report with a Principle self-check table; reviewers treat that table as a claim to test, and a report without it is a P1 finding; the coordinator puts its own table in run-summary.md. Practices described in the developer guides but not in the catalogue became related practices of the skill they fit, each with a Related practices entry, a self-check item and a reviewer check: the SOLID principles (single responsibility and loose coupling with 2.1, Liskov substitution and interface segregation with 2.2, dependency inversion, the twelve-factor app and acyclic dependencies with 2.3, open-closed with 2.5 as its YAGNI brake), composition over inheritance (2.5), the Unix philosophy (2.4), design by contract (2.9), strangler fig (2.12), convention over configuration and secure by default (2.14), least astonishment (3.6), the Boy Scout rule kept inside 3.2's scope (3.10), DRY with the rule of three and the Law of Demeter (3.11, keeping 2.5's duplicate-twice brake), fail fast (3.13), Gall's law (3.14), Goodhart's law (4.6), defence in depth (6.1), least privilege (6.2) and the robustness principle, strict at trust boundaries (6.3). scripts/check-skills.py and scripts/build-agents.py --check fail if a skill lacks its Self-check or its practices drift from data/principles.json. Principle pages list their related practices, and the developer guides link each practice to its skill. Principle statements are unchanged.",
       "reason": "The skills told agents what to do but gave them no step to check their own work against it before handing off, and well-known practices such as SOLID and DRY lived only in the guides, where no agent reads them."
+    },
+    {
+      "date": "2026-11-27",
+      "research_run": "run-1",
+      "type": "edit",
+      "ids": [
+        "5.14",
+        "agents",
+        "guides",
+        "principles",
+        "site",
+        "skills"
+      ],
+      "summary": "Principle 5.14 now names traffic: Instrument boundaries and failure points: latency, traffic, errors, saturation, retries, breaker state. That covers all four Google SRE golden signals plus retries and breaker state. The 5.14 skill (Do list, Self-check, reviewer checks), the agents that quote it, the principle page and the guides' note that traffic belongs beside 5.14 are updated to match.",
+      "reason": "The statement listed three of the four golden signals, and the guides had to say traffic belonged beside it. Traffic is the denominator that turns an error count into a rate."
     }
   ]
 }

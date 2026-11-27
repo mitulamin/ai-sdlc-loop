@@ -156,10 +156,11 @@ Checks:
 Don't (the producer's list):
 - Hard-code sampling rates in application code
 
-### 5.14 Instrument boundaries and failure points: latency, errors, saturation, retries, breaker state
+### 5.14 Instrument boundaries and failure points: latency, traffic, errors, saturation, retries, breaker state
 
 Checks:
 - Inject a failure: does any signal show it?
+- Check the four golden signals (latency, traffic, errors, saturation) exist at each boundary: is there a request-rate signal, so an error count can be read as a rate and a sudden drop in demand is visible?
 
 Don't (the producer's list):
 - Instrument only the happy path inside functions

@@ -1,6 +1,6 @@
 # Sources for 5.14 instrument-boundaries-and-failure-points
 
-Principle: 5.14 Instrument boundaries and failure points: latency, errors, saturation, retries, breaker state
+Principle: 5.14 Instrument boundaries and failure points: latency, traffic, errors, saturation, retries, breaker state
 Licence status: clean.
 
 ## Dedupe summary

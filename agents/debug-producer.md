@@ -301,15 +301,15 @@ Steps:
 Self-check:
 - [ ] Does the SDK export all spans, with sampling configured only in the collector pipeline?
 
-### 5.14 Instrument boundaries and failure points: latency, errors, saturation, retries, breaker state
+### 5.14 Instrument boundaries and failure points: latency, traffic, errors, saturation, retries, breaker state
 
 Skill: [5.14 instrument-boundaries-and-failure-points](../skills/5.14-instrument-boundaries-and-failure-points/SKILL.md)
 
 When to use: Adding observability to outbound calls and entry points.
 
 Do:
-- Measure latency and errors at every boundary
-- Expose retries, breaker state and pool saturation
+- Measure all four golden signals at every boundary: latency, traffic, errors and saturation
+- Expose retries and breaker state alongside them
 
 Don't:
 - Instrument only the happy path inside functions
@@ -321,7 +321,7 @@ Steps:
 4. Reviewer verifies failure is visible
 
 Self-check:
-- [ ] Are latency and errors measured at every boundary?
+- [ ] Are latency, traffic, errors and saturation (the four golden signals) measured at every boundary, with traffic as the denominator that turns an error count into a rate?
 - [ ] Are retries, breaker state and pool saturation exposed, so that an injected failure shows up in a signal?
 
 ## Principles you can look up

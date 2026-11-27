@@ -78,7 +78,7 @@ One file per principle. The list lives in [data/principles.json](../data/princip
 - [5.11](5.11.md) Keep metric label cardinality low
 - [5.12](5.12.md) Every signal should help detect, localise or explain a problem
 - [5.13](5.13.md) Sample in the collector pipeline, not the SDK
-- [5.14](5.14.md) Instrument boundaries and failure points: latency, errors, saturation, retries, breaker state
+- [5.14](5.14.md) Instrument boundaries and failure points: latency, traffic, errors, saturation, retries, breaker state
 - [5.15](5.15.md) Every alert ships with a minimal runbook
 
 ## 6. Secure
