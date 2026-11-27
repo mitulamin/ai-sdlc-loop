@@ -28,7 +28,9 @@ XDG_CONFIG_HOME pointed at a fake home folder and a fake cursor command first on
   - the project is not a git repository on main with no commits, no remote and no git settings
     written, or has anything committed or staged
   - Cursor is not opened in the project when the cursor command works, or the next steps are not
-    printed when it is missing or fails
+    printed when it is missing or fails. Every run is hermetic: a real cursor on the machine is
+    never started, because each case puts a fake or a failing cursor first on PATH, and the case
+    with no cursor uses a PATH folder of links to the needed tools only
 """
 import importlib.util
 import os
@@ -59,13 +61,16 @@ def git(project, *args, env):
 def fake_cursor(folder, marker, exit_code=0):
     folder.mkdir(parents=True, exist_ok=True)
     path = folder / "cursor"
-    path.write_text(f'#!/bin/sh\necho "$1" > "{marker}"\nexit {exit_code}\n')
+    record = f'echo "$1" > "{marker}"\n' if marker else ""
+    path.write_text(f"#!/bin/sh\n{record}exit {exit_code}\n")
     path.chmod(path.stat().st_mode | stat.S_IXUSR)
 
 
-def base_env(home):
+def base_env(home, stub_dir):
+    """Every run gets a cursor command that only fails (exit 127) ahead of anything on the real PATH."""
     env = {k: v for k, v in os.environ.items() if not re.match(r"(GIT_(AUTHOR|COMMITTER|CONFIG|DIR|WORK_TREE)|AI_SDLC_)", k)}
     env.update(HOME=str(home), XDG_CONFIG_HOME=str(home / ".config"), GIT_CONFIG_NOSYSTEM="1")
+    env["PATH"] = f"{stub_dir}{os.pathsep}{env['PATH']}"
     env.pop("PI_CODING_AGENT_DIR", None)
     return env
 
@@ -74,6 +79,21 @@ def run(checkout, env, answers="", extra=None, args=()):
     env = dict(env, **(extra or {}))
     return subprocess.run([BASH, str(checkout / "scripts" / "bootstrap.sh"), *args], cwd=checkout.parent,
                           input=answers, capture_output=True, text=True, env=env)
+
+
+TOOLS = ("bash", "sh", "env", "git", "python3", "cp", "mkdir", "ls", "dirname", "basename", "find", "grep", "sed", "rm", "cat",
+         "head", "tail", "tr", "sort", "mv", "chmod", "ln", "readlink", "uname", "date", "touch", "wc", "awk", "cut", "xargs",
+         "tee", "id", "stat", "realpath", "mktemp", "sleep", "true", "false", "test")
+
+
+def tools_without_cursor(folder):
+    """A PATH folder holding links to the tools bootstrap.sh needs and nothing else, so no real cursor can be found."""
+    folder.mkdir(parents=True, exist_ok=True)
+    for tool in TOOLS:
+        found = shutil.which(tool)
+        if found and not (folder / tool).exists():
+            (folder / tool).symlink_to(found)
+    return folder
 
 
 def listing(folder):
@@ -249,7 +269,9 @@ def main():
         tmp = Path(tmp).resolve()
         home = tmp / "home"
         home.mkdir()
-        env = base_env(home)
+        stub = tmp / "stub-bin"
+        fake_cursor(stub, None, exit_code=127)
+        env = base_env(home, stub)
         marker = tmp / "opened"
         fake_cursor(tmp / "bin", marker)
         env_open = dict(env, PATH=f"{tmp / 'bin'}{os.pathsep}{env['PATH']}")
@@ -286,10 +308,16 @@ def main():
         if r.returncode != 0 or "Next: open the folder" not in r.stdout:
             errors.append(f"a failing cursor command did not lead to the next steps: {r.stderr.strip()}")
 
-        if shutil.which("cursor", path=env["PATH"]) is None:
-            r = run(checkout, env, extra={"AI_SDLC_BOOTSTRAP_LOCATION": str(out), "AI_SDLC_BOOTSTRAP_NAME": "app3"})
-            if r.returncode != 0 or "Next: open the folder" not in r.stdout:
-                errors.append("without the cursor command, the next steps were not printed")
+        bare = tools_without_cursor(tmp / "tools-only")
+        if (bare / "cursor").exists():
+            errors.append("the tools-only folder has a cursor command")
+        r = run(checkout, dict(env, PATH=str(bare)),
+                extra={"AI_SDLC_BOOTSTRAP_LOCATION": str(out), "AI_SDLC_BOOTSTRAP_NAME": "app3"})
+        if r.returncode != 0 or "Next: open the folder" not in r.stdout:
+            errors.append(f"without a cursor command, the next steps were not printed: {r.stderr.strip()}")
+
+        if not (tmp / "opened2").is_file() or (tmp / "opened2").read_text().strip() != str(out / "app2"):
+            errors.append("the failing cursor command chosen for the case was not the one run")
 
         allowed = [p.resolve() for p in expected_in_home]
         leaked = sorted(p.relative_to(home).as_posix() for p in home.rglob("*")
