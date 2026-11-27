@@ -52,7 +52,7 @@ By contributing, you agree your contribution is licensed on the same split as th
 
 - A script, a schema, workflow tooling, or other program code is under GPL-3.0 ([LICENSE](LICENSE)). That includes `scripts/` and `data/schemas/`.
 - Writing is under CC BY-SA 4.0 ([LICENSE-CONTENT](LICENSE-CONTENT)). That includes docs, guides, principle statements and notes, skill and agent markdown, and the data files in `data/` (except `data/schemas/`).
-- Everything under `template/` is MIT ([template/LICENSE](template/LICENSE)), code and writing. A new project copied from it inherits MIT.
+- Everything under `template/` is MIT ([template/LICENSE](template/LICENSE)), code and writing. A new project copied from it inherits MIT. So do the copies of skills, agents and commands that `scripts/new-project.sh --harness` installs, except files adapted from share-alike sources, which keep CC BY-SA 4.0. The sources of those copies in this repo stay CC BY-SA 4.0.
 - Do not add material you cannot license that way. Borrowed files keep their own licence and their attribution.
 
 ## Credit your sources

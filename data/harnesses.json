@@ -3,6 +3,21 @@
   "note": "How scripts/install-harness.py lays out this repo's skills, agents and commands for each coding harness. Every path is relative to the new project's root: nothing is written to a harness's user or global configuration. The sources stay skills/, agents/ and commands/; this file only maps them. Checked against each harness's documentation on 2026-11-27.",
   "shared_dir": ".ai-sdlc",
   "attribution": "AI SDLC Loop, by Shravi Limited and contributors",
+  "licensing": {
+    "note": "Licence of each installed file. A file is MIT, like the new project, unless it holds material adapted from a share-alike source. A skill takes its sources' licences from data/licences.json (skills[id].sources[].licence, matched on the text before the first space). A kind listed in inherit_from_skills holds each listed skill's text, so it takes its skills' licences. An unknown licence stops the installer.",
+    "default": "MIT",
+    "inherit_from_skills": ["agent"],
+    "licences": {
+      "MIT": { "name": "MIT", "kind": "permissive" },
+      "Apache-2.0": { "name": "Apache License 2.0", "kind": "permissive", "modified_statement": true },
+      "CC-BY-SA-4.0": {
+        "name": "CC BY-SA 4.0",
+        "kind": "share-alike",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "text_file": "LICENSE-CONTENT"
+      }
+    }
+  },
   "harnesses": [
     {
       "id": "cursor",

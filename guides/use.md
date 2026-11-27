@@ -227,14 +227,14 @@ The script writes only inside the new project. A few things are still done by th
 
 The project you create is MIT, from `template/`, and your code stays yours.
 
-The skills, agents and commands a harness gets are copies of this repo's writing, which is CC BY-SA 4.0. They keep that licence in your project, so the script carries the licence with them:
+The copies of skills, agents and commands the script installs are MIT, like `template/` and the rest of your project, except files adapted from share-alike sources, which keep CC BY-SA 4.0 and carry their notice and licence text. Your project root holds one licence, the MIT `LICENSE`, and no project-wide notice.
 
-- `.ai-sdlc/NOTICE.md` names the source and the commit, lists the folders it covers, says what was changed, and explains the terms.
-- `.ai-sdlc/LICENSE-CONTENT` is the licence text.
-- Every installed file starts with a comment that names the file it came from and points to the notice.
-- Every skill keeps its `SOURCES.md`, which credits the open-source projects it draws on.
+- Every installed file starts with a comment that names the file it came from and states the licence of that file.
+- Every skill keeps its `SOURCES.md`. It credits the open-source projects the skill draws on, with the copyright lines and licence links their MIT and Apache licences ask for, and says where material was modified.
+- A skill adapted from a share-alike source gets a `NOTICE.md` and a copy of the licence text in its own folder, and only such a skill does. An agent that includes the text of such a skill is under the same licence, and its comment points to that notice.
+- If nothing you install is adapted from a share-alike source, no notice or licence copy is written.
 
-If you edit the installed files, your edits are CC BY-SA 4.0 too, and you can share them on the same terms. Your own code and docs are not affected, and with no harness nothing CC BY-SA is copied. The scripts in this repo are GPL-3.0 and are not copied into your project.
+Which files are share-alike is worked out from each source's licence in the repo's data, so a new share-alike source is handled the same way. If you edit a share-alike file, your edits are CC BY-SA 4.0 too, and you can share them on the same terms. Your own code and docs are not affected, and with no harness no skill, agent or command is copied. The scripts in this repo are GPL-3.0 and are not copied into your project.
 
 ## Things that stay in this repo
 

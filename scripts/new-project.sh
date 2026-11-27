@@ -118,7 +118,7 @@ grep -rlF '@PROFILE@' "$target" 2>/dev/null | while IFS= read -r f; do
   sed -i.bak "s/@PROFILE@/$profile/g" "$f" && rm -f "$f.bak"
 done
 
-# Harness: skills, agents and commands in the project's own harness folders (CC BY-SA 4.0, see the notice it writes).
+# Harness: skills, agents and commands in the project's own harness folders (MIT, except files adapted from share-alike sources, which carry their own notice).
 if [ "$harness" != "none" ]; then
   python3 "$installer" "$target" "$harness"
 fi

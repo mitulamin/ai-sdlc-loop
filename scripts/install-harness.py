@@ -12,11 +12,16 @@ scripts/build-agents.py first if you changed the data they are generated from.
 
 Every file is written under <project-dir>: skills, agents and commands in the harness's project
 folders, any extra project files the harness needs, and, in the shared folder named in the data,
-a licence notice, a copy of LICENSE-CONTENT and the agents and commands reference pages. Nothing
-is written to a user or global configuration folder. The installer refuses to overwrite a file.
+the agents and commands reference pages. Nothing is written to a user or global configuration
+folder. The installer refuses to overwrite a file.
 
-The installed files stay under CC BY-SA 4.0, like their sources: each keeps a provenance comment
-pointing at the notice, and each skill keeps its SOURCES.md.
+Licences. The project keeps its own LICENSE (MIT); the installer writes no project-wide notice. An
+installed file is MIT unless it holds material adapted from a share-alike source (data/harnesses.json
+"licensing"; each skill's sources and their licences are in data/licences.json). Each skill's
+SOURCES.md carries the copyright lines and licence links that MIT and Apache sources need, and a
+modified statement for Apache. A share-alike skill (and only that skill) gets a NOTICE.md and a
+copy of the licence text in its own folder. An agent that embeds the text of a share-alike skill
+stays share-alike, and its provenance comment points at that skill's NOTICE.md.
 """
 import json
 import os
@@ -103,6 +108,8 @@ class Item:
     def __init__(self, kind, src, dest, front, body, values, role=None):
         self.kind, self.src, self.dest = kind, src, dest
         self.front, self.body, self.values, self.role = front, body, values, role
+        self.licence = None
+        self.notice_dest = None
 
 
 class Installer:
@@ -113,11 +120,17 @@ class Installer:
             raise SystemExit(f"Unknown harness: {harness_id}. Known: none, {', '.join(by_id)}")
         self.h = by_id[harness_id]
         self.shared = self.doc["shared_dir"]
+        self.licensing = self.doc["licensing"]
+        self.licence_data = json.loads((DATA / "licences.json").read_text(encoding="utf-8"))
+        self.skill_licences = {}
+        self.skill_dest = {}
+        self.sa_skills = []
         self.ref = git_ref()
         self.items = []
         self.pathmap = {}
         self.commands = sorted(p.stem for p in (ROOT / "commands").glob("*.md") if p.name != "README.md")
         self._collect()
+        self._assign_licences()
 
     def cmd_name(self, name):
         return self.h["commands"]["prefix"] + name
@@ -137,9 +150,12 @@ class Installer:
             self.items.append(Item("skill", src, f"{skill_dir}/SKILL.md", front, body, values))
             self.pathmap[src] = f"{skill_dir}/SKILL.md"
             self.pathmap[e["folder"]] = skill_dir
+            for pid in [e["principle_id"]] + e.get("aliases", []):
+                self.skill_dest[pid] = (e["principle_id"], skill_dir)
+            self.items[-1].values["principle_id"] = e["principle_id"]
             sources = f"{e['folder']}/SOURCES.md"
             if (ROOT / sources).exists():
-                self.items.append(Item("skill-sources", sources, f"{skill_dir}/SOURCES.md", {}, (ROOT / sources).read_text(encoding="utf-8"), {}))
+                self.items.append(Item("skill-sources", sources, f"{skill_dir}/SOURCES.md", {}, (ROOT / sources).read_text(encoding="utf-8"), {"principle_id": e["principle_id"]}))
                 self.pathmap[sources] = f"{skill_dir}/SOURCES.md"
             for pid in [e["principle_id"]] + e.get("aliases", []):
                 self.pathmap[f"principles/{pid}.md"] = f"{skill_dir}/SKILL.md"
@@ -167,12 +183,63 @@ class Installer:
                 values = {"name": name, "description": front["description"], "argument-hint": front.get("argument-hint")}
                 self.items.append(Item("command", src, dest, front, body, values))
             self.pathmap[src] = dest
-        self.pathmap["LICENSE-CONTENT"] = f"{self.shared}/LICENSE-CONTENT"
-        self.pathmap["NOTICE.md"] = f"{self.shared}/NOTICE.md"
         coord = next((i for i in self.items if i.kind == "agent" and i.role == "coordinator"), None)
         if coord is None:
             raise SystemExit("agents/: no agent with role coordinator")
         self.coordinator = coord.dest
+
+    def source_licence(self, licence, where):
+        token = licence.split()[0] if licence.strip() else ""
+        entry = self.licensing["licences"].get(token)
+        if entry is None:
+            raise SystemExit(f"{where}: source licence {licence!r} is not in data/harnesses.json licensing.licences, so the installer cannot tell whether it is share-alike")
+        return token, entry
+
+    def _assign_licences(self):
+        lic = self.licensing
+        default = lic["default"]
+        if lic["licences"][default]["kind"] != "permissive":
+            raise SystemExit("data/harnesses.json licensing.default must be a permissive licence")
+        skills_data = self.licence_data["skills"]
+        for item in self.items:
+            if item.kind not in ("skill", "skill-sources"):
+                continue
+            pid = item.values["principle_id"]
+            if pid not in skills_data:
+                raise SystemExit(f"data/licences.json has no entry for skill {pid}")
+            found = {self.source_licence(s["licence"], f"data/licences.json skills.{pid}")[0] for s in skills_data[pid]["sources"]}
+            share = sorted(k for k in found if lic["licences"][k]["kind"] == "share-alike")
+            if len(share) > 1:
+                raise SystemExit(f"skill {pid} adapts sources under more than one share-alike licence ({', '.join(share)}); they cannot be combined")
+            item.licence = share[0] if share else default
+            if item.kind == "skill":
+                item.values["licence"] = self.licensing["licences"][item.licence].get("spdx", item.licence)
+                self.skill_licences[pid] = item.licence
+                if share:
+                    self.sa_skills.append(item)
+        for item in self.items:
+            item.licence = item.licence or default
+            if item.kind in lic["inherit_from_skills"]:
+                ids = item.front.get("skills", [])
+                share = set()
+                for sid in ids:
+                    if sid not in self.skill_dest:
+                        raise SystemExit(f"{item.src}: skills lists {sid}, which is not a skill")
+                    pid, folder = self.skill_dest[sid]
+                    if lic["licences"][self.skill_licences[pid]]["kind"] == "share-alike":
+                        share.add((self.skill_licences[pid], pid, folder))
+                if len({s[0] for s in share}) > 1:
+                    raise SystemExit(f"{item.src} embeds skills under more than one share-alike licence")
+                if share:
+                    key, _, folder = sorted(share, key=lambda s: s[1])[0]
+                    item.licence = key
+                    item.notice_dest = f"{folder}/NOTICE.md"
+
+    def licence_name(self, key):
+        return self.licensing["licences"][key]["name"]
+
+    def is_share_alike(self, key):
+        return self.licensing["licences"][key]["kind"] == "share-alike"
 
     def front_matter(self, item, spec):
         lines = []
@@ -237,8 +304,17 @@ class Installer:
         return text
 
     def provenance(self, item):
-        return (f"{PROVENANCE} {item.src} at {self.ref[:12]} by scripts/new-project.sh, adapted for {self.h['name']} "
-                f"(front matter, links and command names). CC BY-SA 4.0: see {self.shared}/NOTICE.md. -->")
+        adapted = f"adapted for {self.h['name']} (front matter, links and command names)"
+        if item.kind == "skill-sources":
+            adapted = "licence notes added"
+        name = self.licence_name(item.licence)
+        if not self.is_share_alike(item.licence):
+            where = "the project's LICENSE"
+        elif item.kind in ("skill", "skill-sources"):
+            where = "NOTICE.md in this skill folder"
+        else:
+            where = f"the notice at {item.notice_dest}"
+        return f"{PROVENANCE} {item.src} at {self.ref[:12]} by scripts/new-project.sh, {adapted}. Licence: {name}, see {where}. -->"
 
     def render(self, item):
         body = item.body
@@ -252,50 +328,100 @@ class Installer:
                 body = body.replace("$ARGUMENTS", c["arguments"])
             if c["preamble"]:
                 body = c["preamble"].replace("{coordinator}", self.coordinator) + "\n\n" + body
+        if item.kind == "skill":
+            body = self.relicence_skill(body, item)
         body = self.rewrite(body, item.src, item.dest)
         spec = {"skill": self.h["skills"]["front_matter"], "agent": self.h["agents"]["front_matter"],
                 "command": self.h["commands"]["front_matter"]}.get(item.kind, [])
         head = self.front_matter(item, spec)
         return "\n".join(head + [self.provenance(item), "", body.rstrip("\n")]) + "\n"
 
-    def notice(self):
-        h, ref = self.h, self.ref
-        roots = sorted({h[k]["dir"] for k in ("skills", "agents", "commands")})
-        extras = ", ".join(f"`{e['path']}`" for e in h["extra_files"])
+    def relicence_skill(self, body, item):
+        """The skill text states its licence; state the installed file's licence instead."""
+        old = "released under CC BY-SA 4.0 (see ../../LICENSE-CONTENT and ../../CREDITS.md)."
+        if body.count(old) != 1:
+            raise SystemExit(f"{item.src}: expected exactly one licence sentence ending {old!r}")
+        if self.is_share_alike(item.licence):
+            new = f"released under {self.licence_name(item.licence)} (see NOTICE.md and {self.licensing['licences'][item.licence]['text_file']} in this folder)."
+        else:
+            new = f"released under {self.licence_name(item.licence)} (see SOURCES.md for the sources it was adapted from)."
+        return body.replace(old, new)
+
+    def source_repos(self, pid):
+        """The repos a skill's adapted sources come from, in order of first use, with their licence key."""
+        seen = {}
+        for s in self.licence_data["skills"][pid]["sources"]:
+            key, _ = self.source_licence(s["licence"], f"data/licences.json skills.{pid}")
+            seen.setdefault(s["repo"], key)
+        return seen
+
+    def repo_data(self, repo):
+        data = self.licence_data["repos"].get(repo)
+        if not data or not data.get("licence_file"):
+            raise SystemExit(f"data/licences.json repos has no licence_file for {repo}")
+        return data
+
+    def render_sources(self, item):
+        body = item.body
+        old = "Text: CC BY-SA 4.0 (Shravi Limited and contributors). See ../../LICENSE-CONTENT and ../../CREDITS.md."
+        if body.count(old) != 1:
+            raise SystemExit(f"{item.src}: expected exactly one line starting {old!r}")
+        lic = self.licensing["licences"][item.licence]
+        if self.is_share_alike(item.licence):
+            new = f"Text: {lic['name']} (Shravi Limited and contributors). See NOTICE.md and {lic['text_file']} in this folder."
+        else:
+            new = (f"Text: {lic['name']}, like the project it is installed in (LICENSE at the project root). "
+                   f"Adapted from {self.doc['attribution']}, {REPO_URL}.")
+        body = self.rewrite(body.replace(old, new), item.src, item.dest).rstrip("\n")
+        lines = ["", "", "## Licence notices for the adapted sources", "",
+                 "Each source below keeps its own licence. This skill adapts it: the wording is changed, shortened and combined with the other sources.", ""]
+        for repo, key in self.source_repos(item.values["principle_id"]).items():
+            data = self.repo_data(repo)
+            entry = self.licensing["licences"][key]
+            if entry["kind"] == "share-alike":
+                lines.append(f"- {repo} ({entry['name']}): see NOTICE.md in this folder. Licence file: {data['licence_file']}")
+                continue
+            copyright_lines = [c for c in data.get("copyright", []) if c.lower().startswith("copyright")]
+            holder = "; ".join(copyright_lines) if copyright_lines else "copyright notice as in its licence file"
+            line = f"- {repo} ({entry['name']}): {holder}. Licence file: {data['licence_file']}"
+            if entry.get("modified_statement"):
+                line += ". Modified: material from this source was adapted, reworded and combined with other sources"
+            lines.append(line)
+        return self.provenance(item) + "\n\n" + body + "\n".join(lines) + "\n"
+
+    def skill_notice(self, item):
+        pid = item.values["principle_id"]
+        entry = self.licensing["licences"][item.licence]
+        shared = [(r, self.repo_data(r)) for r, k in self.source_repos(pid).items() if k == item.licence]
         lines = [
-            "# Notice for the AI SDLC Loop files in this project", "",
-            f"This project was created with `scripts/new-project.sh` from [AI SDLC Loop]({REPO_URL}) at commit `{ref}`, with the {h['name']} harness.", "",
-            "The project is under the MIT licence in `LICENSE`, except for the files described here. They are copied and adapted from "
-            "AI SDLC Loop's skills, agents and commands, and they stay under the Creative Commons Attribution-ShareAlike 4.0 International "
-            "licence (CC BY-SA 4.0), like their sources. The licence text is in [LICENSE-CONTENT](LICENSE-CONTENT) next to this file, and at "
-            "https://creativecommons.org/licenses/by-sa/4.0/.", "",
-            f"Attribution: {self.doc['attribution']}, {REPO_URL}. Sources at {REPO_URL}/tree/{ref}.", "",
-            f"Changes from the sources: front matter converted to the format {h['name']} reads, links pointed at the installed copies or at "
-            "the source repo, loop command names given a prefix, and a provenance comment added to each file. The text is otherwise unchanged.", "",
-            "Each skill folder keeps its `SOURCES.md`, which credits the public repositories the skill was written from, with their licences. "
-            f"Per-source credits and copyright lines: {REPO_URL}/blob/{ref}/CREDITS.md.", "",
-            "If you change these files, the changes stay under CC BY-SA 4.0 (share-alike). Keep this notice and the licence copy with them. "
-            "Your own code, and any file you write yourself, is not affected.", "",
-            "Covered files: every file under these folders that starts with an `Installed from ai-sdlc-loop` comment, and the files in this folder.", "",
-        ] + [f"- `{r}/`" for r in roots] + [f"- `{self.shared}/`", ""]
-        if extras:
-            lines += [f"The harness settings the script also wrote ({extras}) are ordinary project files under the project's licence.", ""]
+            f"# Licence notice for {item.values['name']}", "",
+            f"The files in this skill folder are licensed under {entry['name']} ({entry['url']}). The full text is in "
+            f"[{entry['text_file']}]({entry['text_file']}) next to this file.", "",
+            "This skill contains material adapted from:", ""]
+        lines += [f"- [{repo}]({data['url']}) at commit `{data['pinned_commit']}`, under {entry['name']}. Licence file: {data['licence_file']}" for repo, data in shared]
+        lines += ["",
+            f"It is adapted from {self.doc['attribution']}, {REPO_URL}, at commit `{self.ref}`.", "",
+            f"Changes: the wording was shortened and combined with other sources, the front matter was converted to the format {self.h['name']} reads, "
+            "links were pointed at the installed copies or at the source repo, and loop command names were given a prefix. "
+            "SOURCES.md in this folder lists every source and its licence.", "",
+            f"Share-alike: if you change or build on these files, license the result under {entry['name']} or a licence it allows, "
+            "keep this notice and the licence text with it, and say what you changed. "
+            "Other files in the project, including your own, are not affected; the project's own licence is in LICENSE at the project root.", ""]
         return "\n".join(lines)
 
     def plan(self):
         """{project-relative path: text} for everything this harness installs."""
         files = {}
         for item in self.items:
-            files[item.dest] = self.render(item) if item.kind != "skill-sources" else self.render_sources(item)
-        files[f"{self.shared}/LICENSE-CONTENT"] = (ROOT / "LICENSE-CONTENT").read_text(encoding="utf-8")
-        files[f"{self.shared}/NOTICE.md"] = self.notice()
+            files[item.dest] = self.render_sources(item) if item.kind == "skill-sources" else self.render(item)
+        for item in self.sa_skills:
+            folder = posixpath.dirname(item.dest)
+            entry = self.licensing["licences"][item.licence]
+            files[f"{folder}/NOTICE.md"] = self.skill_notice(item)
+            files[f"{folder}/{entry['text_file']}"] = (ROOT / entry["text_file"]).read_text(encoding="utf-8")
         for extra in self.h["extra_files"]:
             files[extra["path"]] = extra["text"] if "text" in extra else json.dumps(extra["json"], indent=2) + "\n"
         return files
-
-    def render_sources(self, item):
-        body = self.rewrite(item.body, item.src, item.dest)
-        return self.provenance(item) + "\n\n" + body
 
     def check_names(self):
         problems = []
@@ -352,7 +478,7 @@ def main():
         print(usage, file=sys.stderr)
         return 2
     inst, files = install(args[0], args[1])
-    print(f"Installed the {inst.h['name']} layout: {len(files)} files under {args[0]}. Notice: {inst.shared}/NOTICE.md")
+    print(f"Installed the {inst.h['name']} layout: {len(files)} files under {args[0]}")
     return 0
 
 
