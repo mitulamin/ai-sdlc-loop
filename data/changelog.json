@@ -303,6 +303,17 @@
       ],
       "summary": "Added data/harnesses.json (schema data/schemas/harnesses.schema.json) and scripts/install-harness.py. scripts/new-project.sh --harness <name> now installs the skills, agents and loop commands into a new project in the project-level layout of Cursor, Claude Code, OpenCode, Pi or GitHub Copilot in VS Code. The default, none, keeps the old behaviour. Paths must stay inside the project, and nothing is written to a harness's user or global settings. Loop commands carry an sdlc- prefix. Installed copies are MIT, like template/, except files adapted from share-alike sources (found from the per-source licences in data/licences.json), which keep CC BY-SA 4.0 and carry a NOTICE.md and the licence text in their own skill folder. Each file has a provenance comment stating its licence, and each SOURCES.md carries the copyright lines and licence links of its MIT and Apache sources. The project root holds only the template's MIT LICENSE. Added scripts/check-new-project.py to CI, which also asserts the licence of every installed file. Added the Use page (guides/use.md, published as docs/use.html), the last site nav item before the GitHub link, whose harness table and sections build-site.py generates from data/harnesses.json. Updated the README start section, the licence section and the folder READMEs.",
       "reason": "Starting a project in a given harness meant copying and adapting the agent, command and skill files by hand. Keeping each harness's layout as data, generated from the same sources, lets every harness get the same loop without a second copy to maintain."
+    },
+    {
+      "date": "2026-11-27",
+      "research_run": "run-1",
+      "type": "edit",
+      "ids": [
+        "guides",
+        "site"
+      ],
+      "summary": "Added a short 'Bootstrap for Cursor (planned)' section to guides/use.md, placed before 'Harness by harness', and regenerated docs/use.html. It describes a planned one-command Bootstrap (scripts/bootstrap.sh) for solo developers and non-coders: it would install the coordinator, agents, skills and /sdlc-* commands into .cursor/, add an always-on Cursor rule and START-HERE.md, run a local git init only, and open Cursor. The section says it is not yet available and that new-project.sh remains the route for teams and larger organisations. Docs only; no code or scripts changed.",
+      "reason": "Solo developers and non-coders need a simpler start than cloning the repo and running new-project.sh; stating the plan now sets expectations without promising something that does not exist yet."
     }
   ]
 }

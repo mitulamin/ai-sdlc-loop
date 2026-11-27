@@ -130,6 +130,19 @@ file and a malformed row, and the README shows how to run it.
 
 Then ask for the next feature the same way. Keep each request to one outcome you can check. The smaller the request, the shorter each loop and the easier the review.
 
+## Bootstrap for Cursor (planned)
+
+**Planned, not yet available.** There is no `scripts/bootstrap.sh` yet. This describes a path we intend to add for solo developers and non-coders who use Cursor and want the loop without setting anything up by hand.
+
+You would run one command in an empty folder. It would:
+
+- copy the solo template and install the coordinator, agents, skills and `/sdlc-*` commands into the project's `.cursor/` folder;
+- add an always-on Cursor rule and a `START-HERE.md` brief, so the agent knows what was set up and works through the project's coordinator for every step of the SDLC;
+- run a local `git init` only: no GitHub, no accounts and no remote;
+- open Cursor, so you can just say what you want to build.
+
+Until then, and for teams and larger organisations, `new-project.sh` stays the route, as described in the steps above.
+
 ## Harness by harness
 
 Each section says what to install first, how the rules file is read, how to reach the coordinator, and where the harness works differently from the others. Each also links the official docs the layout follows.
