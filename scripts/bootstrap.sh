@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
+# The goal is to hand you over to a Cursor agent that understands what's going on and can
+# handhold you from there, so you never feel unassisted. Bootstrap only gives Cursor a leg up
+# into a full SDLC that protects you.
+#
 # Bootstrap: set up a new project for Cursor, with the solo template, the loop's coordinator,
 # agents, skills and /sdlc-* commands in .cursor/, an always-on Cursor rule, a START-HERE.md brief
 # and a local git repository (on main, with no commits yet). Run it from inside your checkout of

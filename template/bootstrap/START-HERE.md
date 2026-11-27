@@ -2,6 +2,8 @@
 
 This project was set up for you in one step. This note is for the agent (and for you, if you are curious). You do not need to read it to get going: say what you want to build.
 
+The goal is to hand you over to a Cursor agent that understands what's going on and can handhold you from here into the decisions you need to make. You should never feel unassisted. Bootstrap only gave Cursor a leg up: the full SDLC is here so you are not dependent on the AI model to do all the thinking.
+
 ## What was set up
 
 - The project files from the solo template: `AGENTS.md` (the short rules file), `PROCESS.md`, `README.md` and `CHANGELOG.md`.

@@ -134,6 +134,10 @@ Then ask for the next feature the same way. Keep each request to one outcome you
 
 For solo developers and people who do not code, using Cursor. Bootstrap asks two questions, sets up a new project, and opens it in Cursor. Then you tell the agent what you want to build.
 
+### Why Bootstrap exists
+
+The goal is to hand you over to a Cursor AI agent that understands what's going on and can handhold you from there into the decisions you need to make. You should never feel unassisted. As long as we follow that principle, Bootstrap doesn't need to do much: it gives Cursor a leg up in setting up a full SDLC that protects you, so you are not dependent on the AI model to do all the thinking, and you end up with beautifully engineered applications at a professional grade.
+
 ### Before you start
 
 You need:
