@@ -32,6 +32,12 @@ Don't:
 2. Split if mixed
 3. Write a focused description
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is the change one logical change, small enough to review and to revert, with refactors split from features?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find two unrelated changes in one PR

@@ -38,6 +38,13 @@ Don't:
 3. Redact captured debug output before sharing
 4. Reviewer greps logs and output
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is every secret, token, password, key and item of full personal data kept out of logs, displays, debug output, artifacts and transcripts?
+- [ ] Is redaction done at the logger with an allow-list of fields, not by hand?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a secret or personal data in logs, traces or debug output

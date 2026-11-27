@@ -35,6 +35,13 @@ Don't:
 3. Contract test failure cases
 4. Reviewer plays an unhappy client
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does the contract give, for each operation, its errors, whether it is retryable and its expected latency or timeout?
+- [ ] Is the versioning policy stated next to the contract?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find an error the code returns that the contract omits

@@ -4,7 +4,7 @@ The machine-readable source of truth. Everything here is versioned (`schema_vers
 
 | File | What it holds | Kind |
 | --- | --- | --- |
-| `principles.json` | The principles, with sources, status, provenance, aliases for merged IDs and notes on how overlapping principles differ | Hand-written |
+| `principles.json` | The principles, with sources, status, provenance, aliases for merged IDs, notes on how overlapping principles differ, and the related practices (established practices that are not principles here, such as SOLID or DRY) each principle's skill applies | Hand-written |
 | `sources.json` | The source repos, their role, licence and pinned commit | Hand-written, pins moved by `scripts/refresh-sources.py` |
 | `changelog.json` | Machine-readable log of merges, drops, edits and pins | Hand-written |
 | `notes/` | Hand-written overlays added to generated pages | Hand-written |

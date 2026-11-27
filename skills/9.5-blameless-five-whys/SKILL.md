@@ -33,6 +33,13 @@ Don't:
 3. Pick condition to change
 4. Assign fix
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Did the five whys lead to conditions, not to an agent's mistake?
+- [ ] Does the conclusion name a change to the system?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Check the conclusion names a changeable condition

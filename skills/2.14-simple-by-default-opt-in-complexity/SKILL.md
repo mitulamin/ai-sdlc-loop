@@ -35,10 +35,28 @@ Don't:
 3. Layer advanced options
 4. Reviewer writes the hello-world call
 
+## Related practices
+
+Established practices this skill applies alongside its principle. Each has a self-check item and a reviewer check below.
+
+- **Convention over configuration** ([guide](../../guides/developer/quality-principles.md#convention-over-configuration)): agree sensible defaults once, following the platform's and the codebase's conventions, so callers declare only the exceptions. Be explicit where the domain is genuinely unusual, and say why. See also [3.3](../../principles/3.3.md).
+- **Secure by default** ([guide](../../guides/developer/quality-principles.md#secure-by-default)): the safe option is the default and anything riskier is a deliberate opt-in: authentication on, debug endpoints and sample logins off, the narrowest permissions, and encryption in transit without a flag. Nobody should need a hardening guide to avoid being exposed. See also [6.2](../../principles/6.2.md), [6.4](../../principles/6.4.md).
+
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does the common case work with zero configuration and sensible defaults?
+- [ ] Are advanced options in a separate opt-in layer, with no boolean flag switching behaviour and the primary constructor at three or four parameters?
+- [ ] Convention over configuration: does the design follow the platform's and the codebase's conventions, so callers declare only the exceptions, with each departure explained?
+- [ ] Secure by default: is the default configuration the safe one, with every riskier option an explicit opt-in?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Count steps for the common case
 - Find an option every caller must set to the same value
+- Convention over configuration: find a setting every caller must declare that a convention could have defaulted
+- Secure by default: find a default that leaves something exposed, such as authentication off, debug on, a sample login or broad permissions
 - Default verdict is FAIL until evidence shows otherwise; report findings to a file with P0-P3 severity.
 
 ## How the source skills compare

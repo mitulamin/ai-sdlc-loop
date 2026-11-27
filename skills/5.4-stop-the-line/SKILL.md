@@ -34,6 +34,13 @@ Don't:
 3. Fix or escalate
 4. Resume when green
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Did you stop and fix, or escalate with evidence, every red test or build before writing anything new?
+- [ ] Is every failing test still running, with none skipped or disabled to get past it?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find commits made on top of a red build

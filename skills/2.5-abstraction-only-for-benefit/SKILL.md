@@ -35,10 +35,29 @@ Don't:
 3. Keep only if the benefit survives
 4. Log the decision
 
+## Related practices
+
+Established practices this skill applies alongside its principle. Each has a self-check item and a reviewer check below.
+
+- **Open-closed principle** (SOLID; [guide](../../guides/developer/quality-principles.md#open-closed-principle)): let new cases arrive as new code rather than as edits scattered through a working core, but only along an axis of change that is visible today, such as a second case in the spec or the code. YAGNI and this principle are the brake: no plugin system or extension point for a single case. See also [3.1](../../principles/3.1.md).
+- **Composition over inheritance** ([guide](../../guides/developer/quality-principles.md#composition-over-inheritance)): build behaviour by combining small parts you can swap. Use inheritance only for a true is-a with a shared contract, where the Liskov substitution principle in 2.2 applies, never to reuse a handful of methods. See also [2.2](../../principles/2.2.md).
+
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Can you name, in one line, the concrete benefit each new layer, interface or abstraction brings today?
+- [ ] If you remove each one in your head, does something break today, not only in a possible future?
+- [ ] Did you tolerate a second copy and wait for a third before extracting shared code?
+- [ ] Open-closed principle: is every extension point you added on an axis of change visible today, a second case in the spec or the code, with none built for a single case?
+- [ ] Composition over inheritance: is every subclass you added a true is-a with a shared contract, with reuse otherwise done by composing small parts?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Remove the abstraction mentally: what breaks today?
 - Find interfaces with one implementation and no test use
+- Open-closed principle: find an extension point with one case and no second case in the spec
+- Composition over inheritance: find a subclass that exists only to reuse methods, or that cannot honour its parent's contract
 - Default verdict is FAIL until evidence shows otherwise; report findings to a file with P0-P3 severity.
 
 ## How the source skills compare

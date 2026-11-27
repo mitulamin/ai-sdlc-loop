@@ -37,11 +37,27 @@ Don't:
 3. Extract them into a service
 4. Reviewer checks the rules still live in the use-case function
 
+## Related practices
+
+Established practices this skill applies alongside its principle. Each has a self-check item and a reviewer check below.
+
+- **Unix philosophy** ([guide](../../guides/developer/developer-guide.md#unix-philosophy)): make each service operation do one thing well, with a plain input and output, so use cases compose operations instead of one operation growing modes and flags. See also [2.1](../../principles/2.1.md), [3.5](../../principles/3.5.md).
+
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does each use case's flow live in one function that calls the domain and the shared services?
+- [ ] Are use-case rules kept out of shared services, handlers and repositories?
+- [ ] Do dependencies point one way (API, use case, service, repository), and does every shared service have more than one caller?
+- [ ] Unix philosophy: does each service operation do one thing well with a plain input and output, so use cases compose operations rather than switch one by mode?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a use-case rule hidden in a shared service
 - Find a service with a single caller
 - Find a dependency pointing the wrong way
+- Unix philosophy: find a service operation that switches between several jobs by a mode or flag
 - Default verdict is FAIL until evidence shows otherwise; report findings to a file with P0-P3 severity.
 
 ## How the source skills compare

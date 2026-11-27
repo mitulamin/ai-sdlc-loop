@@ -35,6 +35,13 @@ Don't:
 3. Hypothesise and test with it
 4. Keep it as a test
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is there one command that shows pass or fail in seconds?
+- [ ] Does it give the same result on every run, with fixed seeds and inputs?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Run the loop 5 times: same result?

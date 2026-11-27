@@ -34,6 +34,12 @@ Don't:
 3. Write findings
 4. Summarise verdict
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does the review cover correctness, readability, architecture, security and performance, each with findings or a reason it does not apply?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find an axis with no comment and no 'n/a' reason

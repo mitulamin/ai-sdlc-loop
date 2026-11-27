@@ -35,6 +35,13 @@ Don't:
 3. Fix model/terms
 4. Record scenarios as tests
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Did you walk concrete edge scenarios (empty, duplicate, concurrent, expired) through the model, not only the happy path?
+- [ ] Did you update the glossary and the model wherever a term broke or two scenarios used it differently?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Produce one scenario the model cannot express

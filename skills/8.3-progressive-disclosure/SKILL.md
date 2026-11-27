@@ -32,6 +32,12 @@ Don't:
 2. Split references
 3. Check token size
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is each SKILL.md body short, with detail moved to reference files that are linked with a note on when to read them?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Measure body tokens; find reference-worthy detail inline

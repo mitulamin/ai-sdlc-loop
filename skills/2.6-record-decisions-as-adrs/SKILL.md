@@ -36,6 +36,14 @@ Don't:
 3. Reviewer checks alternatives were real
 4. Commit with the change
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does every costly or hard-to-reverse decision in the change have an ADR with its context, the decision, real alternatives and consequences?
+- [ ] Is each ADR under a page, and linked from the code or spec where the decision bites?
+- [ ] Did you supersede, rather than edit, any old ADR the change overturns?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a costly decision in the diff with no ADR

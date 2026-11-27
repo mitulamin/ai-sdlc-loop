@@ -32,7 +32,7 @@ The aim is loops that run on their own from start to finish, come back to the hu
 | Phase | One stage of the loop, such as Plan or Verify. Each phase is run by a producer and checked by a reviewer. |
 | Producer | The agent that does a phase's work, such as writing the plan or the code. |
 | Adversarial reviewer | A separate agent whose job is to prove the producer's work fails. It is not a collaborator. |
-| Skill | One folder in `skills/` per principle, with a `SKILL.md` that holds When to use, Do and Don't lists, Steps and adversarial reviewer checks. |
+| Skill | One folder in `skills/` per principle, with a `SKILL.md` that holds When to use, Do and Don't lists, Steps, any related practices, a Self-check and adversarial reviewer checks. |
 | Brief | A file the coordinator writes for an agent: the task, the acceptance criteria, the files to read, the skill IDs that apply, and where to write the output. |
 | Fresh context | A new agent that has not seen the conversation so far. It cannot be misled by earlier mistakes because it never saw them. |
 | Register | A plain append-only file, `.ai-sdlc/register.jsonl` by default, where agents write the assumptions they made, the questions they could not answer and their blockers, as register-request blocks. The coordinator reads it as its inbox, and you can read it too. |
@@ -90,12 +90,16 @@ Three details matter:
 
 ## What producers and reviewers load
 
-Every `SKILL.md` has the same sections, and the two roles load different ones on purpose.
+Every `SKILL.md` has the same sections, plus Related practices where a practice fits, and the two roles load different ones on purpose.
 
-- **Producers** load each skill's When to use, its Do and Don't lists together, and its Steps. Getting the dos and don'ts in one pass means the producer builds to them from the start, instead of finding out about a don't only when the reviewer fails it.
+- **Producers** load each skill's When to use, its Do and Don't lists together, its Steps, any related practices and its Self-check. Getting the dos and don'ts in one pass means the producer builds to them from the start, instead of finding out about a don't only when the reviewer fails it.
 - **Reviewers** load only each skill's adversarial reviewer checks and its Don't list. A reviewer must not open the skills' `SKILL.md` files, because those hold the producer's Do lists. Without the Do lists, the reviewer cannot drift into grading taste or style; it hunts for breaches of the don'ts and known failure modes, and tests each acceptance criterion in the brief.
 
 This split is principle [9.2](../../docs/principles/9.2.html): enforce standards at review, not by loading them all into the implementer's context. The separate reviewer itself is principle [7.1](../../docs/principles/7.1.html).
+
+**Related practices.** Some well-known practices are not principles in the catalogue but belong with one: SOLID, DRY and the rule of three, the Law of Demeter, composition over inheritance, fail fast, least privilege and others from the [quality principles](quality-principles.md) and the [developer guide](developer-guide.md). Each sits in the skill it fits, under Related practices, next to the principle that brakes it where there is a tension (the open-closed principle sits with [2.5](../../docs/principles/2.5.html), so no extension point is built for a single case). The list is `related_practices` in [data/principles.json](../../data/principles.json), and each principle page shows its own.
+
+**The self-check.** Every skill ends its producer part with a Self-check: short questions on the skill's rules, plus one per related practice, that the producer answers yes, no or N/A with evidence before it hands off. The producer's report carries the answers in a `Principle self-check` table, and fixes every no or records it as a blocker. The reviewer treats each yes as a claim to test, and a report without the table is a P1 finding. Every related practice also has a check in the reviewer's list, so the producer's question and the reviewer's check cover the same ground from both sides. `scripts/check-skills.py` fails if a skill's related practices, self-check items and reviewer checks drift from the data.
 
 ## The rules of the loop
 
@@ -151,7 +155,7 @@ You choose where it lives with `--register <path>` on any command, and it defaul
 
 Each phase repeats the same producer and reviewer pair. When the human dislikes the final result, the Learn loop turns that into a stricter check for the phase that let the problem through. As a flow:
 
-1. **Phase producer.** Gets the phase's dos and don'ts together, in one pass, and produces the output.
+1. **Phase producer.** Gets the phase's dos and don'ts together, in one pass, produces the output, and answers each skill's self-check before handing off.
 2. **Adversarial reviewer.** Checks the output only against the don'ts and known failure modes. If a check fails, the work goes back to a new producer (step 1). If it passes, the loop moves to the next phase.
 3. **Next phase.** The phases repeat this pair, in order, until the final result is ready.
 4. **Human acceptance review.** At the end of the full cycle, the human judges the final result. This is not in-development code review. If the human likes it, it is accepted and the cycle ends.

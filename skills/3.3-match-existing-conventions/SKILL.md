@@ -35,6 +35,13 @@ Don't:
 3. Write in that style
 4. Reviewer diffs style against neighbours
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Did you read neighbouring files first, and does the new code match their naming, error handling, test layout and import style?
+- [ ] Does the change avoid any style, pattern, library or formatter the codebase does not already use?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find code that looks foreign next to its neighbours

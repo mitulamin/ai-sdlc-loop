@@ -33,6 +33,13 @@ Don't:
 3. Re-run
 4. Reviewer diffs config for loosened checks
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Did you fix the cause of every failing check rather than disable, skip or loosen it?
+- [ ] Is the change free of new skip markers, disabled rules and `--no-verify`?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a disabled rule, skip marker or --no-verify

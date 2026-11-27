@@ -35,6 +35,13 @@ Don't:
 3. Keep verified, drop refuted
 4. Log both
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Was each finding checked by a separate, fresh verifier given only the claim and the code?
+- [ ] Did you report only the findings the verifier could not disprove?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Check verifier context excluded finder reasoning

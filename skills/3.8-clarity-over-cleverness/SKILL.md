@@ -35,6 +35,13 @@ Don't:
 3. Re-run tests
 4. Reviewer reads it cold
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] After the tests went green, did you run a simplification pass and run the tests again?
+- [ ] Would a new engineer read each line without puzzling over it, with no dense one-liners or tricks?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a line a new engineer would need to puzzle over

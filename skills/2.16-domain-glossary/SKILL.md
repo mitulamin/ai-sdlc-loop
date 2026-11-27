@@ -35,6 +35,13 @@ Don't:
 3. Inject into worker briefs
 4. Reviewer greps for synonyms
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does the glossary give each domain concept one term, a definition and its code name?
+- [ ] Do code, tests, UI and docs use the glossary term, with no synonyms and no generic names (data, item, manager) for domain concepts?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find two names for one concept

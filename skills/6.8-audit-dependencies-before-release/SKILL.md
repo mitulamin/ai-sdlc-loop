@@ -35,6 +35,13 @@ Don't:
 3. Upgrade or document
 4. Reviewer re-runs the audit
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Did you run the ecosystem's audit against the lockfile, with no high or critical issue left unaddressed?
+- [ ] Were new dependencies checked for maintenance and typosquatting, and is every install pinned by a committed lockfile?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Re-run audit: any high/critical left?

@@ -32,6 +32,12 @@ Don't:
 2. Assign to reviewer briefs
 3. Measure implementer context
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Are enforcement checklists in reviewer briefs, with producers given only the short dos and don'ts?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a long standards doc in an implementer brief

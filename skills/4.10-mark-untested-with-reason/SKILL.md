@@ -35,6 +35,13 @@ Don't:
 3. Add UNTESTED section
 4. Reviewer checks the list is complete
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is every check you could not run listed in the report, with the reason and how it could be tested?
+- [ ] Is every skipped test listed, with nothing reported as passed that was only partly verified?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a claimed-tested item with no evidence

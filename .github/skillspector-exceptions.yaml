@@ -242,19 +242,20 @@ exceptions:
     path: "*agents/*-producer*.md"
     message: "skills/*/SKILL.md"
     line: "*](../skills/*/skill.md)*"
-    max_per_file: 48
+    max_per_file: 74
     reason: >-
-      A producer links the skills of its phase, so that it can open them. Nothing reads or
-      lists the installed skills folder.
+      A producer links the skills of its phase, and the principles their related practices
+      point to, so that it can open them. Nothing reads or lists the installed skills folder.
   - target: "harness-*"
     id: "AS3"
     path: "*agents/*-reviewer*.md"
     message: "skills/*/SKILL.md"
     line: "*](../skills/*/skill.md)*"
-    max_per_file: 30
+    max_per_file: 37
     reason: >-
-      A reviewer links the skills of its phase, so that it can open their reviewer checks.
-      Nothing reads or lists the installed skills folder.
+      A reviewer links the skills of its phase, and the principles their related practices
+      point to, so that it can open their reviewer checks. Nothing reads or lists the
+      installed skills folder.
   - target: ["harness-opencode", "harness-pi"]
     id: "AS3"
     path: "*/sdlc-*.md"

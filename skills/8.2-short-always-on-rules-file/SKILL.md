@@ -35,6 +35,13 @@ Don't:
 3. Test that a fresh agent can build and test from it alone
 4. Prune on a schedule (9.3)
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is there one always-on rules file with the stack, the build and test commands, the conventions and the never-do list?
+- [ ] Is it short and current, with every line changing agent behaviour and detail moved into skills?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a line no agent behaviour depends on

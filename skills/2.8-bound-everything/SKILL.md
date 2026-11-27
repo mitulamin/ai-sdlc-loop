@@ -35,6 +35,13 @@ Don't:
 3. Test at the limit
 4. Reviewer tries to make it grow unbounded
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does every queue, cache, pool and collection have a maximum size, and every query a limit or page size?
+- [ ] Is the behaviour when full (reject, drop oldest, block or shed load) decided and stated in the contract?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a query with no LIMIT or page size

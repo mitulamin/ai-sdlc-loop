@@ -35,6 +35,13 @@ Don't:
 3. Fix nondeterminism
 4. Reviewer reads names as a spec
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Are the tests deterministic: a fixed clock and seeds, no real network and no sleeps?
+- [ ] Is each test named as a behaviour sentence, with a clear arrange-act-assert and no shared mutable state?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find sleeps, random or wall-clock use in tests

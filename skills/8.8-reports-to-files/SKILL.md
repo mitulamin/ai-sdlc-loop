@@ -32,6 +32,12 @@ Don't:
 2. Return path+summary
 3. Coordinator reads on demand
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is every report written to a named file in the run folder, with only its path and a short summary returned?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a long report pasted inline

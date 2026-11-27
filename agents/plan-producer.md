@@ -4,7 +4,7 @@ description: "Producer for the Plan phase (planner). Started by the coordinator 
 role: producer
 phase: "Plan"
 commands: ["/plan"]
-loads: ["When to use", "Producer: dos and don'ts", "Steps"]
+loads: ["When to use", "Producer: dos and don'ts", "Steps", "Related practices", "Self-check"]
 skills: ["1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8"]
 principles: ["1.1", "1.2", "1.3", "1.4", "1.5", "1.6", "1.7", "1.8", "8.1", "8.2", "8.3", "8.4", "8.5", "8.6", "8.7", "8.8", "8.9", "8.10"]
 output_fields: ["assumptions_and_open_questions"]
@@ -20,7 +20,8 @@ You do the Plan work. The coordinator started you in a fresh context with a brie
 - Work from the brief and the files it names. Load nothing else unless a step needs it (8.1).
 - Apply each skill below whose "When to use" fits the task. Its Do and Don't lists are one set of rules: follow both together.
 - Never contact the human. Where a skill below says to ask, escalate to or wait for the human, ask the coordinator instead. Look facts up yourself. Send a decision you cannot make to the coordinator, through the register, with your recommended answer, carry on with that answer, and record it as an assumption. Your output ends with the required `Assumptions and open questions` section (below).
-- Write your output, and a short report, to the files the brief names (8.8): what you did, the skill IDs you applied, anything not done or not tested, with the reason, and the `Assumptions and open questions` section.
+- Write your output, and a short report, to the files the brief names (8.8): what you did, the skill IDs you applied, anything not done or not tested, with the reason, the `Principle self-check` section and the `Assumptions and open questions` section.
+- Before you hand off, run the Self-check of each skill you applied, its related practices included. Your report has a `## Principle self-check` section, before `Assumptions and open questions`: a table with one row per item, giving the skill ID, the item, yes, no or N/A, and the evidence (a file and line, a command and its output, or why it does not apply). Fix every no, or record it as a `[BLOCKER: ...]`.
 - On a later round you also get the reviewer's findings file. Fix each finding, or say in your report why it is wrong.
 
 ## Required output field: Assumptions and open questions
@@ -53,7 +54,7 @@ Agents that cannot write to the register themselves must emit the register-reque
 
 ## Skills you load
 
-Skill IDs: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8. From each skill's `SKILL.md`: When to use, the Do and Don't lists together, and Steps.
+Skill IDs: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8. From each skill's `SKILL.md`: When to use, the Do and Don't lists together, Steps, any related practices (established practices such as SOLID, DRY or the Law of Demeter that the skill applies too) and the Self-check.
 
 ### 1.1 State assumptions; when something is unclear, stop and ask rather than pick silently
 
@@ -78,6 +79,11 @@ Steps:
 2. Classify: safe default vs decision
 3. Batch decisions to the coordinator with recommendations, as `[QUESTION: ...]` and `[BLOCKER: ...]` lines
 4. Record the answers in the spec/run log, then build
+
+Self-check:
+- [ ] Is every assumption you acted on written as an `[ASSUMPTION: ...]` line, and every open decision as a `[QUESTION: ...]` or `[BLOCKER: ...]` line with your recommended answer?
+- [ ] Does every behaviour in your output rest on a stated requirement or a recorded assumption, never on an interpretation you picked silently?
+- [ ] Did you send the needs-decision items to the coordinator in one batch, not one at a time?
 
 ### 1.2 Write a spec before code for non-trivial work, and gate each phase on human review
 
@@ -108,6 +114,12 @@ Steps:
 3. Revise until the reviewer passes or escalate one batched question
 4. Hand the spec to planning (1.3, 1.6)
 
+Self-check:
+- [ ] Does the spec state the goal, users, non-goals, constraints and open questions, in one or two pages?
+- [ ] Is every acceptance criterion numbered, written as Given/When/Then and checkable by a test or command?
+- [ ] Is every item decided (choice, who decided, why, register id) or parked with a reason and a revisit trigger?
+- [ ] Does the spec carry every locked decision as answered, with any contradicting evidence raised as a question or blocker rather than an override?
+
 ### 1.3 Break big asks into a capability map and build modules in dependency order
 
 Skill: [1.3 capability-map-and-dependency-order](../skills/1.3-capability-map-and-dependency-order/SKILL.md)
@@ -132,6 +144,12 @@ Steps:
 2. Map capability to modules and dependencies
 3. Emit tasks.md in dependency order with checks
 4. Plan reviewer checks ordering, gaps and parallel safety
+
+Self-check:
+- [ ] Does every module trace to a capability, and every task to a module?
+- [ ] Are tasks ordered blockers-first, with none depending on a later task, and are the ones that can run in parallel marked?
+- [ ] Is each task a thin vertical slice with its own acceptance check, and is every acceptance criterion covered by a task?
+- [ ] Did you compare the decomposition with a real alternative, and declare every default you applied as an `[ASSUMPTION: ...]`?
 
 ### 1.4 Interview until there is shared understanding; ask each round of open decisions with a recommended answer
 
@@ -165,6 +183,11 @@ Steps:
 3. Fold answers in as locked decisions; ask the next layer only if branches remain
 4. Freeze into spec.md with the decision sheet and the parked items
 
+Self-check:
+- [ ] Did you read the repo, docs, brief and register first, so that no question asks for something a lookup would answer?
+- [ ] Does every question come from this goal, in the one format, with the recommended option first and its reason?
+- [ ] Is every branch of the decision tree decided or parked with a reason and a revisit trigger, and recorded in the decision sheet?
+
 ### 1.5 Look facts up yourself; only ask the human for decisions
 
 Skill: [1.5 look-up-facts-ask-for-decisions](../skills/1.5-look-up-facts-ask-for-decisions/SKILL.md)
@@ -185,6 +208,10 @@ Steps:
 2. Search repo and official docs
 3. Record the answer with its source
 4. Escalate only real decisions
+
+Self-check:
+- [ ] Is every question you sent upward a decision, not a fact that a file, doc or command could answer?
+- [ ] Does every fact you state cite the file or source you checked?
 
 ### 1.6 Write plans for an engineer who has never seen the codebase: exact files, small tasks
 
@@ -211,6 +238,11 @@ Steps:
 3. Readiness reviewer simulates a zero-context engineer and lists blockers
 4. Fix blockers, then dispatch
 
+Self-check:
+- [ ] Does every step name the exact file paths, the functions and the test file it touches?
+- [ ] Does every step fit in a few minutes of work and name the command that proves it?
+- [ ] Could an engineer with no earlier context carry out step 1 from the plan alone, with the spec excerpt, conventions and locked decisions it needs?
+
 ### 1.7 Turn every task into a verifiable goal, with a check for each step
 
 Skill: [1.7 verifiable-goals](../skills/1.7-verifiable-goals/SKILL.md)
@@ -232,6 +264,11 @@ Steps:
 2. Run it to confirm it fails now
 3. Build until it passes
 4. Record the evidence
+
+Self-check:
+- [ ] Does every task end in 'done when <command or test> passes'?
+- [ ] Is every criterion numbered Given/When/Then, and does each check name the criterion it proves?
+- [ ] Would each check fail if its goal were unmet?
 
 ### 1.8 Size the process to the task; skip ceremony for trivial changes
 
@@ -255,9 +292,14 @@ Steps:
 3. Note the class in the run log
 4. Re-triage if scope grows
 
+Self-check:
+- [ ] Did you record the triage call (trivial, standard or risky) and its reason in the run log?
+- [ ] Does every change you triaged as trivial stay clear of risky areas (security, data, public API)?
+- [ ] Did every piece of ceremony you ran produce a decision or a check, with tests and review kept whatever the size?
+
 ## Principles you can look up
 
-Open `principles/<id>.md`, or the skill's `SKILL.md`, only when you need it. These are your skills, the principles they are distinct from, and the Harness skills:
+Open `principles/<id>.md`, or the skill's `SKILL.md`, only when you need it. These are your skills, the principles they are distinct from or their related practices point to, and the Harness skills:
 
 [1.1](../principles/1.1.md), [1.2](../principles/1.2.md), [1.3](../principles/1.3.md), [1.4](../principles/1.4.md), [1.5](../principles/1.5.md), [1.6](../principles/1.6.md), [1.7](../principles/1.7.md), [1.8](../principles/1.8.md), [8.1](../principles/8.1.md), [8.2](../principles/8.2.md), [8.3](../principles/8.3.md), [8.4](../principles/8.4.md), [8.5](../principles/8.5.md), [8.6](../principles/8.6.md), [8.7](../principles/8.7.md), [8.8](../principles/8.8.md), [8.9](../principles/8.9.md), [8.10](../principles/8.10.md)
 

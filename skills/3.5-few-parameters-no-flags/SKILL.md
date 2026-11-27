@@ -35,6 +35,13 @@ Don't:
 3. Refactor to concepts
 4. Reviewer flags flag arguments
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does each signature take about three parameters, with related ones grouped into a named type?
+- [ ] Is every function free of boolean parameters that switch its behaviour?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a boolean param that changes behaviour

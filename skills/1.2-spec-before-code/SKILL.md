@@ -43,6 +43,15 @@ Don't:
 3. Revise until the reviewer passes or escalate one batched question
 4. Hand the spec to planning (1.3, 1.6)
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does the spec state the goal, users, non-goals, constraints and open questions, in one or two pages?
+- [ ] Is every acceptance criterion numbered, written as Given/When/Then and checkable by a test or command?
+- [ ] Is every item decided (choice, who decided, why, register id) or parked with a reason and a revisit trigger?
+- [ ] Does the spec carry every locked decision as answered, with any contradicting evidence raised as a question or blocker rather than an override?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Every acceptance criterion must be numbered, written as Given/When/Then, and checkable by a test or command

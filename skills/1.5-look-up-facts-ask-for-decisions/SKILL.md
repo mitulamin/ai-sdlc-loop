@@ -35,6 +35,13 @@ Don't:
 3. Record the answer with its source
 4. Escalate only real decisions
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is every question you sent upward a decision, not a fact that a file, doc or command could answer?
+- [ ] Does every fact you state cite the file or source you checked?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find any question sent to the coordinator that a file or doc answers

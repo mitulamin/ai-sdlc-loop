@@ -35,6 +35,13 @@ Don't:
 3. Draw aggregate boundaries
 4. Reviewer tests invariants under concurrency
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Did you list the domain events and the commands that cause them before drawing aggregates?
+- [ ] Does each aggregate enforce its own invariants, and does each transaction change only one aggregate?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find an invariant enforced outside its aggregate

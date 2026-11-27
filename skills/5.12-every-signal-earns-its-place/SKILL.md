@@ -33,6 +33,13 @@ Don't:
 3. Prune
 4. Reviewer challenges each signal
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Can you name the question each signal answers during an incident?
+- [ ] Did you remove the signals that answer none?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a signal nobody would look at during an incident

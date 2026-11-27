@@ -34,6 +34,13 @@ Don't:
 3. Escalate
 4. Resume with the decision
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] After three failed fixes, did you stop and escalate with a design question?
+- [ ] Does the escalation say what each attempt assumed and why it failed?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Count fix attempts in the transcript

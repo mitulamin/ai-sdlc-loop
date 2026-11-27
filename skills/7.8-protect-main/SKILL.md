@@ -33,6 +33,13 @@ Don't:
 2. Use branches
 3. Merge via PR
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is all work on a branch and merged through a pull request?
+- [ ] Are pushes to main and force-pushes blocked by hooks or branch protection, and did you do neither?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Attempt a push to main in a test: is it blocked?

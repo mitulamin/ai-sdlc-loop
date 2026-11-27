@@ -36,6 +36,14 @@ Don't:
 3. Implement and test failure paths with fakes
 4. Reviewer injects a hanging dependency
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does every outbound call have an explicit timeout?
+- [ ] Are retries limited to idempotent operations, capped, with exponential backoff and jitter?
+- [ ] Is there a circuit breaker or bulkhead wherever a dependency can hang or exhaust shared resources?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a call with no timeout

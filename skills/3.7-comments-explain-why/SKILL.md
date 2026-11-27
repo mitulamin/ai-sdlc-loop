@@ -35,6 +35,13 @@ Don't:
 3. Comment analyzer checks accuracy
 4. Remove noise
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does every comment explain why (a constraint, a trade-off, a link), not narrate what the code does?
+- [ ] Are public interface docs accurate, with no commented-out code or stale TODOs left behind?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a comment that restates code

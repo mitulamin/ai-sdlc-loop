@@ -33,6 +33,13 @@ Don't:
 3. Move unbounded ones
 4. Reviewer estimates series count
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does every metric label take a bounded set of values, such as a status class or route template?
+- [ ] Are user ids, emails and raw paths kept in traces or logs rather than labels?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find an unbounded label

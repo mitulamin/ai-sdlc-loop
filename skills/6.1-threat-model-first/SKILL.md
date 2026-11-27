@@ -35,10 +35,25 @@ Don't:
 3. Rank
 4. Turn top threats into tasks and tests
 
+## Related practices
+
+Established practices this skill applies alongside its principle. Each has a self-check item and a reviewer check below.
+
+- **Defence in depth** ([guide](../../guides/developer/developer-guide.md#defence-in-depth)): give each top threat more than one independent control, such as input validation, authorisation, least privilege and monitoring, so one failed control is not a breach. See also [6.3](../../principles/6.3.md), [5.14](../../principles/5.14.md).
+
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does the threat model list the assets, actors, entry points and trust boundaries?
+- [ ] Was STRIDE run over each boundary, and does each top-ranked threat have a mitigation task?
+- [ ] Defence in depth: does each top threat meet more than one independent control, so that one failed control is not a breach?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find an entry point missing from the model
 - Find a top threat with no mitigation task
+- Defence in depth: find a top threat that a single failed control would let through
 - Default verdict is FAIL until evidence shows otherwise; report findings to a file with P0-P3 severity.
 
 ## How the source skills compare

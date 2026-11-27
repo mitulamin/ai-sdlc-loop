@@ -38,6 +38,13 @@ Don't:
 3. State the root cause
 4. Fix at the source; reviewer challenges the causal chain
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Can you state the root cause in one sentence, traced back to the original trigger?
+- [ ] Does the fix change the source of the bad value, so it would also protect another caller?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Ask: would this fix prevent the same bug from another caller?

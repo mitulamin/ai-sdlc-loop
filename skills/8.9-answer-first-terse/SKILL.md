@@ -34,6 +34,13 @@ Don't:
 2. Cut to essentials
 3. Keep verbatim bits
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does each report lead with the result, with no preamble or padding?
+- [ ] Are code and error messages quoted verbatim, not paraphrased?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a paraphrased error

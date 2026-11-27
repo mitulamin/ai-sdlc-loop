@@ -33,6 +33,13 @@ Don't:
 3. Simulate failure and check signals
 4. Reviewer verifies failure is visible
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Are latency and errors measured at every boundary?
+- [ ] Are retries, breaker state and pool saturation exposed, so that an injected failure shows up in a signal?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Inject a failure: does any signal show it?

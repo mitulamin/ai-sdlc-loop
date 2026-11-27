@@ -35,7 +35,7 @@ For each phase that runs:
 
 ### Design
 
-Producer: [design-producer](../agents/design-producer.md), which loads each skill's dos and don'ts together. Reviewer: [design-reviewer](../agents/design-reviewer.md), which loads only each skill's adversarial reviewer checks and don'ts.
+Producer: [design-producer](../agents/design-producer.md), which loads each skill's dos and don'ts together, its related practices and its Self-check. Reviewer: [design-reviewer](../agents/design-reviewer.md), which loads only each skill's adversarial reviewer checks and don'ts.
 
 Skill IDs: 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 2.10, 2.12, 2.13, 2.14, 2.15, 2.16, 2.17, 2.18, 2.19.
 

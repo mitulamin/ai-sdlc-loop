@@ -35,6 +35,13 @@ Don't:
 3. Re-read the diff hunk by hunk against the task
 4. Reviewer flags hunks that serve no part of the task
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does every hunk of the diff trace to the task?
+- [ ] Is the diff free of unrelated formatting, renames and refactors, with other problems noted in the run log instead?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a hunk unrelated to the task

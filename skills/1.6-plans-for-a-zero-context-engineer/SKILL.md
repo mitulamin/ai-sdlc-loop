@@ -39,6 +39,14 @@ Don't:
 3. Readiness reviewer simulates a zero-context engineer and lists blockers
 4. Fix blockers, then dispatch
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does every step name the exact file paths, the functions and the test file it touches?
+- [ ] Does every step fit in a few minutes of work and name the command that proves it?
+- [ ] Could an engineer with no earlier context carry out step 1 from the plan alone, with the spec excerpt, conventions and locked decisions it needs?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Try to execute step 1 knowing only the plan: what is missing?

@@ -39,6 +39,13 @@ Don't:
 3. Fix until the test passes
 4. Keep the test as a guard and verify end to end
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Did a failing test reproduce the bug before the fix, and does it fail again when the fix is reverted?
+- [ ] Was the case localised and reduced, and is there end-to-end evidence that the fix works?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Revert the fix: does the guard test fail?

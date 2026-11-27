@@ -35,6 +35,13 @@ Don't:
 3. Check levels
 4. Reviewer parses logs as JSON
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is every log line a structured event with a consistent schema and context fields such as ids and the operation?
+- [ ] Are levels used consistently, with error kept for conditions that need action?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find an unstructured log line

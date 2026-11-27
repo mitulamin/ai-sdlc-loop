@@ -37,7 +37,7 @@ For each phase that runs:
 
 ### Learn
 
-Producer: [learn-producer](../agents/learn-producer.md), which loads each skill's dos and don'ts together. Reviewer: [learn-reviewer](../agents/learn-reviewer.md), which loads only each skill's adversarial reviewer checks and don'ts.
+Producer: [learn-producer](../agents/learn-producer.md), which loads each skill's dos and don'ts together, its related practices and its Self-check. Reviewer: [learn-reviewer](../agents/learn-reviewer.md), which loads only each skill's adversarial reviewer checks and don'ts.
 
 Skill IDs: 9.1, 9.2, 9.3, 9.5, 9.6, 9.7, 9.8, 9.9, 9.10, 9.11, 9.12.
 

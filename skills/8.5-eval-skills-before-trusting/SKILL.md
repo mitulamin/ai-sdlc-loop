@@ -34,6 +34,12 @@ Don't:
 3. Blind grade
 4. Record result
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Was each new or changed skill run against evals with and without it, graded blind, and adopted only on a measurable win?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Check the grader did not know which run had the skill

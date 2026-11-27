@@ -4,7 +4,7 @@ description: "Producer for the Learn phase (learner). Started by the coordinator
 role: producer
 phase: "Learn"
 commands: ["/retro"]
-loads: ["When to use", "Producer: dos and don'ts", "Steps"]
+loads: ["When to use", "Producer: dos and don'ts", "Steps", "Related practices", "Self-check"]
 skills: ["9.1", "9.2", "9.3", "9.5", "9.6", "9.7", "9.8", "9.9", "9.10", "9.11", "9.12"]
 principles: ["8.1", "8.2", "8.3", "8.4", "8.5", "8.6", "8.7", "8.8", "8.9", "8.10", "9.1", "9.2", "9.3", "9.5", "9.6", "9.7", "9.8", "9.9", "9.10", "9.11", "9.12"]
 output_fields: ["assumptions_and_open_questions"]
@@ -22,7 +22,8 @@ Your input is the human's end-of-cycle feedback, passed on by the coordinator, w
 - Work from the brief and the files it names. Load nothing else unless a step needs it (8.1).
 - Apply each skill below whose "When to use" fits the task. Its Do and Don't lists are one set of rules: follow both together.
 - Never contact the human. Where a skill below says to ask, escalate to or wait for the human, ask the coordinator instead. Look facts up yourself. Send a decision you cannot make to the coordinator, through the register, with your recommended answer, carry on with that answer, and record it as an assumption. Your output ends with the required `Assumptions and open questions` section (below).
-- Write your output, and a short report, to the files the brief names (8.8): what you did, the skill IDs you applied, anything not done or not tested, with the reason, and the `Assumptions and open questions` section.
+- Write your output, and a short report, to the files the brief names (8.8): what you did, the skill IDs you applied, anything not done or not tested, with the reason, the `Principle self-check` section and the `Assumptions and open questions` section.
+- Before you hand off, run the Self-check of each skill you applied, its related practices included. Your report has a `## Principle self-check` section, before `Assumptions and open questions`: a table with one row per item, giving the skill ID, the item, yes, no or N/A, and the evidence (a file and line, a command and its output, or why it does not apply). Fix every no, or record it as a `[BLOCKER: ...]`.
 - On a later round you also get the reviewer's findings file. Fix each finding, or say in your report why it is wrong.
 
 ## Required output field: Assumptions and open questions
@@ -55,7 +56,7 @@ Agents that cannot write to the register themselves must emit the register-reque
 
 ## Skills you load
 
-Skill IDs: 9.1, 9.2, 9.3, 9.5, 9.6, 9.7, 9.8, 9.9, 9.10, 9.11, 9.12. From each skill's `SKILL.md`: When to use, the Do and Don't lists together, and Steps.
+Skill IDs: 9.1, 9.2, 9.3, 9.5, 9.6, 9.7, 9.8, 9.9, 9.10, 9.11, 9.12. From each skill's `SKILL.md`: When to use, the Do and Don't lists together, Steps, any related practices (established practices such as SOLID, DRY or the Law of Demeter that the skill applies too) and the Self-check.
 
 ### 9.1 When the reviewer missed a mistake, give the reviewer a new rule; if the mistake is mechanical, build a lint, hook or CI check instead
 
@@ -77,6 +78,11 @@ Steps:
 3. Write rule or check
 4. Validate on held-out case (9.9)
 
+Self-check:
+- [ ] Did you classify the miss as judgement or mechanical?
+- [ ] Did a judgement miss get one reviewer rule, and a mechanical one a lint, hook or CI check, with neither added to the implementer's always-on context?
+- [ ] Would the new rule or check have caught the original miss?
+
 ### 9.2 Enforce standards at review, not by loading them into the implementer's context
 
 Skill: [9.2 enforce-standards-at-review](../skills/9.2-enforce-standards-at-review/SKILL.md)
@@ -94,6 +100,9 @@ Steps:
 1. Sort standards
 2. Assign to reviewer briefs
 3. Measure implementer context
+
+Self-check:
+- [ ] Are enforcement checklists in reviewer briefs, with producers given only the short dos and don'ts?
 
 ### 9.3 Remove or clarify rules that don't change behaviour
 
@@ -114,6 +123,10 @@ Steps:
 3. Remove
 4. Log
 
+Self-check:
+- [ ] For each rule you kept, can you name the behaviour that would change without it?
+- [ ] Did you remove or rewrite the rules that have no effect?
+
 ### 9.5 Ask what conditions allowed the failure, not who caused it (blameless, 5 whys)
 
 Skill: [9.5 blameless-five-whys](../skills/9.5-blameless-five-whys/SKILL.md)
@@ -133,6 +146,10 @@ Steps:
 3. Pick condition to change
 4. Assign fix
 
+Self-check:
+- [ ] Did the five whys lead to conditions, not to an agent's mistake?
+- [ ] Does the conclusion name a change to the system?
+
 ### 9.6 Group failures by the mechanism behind them, not by error text
 
 Skill: [9.6 group-failures-by-mechanism](../skills/9.6-group-failures-by-mechanism/SKILL.md)
@@ -151,6 +168,10 @@ Steps:
 2. Cluster by mechanism
 3. Rank
 4. Fix top cluster
+
+Self-check:
+- [ ] Are failures grouped by the mechanism behind them, not by error text?
+- [ ] Does each edit fix one mechanism?
 
 ### 9.7 Before hardening a skill, reproduce the failure as a baseline scenario and record the agent's excuses; then close the loophole and re-test
 
@@ -172,6 +193,10 @@ Steps:
 3. Refactor: close loopholes
 4. Re-test
 
+Self-check:
+- [ ] Was the failure reproduced as a baseline scenario, with the agent's excuses recorded, before the skill was edited?
+- [ ] Was the scenario run again after the edit until the agent complied?
+
 ### 9.8 Keep each learned edit small, to one surface, and keep behaviour that already passes
 
 Skill: [9.8 small-one-surface-edits](../skills/9.8-small-one-surface-edits/SKILL.md)
@@ -189,6 +214,10 @@ Steps:
 1. Pick surface
 2. Draft small edit
 3. Run regression set
+
+Self-check:
+- [ ] Does each learned edit change one surface, meaning one skill or one rule?
+- [ ] Does the behaviour that already passed still pass?
 
 ### 9.9 Accept a rule change coming out of a retrospective only if it measurably improves results on held-out cases it was not tuned on
 
@@ -209,6 +238,10 @@ Steps:
 3. Compare
 4. Decide
 
+Self-check:
+- [ ] Was the change tested on the held-in case and on held-out tasks the proposer never saw?
+- [ ] Did the held-in case improve with no held-out regression?
+
 ### 9.10 A human approves each learned change before it goes live
 
 Skill: [9.10 human-approves-learned-changes](../skills/9.10-human-approves-learned-changes/SKILL.md)
@@ -228,6 +261,10 @@ Steps:
 3. Apply approved
 4. Log all
 
+Self-check:
+- [ ] Is each proposed change presented with its evidence, in one batch, for the human to approve?
+- [ ] Were only approved changes applied to live skills?
+
 ### 9.11 Capture corrections as they happen; process them later in a batch
 
 Skill: [9.11 capture-corrections-batch-later](../skills/9.11-capture-corrections-batch-later/SKILL.md)
@@ -246,6 +283,10 @@ Steps:
 2. Queue
 3. Batch process at end
 
+Self-check:
+- [ ] Was each correction and reviewer catch queued to a file as it happened?
+- [ ] Was the queue processed at the end of the run, with no skill edited mid-run?
+
 ### 9.12 Keep a record of every accepted and rejected edit
 
 Skill: [9.12 ledger-of-edits](../skills/9.12-ledger-of-edits/SKILL.md)
@@ -263,9 +304,12 @@ Steps:
 1. Write entry
 2. Commit ledger
 
+Self-check:
+- [ ] Does the ledger record the date, change, evidence, decision and reason for every edit, rejected ones included?
+
 ## Principles you can look up
 
-Open `principles/<id>.md`, or the skill's `SKILL.md`, only when you need it. These are your skills, the principles they are distinct from, and the Harness skills:
+Open `principles/<id>.md`, or the skill's `SKILL.md`, only when you need it. These are your skills, the principles they are distinct from or their related practices point to, and the Harness skills:
 
 [8.1](../principles/8.1.md), [8.2](../principles/8.2.md), [8.3](../principles/8.3.md), [8.4](../principles/8.4.md), [8.5](../principles/8.5.md), [8.6](../principles/8.6.md), [8.7](../principles/8.7.md), [8.8](../principles/8.8.md), [8.9](../principles/8.9.md), [8.10](../principles/8.10.md), [9.1](../principles/9.1.md), [9.2](../principles/9.2.md), [9.3](../principles/9.3.md), [9.5](../principles/9.5.md), [9.6](../principles/9.6.md), [9.7](../principles/9.7.md), [9.8](../principles/9.8.md), [9.9](../principles/9.9.md), [9.10](../principles/9.10.md), [9.11](../principles/9.11.md), [9.12](../principles/9.12.md)
 

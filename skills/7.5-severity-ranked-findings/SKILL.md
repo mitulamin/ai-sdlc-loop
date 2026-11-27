@@ -32,6 +32,13 @@ Don't:
 2. Assign severity
 3. Decide block
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does every finding carry a severity from P0 to P3 that matches its impact?
+- [ ] Does blocking rest on P0 and P1 findings only?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a mis-ranked finding (e.g. data loss as P2)

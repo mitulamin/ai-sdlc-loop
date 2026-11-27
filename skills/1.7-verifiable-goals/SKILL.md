@@ -36,6 +36,14 @@ Don't:
 3. Build until it passes
 4. Record the evidence
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does every task end in 'done when <command or test> passes'?
+- [ ] Is every criterion numbered Given/When/Then, and does each check name the criterion it proves?
+- [ ] Would each check fail if its goal were unmet?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a goal whose check could pass while the goal is unmet

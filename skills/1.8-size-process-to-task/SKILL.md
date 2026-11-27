@@ -36,6 +36,14 @@ Don't:
 3. Note the class in the run log
 4. Re-triage if scope grows
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Did you record the triage call (trivial, standard or risky) and its reason in the run log?
+- [ ] Does every change you triaged as trivial stay clear of risky areas (security, data, public API)?
+- [ ] Did every piece of ceremony you ran produce a decision or a check, with tests and review kept whatever the size?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a 'trivial' change that touched risky areas

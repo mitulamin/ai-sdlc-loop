@@ -35,6 +35,14 @@ Don't:
 3. Test each endpoint's failure path
 4. Reviewer diffs error bodies across endpoints
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Do all endpoints return one error shape, with a code, message, details and correlation id?
+- [ ] Are exceptions mapped to that shape in one place, with no stack trace reaching a client?
+- [ ] Are the error codes documented in the contract?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find two endpoints with different error shapes

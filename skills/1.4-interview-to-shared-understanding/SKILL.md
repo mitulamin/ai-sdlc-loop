@@ -46,6 +46,14 @@ Don't:
 3. Fold answers in as locked decisions; ask the next layer only if branches remain
 4. Freeze into spec.md with the decision sheet and the parked items
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Did you read the repo, docs, brief and register first, so that no question asks for something a lookup would answer?
+- [ ] Does every question come from this goal, in the one format, with the recommended option first and its reason?
+- [ ] Is every branch of the decision tree decided or parked with a reason and a revisit trigger, and recorded in the decision sheet?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - List any decision the build made that the interview never covered

@@ -35,6 +35,13 @@ Don't:
 3. Check suite time
 4. Reviewer audits the mix
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is most behaviour covered by fast unit tests, with integration tests at real boundaries such as the database and HTTP?
+- [ ] Are end-to-end tests kept to the critical journeys, with no behaviour covered only end to end?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a behaviour only covered by e2e

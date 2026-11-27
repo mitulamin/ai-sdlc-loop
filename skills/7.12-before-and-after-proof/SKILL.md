@@ -43,6 +43,13 @@ Don't:
 4. Publish the pair in the PR body, proof first
 5. Reviewer checks the proof matches the change described
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does each visible change have a before-and-after pair of the same screen, state and size, cropped to what changed, or an after alone marked as new?
+- [ ] Was the proof captured in a clean environment, checked for private data, hosted off the main history, and put near the top of the PR body?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Check the before and after really show the same screen, state and size
