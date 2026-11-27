@@ -35,6 +35,14 @@ Don't:
 3. Simplify once green
 4. Reviewer tries to delete lines
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does every line serve the current acceptance check, with no option, hook or generality nobody asked for?
+- [ ] Did you use the standard library and existing code before writing new code?
+- [ ] Once green, did you delete the code paths no test or requirement needs?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - List lines that can be deleted with all checks still green

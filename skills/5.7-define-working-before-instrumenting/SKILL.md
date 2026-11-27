@@ -35,6 +35,13 @@ Don't:
 3. Instrument
 4. Reviewer maps each signal to an SLI
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Did you write a few indicators of 'working', each with a target, before instrumenting?
+- [ ] Does every signal you added measure one of those indicators, and does each indicator have a signal?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a signal tied to no indicator

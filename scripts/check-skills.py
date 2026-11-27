@@ -17,7 +17,13 @@ Standard library only. Exits 1 on any error. Checks:
   (assumptions and open questions) in its front matter, and its section has the register-request
   block and the instruction for agents that cannot write to the register
 - skill 1.1 (surface assumptions) carries that instruction; other skills carry no output contract
+- every SKILL.md has a Self-check section with at least one item
+- the related_practices of each principle in data/principles.json match its skill: one Related practices
+  entry per practice, in the same order, linking its guide section and its see_also principles, and a
+  Self-check item and an adversarial reviewer check that start with the practice's name
 """
+import functools
+import importlib.util
 import json
 import re
 import sys
@@ -44,6 +50,42 @@ def front_matter(text):
         if sep:
             fm[key.strip()] = value.strip()
     return fm
+
+
+@functools.cache
+def skill_sections():
+    """The SKILL.md section splitter from scripts/build-agents.py, so both scripts read skills the same way."""
+    spec = importlib.util.spec_from_file_location("build_agents", ROOT / "scripts" / "build-agents.py")
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod.sections, mod.SELF_CHECK_ITEM
+
+
+def check_practices(folder, text, practices, errors):
+    """The skill's Related practices, Self-check and reviewer checks must match the principle's related_practices."""
+    sections, item = skill_sections()
+    secs = sections(text)
+    checks = [l for l in secs.get("Self-check", "").splitlines() if l.startswith(item)]
+    if not checks:
+        errors.append(f"{folder}/SKILL.md: needs a Self-check section with at least one '{item}' item")
+    entries = [l for l in secs.get("Related practices", "").splitlines() if l.startswith("- ")]
+    names = [m[1] if (m := re.match(r"- \*\*([^*]+)\*\*", l)) else l for l in entries]
+    want = [r["name"] for r in practices]
+    if names != want:
+        errors.append(f"{folder}/SKILL.md: Related practices entries {names} differ from related_practices in data/principles.json {want}")
+        return
+    reviewer = next((v for k, v in secs.items() if k.startswith("Adversarial reviewer")), "")
+    for r, entry in zip(practices, entries):
+        n = r["name"]
+        if f"](../../{r['guide']})" not in entry:
+            errors.append(f"{folder}/SKILL.md: Related practices entry {n!r} must link ../../{r['guide']}")
+        for sid in r["see_also"]:
+            if f"](../../principles/{sid}.md)" not in entry:
+                errors.append(f"{folder}/SKILL.md: Related practices entry {n!r} must link its see_also principle {sid}")
+        if not any(c.startswith(f"{item}{n}: ") for c in checks):
+            errors.append(f"{folder}/SKILL.md: Self-check needs an item starting '{item}{n}: '")
+        if not any(l.startswith(f"- {n}: ") for l in reviewer.splitlines()):
+            errors.append(f"{folder}/SKILL.md: adversarial reviewer section needs a check starting '- {n}: '")
 
 
 def check_agents(errors):
@@ -156,6 +198,8 @@ def main():
         desc = fm.get("description", "")
         if not (desc.startswith('"') and desc.endswith('"')):
             errors.append(f"{e['folder']}/SKILL.md: quote the description so the front matter is valid YAML")
+        if pid in active:
+            check_practices(e["folder"], skill.read_text(encoding="utf-8"), active[pid].get("related_practices", []), errors)
 
     tax_ids = [i for p in tax["phases"] for i in p["principles"]]
     if sorted(tax_ids) != sorted(active):

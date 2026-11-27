@@ -37,7 +37,7 @@ For each phase that runs:
 
 ### Verify
 
-Producer: [verify-producer](../agents/verify-producer.md), which loads each skill's dos and don'ts together. Reviewer: [verify-reviewer](../agents/verify-reviewer.md), which loads only each skill's adversarial reviewer checks and don'ts.
+Producer: [verify-producer](../agents/verify-producer.md), which loads each skill's dos and don'ts together, its related practices and its Self-check. Reviewer: [verify-reviewer](../agents/verify-reviewer.md), which loads only each skill's adversarial reviewer checks and don'ts.
 
 Skill IDs: 4.1, 4.2, 4.3, 4.6, 4.7, 4.8, 4.9, 4.10.
 
@@ -52,7 +52,7 @@ Skill IDs: 4.1, 4.2, 4.3, 4.6, 4.7, 4.8, 4.9, 4.10.
 
 ### Debug
 
-Producer: [debug-producer](../agents/debug-producer.md), which loads each skill's dos and don'ts together. Reviewer: [debug-reviewer](../agents/debug-reviewer.md), which loads only each skill's adversarial reviewer checks and don'ts.
+Producer: [debug-producer](../agents/debug-producer.md), which loads each skill's dos and don'ts together, its related practices and its Self-check. Reviewer: [debug-reviewer](../agents/debug-reviewer.md), which loads only each skill's adversarial reviewer checks and don'ts.
 
 Skill IDs: 5.1, 5.2, 5.3, 5.5, 5.7, 5.8, 5.9, 5.11, 5.12, 5.13, 5.14.
 

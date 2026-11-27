@@ -34,6 +34,13 @@ Don't:
 3. Keep under ~10 min
 4. Reviewer breaks a test to see CI catch it
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Do lint, types, tests and security checks run on every push, fast enough to run per commit?
+- [ ] Does the change ship as a small batch?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Introduce a deliberate failure: does CI catch it?

@@ -35,10 +35,26 @@ Don't:
 3. List brittle/illusory tests
 4. Fix or delete
 
+## Related practices
+
+Established practices this skill applies alongside its principle. Each has a self-check item and a reviewer check below.
+
+- **Goodhart's law** ([guide](../../guides/developer/quality-principles.md#goodharts-law)): a measure that becomes a target stops being a good measure. Coverage, test counts and pass rates can all be met without the behaviour being checked, so treat each as a question and pair it with the outcome it stands for: tests that fail when the behaviour breaks. See also [5.7](../../principles/5.7.md).
+
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Are mocks used only at seams, never for internal modules?
+- [ ] Would each test fail if the behaviour it covers were broken or deleted?
+- [ ] Is every quality claim backed by tests that can fail, with coverage treated as a hint?
+- [ ] Goodhart's law: is every metric you report, such as coverage, a test count or a pass rate, backed by the outcome it stands for rather than raised for its own sake?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a test that passes with the implementation deleted
 - Find mocks of internal modules
+- Goodhart's law: find a metric raised without the outcome it stands for, such as coverage from tests that assert nothing
 - Default verdict is FAIL until evidence shows otherwise; report findings to a file with P0-P3 severity.
 
 ## How the source skills compare

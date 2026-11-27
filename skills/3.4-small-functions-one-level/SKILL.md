@@ -35,6 +35,13 @@ Don't:
 3. Extract mixed levels
 4. Reviewer flags mixed-level functions
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does each function do one job at one level of abstraction, with I/O, parsing and business rules kept apart?
+- [ ] Does each function fit on one screen, without being split into trivial one-line helpers?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a function doing I/O and rules together

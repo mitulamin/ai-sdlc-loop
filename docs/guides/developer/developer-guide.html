@@ -49,6 +49,7 @@
 <p>On this site: principle <a href="../../principles/3.8.html">3.8</a>, prefer clarity over cleverness.</p>
 <h3 id="unix-philosophy">Unix philosophy</h3>
 <p>Write small programs that do one thing well, and combine them, often through simple text interfaces, rather than building one large program that tries to do everything. The usual sources are Doug McIlroy&#x27;s early Unix practice and Eric Raymond&#x27;s later write-up in The Art of Unix Programming. <a href="https://en.wikipedia.org/wiki/Unix_philosophy">https://en.wikipedia.org/wiki/Unix_philosophy</a></p>
+<p>On this site: a related practice in the skill for principle <a href="../../principles/2.4.html">2.4</a>, separate orchestration from reusable service operations.</p>
 <h3 id="the-pragmatic-programmer">The Pragmatic Programmer</h3>
 <p>Andy Hunt and Dave Thomas offer a set of working habits more than a single rule: keep knowledge orthogonal, so a change in one place does not force a change in another; fix &quot;broken windows&quot; before they spread; and get a thin slice working end to end with tracer bullets. Their DRY rule, that each piece of knowledge should have one authoritative home, is covered in the <a href="quality-principles.html">companion paper</a>. <a href="https://pragprog.com/tips/">https://pragprog.com/tips/</a></p>
 <p>On this site: principle <a href="../../principles/3.14.html">3.14</a>, build in thin vertical slices, is the tracer-bullet habit applied to agents.</p>
@@ -81,6 +82,7 @@
 <p>If no new updates are made, all replicas of a piece of data will eventually agree on the last value. Werner Vogels&#x27;s essay is the standard explanation: you gain availability and scale, and you accept a window in which different readers can see different answers. <a href="https://allthingsdistributed.com/2007/12/eventually_consistent.html">https://allthingsdistributed.com/2007/12/eventually_consistent.html</a></p>
 <h3 id="the-strangler-fig-pattern">The strangler fig pattern</h3>
 <p>Martin Fowler&#x27;s name for replacing a legacy system gradually, by routing more and more work to new code until the old system can be retired, rather than attempting a risky big-bang rewrite. <a href="https://martinfowler.com/bliki/StranglerFigApplication.html">https://martinfowler.com/bliki/StranglerFigApplication.html</a></p>
+<p>On this site: a related practice in the skill for principle <a href="../../principles/2.12.html">2.12</a>, prefer adding over changing.</p>
 <h2 id="reliability">Reliability</h2>
 <p>Google&#x27;s Site Reliability Engineering books are the usual home for several of these ideas. The others are named patterns for staying up when something, inevitably, goes wrong.</p>
 <h3 id="slos-and-slis">SLOs and SLIs</h3>
@@ -97,7 +99,7 @@
 <p>Run controlled experiments, often in production, to see whether the system still behaves when things fail: a host dies, a dependency slows, a network path drops. The aim is to find weaknesses before your users do, with a limited blast radius. <a href="https://principlesofchaos.org/">https://principlesofchaos.org/</a></p>
 <h3 id="fail-fast">Fail fast</h3>
 <p>Detect bad input or a broken assumption immediately and make the failure visible, rather than carrying on with corrupted state. Failures that surface at the boundary are cheap; failures that explode three services later are not. <a href="https://www.martinfowler.com/ieeeSoftware/failFast.pdf">https://www.martinfowler.com/ieeeSoftware/failFast.pdf</a></p>
-<p>On this site: principle <a href="../../principles/6.3.html">6.3</a>, validate all external input at the boundary, is one everyday form of failing fast.</p>
+<p>On this site: principle <a href="../../principles/6.3.html">6.3</a>, validate all external input at the boundary, is one everyday form of failing fast, and fail fast is a related practice in the skill for principle <a href="../../principles/3.13.html">3.13</a>, never cut boundary validation, data-loss handling or security to save code.</p>
 <h3 id="circuit-breakers">Circuit breakers</h3>
 <p>If a dependency is failing or timing out, stop calling it for a while and fail quickly, then probe now and then to see if it has recovered. This protects both sides from a storm of retries. <a href="https://martinfowler.com/bliki/CircuitBreaker.html">https://martinfowler.com/bliki/CircuitBreaker.html</a></p>
 <p>On this site: principle <a href="../../principles/2.7.html">2.7</a>, design for failure.</p>
@@ -153,9 +155,10 @@
 <p>You do not need to become a specialist overnight, but you do need a few named habits and one standard list of the ways web apps usually go wrong.</p>
 <h3 id="defence-in-depth">Defence in depth</h3>
 <p>Do not rely on a single control. Stack independent protections, such as authentication, authorisation, network rules, encryption and monitoring, so that one failure does not open the whole system. NIST&#x27;s glossary is the official short definition. <a href="https://csrc.nist.gov/glossary/term/defense_in_depth">https://csrc.nist.gov/glossary/term/defense_in_depth</a></p>
+<p>On this site: a related practice in the skill for principle <a href="../../principles/6.1.html">6.1</a>, threat-model before hardening.</p>
 <h3 id="least-privilege">Least privilege</h3>
 <p>Give each user, service and process only the access it needs to do its job, and no more. This limits how much damage a stolen credential or a buggy service can do. <a href="https://csrc.nist.gov/glossary/term/least_privilege">https://csrc.nist.gov/glossary/term/least_privilege</a></p>
-<p>On this site: principle <a href="../../principles/6.2.html">6.2</a>, sort actions into always do, ask first and never do, applies the same thinking to what an agent may do.</p>
+<p>On this site: principle <a href="../../principles/6.2.html">6.2</a>, sort actions into always do, ask first and never do, applies the same thinking to what an agent may do, and its skill carries least privilege as a related practice for the services, tokens and roles a project creates.</p>
 <h3 id="owasp-top-10">OWASP Top 10</h3>
 <p>The OWASP Top 10 is the standard awareness list of the most critical risks to web applications, and the usual first security reading for application developers. The current edition is the 2025 list. <a href="https://owasp.org/www-project-top-ten/">https://owasp.org/www-project-top-ten/</a></p>
 <p>On this site: the <a href="../../categories/secure.html">Secure</a> category, especially principle <a href="../../principles/6.3.html">6.3</a> (validate input, parameterise queries, encode output).</p>
@@ -169,11 +172,13 @@
 <p>Mel Conway&#x27;s 1968 observation: organisations design systems that mirror their communication structure. If you want a different architecture, you often have to change how teams talk, or accept that the org chart will show up in the code. <a href="https://melconway.com/Home/Conways_Law.html">https://melconway.com/Home/Conways_Law.html</a></p>
 <h3 id="postels-law">Postel&#x27;s law</h3>
 <p>Also called the robustness principle, from Jon Postel&#x27;s TCP work: be conservative in what you send, and liberal in what you accept. It helped early internet protocols interoperate. Later guidance, including RFC 9413, cautions that being too liberal about bad input can hide bugs and create security holes, so apply it with care. The original wording is in RFC 793: <a href="https://www.rfc-editor.org/rfc/rfc793">https://www.rfc-editor.org/rfc/rfc793</a></p>
+<p>On this site: a related practice in the skill for principle <a href="../../principles/6.3.html">6.3</a>, validate all external input at the boundary, in its strict form: conservative in what you send, strict at trust boundaries in what you accept.</p>
 <h3 id="hyrums-law">Hyrum&#x27;s Law</h3>
 <p>With enough users of an API, they will come to depend on every observable behaviour, even the accidental ones you never promised. That is why a &quot;harmless&quot; implementation change sometimes breaks people, and why tests and explicit contracts matter. <a href="https://www.hyrumslaw.com/">https://www.hyrumslaw.com/</a></p>
 <p>On this site: principle <a href="../../principles/2.12.html">2.12</a>, prefer adding over changing.</p>
 <h3 id="galls-law">Gall&#x27;s Law</h3>
 <p>A complex system that works has usually evolved from a simple system that worked; a complex system designed from scratch rarely does. Start simple, then grow. The usual citation is John Gall&#x27;s Systemantics (1975). <a href="https://en.wikipedia.org/wiki/John_Gall_%28author%29">https://en.wikipedia.org/wiki/John_Gall_%28author%29</a></p>
+<p>On this site: a related practice in the skill for principle <a href="../../principles/3.14.html">3.14</a>, build in thin vertical slices.</p>
 <h3 id="hofstadters-law">Hofstadter&#x27;s Law</h3>
 <p>It always takes longer than you expect, even when you take Hofstadter&#x27;s Law into account. Coined in Douglas Hofstadter&#x27;s Gödel, Escher, Bach, it is a humorous warning about estimation, not a planning method. <a href="https://en.wikipedia.org/wiki/Hofstadter%27s_law">https://en.wikipedia.org/wiki/Hofstadter%27s_law</a></p>
 <h3 id="brookss-law">Brooks&#x27;s Law</h3>

@@ -35,6 +35,13 @@ Don't:
 3. Justify new deps in the PR
 4. Reviewer challenges every added dependency
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Did you check the standard library, platform features and existing dependencies before adding a package?
+- [ ] Does each new dependency have a one-line justification (size, maintenance, licence), and duplicate no installed library?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a new dependency replaceable by stdlib or an existing one

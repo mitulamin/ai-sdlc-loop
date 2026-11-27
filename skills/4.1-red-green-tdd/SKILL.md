@@ -41,6 +41,13 @@ Don't:
 4. Refactor, then repeat
 5. Reviewer checks test-first order in the history
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Did each behaviour start with one failing test that you watched fail for the right reason?
+- [ ] Did each cycle cover one seam and one behaviour, with the minimum code to pass and refactoring only on green?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find code with no test that failed first

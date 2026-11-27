@@ -34,6 +34,13 @@ Don't:
 3. Prove reachability
 4. Write finding with fix
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does every finding cross a real trust boundary through a reachable path?
+- [ ] Does each one carry source evidence, a safe reproduction, a priority and the smallest fix?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Try to show the finding is unreachable

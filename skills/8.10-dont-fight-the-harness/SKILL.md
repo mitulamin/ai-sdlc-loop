@@ -32,6 +32,13 @@ Don't:
 2. Choose native path
 3. Proceed
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Did you detect and use the existing worktrees, sandboxes and native tools before reaching for a workaround?
+- [ ] Did you avoid nested worktrees and reimplementing a native feature?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a workaround duplicating a native tool

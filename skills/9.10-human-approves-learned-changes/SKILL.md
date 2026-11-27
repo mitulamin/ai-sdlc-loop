@@ -33,6 +33,13 @@ Don't:
 3. Apply approved
 4. Log all
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is each proposed change presented with its evidence, in one batch, for the human to approve?
+- [ ] Were only approved changes applied to live skills?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a live change with no approval record

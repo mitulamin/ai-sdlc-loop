@@ -35,6 +35,13 @@ Don't:
 3. Fix findings
 4. Re-review if changes were material
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Was the work reviewed by a fresh reviewer that did not write it, before the next task started?
+- [ ] Were blocking findings fixed before moving on?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Check the reviewer was a fresh context

@@ -34,10 +34,25 @@ Don't:
 3. Restore any removed safety code
 4. Reviewer audits the diff for removed guards
 
+## Related practices
+
+Established practices this skill applies alongside its principle. Each has a self-check item and a reviewer check below.
+
+- **Fail fast** ([guide](../../guides/developer/quality-principles.md#fail-fast)): detect invalid input, broken invariants and missing config at the point of entry, at startup or at the boundary, and fail loudly rather than carry on with data that is already wrong. Failing fast is for operators and developers: users still get a controlled, consistent error. See also [6.3](../../principles/6.3.md), [2.7](../../principles/2.7.md).
+
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does the change keep every boundary validation, data-loss guard, security check and accessibility feature?
+- [ ] Is every error handled or propagated, with none swallowed to simplify the flow?
+- [ ] Fail fast: are invalid input, broken invariants and missing config caught at startup or at the boundary and reported loudly, with users still given a controlled error?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a removed validation, catch or auth check
 - Find an error swallowed silently
+- Fail fast: find invalid input, a broken invariant or missing config that the code carries on with instead of reporting at entry
 - Default verdict is FAIL until evidence shows otherwise; report findings to a file with P0-P3 severity.
 
 ## How the source skills compare

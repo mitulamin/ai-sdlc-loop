@@ -35,7 +35,7 @@ For each phase that runs:
 
 ### Build
 
-Producer: [build-producer](../agents/build-producer.md), which loads each skill's dos and don'ts together. Reviewer: [build-reviewer](../agents/build-reviewer.md), which loads only each skill's adversarial reviewer checks and don'ts.
+Producer: [build-producer](../agents/build-producer.md), which loads each skill's dos and don'ts together, its related practices and its Self-check. Reviewer: [build-reviewer](../agents/build-reviewer.md), which loads only each skill's adversarial reviewer checks and don'ts.
 
 Skill IDs: 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 3.9, 3.10, 3.11, 3.12, 3.13, 3.14, 5.4.
 

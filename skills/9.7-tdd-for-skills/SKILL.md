@@ -34,6 +34,13 @@ Don't:
 3. Refactor: close loopholes
 4. Re-test
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Was the failure reproduced as a baseline scenario, with the agent's excuses recorded, before the skill was edited?
+- [ ] Was the scenario run again after the edit until the agent complied?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Check a baseline failure was recorded before the edit

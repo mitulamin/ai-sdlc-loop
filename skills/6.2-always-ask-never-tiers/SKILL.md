@@ -34,10 +34,25 @@ Don't:
 3. Enforce with hooks where possible
 4. Reviewer audits transcript against tiers
 
+## Related practices
+
+Established practices this skill applies alongside its principle. Each has a self-check item and a reviewer check below.
+
+- **Least privilege** ([guide](../../guides/developer/developer-guide.md#least-privilege)): give each agent, service, token and user role only the access its task needs, scoped and time-limited where the platform allows: read-only by default, write access only where the task writes. See also [6.4](../../principles/6.4.md).
+
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Are the always, ask-first and never lists written in the always-on rules file?
+- [ ] Did you take no never-action, and no ask-first action without the coordinator's answer?
+- [ ] Least privilege: does each agent, service account, token and user role have only the access and scopes its task uses?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a never-action taken
 - Find an ask-first action taken without asking
+- Least privilege: find a token, role, account or agent tool with more access than its task uses
 - Default verdict is FAIL until evidence shows otherwise; report findings to a file with P0-P3 severity.
 
 ## How the source skills compare

@@ -33,6 +33,13 @@ Don't:
 3. Compare
 4. Decide
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Was the change tested on the held-in case and on held-out tasks the proposer never saw?
+- [ ] Did the held-in case improve with no held-out regression?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Check held-out tasks were unseen by the proposer

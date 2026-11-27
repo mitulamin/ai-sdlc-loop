@@ -35,6 +35,14 @@ Don't:
 3. Map relations
 4. Reviewer finds leaked models
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does each bounded context have a name, an owner and the model it owns?
+- [ ] Is there a context map, and does every type that crosses contexts go through a translation point?
+- [ ] Is the strategic design sized to the app, rather than full DDD for a small one?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a type used across contexts without translation

@@ -41,11 +41,27 @@ Don't:
 3. Add injection and malformed-input tests
 4. Reviewer attempts injection and fuzzes the boundary
 
+## Related practices
+
+Established practices this skill applies alongside its principle. Each has a self-check item and a reviewer check below.
+
+- **Robustness principle** ([guide](../../guides/developer/developer-guide.md#postels-law)): be conservative in what you send. At a trust boundary, be strict in what you accept: validate against the schema and reject malformed input with the standard error, rather than guess what it meant, as RFC 9413 advises. Tolerance belongs only where the contract allows it, such as ignoring unknown fields. See also [2.12](../../principles/2.12.md).
+
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is all external input, third-party responses included, validated against a schema at the boundary?
+- [ ] Are all queries parameterised and all output encoded for its context, with no SQL or shell built by concatenation?
+- [ ] Is invalid input rejected early, with the standard error shape?
+- [ ] Robustness principle: is everything you send strictly conformant, and is malformed input at a trust boundary rejected rather than guessed at or silently repaired?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Attempt SQL, XSS and command injection on each input
 - Find string-built queries
 - Find a third-party response used without checks
+- Robustness principle: find malformed input at a trust boundary that is accepted or silently repaired instead of rejected
 - Default verdict is FAIL until evidence shows otherwise; report findings to a file with P0-P3 severity.
 
 ## How the source skills compare

@@ -34,6 +34,14 @@ Don't:
 3. Write rule or check
 4. Validate on held-out case (9.9)
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Did you classify the miss as judgement or mechanical?
+- [ ] Did a judgement miss get one reviewer rule, and a mechanical one a lint, hook or CI check, with neither added to the implementer's always-on context?
+- [ ] Would the new rule or check have caught the original miss?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Check the new rule would have caught the original miss

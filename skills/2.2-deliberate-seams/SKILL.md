@@ -35,10 +35,29 @@ Don't:
 3. Write tests against seams
 4. Reviewer checks no test reaches past a seam
 
+## Related practices
+
+Established practices this skill applies alongside its principle. Each has a self-check item and a reviewer check below.
+
+- **Liskov substitution principle** (SOLID; [guide](../../guides/developer/quality-principles.md#liskov-substitution-principle)): every implementation behind a seam, test fakes included, honours the whole contract: it accepts what the interface accepts, keeps its guarantees and throws no new kind of error. A substitute that needs a type check or a special case at the call site breaks the seam. See also [2.9](../../principles/2.9.md).
+- **Interface segregation principle** (SOLID; [guide](../../guides/developer/quality-principles.md#interface-segregation-principle)): shape each seam's interface for the client that uses it. Several small interfaces beat one fat one that ties callers to methods they never call. See also [2.1](../../principles/2.1.md).
+
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is each seam named (I/O, clock, network, storage), with an interface that production code injects the real thing into?
+- [ ] Does every external effect go through a seam?
+- [ ] Do tests attach only at seams, so a refactor that keeps behaviour keeps them green?
+- [ ] Liskov substitution principle: does every implementation, adapter and fake at a seam honour the whole contract, with no narrower input, weaker guarantee or unlisted error?
+- [ ] Interface segregation principle: does each seam interface hold only the operations its client uses?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a test that breaks on a refactor that kept behaviour
 - Find an external effect with no seam
+- Liskov substitution principle: find an implementation or fake at a seam that rejects valid input, weakens a guarantee or throws an error the contract does not list
+- Interface segregation principle: find a client that depends on interface methods it never calls
 - Default verdict is FAIL until evidence shows otherwise; report findings to a file with P0-P3 severity.
 
 ## How the source skills compare

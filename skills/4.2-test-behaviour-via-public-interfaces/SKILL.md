@@ -35,6 +35,13 @@ Don't:
 3. Assert outcome
 4. Reviewer refactors internals mentally: do tests break?
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does every test drive the code through its public API or CLI, and assert on outputs or observable effects?
+- [ ] Would the tests stay green through an internal refactor that keeps behaviour?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a test that reaches into internals

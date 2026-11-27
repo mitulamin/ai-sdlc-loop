@@ -34,6 +34,13 @@ Don't:
 3. Brief worker
 4. Review what was unused
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does each brief hold only the spec section, files and standards its task needs, pointing to files rather than pasting them?
+- [ ] Did the worker have everything it needed, and use what it was given?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find context in the brief the worker never used

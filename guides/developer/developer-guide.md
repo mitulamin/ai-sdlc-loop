@@ -38,6 +38,8 @@ On this site: principle [3.8](../../docs/principles/3.8.html), prefer clarity ov
 
 Write small programs that do one thing well, and combine them, often through simple text interfaces, rather than building one large program that tries to do everything. The usual sources are Doug McIlroy's early Unix practice and Eric Raymond's later write-up in The Art of Unix Programming. [https://en.wikipedia.org/wiki/Unix_philosophy](https://en.wikipedia.org/wiki/Unix_philosophy)
 
+On this site: a related practice in the skill for principle [2.4](../../docs/principles/2.4.html), separate orchestration from reusable service operations.
+
 ### The Pragmatic Programmer
 
 Andy Hunt and Dave Thomas offer a set of working habits more than a single rule: keep knowledge orthogonal, so a change in one place does not force a change in another; fix "broken windows" before they spread; and get a thin slice working end to end with tracer bullets. Their DRY rule, that each piece of knowledge should have one authoritative home, is covered in the [companion paper](quality-principles.md). [https://pragprog.com/tips/](https://pragprog.com/tips/)
@@ -102,6 +104,8 @@ If no new updates are made, all replicas of a piece of data will eventually agre
 
 Martin Fowler's name for replacing a legacy system gradually, by routing more and more work to new code until the old system can be retired, rather than attempting a risky big-bang rewrite. [https://martinfowler.com/bliki/StranglerFigApplication.html](https://martinfowler.com/bliki/StranglerFigApplication.html)
 
+On this site: a related practice in the skill for principle [2.12](../../docs/principles/2.12.html), prefer adding over changing.
+
 ## Reliability
 
 Google's Site Reliability Engineering books are the usual home for several of these ideas. The others are named patterns for staying up when something, inevitably, goes wrong.
@@ -134,7 +138,7 @@ Run controlled experiments, often in production, to see whether the system still
 
 Detect bad input or a broken assumption immediately and make the failure visible, rather than carrying on with corrupted state. Failures that surface at the boundary are cheap; failures that explode three services later are not. [https://www.martinfowler.com/ieeeSoftware/failFast.pdf](https://www.martinfowler.com/ieeeSoftware/failFast.pdf)
 
-On this site: principle [6.3](../../docs/principles/6.3.html), validate all external input at the boundary, is one everyday form of failing fast.
+On this site: principle [6.3](../../docs/principles/6.3.html), validate all external input at the boundary, is one everyday form of failing fast, and fail fast is a related practice in the skill for principle [3.13](../../docs/principles/3.13.html), never cut boundary validation, data-loss handling or security to save code.
 
 ### Circuit breakers
 
@@ -246,11 +250,13 @@ You do not need to become a specialist overnight, but you do need a few named ha
 
 Do not rely on a single control. Stack independent protections, such as authentication, authorisation, network rules, encryption and monitoring, so that one failure does not open the whole system. NIST's glossary is the official short definition. [https://csrc.nist.gov/glossary/term/defense_in_depth](https://csrc.nist.gov/glossary/term/defense_in_depth)
 
+On this site: a related practice in the skill for principle [6.1](../../docs/principles/6.1.html), threat-model before hardening.
+
 ### Least privilege
 
 Give each user, service and process only the access it needs to do its job, and no more. This limits how much damage a stolen credential or a buggy service can do. [https://csrc.nist.gov/glossary/term/least_privilege](https://csrc.nist.gov/glossary/term/least_privilege)
 
-On this site: principle [6.2](../../docs/principles/6.2.html), sort actions into always do, ask first and never do, applies the same thinking to what an agent may do.
+On this site: principle [6.2](../../docs/principles/6.2.html), sort actions into always do, ask first and never do, applies the same thinking to what an agent may do, and its skill carries least privilege as a related practice for the services, tokens and roles a project creates.
 
 ### OWASP Top 10
 
@@ -278,6 +284,8 @@ Mel Conway's 1968 observation: organisations design systems that mirror their co
 
 Also called the robustness principle, from Jon Postel's TCP work: be conservative in what you send, and liberal in what you accept. It helped early internet protocols interoperate. Later guidance, including RFC 9413, cautions that being too liberal about bad input can hide bugs and create security holes, so apply it with care. The original wording is in RFC 793: [https://www.rfc-editor.org/rfc/rfc793](https://www.rfc-editor.org/rfc/rfc793)
 
+On this site: a related practice in the skill for principle [6.3](../../docs/principles/6.3.html), validate all external input at the boundary, in its strict form: conservative in what you send, strict at trust boundaries in what you accept.
+
 ### Hyrum's Law
 
 With enough users of an API, they will come to depend on every observable behaviour, even the accidental ones you never promised. That is why a "harmless" implementation change sometimes breaks people, and why tests and explicit contracts matter. [https://www.hyrumslaw.com/](https://www.hyrumslaw.com/)
@@ -287,6 +295,8 @@ On this site: principle [2.12](../../docs/principles/2.12.html), prefer adding o
 ### Gall's Law
 
 A complex system that works has usually evolved from a simple system that worked; a complex system designed from scratch rarely does. Start simple, then grow. The usual citation is John Gall's Systemantics (1975). [https://en.wikipedia.org/wiki/John_Gall_%28author%29](https://en.wikipedia.org/wiki/John_Gall_%28author%29)
+
+On this site: a related practice in the skill for principle [3.14](../../docs/principles/3.14.html), build in thin vertical slices.
 
 ### Hofstadter's Law
 

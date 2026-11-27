@@ -33,6 +33,13 @@ Don't:
 2. Decide
 3. Record reason
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does the verdict rest on whether the change improves code health, with no block based only on preference?
+- [ ] Are nits labelled non-blocking, and is nothing approved with an open blocker?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a block based only on preference

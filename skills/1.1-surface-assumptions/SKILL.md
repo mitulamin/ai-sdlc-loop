@@ -38,6 +38,14 @@ Don't:
 3. Batch decisions to the coordinator with recommendations, as `[QUESTION: ...]` and `[BLOCKER: ...]` lines
 4. Record the answers in the spec/run log, then build
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is every assumption you acted on written as an `[ASSUMPTION: ...]` line, and every open decision as a `[QUESTION: ...]` or `[BLOCKER: ...]` line with your recommended answer?
+- [ ] Does every behaviour in your output rest on a stated requirement or a recorded assumption, never on an interpretation you picked silently?
+- [ ] Did you send the needs-decision items to the coordinator in one batch, not one at a time?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a behaviour in the output that rests on an unstated assumption

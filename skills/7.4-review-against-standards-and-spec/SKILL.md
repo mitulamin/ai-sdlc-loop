@@ -34,6 +34,13 @@ Don't:
 3. Fix
 4. Re-run the one whose area changed
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Did a spec reviewer check every acceptance criterion and flag behaviour not in the spec, in parallel with the standards review?
+- [ ] Were the two sets of findings merged into one?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find an acceptance criterion not met

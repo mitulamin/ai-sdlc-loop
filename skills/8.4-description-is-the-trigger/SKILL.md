@@ -32,6 +32,12 @@ Don't:
 2. Run trigger tests
 3. Adjust
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does each skill description say 'Use when ...' with concrete triggers, tested on prompts that should and should not trigger it?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Give 5 prompts that should and 5 that shouldn't trigger: check results

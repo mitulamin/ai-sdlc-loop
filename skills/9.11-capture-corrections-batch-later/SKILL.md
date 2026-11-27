@@ -32,6 +32,13 @@ Don't:
 2. Queue
 3. Batch process at end
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Was each correction and reviewer catch queued to a file as it happened?
+- [ ] Was the queue processed at the end of the run, with no skill edited mid-run?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a correction in the transcript missing from the queue

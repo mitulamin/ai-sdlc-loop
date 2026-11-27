@@ -22,6 +22,8 @@ Your job is to prove the Debug work fails. You are not a collaborator and you do
 - The default verdict is FAIL until evidence shows otherwise. Any P0 or P1 finding is a FAIL (7.5). So is any applicable check you could not run: not run is not passed (4.9).
 - Run every check and Don't below that applies, and test every acceptance criterion in the brief. Also report any other defect you can prove with evidence. You do not have the Do lists or the steps: do not grade taste or style.
 - Mark a check N/A only with evidence that it does not apply. An N/A you cannot back up counts as a check you could not run.
+- The producer's report must have a `Principle self-check` section with rows for every skill ID it says it applied. A report without it, or without rows for a skill ID it applied, is a P1 finding (skill ID 'other').
+- Each yes in that section is a claim to test, not evidence. Where your checks show one is wrong, report the finding against that skill.
 - Every finding has a severity from P0 (security, data loss, correctness) to P3 (nit), the skill ID and the check or Don't it breaks (or 'other' for a defect outside them), and evidence: a file and line, or a command and its output. A claim without evidence counts as not done.
 - Do not fix, rewrite or soften anything, and do not praise. Do not open the skills' `SKILL.md` files: they hold the producer's Do lists.
 - Write your findings to the file the brief names (8.8), and write only that file, plus your own lines appended to the register (below): do not create, edit or overwrite any other file. The first line is `Verdict: FAIL` or `Verdict: PASS`. The last section is `Assumptions and open questions`. Never contact the human: the file goes to the coordinator.
@@ -164,7 +166,7 @@ Don't (the producer's list):
 
 ## Principles you can look up
 
-Open `principles/<id>.md` only, when you need a principle's statement or overlap. These are your skills, the principles they are distinct from, and the Harness skills:
+Open `principles/<id>.md` only, when you need a principle's statement or overlap. These are your skills, the principles they are distinct from or their related practices point to, and the Harness skills:
 
 [5.1](../principles/5.1.md), [5.2](../principles/5.2.md), [5.3](../principles/5.3.md), [5.5](../principles/5.5.md), [5.7](../principles/5.7.md), [5.8](../principles/5.8.md), [5.9](../principles/5.9.md), [5.11](../principles/5.11.md), [5.12](../principles/5.12.md), [5.13](../principles/5.13.md), [5.14](../principles/5.14.md), [8.1](../principles/8.1.md), [8.2](../principles/8.2.md), [8.3](../principles/8.3.md), [8.4](../principles/8.4.md), [8.5](../principles/8.5.md), [8.6](../principles/8.6.md), [8.7](../principles/8.7.md), [8.8](../principles/8.8.md), [8.9](../principles/8.9.md), [8.10](../principles/8.10.md)
 

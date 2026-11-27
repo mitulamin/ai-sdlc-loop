@@ -33,6 +33,13 @@ Don't:
 3. Remove
 4. Log
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] For each rule you kept, can you name the behaviour that would change without it?
+- [ ] Did you remove or rewrite the rules that have no effect?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a rule no transcript ever shows applied

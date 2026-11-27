@@ -32,6 +32,13 @@ Don't:
 2. Draft small edit
 3. Run regression set
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does each learned edit change one surface, meaning one skill or one rule?
+- [ ] Does the behaviour that already passed still pass?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find an edit touching several surfaces

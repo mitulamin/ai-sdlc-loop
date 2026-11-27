@@ -49,11 +49,13 @@ Don't Repeat Yourself, from Andy Hunt and Dave Thomas in The Pragmatic Programme
 
 Don Roberts's rule, popularised in Fowler's Refactoring, is "three strikes and you refactor": write it once, tolerate a second copy, and extract a shared abstraction on the third. The counter-slogan WET, often rendered as Write Everything Twice, is a reminder that premature DRY creates the wrong abstraction. Duplicated knowledge is the problem; similar-looking code is only a clue.
 
+On this site: DRY and the rule of three are a related practice in the skill for principle [3.11](../../docs/principles/3.11.html), name the code smell and apply its standard remedy, with principle [2.5](../../docs/principles/2.5.html) as the brake on extracting a second copy.
+
 ### The Boy Scout Rule
 
 Leave the campground cleaner than you found it. Robert C. Martin uses this in Clean Code for opportunistic, in-scope tidy-ups: a clearer name, a split method, a bit of duplication removed. Small continuous care beats occasional grand rewrites. Fowler describes the same habit as opportunistic refactoring.
 
-On this site: principle [3.10](../../docs/principles/3.10.html), refactor in small behaviour-preserving steps, kept separate from feature changes.
+On this site: principle [3.10](../../docs/principles/3.10.html), refactor in small behaviour-preserving steps, kept separate from feature changes. Its skill applies the Boy Scout Rule as a related practice, limited to the lines a task already changes so that principle [3.2](../../docs/principles/3.2.html), surgical changes, still holds.
 
 ## Structure and boundaries
 
@@ -75,19 +77,25 @@ On this site: principle [2.1](../../docs/principles/2.1.html), design deep modul
 
 From structured design: put work that changes together in the same module (high cohesion), and keep the links between modules few, explicit and stable (loose coupling). A service that must know another service's tables, retries and UI quirks is tightly coupled no matter how clean the folder names look.
 
+On this site: a related practice in the skill for principle [2.1](../../docs/principles/2.1.html), design deep modules.
+
 ### Law of Demeter
 
 Don't talk to strangers. A method should speak to itself, its arguments, objects it creates, and its immediate collaborators, not walk a chain such as `order.getCustomer().getAddress().getZip()`. Long chains couple you to someone else's internals and break when that shape changes.
+
+On this site: a related practice in the skill for principle [3.11](../../docs/principles/3.11.html), name the code smell and apply its standard remedy.
 
 ### Acyclic dependencies principle
 
 Robert C. Martin's package-level rule: the dependency graph of packages or components should have no cycles, so it forms a directed acyclic graph. If module A depends on B and B depends, directly or through others, on A, you cannot build, test or release either one alone, and a change in one ripples round the loop. Break a cycle by moving the shared piece into a new module both can depend on, or by applying the Dependency Inversion Principle so one side depends on an abstraction. A cycle checker in CI makes the rule cheap to keep. See [https://en.wikipedia.org/wiki/Acyclic_dependencies_principle](https://en.wikipedia.org/wiki/Acyclic_dependencies_principle).
 
-On this site: principle [2.3](../../docs/principles/2.3.html), keep framework, persistence and vendor details out of business logic, behind adapters, which keeps dependencies pointing one way.
+On this site: principle [2.3](../../docs/principles/2.3.html), keep framework, persistence and vendor details out of business logic, behind adapters, which keeps dependencies pointing one way, and whose skill applies this as a related practice.
 
 ### Composition over inheritance
 
 The Gang of Four asked designers to favour object composition over class inheritance. Combine small, focused parts that you can swap, rather than building deep is-a trees that become rigid the first time a new case does not fit. Inheritance remains useful for a true subtype with a shared contract; it is a poor way to reuse a handful of methods.
+
+On this site: a related practice in the skill for principle [2.5](../../docs/principles/2.5.html), add an abstraction only for a concrete benefit.
 
 ### Program to an interface, not an implementation
 
@@ -103,23 +111,31 @@ Robert C. Martin collected five class-design principles that Michael Feathers la
 
 A class, or more usefully a module, should have one and only one reason to change. If payroll calculations and paycheck layout change for different business reasons, they do not belong in the same unit. The aim is not tiny files; it is isolating change.
 
+On this site: a related practice in the skill for principle [2.1](../../docs/principles/2.1.html), design deep modules.
+
 ### Open-Closed Principle
 
 You should be able to extend behaviour without modifying the working core. New cases arrive as new code, not as edits scattered through a switch you are afraid to touch. Use this when the axis of change is already visible; do not pre-build a plugin system for a single case.
+
+On this site: a related practice in the skill for principle [2.5](../../docs/principles/2.5.html), add an abstraction only for a concrete benefit, which is also its brake: no extension point without a second case today.
 
 ### Liskov Substitution Principle
 
 Named for Barbara Liskov: a derived type must be substitutable for its base type without surprising callers. If a square cannot honour the contract of a rectangle, it should not inherit from it. Subtypes that throw unexpected errors, or weaken guarantees, break the abstraction.
 
+On this site: a related practice in the skill for principle [2.2](../../docs/principles/2.2.html), choose seams deliberately.
+
 ### Interface Segregation Principle
 
 Make fine-grained, client-specific interfaces. Callers should not depend on methods they do not use, because those unused methods still couple them to changes they do not care about. Several small contracts beat one fat one.
+
+On this site: a related practice in the skill for principle [2.2](../../docs/principles/2.2.html), choose seams deliberately.
 
 ### Dependency Inversion Principle
 
 Depend on abstractions, not on concretions. High-level policy should not import low-level detail; both should depend on a contract the policy owns. This is why a domain service talks to a repository interface, not to a particular database driver.
 
-On this site: principle [2.3](../../docs/principles/2.3.html), keep framework, persistence and vendor details out of business logic, behind adapters.
+On this site: a related practice in the skill for principle [2.3](../../docs/principles/2.3.html), keep framework, persistence and vendor details out of business logic, with principle [2.5](../../docs/principles/2.5.html) deciding when the interface is worth adding.
 
 ## Contracts, predictability and failure
 
@@ -127,23 +143,25 @@ On this site: principle [2.3](../../docs/principles/2.3.html), keep framework, p
 
 Bertrand Meyer's idea: a component advertises preconditions it requires, postconditions it promises, and invariants it maintains. Callers and implementers can then be checked against the same agreement. It is the intellectual cousin of Liskov substitution, and a useful prompt when writing tests or API docs: what must be true before, and what is guaranteed after.
 
-On this site: principles [2.9](../../docs/principles/2.9.html) (define the contract first) and [2.15](../../docs/principles/2.15.html) (state failure modes, retryability, timeouts and versioning in the contract).
+On this site: principles [2.9](../../docs/principles/2.9.html) (define the contract first) and [2.15](../../docs/principles/2.15.html) (state failure modes, retryability, timeouts and versioning in the contract). The skill for 2.9 applies it as a related practice.
 
 ### Principle of least astonishment
 
 Software should behave as a careful user or caller would expect. A function named `getUser` should not write to the database; error shapes should be consistent; a Cancel button should sit where the platform puts it. Predictable systems are faster to learn and safer to automate.
 
-On this site: principles [3.6](../../docs/principles/3.6.html) (separate commands from queries; no hidden side effects) and [2.10](../../docs/principles/2.10.html) (one consistent error shape).
+On this site: principles [3.6](../../docs/principles/3.6.html) (separate commands from queries; no hidden side effects) and [2.10](../../docs/principles/2.10.html) (one consistent error shape). The skill for 3.6 applies it as a related practice.
 
 ### Fail fast
 
 Jim Shore's 2004 IEEE Software column, archived at [https://www.martinfowler.com/ieeeSoftware/failFast.pdf](https://www.martinfowler.com/ieeeSoftware/failFast.pdf), argues that you should detect invalid input or broken assumptions immediately and visibly, rather than limp on with corrupted state. Failures that surface at the boundary are cheap; failures that explode three services later are not. Failing fast is for operators and developers; user-facing paths still need a clear, controlled response.
 
-On this site: principle [6.3](../../docs/principles/6.3.html), validate all external input at the boundary.
+On this site: principle [6.3](../../docs/principles/6.3.html), validate all external input at the boundary. Fail fast is a related practice in the skill for principle [3.13](../../docs/principles/3.13.html), never cut boundary validation, data-loss handling or security to save code.
 
 ### Convention over configuration
 
 Popularised by Ruby on Rails and set out in the Rails Doctrine at [https://rubyonrails.org/doctrine](https://rubyonrails.org/doctrine): agree a sensible default once, and only declare the exceptions. Conventions remove boring decisions and let deeper abstractions grow, but they become a trap when the domain is genuinely unusual and you follow the template anyway.
+
+On this site: a related practice in the skill for principle [2.14](../../docs/principles/2.14.html), make the simple case the default.
 
 ## Verification
 
@@ -161,7 +179,7 @@ On this site: the [Verify (testing)](../../docs/categories/verify.html) category
 
 "When a measure becomes a target, it ceases to be a good measure." The wording is a popular paraphrase of economist Charles Goodhart's 1975 observation about monetary policy: once you put pressure on a statistic for control purposes, people optimise the statistic and it stops reflecting what you cared about. In engineering, a coverage percentage, a ticket count or a deployment-frequency target can all be met without improving anything. Use metrics to ask questions, pair each with a counter-measure, and look at the outcome the metric stands for. See [https://en.wikipedia.org/wiki/Goodhart%27s_law](https://en.wikipedia.org/wiki/Goodhart%27s_law).
 
-On this site: principle [4.6](../../docs/principles/4.6.html), review suites for mock abuse, brittleness and coverage illusions; coverage is not quality.
+On this site: a related practice in the skill for principle [4.6](../../docs/principles/4.6.html), review suites for mock abuse, brittleness and coverage illusions; coverage is not quality.
 
 ## Security by default
 
@@ -171,7 +189,7 @@ Security is easiest to get right when it is a property of the design, not a laye
 
 A product should be safe the moment it is installed or deployed, with no extra configuration and no extra cost: the safe option is the default, and the person who wants something riskier has to choose it knowingly. In practice that means authentication on, debug endpoints and sample credentials off, the narrowest permissions, and encryption in transit without a flag. Secure by default is one half of secure by design, which treats security as a design constraint from the start rather than a retrofit; see [https://en.wikipedia.org/wiki/Secure_by_design](https://en.wikipedia.org/wiki/Secure_by_design) and the CISA Secure by Design programme at [https://www.cisa.gov/securebydesign](https://www.cisa.gov/securebydesign). It is the security-flavoured cousin of convention over configuration, and of the principle of least astonishment: nobody should have to read a hardening guide to avoid being exposed.
 
-On this site: principles [6.2](../../docs/principles/6.2.html) (sort actions into always do, ask first and never do) and [2.14](../../docs/principles/2.14.html) (the simple case is the default and advanced behaviour is opt-in).
+On this site: principles [6.2](../../docs/principles/6.2.html) (sort actions into always do, ask first and never do) and [2.14](../../docs/principles/2.14.html) (the simple case is the default and advanced behaviour is opt-in). The skill for 2.14 applies it as a related practice.
 
 ## Operability
 
@@ -191,6 +209,8 @@ Design principles decide whether code is easy to change. Operability principles 
 | X. Dev/prod parity | Keep development, staging and production close in time, people and tools. |
 | XI. Logs | Treat logs as event streams on standard output. The environment routes and stores them. |
 | XII. Admin processes | Run migrations and one-off tasks as one-off processes against the same release and environment as the app. |
+
+On this site: a related practice in the skill for principle [2.3](../../docs/principles/2.3.html), keep framework, persistence and vendor details out of business logic.
 
 ### Observability
 
@@ -218,7 +238,7 @@ Convention versus explicit configuration, and KISS versus completeness, follow t
 
 If you are encoding these ideas as agent skills or always-on rules, a short, opinionated subset beats a catalogue. Every skill description sits in context on every turn, so prefer a handful of rules the agent must follow, and keep the rest on demand.
 
-This repo does exactly that: one skill per principle, loaded only by the phase that needs it. [Using the agents and commands](using-the-agents.md) explains how the agents load them, and the [skills page](../../docs/skills.html) lists them all.
+This repo does exactly that: one skill per principle, loaded only by the phase that needs it. The practices in this paper that are not principles of their own, such as SOLID, DRY and the Law of Demeter, sit in the skill they fit as related practices, and every skill ends in a self-check that the producer answers before handing off and the reviewer then tests. [Using the agents and commands](using-the-agents.md) explains how the agents load them, and the [skills page](../../docs/skills.html) lists them all.
 
 ### Prefer surgical change
 

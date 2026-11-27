@@ -35,10 +35,25 @@ Don't:
 3. Test queries are pure
 4. Reviewer hunts hidden side effects
 
+## Related practices
+
+Established practices this skill applies alongside its principle. Each has a self-check item and a reviewer check below.
+
+- **Principle of least astonishment** ([guide](../../guides/developer/quality-principles.md#principle-of-least-astonishment)): names, defaults and errors behave as a careful caller would expect: a getter does not write, similar calls behave alike, and errors share one shape. See also [2.10](../../principles/2.10.md).
+
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is each function either a command (named as a verb, returning nothing or a status) or a query with no side effects?
+- [ ] Is every side effect visible in the function's name?
+- [ ] Principle of least astonishment: would a careful caller predict what each name, default and error does, with no surprise writes and no difference between similar calls?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a query that mutates
 - Find a side effect not implied by the name
+- Principle of least astonishment: find a name, default or error that behaves differently from what a careful caller would expect
 - Default verdict is FAIL until evidence shows otherwise; report findings to a file with P0-P3 severity.
 
 ## How the source skills compare

@@ -35,6 +35,13 @@ Don't:
 3. Add characterization tests
 4. Remove or change with evidence
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Before removing or rewriting code you did not write, did you check its history, callers and tests for its reason?
+- [ ] Is that reason recorded in the commit, with a characterization test wherever legacy behaviour changes?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Ask: what did this code protect against?

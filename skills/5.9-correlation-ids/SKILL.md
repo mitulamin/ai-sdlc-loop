@@ -35,6 +35,13 @@ Don't:
 3. Log it
 4. Reviewer follows one request through logs
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is a correlation id created or accepted at every entry point?
+- [ ] Is it carried through calls, jobs and async hops into every log line and error response?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Pick one request: can you trace all its logs?

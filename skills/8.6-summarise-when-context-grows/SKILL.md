@@ -33,6 +33,13 @@ Don't:
 3. Restart fresh
 4. Verify continuity
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] When the context grew long, did you write a handoff file with the goal, what is done, what is next, the decisions and the open issues?
+- [ ] Did the next agent start from that file, with no decision lost?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a decision lost across a handoff

@@ -39,6 +39,15 @@ Don't:
 3. Emit tasks.md in dependency order with checks
 4. Plan reviewer checks ordering, gaps and parallel safety
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does every module trace to a capability, and every task to a module?
+- [ ] Are tasks ordered blockers-first, with none depending on a later task, and are the ones that can run in parallel marked?
+- [ ] Is each task a thin vertical slice with its own acceptance check, and is every acceptance criterion covered by a task?
+- [ ] Did you compare the decomposition with a real alternative, and declare every default you applied as an `[ASSUMPTION: ...]`?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a task that depends on a later task

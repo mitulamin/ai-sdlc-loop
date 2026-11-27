@@ -35,7 +35,7 @@ For each phase that runs:
 
 ### Plan
 
-Producer: [plan-producer](../agents/plan-producer.md), which loads each skill's dos and don'ts together. Reviewer: [plan-reviewer](../agents/plan-reviewer.md), which loads only each skill's adversarial reviewer checks and don'ts.
+Producer: [plan-producer](../agents/plan-producer.md), which loads each skill's dos and don'ts together, its related practices and its Self-check. Reviewer: [plan-reviewer](../agents/plan-reviewer.md), which loads only each skill's adversarial reviewer checks and don'ts.
 
 Skill IDs: 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8.
 

@@ -33,6 +33,13 @@ Don't:
 2. Assert the literal
 3. Reviewer checks the expected-value source
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is every expected value a literal, worked out by hand from the spec rather than computed by the logic under test?
+- [ ] Has every snapshot been reviewed as correct, not just accepted?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find an expected value computed by the same logic

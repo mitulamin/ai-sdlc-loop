@@ -35,6 +35,14 @@ Don't:
 3. Server-side checks
 4. Reviewer scans history
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Are secrets loaded from the environment or a secrets manager, with none in the code, the tests or the history?
+- [ ] Is `.env` ignored, and does CI run a secret scanner?
+- [ ] Is every client-side check repeated on the server?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Run a secret scan on the diff and history

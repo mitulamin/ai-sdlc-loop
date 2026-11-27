@@ -33,6 +33,13 @@ Don't:
 3. Link
 4. Reviewer does a dry run
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does every alert link a runbook with its meaning, first checks, mitigation and owner?
+- [ ] Could someone follow each runbook cold?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Follow the runbook cold: does it work?

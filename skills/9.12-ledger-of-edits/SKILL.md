@@ -31,6 +31,12 @@ Don't:
 1. Write entry
 2. Commit ledger
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does the ledger record the date, change, evidence, decision and reason for every edit, rejected ones included?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a decision missing from the ledger

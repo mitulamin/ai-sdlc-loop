@@ -33,6 +33,13 @@ Don't:
 3. Remove
 4. Reviewer lists flags past expiry
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does every feature flag have an owner, a purpose and a removal date?
+- [ ] Are flags and their dead branches removed after rollout?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a flag with no removal date

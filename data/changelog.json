@@ -340,6 +340,49 @@
       ],
       "summary": "Extended the SkillSpector CI scan from skills/ to agents/, commands/, template/ and a throwaway install for each harness, and added the scan with the LLM analyzers on (scripts/skillspector-llm-scan.py, which uses xAI when XAI_API_KEY is set and otherwise NVIDIA Build with NVIDIA_INFERENCE_KEY and a pinned model, nvidia/nemotron-3.5-super-vl-120b-a12b, because SkillSpector's own default for NVIDIA Build no longer answers; with backoff on failed calls), run by workflow skillspector-llm.yml on release-candidate tags (vX.Y.Z-rcN on a main commit) as groups derived from the repo, one skill family or folder per job, one after another, with a summary job that passes only when every group passed. The release tag vX.Y.Z and GitHub release follow only after that, on the same commit (RELEASING.md, workflow release-gate.yml, per-finding record). Reworded the reviewer agents' loads label in scripts/build-agents.py so SkillSpector's static parser can read every reviewer file.",
       "reason": "The static scan covered only skills, but agents, commands, the template and the installed harness files are what an agent actually reads. A model-assisted pass catches intent that static rules miss, but it is slow, limited by provider rate limits and needs a person to triage its findings, so it runs per release candidate in small serial groups that can be re-run one at a time, and gates the release rather than every pull request."
+    },
+    {
+      "date": "2026-11-27",
+      "research_run": "run-1",
+      "type": "schema",
+      "ids": [
+        "principles"
+      ],
+      "summary": "principles schema 1.1.0 to 1.2.0: added optional related_practices (name, guide section, see_also principle ids). Existing data stays valid; set schema_version to 1.2.0.",
+      "reason": "Established practices that are not principles here need one recorded home in a skill, so the skill text, the agents and the principle pages can be checked against the data."
+    },
+    {
+      "date": "2026-11-27",
+      "research_run": "run-1",
+      "type": "edit",
+      "ids": [
+        "2.1",
+        "2.12",
+        "2.14",
+        "2.2",
+        "2.3",
+        "2.4",
+        "2.5",
+        "2.9",
+        "3.10",
+        "3.11",
+        "3.13",
+        "3.14",
+        "3.6",
+        "4.6",
+        "6.1",
+        "6.2",
+        "6.3",
+        "agents",
+        "commands",
+        "guides",
+        "principles",
+        "scripts",
+        "site",
+        "skills"
+      ],
+      "summary": "Every skill gained a Self-check section: questions the producer answers yes, no or N/A with evidence before handing off. Producers load it and end their report with a Principle self-check table; reviewers treat that table as a claim to test, and a report without it is a P1 finding; the coordinator puts its own table in run-summary.md. Practices described in the developer guides but not in the catalogue became related practices of the skill they fit, each with a Related practices entry, a self-check item and a reviewer check: the SOLID principles (single responsibility and loose coupling with 2.1, Liskov substitution and interface segregation with 2.2, dependency inversion, the twelve-factor app and acyclic dependencies with 2.3, open-closed with 2.5 as its YAGNI brake), composition over inheritance (2.5), the Unix philosophy (2.4), design by contract (2.9), strangler fig (2.12), convention over configuration and secure by default (2.14), least astonishment (3.6), the Boy Scout rule kept inside 3.2's scope (3.10), DRY with the rule of three and the Law of Demeter (3.11, keeping 2.5's duplicate-twice brake), fail fast (3.13), Gall's law (3.14), Goodhart's law (4.6), defence in depth (6.1), least privilege (6.2) and the robustness principle, strict at trust boundaries (6.3). scripts/check-skills.py and scripts/build-agents.py --check fail if a skill lacks its Self-check or its practices drift from data/principles.json. Principle pages list their related practices, and the developer guides link each practice to its skill. Principle statements are unchanged.",
+      "reason": "The skills told agents what to do but gave them no step to check their own work against it before handing off, and well-known practices such as SOLID and DRY lived only in the guides, where no agent reads them."
     }
   ]
 }

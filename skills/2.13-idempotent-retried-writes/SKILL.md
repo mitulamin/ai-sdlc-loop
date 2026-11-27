@@ -35,6 +35,13 @@ Don't:
 3. Test double-submit
 4. Reviewer replays requests
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does every retryable write require an idempotency key derived from intent, not a fresh id per attempt?
+- [ ] Does a repeat with the same key return the stored result instead of writing twice?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Submit the same request twice: are there two records?

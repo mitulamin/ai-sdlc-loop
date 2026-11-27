@@ -33,6 +33,12 @@ Don't:
 3. Verify errors are always kept
 4. Reviewer checks config location
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does the SDK export all spans, with sampling configured only in the collector pipeline?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find sampling configured in app code

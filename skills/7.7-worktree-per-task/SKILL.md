@@ -34,6 +34,13 @@ Don't:
 3. Work
 4. Finish and remove
 
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Does each task and each agent have its own worktree and branch, set up with a baseline test run?
+- [ ] Is each worktree cleaned up once its work is merged?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find two agents' changes interleaved in one working tree

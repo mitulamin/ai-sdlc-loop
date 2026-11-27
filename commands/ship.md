@@ -35,7 +35,7 @@ For each phase that runs:
 
 ### Review & ship
 
-Producer: [review-and-ship-producer](../agents/review-and-ship-producer.md), which loads each skill's dos and don'ts together. Reviewer: [review-and-ship-reviewer](../agents/review-and-ship-reviewer.md), which loads only each skill's adversarial reviewer checks and don'ts.
+Producer: [review-and-ship-producer](../agents/review-and-ship-producer.md), which loads each skill's dos and don'ts together, its related practices and its Self-check. Reviewer: [review-and-ship-reviewer](../agents/review-and-ship-reviewer.md), which loads only each skill's adversarial reviewer checks and don'ts.
 
 Skill IDs: 5.15, 7.1, 7.2, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8, 7.9, 7.10, 7.11, 7.12.
 

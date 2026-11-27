@@ -35,10 +35,25 @@ Don't:
 3. Run tests and commit
 4. Repeat; reviewer checks no behaviour diff
 
+## Related practices
+
+Established practices this skill applies alongside its principle. Each has a self-check item and a reviewer check below.
+
+- **Boy Scout rule** ([guide](../../guides/developer/quality-principles.md#the-boy-scout-rule)): leave the code you had to touch a little cleaner, such as a clearer name or a split function, but only in the lines the task already changes, and as its own refactor commit. 3.2's surgical scope wins: log anything wider instead of fixing it. See also [3.2](../../principles/3.2.md).
+
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is each refactoring a named, behaviour-preserving step, with the tests run after it?
+- [ ] Are refactor commits separate from behaviour changes, with tests covering the area before you start?
+- [ ] Boy Scout rule: is every tidy-up limited to lines the task already changes, and in its own refactor commit?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find a behaviour change hidden in a refactor commit
 - Find a step that left tests red
+- Boy Scout rule: find a tidy-up outside the lines the task changed, or one mixed into a behaviour commit
 - Default verdict is FAIL until evidence shows otherwise; report findings to a file with P0-P3 severity.
 
 ## How the source skills compare

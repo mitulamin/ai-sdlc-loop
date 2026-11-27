@@ -35,10 +35,25 @@ Don't:
 3. Write compat tests
 4. Reviewer lists who could break
 
+## Related practices
+
+Established practices this skill applies alongside its principle. Each has a self-check item and a reviewer check below.
+
+- **Strangler fig** ([guide](../../guides/developer/developer-guide.md#the-strangler-fig-pattern)): replace a legacy part step by step: put the new code behind the same interface or route, move one case at a time, run old and new side by side, and remove the old code only once nothing uses it. No big-bang rewrite. See also [3.9](../../principles/3.9.md), [3.10](../../principles/3.10.md).
+
+## Self-check
+
+Before you hand off, answer each item yes, no or N/A, with evidence. Fix every no, or record it as a `[BLOCKER: ...]`.
+
+- [ ] Is every change to observable behaviour additive, or listed in the changelog with a deprecation notice and timeline?
+- [ ] Is there a compatibility test for each old behaviour you kept?
+- [ ] Strangler fig: when replacing a legacy part, does the new code take over one case at a time behind the same interface, with the old code removed only once nothing uses it?
+
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Find an observable behaviour change not in the changelog
 - Find a removed field with no deprecation
+- Strangler fig: find a legacy replacement done as a big-bang rewrite, or old code removed while something still uses it
 - Default verdict is FAIL until evidence shows otherwise; report findings to a file with P0-P3 severity.
 
 ## How the source skills compare
