@@ -87,18 +87,24 @@ When to use: Any change bigger than a one-file fix, or any new feature/app.
 
 Do:
 - Write spec.md: goal, users, non-goals, acceptance criteria (testable), constraints, open questions
+- Write acceptance criteria as numbered Given/When/Then lines, so every later check can cite one by its number
+- Record the interview outcome in the spec as a decision sheet: for each decision the choice, who decided it, why, and its register id (log an interview answer in the register so it has one)
+- Give every parked item a reason it can wait and a revisit trigger, the event that should bring it back
+- Treat a decision the human has answered, through a register QUESTION or the interview, as locked, and carry it into the spec as answered
 - Keep it to one or two pages; link out for detail
 - Have an adversarial spec reviewer check it before planning starts
-- Treat the spec as living: update it when the build teaches you something
+- Treat the spec as living: update it when the build teaches you something, except for locked decisions
 
 Don't:
 - Start coding before acceptance criteria exist
 - Copy a heavyweight template and fill every section
 - Pause the loop for human sign-off at each phase (the coordinator gates; the human reviews at the end)
+- Reopen or override a locked decision silently; if the evidence contradicts it, raise [QUESTION: ...] or [BLOCKER: ...] with that evidence and leave the decision standing meanwhile
+- Leave a choice open that affects behaviour, an interface, authorisation, the source of truth or rollout
 
 Steps:
-1. Draft spec.md from the brief and 1.1 assumptions
-2. Spec reviewer attacks it: ambiguity, untestable criteria, missing non-goals
+1. Draft spec.md from the brief, 1.1 assumptions and any answered decisions in the register
+2. Spec reviewer attacks it: ambiguity, untestable criteria, missing non-goals, silent overrides
 3. Revise until the reviewer passes or escalate one batched question
 4. Hand the spec to planning (1.3, 1.6)
 
@@ -118,6 +124,8 @@ Don't:
 - Plan horizontally (all models, then all routes, then all UI)
 - Create tasks with no verifiable done condition
 - Plan beyond what one run can deliver without a wayfinder milestone
+- Anchor on the first decomposition or option that comes to mind; compare it with a real alternative before committing to the order
+- Apply a preference or default silently; declare it as [ASSUMPTION: ...]
 
 Steps:
 1. Derive capabilities from spec acceptance criteria
@@ -132,21 +140,30 @@ Skill: [1.4 interview-to-shared-understanding](../skills/1.4-interview-to-shared
 When to use: Only at the very start of a project or epic, run by the top coordinator with the human.
 
 Do:
+- Ground yourself first: read the repo, docs, brief and register, and open the interview with what you already know
+- Infer the decision areas from this goal rather than a stock list of topics; a decision belongs in the tree only if this goal makes it matter
 - Map open decisions as a tree; ask the top-level branches first
+- Go one layer at a time, ordered by coupling: settle the decisions that others depend on before the ones they unlock
+- Ask every question in one format: the question, the options, the recommended option first with the reason, and what changes if another option is picked
 - Give a recommended answer and the reason with every question
 - Batch a round of 3-7 questions; stop when answers stop changing the plan
-- Write the outcome into the spec
+- Write the outcome into the spec as a decision sheet: for each decision the choice, who decided it, why, and its register id (log each answer in the register so it has one)
+- Park what can wait with a reason and a revisit trigger, the event that should bring it back
+- Treat every answer as a locked decision from then on, and tell downstream agents which decisions are locked
 
 Don't:
 - Interview inside worker loops (workers get filled context instead)
 - Ask questions whose answer is in the repo or docs
 - Treat 'okay let's start' as agreement without checking open branches
+- Anchor on the first option that comes to mind; weigh real alternatives before choosing what to recommend
+- Apply a preference or default silently; declare it as [ASSUMPTION: ...]
+- Reopen a locked decision without new evidence, or override it silently; raise [QUESTION: ...] or [BLOCKER: ...] with the evidence
 
 Steps:
-1. Coordinator lists decisions as a tree
-2. Ask round 1 with recommendations
-3. Fold answers in; ask the next round only if branches remain
-4. Freeze into spec.md
+1. Coordinator reads the existing context, then lists decisions as a tree inferred from this goal
+2. Order the layers by coupling and ask the first layer with recommendations
+3. Fold answers in as locked decisions; ask the next layer only if branches remain
+4. Freeze into spec.md with the decision sheet and the parked items
 
 ### 1.5 Look facts up yourself; only ask the human for decisions
 
@@ -180,11 +197,13 @@ Do:
 - Keep steps 2-5 minutes of work each, with the command that proves it
 - Include the relevant spec excerpt, not the whole spec
 - State conventions the code must match
+- List the locked decisions that apply to each task and carry them in as given
 
 Don't:
 - Write 'implement the feature' with no file paths
 - Assume the implementer knows earlier conversation
 - Bundle unrelated changes into one step
+- Reopen or override a locked decision silently; if a step cannot be written without contradicting one, raise [QUESTION: ...] or [BLOCKER: ...] with the evidence
 
 Steps:
 1. Pick the task from tasks.md
@@ -200,6 +219,7 @@ When to use: Writing any task, step or brief.
 
 Do:
 - Rewrite vague asks as 'done when <command/test> passes'
+- Write the goal's criteria as numbered Given/When/Then lines, and make each check name the criterion number it proves
 - Prefer automated checks; describe manual checks precisely when unavoidable
 - Loop until the check passes, independently
 

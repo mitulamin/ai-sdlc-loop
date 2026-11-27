@@ -11,6 +11,7 @@ Sections:
 - [The commands](#the-commands)
 - [What producers and reviewers load](#what-producers-and-reviewers-load)
 - [The rules of the loop](#the-rules-of-the-loop)
+- [Planning discipline](#planning-discipline)
 - [Assumptions, open questions and the register](#assumptions-open-questions-and-the-register)
 - [The phase model and the Learn loop](#the-phase-model-and-the-learn-loop)
 - [A worked example: one cycle](#a-worked-example-one-cycle)
@@ -107,6 +108,16 @@ This split is principle [9.2](../../docs/principles/9.2.html): enforce standards
 7. **No mid-cycle questions to the human.** Agents send questions to the coordinator, through the register, even where a skill says to ask the human. The coordinator answers from the repo or the brief, or picks the recommended answer and records it as an assumption. The one exception is the interview at the very start of a project or epic, before any loop starts ([1.4](../../docs/principles/1.4.html)).
 8. **The end of the cycle is the only exchange with the human.** The coordinator writes `run-summary.md` (what ran, each verdict and findings file, the curated assumptions and open questions from the register, open decisions), fills in [data/scorecard.json](../../data/scorecard.json), and asks for feedback.
 9. **`/retro` proposes; the human approves.** The coordinator runs `/retro` on the feedback and closes with one report that gives the proposed edits and their results on held-out cases ([9.9](../../docs/principles/9.9.html)). An edit goes live only when the human approves it ([9.10](../../docs/principles/9.10.html)), every accepted or rejected edit is logged ([9.12](../../docs/principles/9.12.html)), and the Harness producer applies the approved edits at the start of the next run.
+
+## Planning discipline
+
+The Plan skills carry a few habits that keep a spec from drifting. Skill text says what each role does; this section says what you will see.
+
+- **The interview** ([1.4](../../docs/principles/1.4.html)). The coordinator reads the repo, docs, brief and register before it asks you anything, infers the decisions that matter from your goal instead of working through a stock list, and goes one layer at a time, settling the decisions that others depend on first. Every question has the same shape: the options, the recommended one first with its reason, and what changes if you pick another. It does not anchor on the first option it thought of, and it never applies a preference or default silently; it declares it as an `[ASSUMPTION: ...]`.
+- **The decision sheet** ([1.2](../../docs/principles/1.2.html), 1.4). The interview outcome is written into the spec. Each decision records the choice, who decided it, why, and its register id. Anything parked records why it can wait and a revisit trigger.
+- **Locked decisions** ([1.2](../../docs/principles/1.2.html), [1.6](../../docs/principles/1.6.html)). Once you have answered a decision, in the interview or as a register `QUESTION`, every later agent treats it as locked. If the evidence contradicts it, the agent raises a `[QUESTION: ...]` or `[BLOCKER: ...]` with that evidence and does not change it. The spec and plan reviewers compare their input with your answers and flag a silent override.
+- **The exit test** (1.2, 1.4). The spec and interview reviewers check that every item is either decided or parked with a reason and a revisit trigger, and that no open choice affects behaviour, an interface, authorisation, the source of truth or rollout.
+- **Numbered acceptance criteria** ([1.2](../../docs/principles/1.2.html), [1.7](../../docs/principles/1.7.html)). Criteria are written as numbered Given/When/Then lines, and each check names the criterion it proves, so a reviewer can find a criterion with no check, or a check that proves nothing.
 
 ## Assumptions, open questions and the register
 

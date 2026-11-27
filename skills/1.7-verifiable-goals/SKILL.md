@@ -21,6 +21,7 @@ Writing any task, step or brief.
 
 Do:
 - Rewrite vague asks as 'done when <command/test> passes'
+- Write the goal's criteria as numbered Given/When/Then lines, and make each check name the criterion number it proves
 - Prefer automated checks; describe manual checks precisely when unavoidable
 - Loop until the check passes, independently
 
@@ -39,6 +40,7 @@ Don't:
 
 - Find a goal whose check could pass while the goal is unmet
 - Find tasks with no check
+- Find a check that names no criterion, a criterion no check names, or a criterion that is not numbered Given/When/Then
 - Default verdict is FAIL until evidence shows otherwise; report findings to a file with P0-P3 severity.
 
 ## How the source skills compare

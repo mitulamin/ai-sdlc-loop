@@ -24,11 +24,13 @@ Do:
 - Keep steps 2-5 minutes of work each, with the command that proves it
 - Include the relevant spec excerpt, not the whole spec
 - State conventions the code must match
+- List the locked decisions that apply to each task and carry them in as given
 
 Don't:
 - Write 'implement the feature' with no file paths
 - Assume the implementer knows earlier conversation
 - Bundle unrelated changes into one step
+- Reopen or override a locked decision silently; if a step cannot be written without contradicting one, raise [QUESTION: ...] or [BLOCKER: ...] with the evidence
 
 ## Steps
 
@@ -40,6 +42,7 @@ Don't:
 ## Adversarial reviewer (fresh context, tries to prove the work fails)
 
 - Try to execute step 1 knowing only the plan: what is missing?
+- Locked decisions: compare each step with the answered register entries and the spec's decision sheet; flag any step that contradicts one without a [QUESTION: ...] or [BLOCKER: ...] raised with evidence, as a silent override
 - Find steps with no verification command
 - Default verdict is FAIL until evidence shows otherwise; report findings to a file with P0-P3 severity.
 
