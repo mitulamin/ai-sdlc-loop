@@ -10,6 +10,7 @@ Sections:
 - [SOLID](#solid)
 - [Contracts, predictability and failure](#contracts-predictability-and-failure)
 - [Verification](#verification)
+- [Security by default](#security-by-default)
 - [Operability](#operability)
 - [Where principles pull against each other](#where-principles-pull-against-each-other)
 - [Using these with AI coding agents](#using-these-with-ai-coding-agents)
@@ -78,6 +79,12 @@ From structured design: put work that changes together in the same module (high 
 
 Don't talk to strangers. A method should speak to itself, its arguments, objects it creates, and its immediate collaborators, not walk a chain such as `order.getCustomer().getAddress().getZip()`. Long chains couple you to someone else's internals and break when that shape changes.
 
+### Acyclic dependencies principle
+
+Robert C. Martin's package-level rule: the dependency graph of packages or components should have no cycles, so it forms a directed acyclic graph. If module A depends on B and B depends, directly or through others, on A, you cannot build, test or release either one alone, and a change in one ripples round the loop. Break a cycle by moving the shared piece into a new module both can depend on, or by applying the Dependency Inversion Principle so one side depends on an abstraction. A cycle checker in CI makes the rule cheap to keep. See [https://en.wikipedia.org/wiki/Acyclic_dependencies_principle](https://en.wikipedia.org/wiki/Acyclic_dependencies_principle).
+
+On this site: principle [2.3](../../docs/principles/2.3.html), keep framework, persistence and vendor details out of business logic, behind adapters, which keeps dependencies pointing one way.
+
 ### Composition over inheritance
 
 The Gang of Four asked designers to favour object composition over class inheritance. Combine small, focused parts that you can swap, rather than building deep is-a trees that become rigid the first time a new case does not fit. Inheritance remains useful for a true subtype with a shared contract; it is a poor way to reuse a handful of methods.
@@ -111,6 +118,8 @@ Make fine-grained, client-specific interfaces. Callers should not depend on meth
 ### Dependency Inversion Principle
 
 Depend on abstractions, not on concretions. High-level policy should not import low-level detail; both should depend on a contract the policy owns. This is why a domain service talks to a repository interface, not to a particular database driver.
+
+On this site: principle [2.3](../../docs/principles/2.3.html), keep framework, persistence and vendor details out of business logic, behind adapters.
 
 ## Contracts, predictability and failure
 
@@ -147,6 +156,22 @@ Mike Cohn described the test automation pyramid in Succeeding with Agile; Martin
 Ham Vocke's follow-up, The Practical Test Pyramid at [https://martinfowler.com/articles/practical-test-pyramid.html](https://martinfowler.com/articles/practical-test-pyramid.html), is the best short guide to applying this without getting stuck on Cohn's original layer names.
 
 On this site: the [Verify (testing)](../../docs/categories/verify.html) category, especially principles [4.7](../../docs/principles/4.7.html) (balance the test pyramid by size and cost) and [4.6](../../docs/principles/4.6.html) (coverage is not quality).
+
+### Goodhart's law
+
+"When a measure becomes a target, it ceases to be a good measure." The wording is a popular paraphrase of economist Charles Goodhart's 1975 observation about monetary policy: once you put pressure on a statistic for control purposes, people optimise the statistic and it stops reflecting what you cared about. In engineering, a coverage percentage, a ticket count or a deployment-frequency target can all be met without improving anything. Use metrics to ask questions, pair each with a counter-measure, and look at the outcome the metric stands for. See [https://en.wikipedia.org/wiki/Goodhart%27s_law](https://en.wikipedia.org/wiki/Goodhart%27s_law).
+
+On this site: principle [4.6](../../docs/principles/4.6.html), review suites for mock abuse, brittleness and coverage illusions; coverage is not quality.
+
+## Security by default
+
+Security is easiest to get right when it is a property of the design, not a layer added at the end. The [Developer Guide](developer-guide.md) covers [defence in depth](developer-guide.md#defence-in-depth) and [least privilege](developer-guide.md#least-privilege); this one idea belongs beside the design principles above.
+
+### Secure by default
+
+A product should be safe the moment it is installed or deployed, with no extra configuration and no extra cost: the safe option is the default, and the person who wants something riskier has to choose it knowingly. In practice that means authentication on, debug endpoints and sample credentials off, the narrowest permissions, and encryption in transit without a flag. Secure by default is one half of secure by design, which treats security as a design constraint from the start rather than a retrofit; see [https://en.wikipedia.org/wiki/Secure_by_design](https://en.wikipedia.org/wiki/Secure_by_design) and the CISA Secure by Design programme at [https://www.cisa.gov/securebydesign](https://www.cisa.gov/securebydesign). It is the security-flavoured cousin of convention over configuration, and of the principle of least astonishment: nobody should have to read a hardening guide to avoid being exposed.
+
+On this site: principles [6.2](../../docs/principles/6.2.html) (sort actions into always do, ask first and never do) and [2.14](../../docs/principles/2.14.html) (the simple case is the default and advanced behaviour is opt-in).
 
 ## Operability
 
@@ -234,6 +259,7 @@ On this site: principles [5.8](../../docs/principles/5.8.html) (structured logs)
 | Structure | Information hiding | Hide design decisions likely to change behind a small interface. | Do not leak storage, algorithms or sequencing. |
 | Structure | Coupling and cohesion | Keep related work together; keep unrelated modules loosely tied. | A tidy folder tree is not the same as low coupling. |
 | Structure | Law of Demeter | Talk only to immediate collaborators, not through long object chains. | A little chaining can be clearer than a forest of wrappers. |
+| Structure | Acyclic dependencies | Keep the dependency graph of modules free of cycles. | Break a cycle with a shared module or an abstraction, not a hack. |
 | Structure | Composition over inheritance | Build behaviour by combining small parts rather than deep class trees. | Inheritance still fits a true is-a relationship. |
 | Structure | Program to an interface | Depend on a contract, not on a concrete class. | Do not invent an interface for a single implementation. |
 | SOLID | SRP | A module should have one reason to change. | One reason is not the same as one function. |
@@ -246,6 +272,8 @@ On this site: principles [5.8](../../docs/principles/5.8.html) (structured logs)
 | Contracts | Fail fast | Detect bad state early and make the failure visible. | Do not confuse failing fast with crashing users. |
 | Contracts | Convention over configuration | Agree sensible defaults so only the exceptions need declaring. | Know when the domain is unusual enough to stray. |
 | Testing | Test pyramid | Many fast unit tests, fewer integration tests, very few end-to-end tests. | Coverage percentage is not the same as meaningful tests. |
+| Testing | Goodhart's law | A measure that becomes a target stops being a good measure. | Pair every metric with the outcome it stands for. |
+| Security | Secure by default | The safe option is the default; riskier choices are deliberate opt-ins. | Defaults that need a hardening guide are not secure by default. |
 | Operability | Twelve-factor app | Treat config, build/release/run, logs and process shape as first-class. | The factors are a method for services, not a scorecard. |
 | Operability | Observability | Ask new questions about production without shipping new instrumentation first. | Dashboards of known metrics are not the whole job. |
 | Operability | Idempotency | Repeating an operation leaves the same result as doing it once. | Retries are unsafe until the write is idempotent. |
@@ -265,3 +293,7 @@ Canonical or close-to-canonical starting points, checked for this paper. Books a
 9. [Observability: A Manifesto](https://www.honeycomb.io/blog/observability-a-manifesto): honeycomb.io
 10. [On the role of scientific thought (EWD447)](https://www.cs.utexas.edu/~EWD/transcriptions/EWD04xx/EWD447.html): cs.utexas.edu
 11. [On the Criteria To Be Used in Decomposing Systems into Modules](https://dl.acm.org/doi/10.1145/361598.361623): ACM / Parnas, 1972
+12. [Acyclic dependencies principle](https://en.wikipedia.org/wiki/Acyclic_dependencies_principle): Wikipedia
+13. [Goodhart's law](https://en.wikipedia.org/wiki/Goodhart%27s_law): Wikipedia
+14. [Secure by design](https://en.wikipedia.org/wiki/Secure_by_design): Wikipedia
+15. [Secure by Design](https://www.cisa.gov/securebydesign): CISA
