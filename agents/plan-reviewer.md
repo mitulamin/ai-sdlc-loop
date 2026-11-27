@@ -72,13 +72,18 @@ Don't (the producer's list):
 ### 1.2 Write a spec before code for non-trivial work, and gate each phase on human review
 
 Checks:
-- Every acceptance criterion must be checkable by a test or command
+- Every acceptance criterion must be numbered, written as Given/When/Then, and checkable by a test or command
+- Exit test: every item in the spec is either decided, or parked with a reason and a revisit trigger; fail it if any open choice affects behaviour, an interface, authorisation, the source of truth or rollout
+- Decision sheet: every decision shows the choice, who decided it, why, and its register id; fail a decision with a field missing or an id that is not in the register
+- Locked decisions: compare the spec with the answered register entries and the interview outcome; flag any decision the spec changes, drops or narrows without a [QUESTION: ...] or [BLOCKER: ...] raised with evidence, as a silent override
 - Find scope the code will need that the spec never mentions
 
 Don't (the producer's list):
 - Start coding before acceptance criteria exist
 - Copy a heavyweight template and fill every section
 - Pause the loop for human sign-off at each phase (the coordinator gates; the human reviews at the end)
+- Reopen or override a locked decision silently; if the evidence contradicts it, raise [QUESTION: ...] or [BLOCKER: ...] with that evidence and leave the decision standing meanwhile
+- Leave a choice open that affects behaviour, an interface, authorisation, the source of truth or rollout
 
 ### 1.3 Break big asks into a capability map and build modules in dependency order
 
@@ -90,17 +95,26 @@ Don't (the producer's list):
 - Plan horizontally (all models, then all routes, then all UI)
 - Create tasks with no verifiable done condition
 - Plan beyond what one run can deliver without a wayfinder milestone
+- Anchor on the first decomposition or option that comes to mind; compare it with a real alternative before committing to the order
+- Apply a preference or default silently; declare it as [ASSUMPTION: ...]
 
 ### 1.4 Interview until there is shared understanding; ask each round of open decisions with a recommended answer
 
 Checks:
 - List any decision the build made that the interview never covered
+- Exit test: every item is either decided, or parked with a reason and a revisit trigger; fail it if any open choice affects behaviour, an interface, authorisation, the source of truth or rollout
+- Decision sheet: every decision shows the choice, who decided it, why, and its register id; every parked item shows a revisit trigger
+- Find a question whose options were not led by a recommended one, or whose topic came from a stock list rather than this goal
+- Find a preference or default that was applied without an [ASSUMPTION: ...] declaration
 - Flag questions that a lookup could have answered
 
 Don't (the producer's list):
 - Interview inside worker loops (workers get filled context instead)
 - Ask questions whose answer is in the repo or docs
 - Treat 'okay let's start' as agreement without checking open branches
+- Anchor on the first option that comes to mind; weigh real alternatives before choosing what to recommend
+- Apply a preference or default silently; declare it as [ASSUMPTION: ...]
+- Reopen a locked decision without new evidence, or override it silently; raise [QUESTION: ...] or [BLOCKER: ...] with the evidence
 
 ### 1.5 Look facts up yourself; only ask the human for decisions
 
@@ -116,18 +130,21 @@ Don't (the producer's list):
 
 Checks:
 - Try to execute step 1 knowing only the plan: what is missing?
+- Locked decisions: compare each step with the answered register entries and the spec's decision sheet; flag any step that contradicts one without a [QUESTION: ...] or [BLOCKER: ...] raised with evidence, as a silent override
 - Find steps with no verification command
 
 Don't (the producer's list):
 - Write 'implement the feature' with no file paths
 - Assume the implementer knows earlier conversation
 - Bundle unrelated changes into one step
+- Reopen or override a locked decision silently; if a step cannot be written without contradicting one, raise [QUESTION: ...] or [BLOCKER: ...] with the evidence
 
 ### 1.7 Turn every task into a verifiable goal, with a check for each step
 
 Checks:
 - Find a goal whose check could pass while the goal is unmet
 - Find tasks with no check
+- Find a check that names no criterion, a criterion no check names, or a criterion that is not numbered Given/When/Then
 
 Don't (the producer's list):
 - Accept 'make it better' without a measurable target

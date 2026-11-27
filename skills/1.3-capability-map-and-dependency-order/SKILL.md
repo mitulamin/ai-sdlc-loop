@@ -29,6 +29,8 @@ Don't:
 - Plan horizontally (all models, then all routes, then all UI)
 - Create tasks with no verifiable done condition
 - Plan beyond what one run can deliver without a wayfinder milestone
+- Anchor on the first decomposition or option that comes to mind; compare it with a real alternative before committing to the order
+- Apply a preference or default silently; declare it as [ASSUMPTION: ...]
 
 ## Steps
 

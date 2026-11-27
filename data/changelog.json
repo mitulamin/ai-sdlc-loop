@@ -271,6 +271,24 @@
       ],
       "summary": "Replaced the JSON-lines register request with one register-request block for assumptions, open questions and blockers: === REGISTER REQUESTS ===, [TYPE: statement] lines (types come from register.types in data/agent-contract.json, so a new type is a data change only), === END REGISTER REQUESTS ===. blocker is a new register type; impact and urgency are optional on entries and the coordinator rates them; entries gain an optional via field. agent-contract.schema.json and data/agent-contract.json move to 1.1.0. Every agent definition carries the instruction for agents that cannot write to the register, and build-agents --check and check-skills fail without the field, the block or the instruction. scripts/register.py ingest parses the block and writes statements verbatim; register.py selftest (run by build-agents --check) round-trips every type. Skill 1.1 now uses the block and carries the instruction.",
       "reason": "Agents with no shell cannot write the register, so every agent needs one format that the coordinator can mirror verbatim, and a way to declare blockers."
+    },
+    {
+      "date": "2026-11-27",
+      "research_run": "run-1",
+      "type": "edit",
+      "ids": [
+        "1.2",
+        "1.3",
+        "1.4",
+        "1.6",
+        "1.7",
+        "agents",
+        "commands",
+        "guides",
+        "site"
+      ],
+      "summary": "Added planning-discipline wording to skills 1.2, 1.3, 1.4, 1.6 and 1.7: locked decisions that downstream agents may not silently override (with a reviewer check), an exit test as reviewer checks for 1.2 and 1.4, an interview protocol for 1.4 (ground first, infer from the goal, one layer at a time by coupling, standard question format with the recommendation first), a decision sheet recorded in the spec, numbered Given/When/Then acceptance criteria with checks that name the criterion they prove, and rules against anchoring on the first option and against applying a preference or default silently (declare it as an assumption). Regenerated agents, commands and site; added a Planning discipline section to the Using the agents and commands guide. Principles, principle statements and the register-request block are unchanged.",
+      "reason": "Planning decisions the human has already made were open to silent reopening, and open choices could reach the build; these rules make decisions explicit, durable and checkable."
     }
   ]
 }
