@@ -27,7 +27,7 @@
 <header class="site-header">
 <div class="wrap header-inner">
 <a class="brand" href="index.html"><img class="brand-logo" src="assets/brand/ai-sdlc-loop.svg" alt="AI SDLC Loop logo" width="28" height="28">AI SDLC Loop</a>
-<nav aria-label="Main"><a href="index.html" aria-current="page">Home</a><a href="path.html">Learning path</a><a href="principles.html">All principles</a><a href="skills.html">Skills</a><a href="agents.html">Agents</a><a href="sources.html">Sources</a><a href="guides/index.html">Guides</a><a href="https://github.com/mitulamin/ai-sdlc-loop">GitHub</a></nav>
+<nav aria-label="Main"><a href="index.html" aria-current="page">Home</a><a href="path.html">Learning path</a><a href="principles.html">All principles</a><a href="skills.html">Skills</a><a href="agents.html">Agents</a><a href="sources.html">Sources</a><a href="guides/index.html">Guides</a><a href="use.html">Use</a><a href="https://github.com/mitulamin/ai-sdlc-loop">GitHub</a></nav>
 </div>
 </header>
 <main id="main" class="wrap">
@@ -127,8 +127,9 @@ grouped into categories. Use them to adopt agentic tools with less trial and err
 cd ai-sdlc-loop
 scripts/new-project.sh ../my-new-project              # solo, the default
 scripts/new-project.sh ../my-new-project small-team
-scripts/new-project.sh ../my-new-project large-org</code></pre>
-<p>Then edit the new project's <code>AGENTS.md</code>, read its <code>PROCESS.md</code>, and start your first loop. More in <a href="https://github.com/mitulamin/ai-sdlc-loop#start-a-new-project-from-the-template">the README</a>.</p>
+scripts/new-project.sh ../my-new-project large-org
+scripts/new-project.sh --harness claude-code ../my-new-project  # with a harness</code></pre>
+<p>Add <code>--harness &lt;name&gt;</code> to install the skills, agents and loop commands in the layout your coding harness reads, inside the new project. Then edit the new project's <code>AGENTS.md</code>, read its <code>PROCESS.md</code>, and start your first loop. The <a href="use.html">Use page</a> walks through it for each harness.</p>
 </section>
 
 <section class="lp-section lp-final" aria-labelledby="next">

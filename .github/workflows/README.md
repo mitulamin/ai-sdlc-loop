@@ -2,7 +2,7 @@
 
 | Workflow | What it does |
 | --- | --- |
-| `ci.yml` | On every pull request and push to `main`. Job `data-and-docs`: validates `data/*.json` against `data/schemas/`, checks `skills/` against the principles and skill data, checks `principles/*.md`, `agents/`, `commands/` and `docs/` are not stale, and checks internal links in `docs/` and markdown. Job `skillspector`: scans every folder in `skills/` with NVIDIA SkillSpector. |
+| `ci.yml` | On every pull request and push to `main`. Job `data-and-docs`: validates `data/*.json` against `data/schemas/`, checks `skills/` against the principles and skill data, checks `principles/*.md`, `agents/`, `commands/` and `docs/` are not stale, checks internal links in `docs/` and markdown, and runs `scripts/new-project.sh` into temporary folders for every harness in `data/harnesses.json` and for none, failing if it writes outside the target or installs a wrong or incomplete layout. Job `skillspector`: scans every folder in `skills/` with NVIDIA SkillSpector. |
 
 Run the same checks locally:
 
@@ -14,6 +14,7 @@ scripts/build-principles.py --check
 scripts/build-agents.py --check
 scripts/build-site.py --check
 python scripts/check-links.py
+python scripts/check-new-project.py
 ```
 
 SkillSpector scan (needs Python 3.12 or later):

@@ -14,6 +14,7 @@ The machine-readable source of truth. Everything here is versioned (`schema_vers
 | `licences.json` | The declared licence of every source repo and file (not this repo's licence) | Hand-written |
 | `scorecard.json` | One row per skill for the test-app workflow; `runs` is empty until a skill is scored | Hand-written |
 | `agent-contract.json` | The output field every agent must declare (assumptions and open questions), the register-request block it is written in (assumption, question and blocker types), and the format of the shared surface register | Hand-written |
+| `harnesses.json` | For each coding harness `scripts/new-project.sh` supports: where its skills, agents and commands go inside the project, their file names and front matter, tool names, the command prefix, extra project files, the licence of each installed file (`licensing`: which source licences are share-alike), how to reach the coordinator, where the harness differs, and links to its official docs. Paths must stay inside the project | Hand-written |
 | `schemas/` | JSON schemas for the files above | Hand-written |
 
 Still to come: `refresh/` (reports from each refresh).

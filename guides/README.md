@@ -2,6 +2,8 @@
 
 Plain-language guides to the principles. The guides are in [developer/](developer/README.md), and `scripts/build-site.py` publishes each one as a page under `docs/guides/developer/`.
 
+[use.md](use.md) is the Use page: how to start a new project in your coding harness and run your first loop. `scripts/build-site.py` publishes it as `docs/use.html`, the last page in the site's main navigation. Its harness table and harness sections sit between `BEGIN` and `END` comments and are generated from `data/harnesses.json`; edit the data, not those regions, and run the build. The rest of the page is hand-written and follows the rules below, with links written relative to `guides/` (such as `../docs/agents.html`).
+
 Writing a guide:
 
 - The first `#` heading is the page title and the label in the guides listing. The listing follows the order of the links in `developer/README.md`.

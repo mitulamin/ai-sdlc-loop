@@ -289,6 +289,20 @@
       ],
       "summary": "Added planning-discipline wording to skills 1.2, 1.3, 1.4, 1.6 and 1.7: locked decisions that downstream agents may not silently override (with a reviewer check), an exit test as reviewer checks for 1.2 and 1.4, an interview protocol for 1.4 (ground first, infer from the goal, one layer at a time by coupling, standard question format with the recommendation first), a decision sheet recorded in the spec, numbered Given/When/Then acceptance criteria with checks that name the criterion they prove, and rules against anchoring on the first option and against applying a preference or default silently (declare it as an assumption). Regenerated agents, commands and site; added a Planning discipline section to the Using the agents and commands guide. Principles, principle statements and the register-request block are unchanged.",
       "reason": "Planning decisions the human has already made were open to silent reopening, and open choices could reach the build; these rules make decisions explicit, durable and checkable."
+    },
+    {
+      "date": "2026-11-27",
+      "research_run": "run-1",
+      "type": "add",
+      "ids": [
+        "harnesses",
+        "scripts",
+        "site",
+        "guides",
+        "ci"
+      ],
+      "summary": "Added data/harnesses.json (schema data/schemas/harnesses.schema.json) and scripts/install-harness.py. scripts/new-project.sh --harness <name> now installs the skills, agents and loop commands into a new project in the project-level layout of Cursor, Claude Code, OpenCode, Pi or GitHub Copilot in VS Code. The default, none, keeps the old behaviour. Paths must stay inside the project, and nothing is written to a harness's user or global settings. Loop commands carry an sdlc- prefix. Installed copies are MIT, like template/, except files adapted from share-alike sources (found from the per-source licences in data/licences.json), which keep CC BY-SA 4.0 and carry a NOTICE.md and the licence text in their own skill folder. Each file has a provenance comment stating its licence, and each SOURCES.md carries the copyright lines and licence links of its MIT and Apache sources. The project root holds only the template's MIT LICENSE. Added scripts/check-new-project.py to CI, which also asserts the licence of every installed file. Added the Use page (guides/use.md, published as docs/use.html), the last site nav item before the GitHub link, whose harness table and sections build-site.py generates from data/harnesses.json. Updated the README start section, the licence section and the folder READMEs.",
+      "reason": "Starting a project in a given harness meant copying and adapting the agent, command and skill files by hand. Keeping each harness's layout as data, generated from the same sources, lets every harness get the same loop without a second copy to maintain."
     }
   ]
 }

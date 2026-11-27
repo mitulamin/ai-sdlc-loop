@@ -30,6 +30,8 @@ jobs:
         run: python scripts/build-site.py --check
       - name: Check internal links in docs/ and markdown
         run: python scripts/check-links.py
+      - name: new-project.sh works for every harness, writing only inside the target
+        run: python scripts/check-new-project.py
 
   skillspector:
     runs-on: ubuntu-latest

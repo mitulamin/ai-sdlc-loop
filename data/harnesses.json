@@ -1,0 +1,334 @@
+{
+  "schema_version": "1.0.0",
+  "note": "How scripts/install-harness.py lays out this repo's skills, agents and commands for each coding harness. Every path is relative to the new project's root: nothing is written to a harness's user or global configuration. The sources stay skills/, agents/ and commands/; this file only maps them. Checked against each harness's documentation on 2026-11-27.",
+  "shared_dir": ".ai-sdlc",
+  "attribution": "AI SDLC Loop, by Shravi Limited and contributors",
+  "licensing": {
+    "note": "Licence of each installed file. A file is MIT, like the new project, unless it holds material adapted from a share-alike source. A skill takes its sources' licences from data/licences.json (skills[id].sources[].licence, matched on the text before the first space). A kind listed in inherit_from_skills holds each listed skill's text, so it takes its skills' licences. An unknown licence stops the installer.",
+    "default": "MIT",
+    "inherit_from_skills": ["agent"],
+    "licences": {
+      "MIT": { "name": "MIT", "kind": "permissive" },
+      "Apache-2.0": { "name": "Apache License 2.0", "kind": "permissive", "modified_statement": true },
+      "CC-BY-SA-4.0": {
+        "name": "CC BY-SA 4.0",
+        "kind": "share-alike",
+        "url": "https://creativecommons.org/licenses/by-sa/4.0/",
+        "text_file": "LICENSE-CONTENT"
+      }
+    }
+  },
+  "harnesses": [
+    {
+      "id": "cursor",
+      "name": "Cursor",
+      "summary": "Cursor editor, CLI and Cloud Agents.",
+      "setup": "Install Cursor and sign in.",
+      "rules": {
+        "file": "AGENTS.md",
+        "how": "Cursor reads `AGENTS.md` at the project root as an always-on rules file."
+      },
+      "skills": {
+        "dir": ".cursor/skills",
+        "front_matter": [
+          { "key": "name", "from": "name" },
+          { "key": "description", "from": "description" },
+          { "key": "license", "from": "licence" },
+          { "key": "metadata", "from": "metadata" }
+        ]
+      },
+      "agents": {
+        "dir": ".cursor/agents",
+        "file": "{name}.md",
+        "front_matter": [
+          { "key": "name", "from": "name" },
+          { "key": "description", "from": "description" },
+          { "key": "model", "value": "inherit" }
+        ]
+      },
+      "commands": {
+        "dir": ".cursor/skills",
+        "file": "{name}/SKILL.md",
+        "prefix": "sdlc-",
+        "front_matter": [
+          { "key": "name", "from": "name" },
+          { "key": "description", "from": "description" },
+          { "key": "disable-model-invocation", "value": true }
+        ],
+        "arguments": "the text the human typed after the command, or the brief file it names",
+        "preamble": "Act as the coordinator for this command: read `{coordinator}` and follow it. Start each producer and reviewer it names as a subagent from the same folder."
+      },
+      "coordinator": "Open Agent chat in the project and type a loop command, such as `/sdlc-plan`. The command tells the main agent to act as the coordinator, which starts the producers and reviewers as subagents.",
+      "extra_files": [],
+      "docs": [
+        { "topic": "install", "url": "https://cursor.com/download" },
+        { "topic": "rules", "url": "https://cursor.com/docs/context/rules" },
+        { "topic": "skills", "url": "https://cursor.com/docs/context/skills" },
+        { "topic": "agents", "url": "https://cursor.com/docs/context/subagents" },
+        { "topic": "commands", "url": "https://cursor.com/docs/context/skills" }
+      ],
+      "notes": [
+        "Cursor now treats slash commands as skills: the loop commands are skills with `disable-model-invocation` set, so they run only when the human types them. Legacy `.cursor/commands/` files still load, but the docs point new commands to skills.",
+        "Cursor has no setting that makes a custom agent the main agent, so each loop command tells the main agent to act as the coordinator. Cursor lets the main agent and its direct subagents start subagents, which is the depth the loop needs.",
+        "Cursor subagents take `readonly` rather than a tools list, and the reviewers must write their findings file, so reviewer tool limits stay a prompt rule, as in this repo's `agents/`."
+      ]
+    },
+    {
+      "id": "claude-code",
+      "name": "Claude Code",
+      "summary": "Anthropic's Claude Code CLI, IDE extensions and desktop app.",
+      "setup": "Install Claude Code, sign in, and check it with `claude --version`.",
+      "rules": {
+        "file": "CLAUDE.md",
+        "how": "Claude Code reads `CLAUDE.md`. The installed `CLAUDE.md` imports `AGENTS.md` with `@AGENTS.md`, so `AGENTS.md` stays the one rules file you edit."
+      },
+      "skills": {
+        "dir": ".claude/skills",
+        "front_matter": [
+          { "key": "name", "from": "name" },
+          { "key": "description", "from": "description" },
+          { "key": "license", "from": "licence" },
+          { "key": "metadata", "from": "metadata" }
+        ]
+      },
+      "agents": {
+        "dir": ".claude/agents",
+        "file": "{name}.md",
+        "front_matter": [
+          { "key": "name", "from": "name" },
+          { "key": "description", "from": "description" },
+          { "key": "tools", "from": "tools", "format": "csv" }
+        ],
+        "tool_names": {
+          "Read": ["Read"],
+          "Grep": ["Grep"],
+          "Glob": ["Glob"],
+          "Bash": ["Bash"],
+          "Write": ["Write"]
+        }
+      },
+      "commands": {
+        "dir": ".claude/skills",
+        "file": "{name}/SKILL.md",
+        "prefix": "sdlc-",
+        "front_matter": [
+          { "key": "name", "from": "name" },
+          { "key": "description", "from": "description" },
+          { "key": "argument-hint", "from": "argument-hint" },
+          { "key": "disable-model-invocation", "value": true }
+        ],
+        "arguments": null,
+        "preamble": null
+      },
+      "coordinator": "Run `claude` in the project. The project settings make the coordinator the session's main agent, so type a loop command, such as `/sdlc-plan`, straight away.",
+      "extra_files": [
+        { "path": "CLAUDE.md", "text": "@AGENTS.md\n" },
+        { "path": ".claude/settings.json", "json": { "agent": "coordinator" } }
+      ],
+      "docs": [
+        { "topic": "install", "url": "https://code.claude.com/docs/en/setup" },
+        { "topic": "rules", "url": "https://code.claude.com/docs/en/memory" },
+        { "topic": "skills", "url": "https://code.claude.com/docs/en/skills" },
+        { "topic": "agents", "url": "https://code.claude.com/docs/en/sub-agents" },
+        { "topic": "commands", "url": "https://code.claude.com/docs/en/skills" }
+      ],
+      "notes": [
+        "Claude Code has merged custom commands into skills, so the loop commands are skills with `disable-model-invocation` set. Legacy `.claude/commands/` files still work.",
+        "Claude Code reserves `/ship` for a bundled skill and keeps `/review` as a bundled alias, so commands with those names would not run. That is why the loop commands carry a prefix.",
+        "The coordinator is the main session agent through the `agent` key in the project's `.claude/settings.json`. Remove that key, or start `claude` with `--agent` and another name, to work without it."
+      ]
+    },
+    {
+      "id": "opencode",
+      "name": "OpenCode",
+      "summary": "The OpenCode terminal agent, desktop app and IDE extension.",
+      "setup": "Install OpenCode and connect a model provider.",
+      "rules": {
+        "file": "AGENTS.md",
+        "how": "OpenCode reads `AGENTS.md` from the project root."
+      },
+      "skills": {
+        "dir": ".opencode/skills",
+        "front_matter": [
+          { "key": "name", "from": "name" },
+          { "key": "description", "from": "description" },
+          { "key": "license", "from": "licence" },
+          { "key": "metadata", "from": "metadata" }
+        ]
+      },
+      "agents": {
+        "dir": ".opencode/agents",
+        "file": "{name}.md",
+        "front_matter": [
+          { "key": "description", "from": "description" },
+          { "key": "mode", "value": "primary", "roles": ["coordinator"] },
+          { "key": "mode", "value": "subagent", "roles": ["producer", "reviewer"] },
+          { "key": "permissions", "from": "tools", "format": "deny-rules" }
+        ],
+        "tool_names": {
+          "Read": ["read"],
+          "Grep": ["grep"],
+          "Glob": ["glob"],
+          "Bash": ["shell"],
+          "Write": ["edit"]
+        }
+      },
+      "commands": {
+        "dir": ".opencode/commands",
+        "file": "{name}.md",
+        "prefix": "sdlc-",
+        "front_matter": [
+          { "key": "description", "from": "description" },
+          { "key": "agent", "value": "coordinator" },
+          { "key": "subagent", "value": false }
+        ],
+        "arguments": null,
+        "preamble": null
+      },
+      "coordinator": "Run `opencode` in the project. The project config makes the coordinator the default agent, and each loop command, such as `/sdlc-plan`, selects it too.",
+      "extra_files": [
+        {
+          "path": ".opencode/opencode.json",
+          "json": { "$schema": "https://opencode.ai/config.json", "default_agent": "coordinator" }
+        }
+      ],
+      "docs": [
+        { "topic": "install", "url": "https://opencode.ai/docs/" },
+        { "topic": "rules", "url": "https://opencode.ai/docs/rules/" },
+        { "topic": "skills", "url": "https://opencode.ai/docs/skills/" },
+        { "topic": "agents", "url": "https://opencode.ai/docs/agents/" },
+        { "topic": "commands", "url": "https://opencode.ai/docs/commands/" },
+        { "topic": "config", "url": "https://opencode.ai/docs/config/" }
+      ],
+      "notes": [
+        "OpenCode agents carry permissions, not a tools list. A reviewer without Bash gets a rule that denies `shell`; the agent name comes from the file name.",
+        "The loop commands keep the shared prefix so they read the same in every harness, although OpenCode lets a project command replace a built-in one."
+      ]
+    },
+    {
+      "id": "pi",
+      "name": "Pi",
+      "summary": "The pi coding agent (pi.dev).",
+      "setup": "Install Pi, check it with `pi --version`, and run `/login` in Pi to choose a model provider.",
+      "rules": {
+        "file": "AGENTS.md",
+        "how": "Pi reads `AGENTS.md` from the working directory and its parents as a context file."
+      },
+      "skills": {
+        "dir": ".pi/skills",
+        "front_matter": [
+          { "key": "name", "from": "name" },
+          { "key": "description", "from": "description" },
+          { "key": "license", "from": "licence" },
+          { "key": "metadata", "from": "metadata" }
+        ]
+      },
+      "agents": {
+        "dir": ".pi/agents",
+        "file": "{name}.md",
+        "front_matter": [
+          { "key": "name", "from": "name" },
+          { "key": "description", "from": "description" },
+          { "key": "tools", "from": "tools", "format": "csv" }
+        ],
+        "tool_names": {
+          "Read": ["read"],
+          "Grep": ["grep"],
+          "Glob": ["find", "ls"],
+          "Bash": ["bash"],
+          "Write": ["write"]
+        }
+      },
+      "commands": {
+        "dir": ".pi/prompts",
+        "file": "{name}.md",
+        "prefix": "sdlc-",
+        "front_matter": [
+          { "key": "description", "from": "description" },
+          { "key": "argument-hint", "from": "argument-hint" }
+        ],
+        "arguments": null,
+        "preamble": "Act as the coordinator for this command: read `{coordinator}` and follow it. Start each producer and reviewer it names from the same folder, each in a fresh context."
+      },
+      "coordinator": "Run `pi` in the project and grant project trust, which Pi needs before it loads `.pi/`. Then type a loop command, such as `/sdlc-plan`. The command tells the session to act as the coordinator.",
+      "extra_files": [],
+      "docs": [
+        { "topic": "install", "url": "https://docs.pi.dev/latest/quickstart" },
+        { "topic": "rules", "url": "https://docs.pi.dev/latest/configuration" },
+        { "topic": "skills", "url": "https://docs.pi.dev/latest/skills" },
+        { "topic": "agents", "url": "https://pi.dev/packages/@tintinweb/pi-subagents" },
+        { "topic": "commands", "url": "https://docs.pi.dev/latest/prompt-templates" },
+        { "topic": "cli", "url": "https://docs.pi.dev/latest/cli" }
+      ],
+      "notes": [
+        "Pi has no built-in subagents. The agents go to `.pi/agents/`, the project folder that Pi subagent extensions read. Install one into the project with `pi install -l`, or let the coordinator start each agent as a separate `pi --print --no-session` process with `--append-system-prompt` pointing at the agent file.",
+        "Pi calls slash commands prompt templates. Each loop command is a template in `.pi/prompts/` that tells the session to act as the coordinator.",
+        "Pi loads `.pi/` only after you grant project trust."
+      ]
+    },
+    {
+      "id": "copilot-vscode",
+      "name": "GitHub Copilot in VS Code",
+      "summary": "GitHub Copilot chat in Visual Studio Code, Copilot harness.",
+      "setup": "Install VS Code and sign in to GitHub Copilot.",
+      "rules": {
+        "file": "AGENTS.md",
+        "how": "The Copilot harness reads `AGENTS.md` (or `.github/copilot-instructions.md`) as the project instructions file."
+      },
+      "skills": {
+        "dir": ".github/skills",
+        "front_matter": [
+          { "key": "name", "from": "name" },
+          { "key": "description", "from": "description" },
+          { "key": "license", "from": "licence" },
+          { "key": "metadata", "from": "metadata" }
+        ]
+      },
+      "agents": {
+        "dir": ".github/agents",
+        "file": "{name}.agent.md",
+        "front_matter": [
+          { "key": "name", "from": "name" },
+          { "key": "description", "from": "description" },
+          { "key": "tools", "from": "tools", "format": "list" },
+          { "key": "user-invocable", "value": false, "roles": ["producer", "reviewer"] }
+        ],
+        "tool_names": {
+          "Read": ["read"],
+          "Grep": ["search"],
+          "Glob": ["search"],
+          "Bash": ["execute"],
+          "Write": ["edit"]
+        }
+      },
+      "commands": {
+        "dir": ".github/skills",
+        "file": "{name}/SKILL.md",
+        "prefix": "sdlc-",
+        "front_matter": [
+          { "key": "name", "from": "name" },
+          { "key": "description", "from": "description" },
+          { "key": "argument-hint", "from": "argument-hint" },
+          { "key": "disable-model-invocation", "value": true }
+        ],
+        "arguments": "the text the human typed after the command, or the brief file it names",
+        "preamble": "Act as the coordinator for this command: if the coordinator agent is not the selected agent, read `{coordinator}` and follow it. Start each producer and reviewer it names as a subagent."
+      },
+      "coordinator": "Open the project in VS Code, choose the Copilot harness in Chat, pick `coordinator` from the Agent dropdown, and type a loop command, such as `/sdlc-plan`.",
+      "extra_files": [],
+      "docs": [
+        { "topic": "install", "url": "https://code.visualstudio.com/docs/setup/copilot" },
+        { "topic": "rules", "url": "https://code.visualstudio.com/docs/copilot/customization/custom-instructions" },
+        { "topic": "skills", "url": "https://code.visualstudio.com/docs/copilot/customization/agent-skills" },
+        { "topic": "agents", "url": "https://code.visualstudio.com/docs/agents/reference/custom-agent-file-reference" },
+        { "topic": "commands", "url": "https://code.visualstudio.com/docs/copilot/customization/prompt-files" },
+        { "topic": "subagents", "url": "https://code.visualstudio.com/docs/agents/run/subagents" }
+      ],
+      "notes": [
+        "Prompt files (`.github/prompts/*.prompt.md`) run only in the Local harness, which VS Code has deprecated, so the loop commands are skills with `disable-model-invocation` set, which the Copilot harness runs as slash commands.",
+        "Producers and reviewers set `user-invocable` to false, so only the coordinator shows in the Agent dropdown; the coordinator starts them as subagents.",
+        "Reviewer tools map to the Copilot aliases `read`, `search`, `edit` and `execute`. The `edit` tool is there so a reviewer can write its findings file; not editing the work stays a prompt rule."
+      ]
+    }
+  ]
+}

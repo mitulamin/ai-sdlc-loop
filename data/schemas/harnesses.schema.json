@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mitulamin/ai-sdlc-loop/data/schemas/harnesses.schema.json",
+  "title": "Harness layouts",
+  "description": "Where and in what format scripts/install-harness.py writes this repo's skills, agents and commands for each coding harness. Paths are relative to the new project's root and must stay inside it.",
+  "type": "object",
+  "required": ["schema_version", "shared_dir", "attribution", "licensing", "harnesses"],
+  "additionalProperties": false,
+  "$defs": {
+    "project_path": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(/|$))(?!~)[A-Za-z0-9._/-]+$",
+      "description": "A relative path inside the project: no leading slash, no '..', no '~'."
+    },
+    "file_pattern": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._/-]*\\{name\\}[A-Za-z0-9._/-]*$",
+      "description": "File path under the kind's dir; {name} is replaced by the item name."
+    },
+    "front_matter": {
+      "type": "array",
+      "description": "Front matter keys to write, in order. Each takes a value from the source item ('from') or a literal ('value'). 'roles' limits an agent entry to some roles.",
+      "items": {
+        "type": "object",
+        "required": ["key"],
+        "additionalProperties": false,
+        "properties": {
+          "key": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
+          "from": { "enum": ["name", "description", "argument-hint", "tools", "licence", "metadata"] },
+          "value": { "type": ["string", "boolean", "number"] },
+          "format": {
+            "enum": ["csv", "list", "deny-rules"],
+            "description": "How a tools list is written: comma-separated, a YAML list, or permission rules that deny the mapped actions the agent does not have."
+          },
+          "roles": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "enum": ["coordinator", "producer", "reviewer"] }
+          }
+        },
+        "oneOf": [
+          { "required": ["from"], "not": { "required": ["value"] } },
+          { "required": ["value"], "not": { "anyOf": [{ "required": ["from"] }, { "required": ["format"] }] } }
+        ]
+      }
+    }
+  },
+  "properties": {
+    "schema_version": { "const": "1.0.0" },
+    "note": { "type": "string" },
+    "shared_dir": {
+      "$ref": "#/$defs/project_path",
+      "description": "Project folder for the agents and commands reference pages."
+    },
+    "attribution": { "type": "string", "minLength": 1 },
+    "licensing": {
+      "type": "object",
+      "required": ["default", "inherit_from_skills", "licences"],
+      "additionalProperties": false,
+      "properties": {
+        "note": { "type": "string" },
+        "default": { "type": "string", "description": "Key in licences: the licence of an installed file with no share-alike material. Must be permissive." },
+        "inherit_from_skills": {
+          "type": "array",
+          "items": { "enum": ["agent", "command"] },
+          "description": "File kinds that hold the text of each skill in their skills list, so share-alike propagates to them."
+        },
+        "licences": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "required": ["name", "kind"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "kind": { "enum": ["permissive", "share-alike"] },
+              "modified_statement": { "type": "boolean", "description": "The installed SOURCES.md says the material was modified (Apache-2.0)." },
+              "url": { "type": "string", "pattern": "^https://" },
+              "text_file": { "type": "string", "description": "Repo file with the licence text, copied into each folder that holds a share-alike skill. Required for share-alike." }
+            },
+            "if": { "properties": { "kind": { "const": "share-alike" } }, "required": ["kind"] },
+            "then": { "required": ["url", "text_file"] }
+          }
+        }
+      }
+    },
+    "harnesses": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "name", "summary", "setup", "rules", "skills", "agents", "commands", "coordinator", "extra_files", "docs", "notes"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "not": { "const": "none" } },
+          "name": { "type": "string", "minLength": 1 },
+          "summary": { "type": "string", "minLength": 1 },
+          "setup": { "type": "string", "minLength": 1, "description": "What the human installs and signs in to before using the harness." },
+          "rules": {
+            "type": "object",
+            "required": ["file", "how"],
+            "additionalProperties": false,
+            "properties": {
+              "file": { "$ref": "#/$defs/project_path" },
+              "how": { "type": "string", "minLength": 1 }
+            }
+          },
+          "skills": {
+            "type": "object",
+            "required": ["dir", "front_matter"],
+            "additionalProperties": false,
+            "properties": {
+              "dir": { "$ref": "#/$defs/project_path" },
+              "front_matter": { "$ref": "#/$defs/front_matter" }
+            }
+          },
+          "agents": {
+            "type": "object",
+            "required": ["dir", "file", "front_matter"],
+            "additionalProperties": false,
+            "properties": {
+              "dir": { "$ref": "#/$defs/project_path" },
+              "file": { "$ref": "#/$defs/file_pattern" },
+              "front_matter": { "$ref": "#/$defs/front_matter" },
+              "tool_names": {
+                "type": "object",
+                "description": "Each tool name used in agents/ front matter, mapped to the harness's names for it.",
+                "additionalProperties": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": { "type": "string", "minLength": 1 }
+                }
+              }
+            }
+          },
+          "commands": {
+            "type": "object",
+            "required": ["dir", "file", "prefix", "front_matter", "arguments", "preamble"],
+            "additionalProperties": false,
+            "properties": {
+              "dir": { "$ref": "#/$defs/project_path" },
+              "file": { "$ref": "#/$defs/file_pattern" },
+              "prefix": { "type": "string", "pattern": "^([a-z0-9]+-)*$" },
+              "front_matter": { "$ref": "#/$defs/front_matter" },
+              "arguments": {
+                "type": ["string", "null"],
+                "description": "Text that replaces $ARGUMENTS where the harness does not substitute it; null keeps $ARGUMENTS."
+              },
+              "preamble": {
+                "type": ["string", "null"],
+                "description": "A line put before the command body; {coordinator} becomes the installed coordinator's path."
+              }
+            }
+          },
+          "coordinator": { "type": "string", "minLength": 1, "description": "How the human starts talking to the coordinator in this harness." },
+          "extra_files": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["path"],
+              "additionalProperties": false,
+              "properties": {
+                "path": { "$ref": "#/$defs/project_path" },
+                "text": { "type": "string" },
+                "json": { "type": "object" }
+              },
+              "oneOf": [{ "required": ["text"] }, { "required": ["json"] }]
+            }
+          },
+          "docs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["topic", "url"],
+              "additionalProperties": false,
+              "properties": {
+                "topic": { "enum": ["install", "rules", "skills", "agents", "commands", "config", "cli", "subagents"] },
+                "url": { "type": "string", "pattern": "^https://" }
+              }
+            }
+          },
+          "notes": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        }
+      }
+    }
+  }
+}

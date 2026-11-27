@@ -23,7 +23,7 @@ The data files hold the principle statements and the research record around them
 
 ## MIT (the template)
 
-The text is in [template/LICENSE](template/LICENSE). It covers everything under `template/`, code and writing. A project created with `scripts/new-project.sh` copies the base from that folder plus the profile you pick, including `LICENSE`, and starts under MIT. It does not inherit GPL-3.0 or CC BY-SA 4.0.
+The text is in [template/LICENSE](template/LICENSE). It covers everything under `template/`, code and writing. A project created with `scripts/new-project.sh` copies the base from that folder plus the profile you pick, including `LICENSE`, and starts under MIT. It does not inherit GPL-3.0. The copies of skills, agents and commands that the script installs with `--harness` are MIT too, like `template/`, except files adapted from share-alike sources, which keep CC BY-SA 4.0 and carry their notice and licence text. The sources of those copies, in `skills/`, `agents/` and `commands/` here, stay under CC BY-SA 4.0.
 
 ## Logo and brand images (all rights reserved)
 
