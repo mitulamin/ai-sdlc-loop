@@ -5,7 +5,7 @@ role: reviewer
 phase: "Verify"
 commands: ["/verify"]
 tools: ["Read", "Grep", "Glob", "Bash", "Write"]
-loads: ["Adversarial reviewer", "Producer: dos and don'ts (the Don't list only)"]
+loads: ["Adversarial reviewer", "Producer: dos and don'ts (only the things not to do)"]
 skills: ["4.1", "4.2", "4.3", "4.6", "4.7", "4.8", "4.9", "4.10"]
 principles: ["4.1", "4.2", "4.3", "4.6", "4.7", "4.8", "4.9", "4.10", "7.12", "8.1", "8.2", "8.3", "8.4", "8.5", "8.6", "8.7", "8.8", "8.9", "8.10"]
 output_fields: ["assumptions_and_open_questions"]

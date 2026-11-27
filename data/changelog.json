@@ -327,6 +327,19 @@
       ],
       "summary": "README.md links the learning site (https://mitulamin.github.io/ai-sdlc-loop/) just after the introduction. The Use page link later in the README stays. The alpha status badge, warning and title are unchanged. The site is generated independently of the README, so docs/ is unchanged.",
       "reason": "The GitHub Pages site was only linked from the Use page, deep in the README."
+    },
+    {
+      "date": "2026-11-27",
+      "research_run": "run-1",
+      "type": "edit",
+      "ids": [
+        "agents",
+        "scripts",
+        "ci",
+        "releasing"
+      ],
+      "summary": "Extended the SkillSpector CI scan from skills/ to agents/, commands/, template/ and a throwaway install for each harness, and added the scan with the LLM analyzers on (scripts/skillspector-llm-scan.py, which uses xAI when XAI_API_KEY is set and otherwise NVIDIA Build with NVIDIA_INFERENCE_KEY and a pinned model, nvidia/nemotron-3.5-super-vl-120b-a12b, because SkillSpector's own default for NVIDIA Build no longer answers; with backoff on failed calls), run by workflow skillspector-llm.yml on release-candidate tags (vX.Y.Z-rcN on a main commit) as groups derived from the repo, one skill family or folder per job, one after another, with a summary job that passes only when every group passed. The release tag vX.Y.Z and GitHub release follow only after that, on the same commit (RELEASING.md, workflow release-gate.yml, per-finding record). Reworded the reviewer agents' loads label in scripts/build-agents.py so SkillSpector's static parser can read every reviewer file.",
+      "reason": "The static scan covered only skills, but agents, commands, the template and the installed harness files are what an agent actually reads. A model-assisted pass catches intent that static rules miss, but it is slow, limited by provider rate limits and needs a person to triage its findings, so it runs per release candidate in small serial groups that can be re-run one at a time, and gates the release rather than every pull request."
     }
   ]
 }

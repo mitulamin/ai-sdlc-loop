@@ -1,0 +1,29 @@
+name: Release gate
+
+# Runs when a final release tag (vX.Y.Z, no -rc suffix) is pushed. It passes only if the
+# SkillSpector LLM scan workflow has a successful run, every group passed, for a release-candidate
+# tag of the same version (vX.Y.Z-rcN) on this very commit. See RELEASING.md.
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  release-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: A passed LLM scan of a release candidate on this commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          passed=$(gh api "repos/${GITHUB_REPOSITORY}/actions/workflows/skillspector-llm.yml/runs?head_sha=${GITHUB_SHA}&event=push&status=success&per_page=100" \
+            --jq "[.workflow_runs[] | select(.head_branch | startswith(\"${GITHUB_REF_NAME}-rc\")) | .head_branch] | unique | join(\", \")")
+          if [ -z "$passed" ]; then
+            echo "::error title=No passed LLM scan::no successful SkillSpector LLM scan run of a ${GITHUB_REF_NAME}-rcN tag on ${GITHUB_SHA}. Do not publish the release; see RELEASING.md."
+            exit 1
+          fi
+          echo "Passed LLM scan on this commit for: $passed"
