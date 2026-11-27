@@ -99,6 +99,18 @@ DISPOSITION = re.compile(r"^(FIXED|FALSE POSITIVE|ACCEPTED|COVERED BY STATIC EXC
 SEMANTIC_PREFIX = "semantic_"
 
 
+def no_llm_work(data):
+    """True when every semantic analyzer found no file it applies to, so a run with no LLM calls is complete.
+
+    A harness install holds agent, command and config files but no skill package, so SkillSpector's
+    semantic analyzers have nothing to read there; the same text is read with the LLM as agents/,
+    commands/ and skills/.
+    """
+    statuses = (data.get("analysis_completeness") or {}).get("analyzer_statuses", [])
+    semantic = [a for a in statuses if a.get("analyzer_id", "").startswith(SEMANTIC_PREFIX)]
+    return bool(semantic) and all(a.get("status") == "not_applicable" for a in semantic)
+
+
 def llm_problem(data, proc):
     """Return why this report cannot count as a successful LLM-mode scan, or None."""
     meta = data.get("metadata", {})
@@ -109,8 +121,8 @@ def llm_problem(data, proc):
         return "the LLM was not requested"
     if not meta.get("llm_available"):
         return "no LLM provider was available (check SKILLSPECTOR_PROVIDER and its credential)"
-    attempted, succeeded = meta.get("llm_calls_attempted", 0), meta.get("llm_calls_succeeded", 0)
-    if meta.get("llm_degraded") or not attempted or succeeded != attempted:
+    attempted, succeeded = meta.get("llm_calls_attempted") or 0, meta.get("llm_calls_succeeded") or 0
+    if meta.get("llm_degraded") or (not attempted and not no_llm_work(data)) or succeeded != attempted:
         return f"LLM stage degraded: {succeeded} of {attempted} calls succeeded ({meta.get('llm_error', 'no detail')})"
     for a in comp.get("analyzer_statuses", []):
         if a.get("analyzer_id", "").startswith(SEMANTIC_PREFIX) and a.get("status") not in ("completed", "not_applicable"):
@@ -359,6 +371,7 @@ def record(args):
     models = provider_summary(reports)
     calls = sum(d["metadata"].get("llm_calls_succeeded", 0) for d in reports)
     minutes = f"{(time.monotonic() - started) / 60:.1f} minutes, {jobs} targets at a time"
+    static_only = [x.name for x, d, _ in results if not d["metadata"].get("llm_calls_attempted")]
     lines = [
         "# SkillSpector LLM-mode scan record", "",
         f"- Commit: {git('rev-parse', 'HEAD')}" + (" (working tree has uncommitted changes)" if dirty else ""),
@@ -370,6 +383,7 @@ def record(args):
         f"- Wall-clock time: {minutes}",
         f"- Targets scanned: {len(targets)} ({'all' if not args.only else 'only ' + args.only}); every file inspected: yes",
         f"- LLM calls succeeded: {calls}, failed: 0",
+        "- Targets with no file the LLM analyzers apply to (static rules only): " + (", ".join(static_only) or "none"),
         "- Scan completed: yes",
         f"- Findings: {len(rows)} in total, {len(open_rows)} {UNREVIEWED}", "",
         "## Findings", "",
