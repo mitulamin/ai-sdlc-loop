@@ -1,33 +1,15 @@
 name: SkillSpector LLM scan
 
-# The LLM-mode scan sends the scanned text to xAI (secret XAI_API_KEY) or, without that, NVIDIA
-# Build (secret NVIDIA_INFERENCE_KEY), so it runs only when something it scans changes, and a newer
-# push to the same pull request cancels the older run. The scan logic, including the choice of
-# provider and how many targets run in parallel, lives in scripts/skillspector-llm-scan.py.
+# The LLM-mode scan runs on a release-candidate tag (vX.Y.Z-rcN) on a commit of the default branch,
+# or by hand. It is not run on pull requests. It sends the scanned text to xAI (secret XAI_API_KEY)
+# or, without that, NVIDIA Build (secret NVIDIA_INFERENCE_KEY). The targets are split into groups
+# (scripts/skillspector-llm-scan.py --list-groups), scanned one group at a time, one job each, to
+# keep request rates low. A failed group does not stop the later ones; use "Re-run failed jobs" so
+# that groups which passed are not scanned again. The summary job passes only when every group
+# passed, and uploads the combined record. See RELEASING.md.
 on:
-  pull_request:
-    paths:
-      - "skills/**"
-      - "agents/**"
-      - "commands/**"
-      - "template/**"
-      - "data/harnesses.json"
-      - "scripts/install-harness.py"
-      - "scripts/skillspector*.py"
-      - ".github/skillspector-exceptions.yaml"
-      - ".github/workflows/skillspector-llm.yml"
   push:
-    branches: [main]
-    paths:
-      - "skills/**"
-      - "agents/**"
-      - "commands/**"
-      - "template/**"
-      - "data/harnesses.json"
-      - "scripts/install-harness.py"
-      - "scripts/skillspector*.py"
-      - ".github/skillspector-exceptions.yaml"
-      - ".github/workflows/skillspector-llm.yml"
+    tags: ["v*.*.*-rc*"]
   workflow_dispatch:
 
 permissions:
@@ -35,12 +17,46 @@ permissions:
 
 concurrency:
   group: skillspector-llm-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
-  skillspector-llm:
+  plan:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 15
+    outputs:
+      groups: ${{ steps.groups.outputs.groups }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: A release-candidate tag must be on the default branch
+        if: github.ref_type == 'tag'
+        env:
+          DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+        run: |
+          git fetch --no-tags origin "$DEFAULT_BRANCH"
+          if ! git merge-base --is-ancestor "$GITHUB_SHA" FETCH_HEAD; then
+            echo "::error title=Not on ${DEFAULT_BRANCH}::${GITHUB_REF_NAME} points at a commit that is not on ${DEFAULT_BRANCH}; tag a ${DEFAULT_BRANCH} commit"
+            exit 1
+          fi
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install pyyaml
+      - name: Scan groups
+        id: groups
+        run: echo "groups=$(python scripts/skillspector-llm-scan.py --list-groups)" >> "$GITHUB_OUTPUT"
+
+  scan:
+    needs: plan
+    name: scan (${{ matrix.group }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    strategy:
+      fail-fast: false
+      max-parallel: 1
+      matrix:
+        group: ${{ fromJSON(needs.plan.outputs.groups) }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -48,15 +64,56 @@ jobs:
           python-version: "3.12"
       - name: Install SkillSpector (NVIDIA, Apache-2.0) and PyYAML
         run: python -m pip install "skillspector==2.13.7" pyyaml
-      - name: Scan with SkillSpector's LLM analyzers (skips without either secret, fails if the key is rejected)
+      - name: Scan the group with SkillSpector's LLM analyzers
         env:
           XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
           NVIDIA_INFERENCE_KEY: ${{ secrets.NVIDIA_INFERENCE_KEY }}
-        run: python scripts/skillspector-llm-scan.py --record "$RUNNER_TEMP/skillspector-llm-record.md" --skip-without-key --allow-unreviewed
-      - name: Upload the scan record
+          GROUP: ${{ matrix.group }}
+        run: python scripts/skillspector-llm-scan.py --group "$GROUP" --record "$RUNNER_TEMP/llm-scan/$GROUP.md" --allow-unreviewed
+      - name: Upload the group record
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: skillspector-llm-group-${{ matrix.group }}
+          path: ${{ runner.temp }}/llm-scan/
+          if-no-files-found: ignore
+          overwrite: true
+
+  summary:
+    needs: [plan, scan]
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install pyyaml
+      - name: Download the group records
+        uses: actions/download-artifact@v4
+        continue-on-error: true
+        with:
+          pattern: skillspector-llm-group-*
+          merge-multiple: true
+          path: ${{ runner.temp }}/groups
+      - name: Combine the group records
+        run: python scripts/skillspector-llm-scan.py --merge "$RUNNER_TEMP/skillspector-llm-record.md" --from "$RUNNER_TEMP/groups"
+      - name: Upload the combined record
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: skillspector-llm-record-${{ github.sha }}
           path: ${{ runner.temp }}/skillspector-llm-record.md
           if-no-files-found: ignore
+          overwrite: true
+      - name: Every group passed
+        if: always()
+        env:
+          PLAN: ${{ needs.plan.result }}
+          SCAN: ${{ needs.scan.result }}
+        run: |
+          if [ "$PLAN" != success ] || [ "$SCAN" != success ]; then
+            echo "::error title=LLM scan incomplete::plan: $PLAN, scan groups: $SCAN. Re-run the failed jobs; do not tag the release until this job passes."
+            exit 1
+          fi
