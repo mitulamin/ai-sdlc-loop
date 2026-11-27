@@ -237,8 +237,6 @@ def preflight(provider, key_env, model):
             if e.code in (400, 404, 410):
                 detail = scrub(e.read().decode(errors="replace"))[:200]
                 return f"model {model} is not available on {base} (HTTP {e.code}: {detail}); set SKILLSPECTOR_MODEL to one that is"
-            if e.code == 429:
-                return None
             last = f"HTTP {e.code}"
         except (TimeoutError, urllib.error.URLError) as e:
             if isinstance(e, TimeoutError) or isinstance(getattr(e, "reason", None), TimeoutError):
@@ -246,7 +244,10 @@ def preflight(provider, key_env, model):
                 return (f"model {model} did not answer a tiny request on {base} within "
                         f"{PREFLIGHT_TIMEOUT_SECONDS}s; set SKILLSPECTOR_MODEL to a model that responds")
             last = scrub(str(e))
-        time.sleep(10 * (attempt + 1))
+        time.sleep(RETRY_PAUSE_SECONDS * (attempt + 1))
+    if last == "HTTP 429":
+        return (f"{key_env} is rate-limited by {base} (HTTP 429 on a single tiny request, so its quota is used up "
+                "for now); try again later, or use the other provider's key")
     return f"could not reach {base} to check the key ({last})"
 
 

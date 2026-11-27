@@ -30,7 +30,7 @@ jobs:
           NVIDIA_INFERENCE_KEY: ${{ secrets.NVIDIA_INFERENCE_KEY }}
         run: python scripts/skillspector-llm-scan.py --record "$RUNNER_TEMP/skillspector-llm-record.md" --allow-unreviewed
       - name: Upload the fresh scan record
-        if: always() && hashFiles(format('{0}/skillspector-llm-record.md', runner.temp)) != ''
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: skillspector-llm-record-${{ github.sha }}
