@@ -2,16 +2,26 @@
 """SkillSpector scan with the LLM analyzers on, and the record that goes with it.
 
 Usage:
-  scripts/skillspector-llm-scan.py --record PATH [--only GLOB] [--jobs N] [--retries N]
+  scripts/skillspector-llm-scan.py --record PATH [--group NAME | --only GLOB] [--jobs N] [--retries N]
                                    [--skip-without-key] [--allow-unreviewed]
+  scripts/skillspector-llm-scan.py --list-groups
+  scripts/skillspector-llm-scan.py --merge PATH --from DIR
   scripts/skillspector-llm-scan.py --verify release-scans/<tag>.md
 
-This is the one entry point for the LLM-mode scan: CI calls it (workflows skillspector-llm and
-release-gate) and so does a person running it locally. It scans the same targets as
+This is the one entry point for the LLM-mode scan: CI calls it (workflow skillspector-llm, on a
+release-candidate tag) and so does a person running it locally. It scans the same targets as
 scripts/skillspector-scan.py (every skill, agents/, commands/, template/ and a throwaway install
 for each harness) but without --no-llm, so SkillSpector sends the text of those files to the model
 provider. Do not run it if that is not acceptable for the files being scanned. The steps and the
 record are in RELEASING.md.
+
+Groups. The targets fall into groups, derived from their names: one per skill family (the number
+before the first dot of a skill folder, so skills-1 holds every 1.x skill), then agents, commands,
+template, and harness-installs. --list-groups prints them, in scan order, as a JSON list (the CI
+matrix). --group NAME scans one group; CI runs the groups one after another, one job each.
+--record also writes PATH.json beside the Markdown record, and --merge combines the .json files of
+every group in DIR into one record of the whole scan, which fails if a group is missing or the
+groups were scanned on different content.
 
 Provider and key. The script picks the provider from the key it finds:
   XAI_API_KEY           xAI (https://api.x.ai/v1), through SkillSpector's openai_compatible
@@ -32,12 +42,12 @@ a model that is retired or not served, or a model that does not answer the check
 stops it with exit code 2.
 
 Speed and rate limits. A target takes most of a minute whatever the model, because SkillSpector
-makes a few long LLM calls for it, so targets are scanned in parallel: --jobs, or SKILLSPECTOR_JOBS,
-defaults to DEFAULT_JOBS for the provider. NVIDIA Build's free tier allows roughly 40 requests a
-minute, which its default stays under; xAI's limits are per team and much higher. SkillSpector
-retries a rate-limited call itself; a target whose LLM calls still failed is scanned again after
-an exponential backoff with jitter, up to --retries times. Results from every target are
-collected into one record and one exit code.
+makes a few long LLM calls for it, so the targets of a run are scanned a few at a time: --jobs, or
+SKILLSPECTOR_JOBS, defaults to DEFAULT_JOBS for the provider, which stays well under NVIDIA Build's
+free tier of roughly 40 requests a minute and xAI's per-team limits. SkillSpector retries a
+rate-limited call itself; a target whose LLM calls still failed is scanned again after an
+exponential backoff with jitter, up to --retries times. Results from every target are collected
+into one record and one exit code.
 
 SkillSpector reports a degraded LLM stage (no key, a rejected key, a failed request) as a warning
 and still exits 0 with static results only. This script treats that as a failure: a target counts
@@ -58,9 +68,10 @@ Dispositions (replace UNREVIEWED with exactly one, followed by a reason):
   FALSE POSITIVE: <why it is not an issue>
   ACCEPTED: <who accepted the risk, and why it ships anyway>
 
---verify exits 0 only when the record names a commit, says the scan completed on a full run, was
-made on exactly the files now in HEAD (apart from release-scans/), and no finding is left
-UNREVIEWED or has a disposition without a reason.
+--verify exits 0 only when the record names a commit, says the scan completed on a full run (a
+record from --merge, or from --record without --group or --only), was made on exactly the files
+now in HEAD (apart from release-scans/), and no finding is left UNREVIEWED or has a disposition
+without a reason.
 """
 import argparse
 import datetime
@@ -81,7 +92,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from skillspector_targets import (  # noqa: E402
-    ROOT, apply_exceptions, as_list, coverage_problem, dir_targets, find_scanner, harness_targets, load_exceptions, skill_targets,
+    DIR_TARGETS, HARNESS_PREFIX, HARNESSES, ROOT, apply_exceptions, as_list, coverage_problem, dir_targets, find_scanner,
+    harness_targets, load_exceptions, skill_targets,
 )
 
 TIMEOUT_SECONDS = 1800
@@ -89,10 +101,11 @@ NV_BUILD_MODEL = "nvidia/nemotron-3.5-super-vl-120b-a12b"
 XAI_BASE_URL = "https://api.x.ai/v1"
 XAI_MODELS = ("grok-4.20-0309-non-reasoning", "grok-4.7")
 KEY_ENVS = {"xai": "XAI_API_KEY", "nv_build": "NVIDIA_INFERENCE_KEY"}
-DEFAULT_JOBS = {"xai": 16, "nv_build": 8}
+DEFAULT_JOBS = {"xai": 6, "nv_build": 4}
 FALLBACK_JOBS = 4
 PREFLIGHT_TIMEOUT_SECONDS = 90
-RETRY_PAUSE_SECONDS = 30
+RETRY_PAUSE_SECONDS = 60
+HARNESS_GROUP = "harness-installs"
 RECORDS_DIR = "release-scans"
 UNREVIEWED = "UNREVIEWED"
 DISPOSITION = re.compile(r"^(FIXED|FALSE POSITIVE|ACCEPTED|COVERED BY STATIC EXCEPTION): \S")
@@ -301,6 +314,81 @@ def cell(text):
     return str(text).replace("|", "\\|").replace("\n", " ").strip()
 
 
+def group_of(name):
+    """The group a target belongs to: its skill family, its own name, or the harness installs."""
+    if name.startswith(HARNESS_PREFIX):
+        return HARNESS_GROUP
+    if name in DIR_TARGETS:
+        return name
+    return "skills-" + name.split(".", 1)[0]
+
+
+def group_order(name):
+    if name.startswith("skills-"):
+        family = name[len("skills-"):]
+        return (0, int(family) if family.isdigit() else 0, family)
+    tail = [*DIR_TARGETS, HARNESS_GROUP]
+    return (1, tail.index(name) if name in tail else len(tail), name)
+
+
+def list_groups():
+    """Return (groups in scan order, error), without installing anything."""
+    skills, err = skill_targets()
+    dirs, err2 = dir_targets()
+    if err or err2:
+        return None, err or err2
+    names = [x.name for x in skills + dirs]
+    if json.loads(HARNESSES.read_text(encoding="utf-8"))["harnesses"]:
+        names.append(HARNESS_PREFIX)
+    return sorted({group_of(n) for n in names}, key=group_order), None
+
+
+def render(meta, rows):
+    """The Markdown record for a scan (one group, a trial or every group)."""
+    open_rows = [r for r in rows if r[6] == UNREVIEWED]
+    lines = [
+        "# SkillSpector LLM-mode scan record", "",
+        f"- Commit: {meta['commit']}" + (" (working tree has uncommitted changes)" if meta["dirty"] else ""),
+        f"- Date (UTC): {meta['date']}",
+        f"- Content id (every tracked file except {RECORDS_DIR}/): {meta['content_id']}",
+        f"- Scanner: {meta['scanner']}",
+        "- Provider and model: " + ("; ".join(meta["providers"]) or "unknown"),
+        f"- Wall-clock time: {meta['time']}",
+    ]
+    if meta.get("groups"):
+        lines.append("- Groups: " + "; ".join(meta["groups"]))
+    lines += [
+        f"- Targets scanned: {meta['targets']} ({meta['scope']}); every file inspected: yes",
+        f"- LLM calls succeeded: {meta['calls']}, failed: 0",
+        "- Targets with no file the LLM analyzers apply to (static rules only): " + (", ".join(meta["static_only"]) or "none"),
+        "- Scan completed: yes",
+        f"- Findings: {len(rows)} in total, {len(open_rows)} {UNREVIEWED}", "",
+        "## Findings", "",
+    ]
+    if rows:
+        lines += ["| Target | Rule | Severity | Where | Matched | Why SkillSpector flagged it | Disposition |", "| --- | --- | --- | --- | --- | --- | --- |"]
+        lines += ["| " + " | ".join(cell(c) for c in r) + " |" for r in rows]
+    else:
+        lines.append("None.")
+    return "\n".join(lines) + "\n"
+
+
+def report_findings(meta, rows, out):
+    """Print the outcome, a warning per unreviewed finding, and the job summary."""
+    open_rows = [r for r in rows if r[6] == UNREVIEWED]
+    print(f"wrote {out}: {meta['targets']} targets ({meta['scope']}) in {meta['time']}, {len(rows)} findings, {len(open_rows)} {UNREVIEWED}")
+    in_ci = bool(os.environ.get("GITHUB_ACTIONS"))
+    for r in open_rows:
+        text = cell(f"{r[0]} {r[1]} ({r[2]}) at {r[3]}: {r[4]}")[:400]
+        print(f"::warning title=LLM scan finding::{text}" if in_ci else f"UNREVIEWED {text}")
+    summary([f"## SkillSpector LLM-mode scan: {meta['scope']}", "",
+             "- Provider and model: " + ("; ".join(meta["providers"]) or "unknown"),
+             f"- Targets scanned: {meta['targets']} in {meta['time']}; LLM calls succeeded: {meta['calls']}",
+             f"- Findings: {len(rows)} in total, {len(open_rows)} not covered by a static exception", ""]
+            + [f"- {cell(r[0])}: {cell(r[1])} ({cell(r[2])}) at {cell(r[3])}: {cell(r[4])[:200]}" for r in open_rows])
+    return open_rows
+
+
 def record(args):
     started = time.monotonic()
     provider, key_env = choose_provider()
@@ -308,6 +396,14 @@ def record(args):
     if err:
         print(err, file=sys.stderr)
         return 2
+    if args.group:
+        groups, err = list_groups()
+        if err:
+            print(err, file=sys.stderr)
+            return 2
+        if args.group not in groups:
+            print(f"--group {args.group!r} is not one of: {', '.join(groups)}", file=sys.stderr)
+            return 2
     wanted = [key_env] if key_env else list(KEY_ENVS.values())
     if provider in KEY_ENVS or provider is None:
         if not any(os.environ.get(e, "").strip() for e in wanted):
@@ -316,7 +412,7 @@ def record(args):
                    "NVIDIA Build key as NVIDIA_INFERENCE_KEY, or set SKILLSPECTOR_PROVIDER to another provider (see RELEASING.md).")
             if args.skip_without_key:
                 print(f"::notice title=LLM scan skipped::{msg}" if os.environ.get("GITHUB_ACTIONS") else f"SKIPPED: {msg}")
-                summary(["## SkillSpector LLM-mode scan", "", f"Skipped: {names} is not available to this run (for example a pull request from a fork)."])
+                summary(["## SkillSpector LLM-mode scan", "", f"Skipped: {names} is not available to this run."])
                 return 0
             print(msg, file=sys.stderr)
             return 2
@@ -338,11 +434,15 @@ def record(args):
     dirty = git("status", "--porcelain")
     with tempfile.TemporaryDirectory() as t:
         tmp = Path(t)
-        harnesses, err = harness_targets(tmp / "installs")
-        if err:
-            print(err, file=sys.stderr)
-            return 2
-        targets = skills + dirs + harnesses
+        targets = skills + dirs
+        if not args.group or args.group == HARNESS_GROUP:
+            harnesses, err = harness_targets(tmp / "installs")
+            if err:
+                print(err, file=sys.stderr)
+                return 2
+            targets += harnesses
+        if args.group:
+            targets = [x for x in targets if group_of(x.name) == args.group]
         if args.only:
             targets = [x for x in targets if fnmatch.fnmatchcase(x.name, args.only)]
             if not targets:
@@ -368,46 +468,78 @@ def record(args):
                              f.get("finding"), f.get("explanation"), disp))
         reports = [d for _, d, _ in results]
 
-    open_rows = [r for r in rows if r[6] == UNREVIEWED]
-    models = provider_summary(reports)
-    calls = sum(d["metadata"].get("llm_calls_succeeded", 0) for d in reports)
-    minutes = f"{(time.monotonic() - started) / 60:.1f} minutes, {jobs} targets at a time"
-    static_only = [x.name for x, d, _ in results if not d["metadata"].get("llm_calls_attempted")]
-    lines = [
-        "# SkillSpector LLM-mode scan record", "",
-        f"- Commit: {git('rev-parse', 'HEAD')}" + (" (working tree has uncommitted changes)" if dirty else ""),
-        f"- Date (UTC): {datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M')}",
-        f"- Content id (every tracked file except {RECORDS_DIR}/): {content_id()}",
-        f"- Scanner: {version}",
-        f"- Provider and model: " + ("; ".join(f"{p} / {m}" for p, m in models) or "unknown")
-        + (f" (endpoint {endpoint(provider)})" if provider in KEY_ENVS else ""),
-        f"- Wall-clock time: {minutes}",
-        f"- Targets scanned: {len(targets)} ({'all' if not args.only else 'only ' + args.only}); every file inspected: yes",
-        f"- LLM calls succeeded: {calls}, failed: 0",
-        "- Targets with no file the LLM analyzers apply to (static rules only): " + (", ".join(static_only) or "none"),
-        "- Scan completed: yes",
-        f"- Findings: {len(rows)} in total, {len(open_rows)} {UNREVIEWED}", "",
-        "## Findings", "",
-    ]
-    if rows:
-        lines += ["| Target | Rule | Severity | Where | Matched | Why SkillSpector flagged it | Disposition |", "| --- | --- | --- | --- | --- | --- | --- |"]
-        lines += ["| " + " | ".join(cell(c) for c in r) + " |" for r in rows]
-    else:
-        lines.append("None.")
+    endpoint_note = f" (endpoint {endpoint(provider)})" if provider in KEY_ENVS else ""
+    seconds = time.monotonic() - started
+    meta = {
+        "group": args.group,
+        "commit": git("rev-parse", "HEAD"),
+        "dirty": bool(dirty),
+        "date": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M"),
+        "content_id": content_id(),
+        "scanner": version,
+        "providers": [f"{p} / {m}{endpoint_note}" for p, m in provider_summary(reports)],
+        "seconds": seconds,
+        "time": f"{seconds / 60:.1f} minutes, {jobs} targets at a time",
+        "targets": len(targets),
+        "scope": ("group " + args.group) if args.group else ("only " + args.only) if args.only else "all",
+        "calls": sum(d["metadata"].get("llm_calls_succeeded", 0) for d in reports),
+        "static_only": [x.name for x, d, _ in results if not d["metadata"].get("llm_calls_attempted")],
+    }
     out = Path(args.record)
     out.parent.mkdir(parents=True, exist_ok=True)
-    out.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print(f"wrote {out}: {len(targets)} targets in {minutes}, {len(rows)} findings, {len(open_rows)} {UNREVIEWED}")
-    in_ci = bool(os.environ.get("GITHUB_ACTIONS"))
-    for r in open_rows:
-        text = cell(f"{r[0]} {r[1]} ({r[2]}) at {r[3]}: {r[4]}")[:400]
-        print(f"::warning title=LLM scan finding::{text}" if in_ci else f"UNREVIEWED {text}")
-    summary(["## SkillSpector LLM-mode scan", "",
-             f"- Provider and model: " + ("; ".join(f"{p} / {m}" for p, m in models) or "unknown"),
-             f"- Targets scanned: {len(targets)} in {minutes}; LLM calls succeeded: {calls}",
-             f"- Findings: {len(rows)} in total, {len(open_rows)} not covered by a static exception", ""]
-            + ([f"- {cell(r[0])}: {cell(r[1])} ({cell(r[2])}) at {cell(r[3])}: {cell(r[4])[:200]}" for r in open_rows] or []))
+    out.write_text(render(meta, rows), encoding="utf-8")
+    Path(f"{out}.json").write_text(json.dumps({"meta": meta, "rows": rows}, indent=1) + "\n", encoding="utf-8")
+    open_rows = report_findings(meta, rows, out)
     return 1 if open_rows and not args.allow_unreviewed else 0
+
+
+def merge(out, source):
+    """Combine the group records (.json) in source into one record of the whole scan."""
+    groups, err = list_groups()
+    if err:
+        print(err, file=sys.stderr)
+        return 2
+    parts = {}
+    for path in sorted(Path(source).glob("*.json")) if Path(source).is_dir() else []:
+        doc = json.loads(path.read_text(encoding="utf-8"))
+        if doc.get("meta", {}).get("group"):
+            parts[doc["meta"]["group"]] = doc
+    problems = []
+    missing = [g for g in groups if g not in parts]
+    if missing:
+        problems.append(f"no record for group(s): {', '.join(missing)}; scan them (re-run the failed jobs) first")
+    ids = {d["meta"]["content_id"] for d in parts.values()}
+    if len(ids) > 1:
+        problems.append("the groups were scanned on different content; scan every group on the same commit")
+    elif ids and ids != {content_id()}:
+        problems.append("the group records were made on different content than HEAD; check out the commit they name")
+    if any(d["meta"]["dirty"] for d in parts.values()):
+        problems.append("a group was scanned on a working tree with uncommitted changes")
+    if problems:
+        print("\n".join(f"cannot merge: {p}" for p in problems), file=sys.stderr)
+        return 2
+    docs = [parts[g] for g in groups]
+    seconds = sum(d["meta"]["seconds"] for d in docs)
+    meta = {
+        "commit": docs[0]["meta"]["commit"],
+        "dirty": False,
+        "date": max(d["meta"]["date"] for d in docs),
+        "content_id": docs[0]["meta"]["content_id"],
+        "scanner": "; ".join(sorted({d["meta"]["scanner"] for d in docs})),
+        "providers": sorted({p for d in docs for p in d["meta"]["providers"]}),
+        "seconds": seconds,
+        "time": f"{seconds / 60:.1f} minutes of scanning across the groups",
+        "groups": [f"{d['meta']['group']} ({d['meta']['targets']} targets, {d['meta']['seconds'] / 60:.1f} min, {d['meta']['date']})" for d in docs],
+        "targets": sum(d["meta"]["targets"] for d in docs),
+        "scope": "all",
+        "calls": sum(d["meta"]["calls"] for d in docs),
+        "static_only": [n for d in docs for n in d["meta"]["static_only"]],
+    }
+    rows = [tuple(r) for d in docs for r in d["rows"]]
+    Path(out).parent.mkdir(parents=True, exist_ok=True)
+    Path(out).write_text(render(meta, rows), encoding="utf-8")
+    report_findings(meta, rows, out)
+    return 0
 
 
 def verify(path):
@@ -453,9 +585,13 @@ def main():
     mode = ap.add_mutually_exclusive_group(required=True)
     mode.add_argument("--record", metavar="PATH", help="run the scan and write the record here")
     mode.add_argument("--verify", metavar="PATH", help="check a record is complete")
+    mode.add_argument("--list-groups", action="store_true", help="print the scan groups, in order, as a JSON list")
+    mode.add_argument("--merge", metavar="PATH", help="combine the group records in --from DIR into one record here")
+    ap.add_argument("--from", dest="source", metavar="DIR", help="folder holding the group records (.json) for --merge")
+    ap.add_argument("--group", metavar="NAME", help="scan only this group (see --list-groups)")
     ap.add_argument("--jobs", type=int, default=int(os.environ.get("SKILLSPECTOR_JOBS", "0")),
                     help="targets scanned in parallel (default SKILLSPECTOR_JOBS, else DEFAULT_JOBS for the provider)")
-    ap.add_argument("--retries", type=int, default=2, help="times to retry a target whose LLM calls failed")
+    ap.add_argument("--retries", type=int, default=3, help="times to retry a target whose LLM calls failed")
     ap.add_argument("--skip-without-key", action="store_true",
                     help="exit 0 with a notice if neither XAI_API_KEY nor NVIDIA_INFERENCE_KEY is set (for CI runs without secrets)")
     ap.add_argument("--allow-unreviewed", action="store_true",
@@ -464,6 +600,17 @@ def main():
     args = ap.parse_args()
     if args.verify:
         return verify(args.verify)
+    if args.list_groups:
+        groups, err = list_groups()
+        if err:
+            print(err, file=sys.stderr)
+            return 2
+        print(json.dumps(groups))
+        return 0
+    if args.merge:
+        if not args.source:
+            ap.error("--merge needs --from DIR")
+        return merge(args.merge, args.source)
     return record(args)
 
 
