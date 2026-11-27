@@ -69,7 +69,7 @@ New sources found through the curation lists are added to `data/sources.json` on
 
 ### 3. Scan anything new (not built yet)
 
-Run NVIDIA SkillSpector over every new or changed file that could be borrowed. Do not carry forward anything that fails. The scan of what this repo ships is `python scripts/skillspector-scan.py` (static, in CI), and the model-assisted scan before every release is described in [RELEASING.md](RELEASING.md).
+Run NVIDIA SkillSpector over every new or changed file that could be borrowed. Do not carry forward anything that fails. The scan of what this repo ships is `python scripts/skillspector-scan.py` (static, in CI), and the model-assisted scan (`python scripts/skillspector-llm-scan.py`, in CI and required before every release) is described in [RELEASING.md](RELEASING.md).
 
 ### 4. Re-collect and re-dedupe (not built yet)
 

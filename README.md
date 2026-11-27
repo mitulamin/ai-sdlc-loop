@@ -136,6 +136,8 @@ This is not a one-off. The research should be re-run about every six months, bec
 
 Every source repo is pinned to a commit in `data/sources.json`. `scripts/refresh-sources.py` compares each pin with the upstream head and tells you what changed. Principles and skills carry their provenance, data files have versioned schemas, and generated files are kept apart from hand-written ones so a refresh does not overwrite human edits. Every merge, drop and change is logged in `CHANGELOG.md` and `data/changelog.json`.
 
+Everything agent-facing in the repo is scanned with NVIDIA SkillSpector in CI, and a model-assisted scan using an NVIDIA Build key gates every release. To run that scan yourself, `export NVIDIA_INFERENCE_KEY=...` and run `python scripts/skillspector-llm-scan.py --record record.md`; the steps are in [RELEASING.md](RELEASING.md).
+
 The full process is in [UPDATING.md](UPDATING.md).
 
 ## Make it yours

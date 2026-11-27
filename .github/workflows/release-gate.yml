@@ -1,0 +1,37 @@
+name: Release gate
+
+# Runs when a release tag is pushed. The tag must carry a complete, triaged LLM-mode scan record
+# (release-scans/<tag>.md) made on the files being released, and a fresh LLM-mode scan of the
+# tagged commit must complete. Unlike skillspector-llm.yml, a missing NVIDIA_INFERENCE_KEY fails
+# here. See RELEASING.md.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  release-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install SkillSpector (NVIDIA, Apache-2.0) and PyYAML
+        run: python -m pip install "skillspector==2.13.7" pyyaml
+      - name: The tag has a complete record made on these files
+        run: python scripts/skillspector-llm-scan.py --verify "release-scans/${GITHUB_REF_NAME}.md"
+      - name: Fresh LLM-mode scan of the tagged commit
+        env:
+          NVIDIA_INFERENCE_KEY: ${{ secrets.NVIDIA_INFERENCE_KEY }}
+        run: python scripts/skillspector-llm-scan.py --record "$RUNNER_TEMP/skillspector-llm-record.md" --allow-unreviewed
+      - name: Upload the fresh scan record
+        if: always() && hashFiles(format('{0}/skillspector-llm-record.md', runner.temp)) != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: skillspector-llm-record-${{ github.sha }}
+          path: ${{ runner.temp }}/skillspector-llm-record.md
+          if-no-files-found: ignore

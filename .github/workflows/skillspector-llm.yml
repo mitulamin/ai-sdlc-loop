@@ -1,0 +1,60 @@
+name: SkillSpector LLM scan
+
+# The LLM-mode scan sends the scanned text to NVIDIA Build, so it runs only when something it scans
+# changes, and a newer push to the same pull request cancels the older run (NVIDIA Build's free
+# tier is about 40 requests a minute). The scan logic lives in scripts/skillspector-llm-scan.py.
+on:
+  pull_request:
+    paths:
+      - "skills/**"
+      - "agents/**"
+      - "commands/**"
+      - "template/**"
+      - "data/harnesses.json"
+      - "scripts/install-harness.py"
+      - "scripts/skillspector*.py"
+      - ".github/skillspector-exceptions.yaml"
+      - ".github/workflows/skillspector-llm.yml"
+  push:
+    branches: [main]
+    paths:
+      - "skills/**"
+      - "agents/**"
+      - "commands/**"
+      - "template/**"
+      - "data/harnesses.json"
+      - "scripts/install-harness.py"
+      - "scripts/skillspector*.py"
+      - ".github/skillspector-exceptions.yaml"
+      - ".github/workflows/skillspector-llm.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: skillspector-llm-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  skillspector-llm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install SkillSpector (NVIDIA, Apache-2.0) and PyYAML
+        run: python -m pip install "skillspector==2.13.7" pyyaml
+      - name: Scan with SkillSpector's LLM analyzers (skips without the secret, fails if the key is rejected)
+        env:
+          NVIDIA_INFERENCE_KEY: ${{ secrets.NVIDIA_INFERENCE_KEY }}
+        run: python scripts/skillspector-llm-scan.py --record "$RUNNER_TEMP/skillspector-llm-record.md" --skip-without-key --allow-unreviewed
+      - name: Upload the scan record
+        if: always() && hashFiles(format('{0}/skillspector-llm-record.md', runner.temp)) != ''
+        uses: actions/upload-artifact@v4
+        with:
+          name: skillspector-llm-record-${{ github.sha }}
+          path: ${{ runner.temp }}/skillspector-llm-record.md
+          if-no-files-found: ignore
