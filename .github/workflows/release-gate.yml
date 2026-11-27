@@ -2,8 +2,8 @@ name: Release gate
 
 # Runs when a release tag is pushed. The tag must carry a complete, triaged LLM-mode scan record
 # (release-scans/<tag>.md) made on the files being released, and a fresh LLM-mode scan of the
-# tagged commit must complete. Unlike skillspector-llm.yml, a missing NVIDIA_INFERENCE_KEY fails
-# here. See RELEASING.md.
+# tagged commit must complete. Unlike skillspector-llm.yml, having neither XAI_API_KEY nor
+# NVIDIA_INFERENCE_KEY fails here. See RELEASING.md.
 on:
   push:
     tags: ["v*"]
@@ -14,7 +14,7 @@ permissions:
 jobs:
   release-gate:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -26,6 +26,7 @@ jobs:
         run: python scripts/skillspector-llm-scan.py --verify "release-scans/${GITHUB_REF_NAME}.md"
       - name: Fresh LLM-mode scan of the tagged commit
         env:
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
           NVIDIA_INFERENCE_KEY: ${{ secrets.NVIDIA_INFERENCE_KEY }}
         run: python scripts/skillspector-llm-scan.py --record "$RUNNER_TEMP/skillspector-llm-record.md" --allow-unreviewed
       - name: Upload the fresh scan record

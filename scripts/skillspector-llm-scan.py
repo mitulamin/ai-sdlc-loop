@@ -13,27 +13,31 @@ for each harness) but without --no-llm, so SkillSpector sends the text of those 
 provider. Do not run it if that is not acceptable for the files being scanned. The steps and the
 record are in RELEASING.md.
 
-Provider and key. The default is NVIDIA Build (https://integrate.api.nvidia.com/v1):
-SKILLSPECTOR_PROVIDER defaults to nv_build and the key is read from the NVIDIA_INFERENCE_KEY
-environment variable. Set SKILLSPECTOR_PROVIDER to use another SkillSpector provider (for example
-ollama, which needs a local Ollama service and no key, or openai_compatible with
-SKILLSPECTOR_COMPAT_API_KEY and SKILLSPECTOR_COMPAT_BASE_URL); that provider's own variables then
-apply. With nv_build the model defaults to NV_BUILD_MODEL below, not SkillSpector's own default
-(z-ai/glm-5.3-flash in SkillSpector 2.13.7, which NVIDIA Build lists but does not answer within
-minutes); set SKILLSPECTOR_MODEL to use another. The key is never printed: anything the script
-echoes is scrubbed of it.
+Provider and key. The script picks the provider from the key it finds:
+  XAI_API_KEY           xAI (https://api.x.ai/v1), through SkillSpector's openai_compatible
+                        provider. The model is the first of XAI_MODELS that xAI lists for the key.
+  NVIDIA_INFERENCE_KEY  NVIDIA Build (https://integrate.api.nvidia.com/v1), SkillSpector's nv_build
+                        provider, with the model NV_BUILD_MODEL. SkillSpector's own default for
+                        nv_build (z-ai/glm-5.3-flash in 2.13.7) is listed but does not answer.
+XAI_API_KEY wins when both are set. SKILLSPECTOR_PROVIDER overrides the choice: nv_build or xai
+use the keys above, and any other SkillSpector provider (for example ollama, which needs a local
+Ollama service and no key, or openai_compatible with SKILLSPECTOR_COMPAT_API_KEY and
+SKILLSPECTOR_COMPAT_BASE_URL) uses that provider's own variables. SKILLSPECTOR_MODEL overrides the
+model. Keys are never printed: anything the script echoes is scrubbed of them.
 
-Before scanning, with nv_build, one tiny request checks the key and the model. A key that is
-missing stops the script with exit code 2, or with exit code 0 and a notice under
---skip-without-key (CI uses that for runs that get no secrets, such as pull requests from forks).
-A key that is rejected, a model that is retired or not served, or a model that does not answer the
-check in time always stops it with exit code 2.
+Before scanning, with xAI or NVIDIA Build, one tiny request checks the key and the model. No key
+stops the script with exit code 2, or with exit code 0 and a notice under --skip-without-key (CI
+uses that for runs that get no secrets, such as pull requests from forks). A key that is rejected,
+a model that is retired or not served, or a model that does not answer the check in time always
+stops it with exit code 2.
 
-Rate limits. NVIDIA Build's free tier allows roughly 40 requests a minute. A target makes a few
-LLM calls over most of a minute, so four targets are scanned at a time by default, which keeps a
-full run inside the CI time limit and well under that rate (--jobs, or SKILLSPECTOR_LLM_JOBS). A
-target whose LLM calls failed (for example because of a rate limit) is tried again after a pause,
-up to --retries times.
+Speed and rate limits. A target takes most of a minute whatever the model, because SkillSpector
+makes a few long LLM calls for it, so targets are scanned in parallel: --jobs, or SKILLSPECTOR_JOBS,
+defaults to DEFAULT_JOBS for the provider. NVIDIA Build's free tier allows roughly 40 requests a
+minute, which its default stays under; xAI's limits are per team and much higher. SkillSpector
+retries a rate-limited call itself; a target whose LLM calls still failed is scanned again after
+an exponential backoff with jitter, up to --retries times. Results from every target are
+collected into one record and one exit code.
 
 SkillSpector reports a degraded LLM stage (no key, a rejected key, a failed request) as a warning
 and still exits 0 with static results only. This script treats that as a failure: a target counts
@@ -69,6 +73,7 @@ import sys
 import tempfile
 import time
 import hashlib
+import random
 import urllib.error
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
@@ -80,11 +85,14 @@ from skillspector_targets import (  # noqa: E402
 )
 
 TIMEOUT_SECONDS = 1800
-DEFAULT_PROVIDER = "nv_build"
-NV_BUILD_MODEL = "nvidia/nemotron-3-ultra-550b-a55b"
-KEY_ENV = "NVIDIA_INFERENCE_KEY"
+NV_BUILD_MODEL = "nvidia/nemotron-3.5-super-vl-120b-a12b"
+XAI_BASE_URL = "https://api.x.ai/v1"
+XAI_MODELS = ("grok-4.20-0309-non-reasoning", "grok-4.7")
+KEY_ENVS = {"xai": "XAI_API_KEY", "nv_build": "NVIDIA_INFERENCE_KEY"}
+DEFAULT_JOBS = {"xai": 16, "nv_build": 8}
+FALLBACK_JOBS = 4
 PREFLIGHT_TIMEOUT_SECONDS = 90
-RETRY_PAUSE_SECONDS = 75
+RETRY_PAUSE_SECONDS = 30
 RECORDS_DIR = "release-scans"
 UNREVIEWED = "UNREVIEWED"
 DISPOSITION = re.compile(r"^(FIXED|FALSE POSITIVE|ACCEPTED|COVERED BY STATIC EXCEPTION): \S")
@@ -115,8 +123,11 @@ def llm_problem(data, proc):
 
 
 def scrub(text):
-    key = os.environ.get(KEY_ENV, "").strip()
-    return text.replace(key, "***") if key else text
+    for name in (*KEY_ENVS.values(), "SKILLSPECTOR_COMPAT_API_KEY"):
+        key = os.environ.get(name, "").strip()
+        if key:
+            text = text.replace(key, "***")
+    return text
 
 
 def scan_once(target, tmp):
@@ -145,47 +156,104 @@ def scan(target, tmp, retries):
         data, problem, retryable = scan_once(target, tmp)
         if not problem or not retryable or attempt == retries:
             break
-        print(f"retry {attempt + 1}/{retries} for {target.name} in {RETRY_PAUSE_SECONDS}s: {problem}", flush=True)
-        time.sleep(RETRY_PAUSE_SECONDS)
+        # Jitter spreads parallel targets that hit the same rate limit at the same moment.
+        pause = RETRY_PAUSE_SECONDS * 2 ** attempt * random.uniform(1, 1.5)
+        print(f"retry {attempt + 1}/{retries} for {target.name} in {pause:.0f}s: {problem}", flush=True)
+        time.sleep(pause)
     calls = (data or {}).get("metadata", {}).get("llm_calls_succeeded", 0)
     print(f"{'FAIL' if problem else 'ok  '} {target.name}: {calls} LLM calls, {time.monotonic() - started:.0f}s", flush=True)
     return target, data, problem
 
 
-def preflight():
-    """Check the NVIDIA Build key and model with one tiny request. Return None, or the reason the scan cannot run."""
+def choose_provider():
+    """Return (provider, key env or None): SKILLSPECTOR_PROVIDER if set, else xai or nv_build by the key present."""
+    explicit = os.environ.get("SKILLSPECTOR_PROVIDER", "").strip()
+    if explicit:
+        return explicit, KEY_ENVS.get(explicit)
+    for provider, env in KEY_ENVS.items():
+        if os.environ.get(env, "").strip():
+            return provider, env
+    return None, None
+
+
+def endpoint(provider):
+    if provider == "xai":
+        return XAI_BASE_URL
+    from skillspector.providers.nv_build.provider import BUILD_BASE_URL
+    return BUILD_BASE_URL
+
+
+def call(url, key, body=None):
+    req = urllib.request.Request(url, data=json.dumps(body).encode() if body else None, method="POST" if body else "GET",
+                                 headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=PREFLIGHT_TIMEOUT_SECONDS) as r:
+        return json.loads(r.read() or b"{}")
+
+
+def pick_xai_model(key):
+    """Return (model, None) for the first of XAI_MODELS the key can use, or (None, reason)."""
     try:
-        from skillspector.providers.nv_build.provider import BUILD_BASE_URL, NvBuildProvider
-    except ImportError:
-        return None
-    creds = NvBuildProvider().resolve_credentials()
-    if not creds:
-        return f"{KEY_ENV} is not set"
-    model = NvBuildProvider().resolve_model()
-    body = json.dumps({"model": model, "messages": [{"role": "user", "content": "ping"}], "max_tokens": 1}).encode()
-    req = urllib.request.Request(f"{BUILD_BASE_URL}/chat/completions", data=body, method="POST",
-                                 headers={"Authorization": f"Bearer {creds[0]}", "Content-Type": "application/json"})
+        listed = {m.get("id") for m in call(f"{XAI_BASE_URL}/models", key).get("data", [])}
+    except urllib.error.HTTPError as e:
+        detail = scrub(e.read().decode(errors="replace"))[:200]
+        if e.code in (400, 401, 403):
+            # xAI answers a malformed or unknown key with 400, not 401.
+            return None, (f"XAI_API_KEY was rejected by {XAI_BASE_URL} (HTTP {e.code}: {detail}); "
+                          "check the key is valid and its team has credits")
+        return None, f"could not list models on {XAI_BASE_URL} (HTTP {e.code}: {detail})"
+    except (TimeoutError, urllib.error.URLError) as e:
+        return None, f"could not reach {XAI_BASE_URL} ({scrub(str(e))})"
+    for model in XAI_MODELS:
+        if model in listed:
+            return model, None
+    return None, (f"none of {', '.join(XAI_MODELS)} is listed for this key on {XAI_BASE_URL}/models; "
+                  "set SKILLSPECTOR_MODEL to one that is")
+
+
+def preflight(provider, key_env, model):
+    """Check the key and model with one tiny request. Return None, or the reason the scan cannot run."""
+    base = endpoint(provider)
+    body = {"model": model, "messages": [{"role": "user", "content": "ping"}], "max_tokens": 16}
     last = None
     for attempt in range(3):
         try:
-            with urllib.request.urlopen(req, timeout=PREFLIGHT_TIMEOUT_SECONDS):
-                return None
+            call(f"{base}/chat/completions", os.environ[key_env].strip(), body)
+            return None
         except urllib.error.HTTPError as e:
             if e.code in (401, 403):
-                return f"{KEY_ENV} was rejected by {BUILD_BASE_URL} (HTTP {e.code}); check the key is a valid, unexpired NVIDIA Build key"
-            if e.code in (404, 410):
-                return f"model {model} is not available on {BUILD_BASE_URL} (HTTP {e.code}); set SKILLSPECTOR_MODEL to one that is"
+                return f"{key_env} was rejected by {base} (HTTP {e.code}); check the key is valid and unexpired"
+            if e.code in (400, 404, 410):
+                detail = scrub(e.read().decode(errors="replace"))[:200]
+                return f"model {model} is not available on {base} (HTTP {e.code}: {detail}); set SKILLSPECTOR_MODEL to one that is"
             if e.code == 429:
                 return None
             last = f"HTTP {e.code}"
         except (TimeoutError, urllib.error.URLError) as e:
             if isinstance(e, TimeoutError) or isinstance(getattr(e, "reason", None), TimeoutError):
-                # The endpoint rejects a bad key at once, so a timeout means the model is not answering.
-                return (f"model {model} did not answer a one-token request on {BUILD_BASE_URL} within "
+                # Both endpoints reject a bad key at once, so a timeout means the model is not answering.
+                return (f"model {model} did not answer a tiny request on {base} within "
                         f"{PREFLIGHT_TIMEOUT_SECONDS}s; set SKILLSPECTOR_MODEL to a model that responds")
             last = scrub(str(e))
         time.sleep(10 * (attempt + 1))
-    return f"could not reach {BUILD_BASE_URL} to check the key ({last})"
+    return f"could not reach {base} to check the key ({last})"
+
+
+def configure(provider, key_env):
+    """Set the SkillSpector variables for xai or nv_build. Return (model, None) or (None, reason)."""
+    model = os.environ.get("SKILLSPECTOR_MODEL", "").strip()
+    if provider == "xai":
+        key = os.environ[key_env].strip()
+        if not model:
+            model, why = pick_xai_model(key)
+            if why:
+                return None, why
+        os.environ.update(SKILLSPECTOR_PROVIDER="openai_compatible", SKILLSPECTOR_COMPAT_BASE_URL=XAI_BASE_URL,
+                          SKILLSPECTOR_COMPAT_API_KEY=key)
+    else:
+        model = model or NV_BUILD_MODEL
+        os.environ["SKILLSPECTOR_PROVIDER"] = provider
+    os.environ["SKILLSPECTOR_MODEL"] = model
+    return model, preflight(provider, key_env, model)
 
 
 def content_id():
@@ -221,26 +289,30 @@ def cell(text):
 
 
 def record(args):
-    provider = os.environ["SKILLSPECTOR_PROVIDER"] = os.environ.get("SKILLSPECTOR_PROVIDER", "").strip() or DEFAULT_PROVIDER
+    started = time.monotonic()
+    provider, key_env = choose_provider()
     _, version, err = find_scanner()
     if err:
         print(err, file=sys.stderr)
         return 2
-    if provider == DEFAULT_PROVIDER:
-        os.environ["SKILLSPECTOR_MODEL"] = os.environ.get("SKILLSPECTOR_MODEL", "").strip() or NV_BUILD_MODEL
-        if not os.environ.get(KEY_ENV, "").strip():
-            msg = (f"{KEY_ENV} is not set, so the LLM-mode scan did not run. Export an NVIDIA Build key "
-                   f"(nvapi-...) as {KEY_ENV}, or set SKILLSPECTOR_PROVIDER to another provider (see RELEASING.md).")
+    wanted = [key_env] if key_env else list(KEY_ENVS.values())
+    if provider in KEY_ENVS or provider is None:
+        if not any(os.environ.get(e, "").strip() for e in wanted):
+            names = " or ".join(wanted)
+            msg = (f"{names} is not set, so the LLM-mode scan did not run. Export an xAI key as XAI_API_KEY or an "
+                   "NVIDIA Build key as NVIDIA_INFERENCE_KEY, or set SKILLSPECTOR_PROVIDER to another provider (see RELEASING.md).")
             if args.skip_without_key:
                 print(f"::notice title=LLM scan skipped::{msg}" if os.environ.get("GITHUB_ACTIONS") else f"SKIPPED: {msg}")
-                summary(["## SkillSpector LLM-mode scan", "", f"Skipped: {KEY_ENV} is not available to this run (for example a pull request from a fork)."])
+                summary(["## SkillSpector LLM-mode scan", "", f"Skipped: {names} is not available to this run (for example a pull request from a fork)."])
                 return 0
             print(msg, file=sys.stderr)
             return 2
-        why = preflight()
+        model, why = configure(provider, key_env)
         if why:
             print(f"::error title=LLM scan could not run::{why}" if os.environ.get("GITHUB_ACTIONS") else f"ERROR: {why}", file=sys.stderr)
             return 2
+        print(f"provider {provider} ({endpoint(provider)}), model {model}", flush=True)
+    jobs = args.jobs or DEFAULT_JOBS.get(provider, FALLBACK_JOBS)
     exceptions, problems = load_exceptions()
     if problems:
         print("\n".join(problems), file=sys.stderr)
@@ -263,7 +335,8 @@ def record(args):
             if not targets:
                 print(f"--only {args.only!r} matches no target", file=sys.stderr)
                 return 2
-        with ThreadPoolExecutor(max_workers=args.jobs) as pool:
+        print(f"scanning {len(targets)} targets, {jobs} at a time", flush=True)
+        with ThreadPoolExecutor(max_workers=jobs) as pool:
             results = list(pool.map(lambda x: scan(x, tmp, args.retries), targets))
         broken = [(x, p) for x, d, p in results if p]
         for x, p in broken:
@@ -285,13 +358,16 @@ def record(args):
     open_rows = [r for r in rows if r[6] == UNREVIEWED]
     models = provider_summary(reports)
     calls = sum(d["metadata"].get("llm_calls_succeeded", 0) for d in reports)
+    minutes = f"{(time.monotonic() - started) / 60:.1f} minutes, {jobs} targets at a time"
     lines = [
         "# SkillSpector LLM-mode scan record", "",
         f"- Commit: {git('rev-parse', 'HEAD')}" + (" (working tree has uncommitted changes)" if dirty else ""),
         f"- Date (UTC): {datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M')}",
         f"- Content id (every tracked file except {RECORDS_DIR}/): {content_id()}",
         f"- Scanner: {version}",
-        f"- Provider and model: " + ("; ".join(f"{p} / {m}" for p, m in models) or "unknown"),
+        f"- Provider and model: " + ("; ".join(f"{p} / {m}" for p, m in models) or "unknown")
+        + (f" (endpoint {endpoint(provider)})" if provider in KEY_ENVS else ""),
+        f"- Wall-clock time: {minutes}",
         f"- Targets scanned: {len(targets)} ({'all' if not args.only else 'only ' + args.only}); every file inspected: yes",
         f"- LLM calls succeeded: {calls}, failed: 0",
         "- Scan completed: yes",
@@ -306,14 +382,14 @@ def record(args):
     out = Path(args.record)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print(f"wrote {out}: {len(targets)} targets, {len(rows)} findings, {len(open_rows)} {UNREVIEWED}")
+    print(f"wrote {out}: {len(targets)} targets in {minutes}, {len(rows)} findings, {len(open_rows)} {UNREVIEWED}")
     in_ci = bool(os.environ.get("GITHUB_ACTIONS"))
     for r in open_rows:
         text = cell(f"{r[0]} {r[1]} ({r[2]}) at {r[3]}: {r[4]}")[:400]
         print(f"::warning title=LLM scan finding::{text}" if in_ci else f"UNREVIEWED {text}")
     summary(["## SkillSpector LLM-mode scan", "",
              f"- Provider and model: " + ("; ".join(f"{p} / {m}" for p, m in models) or "unknown"),
-             f"- Targets scanned: {len(targets)}; LLM calls succeeded: {calls}",
+             f"- Targets scanned: {len(targets)} in {minutes}; LLM calls succeeded: {calls}",
              f"- Findings: {len(rows)} in total, {len(open_rows)} not covered by a static exception", ""]
             + ([f"- {cell(r[0])}: {cell(r[1])} ({cell(r[2])}) at {cell(r[3])}: {cell(r[4])[:200]}" for r in open_rows] or []))
     return 1 if open_rows and not args.allow_unreviewed else 0
@@ -362,11 +438,11 @@ def main():
     mode = ap.add_mutually_exclusive_group(required=True)
     mode.add_argument("--record", metavar="PATH", help="run the scan and write the record here")
     mode.add_argument("--verify", metavar="PATH", help="check a record is complete")
-    ap.add_argument("--jobs", type=int, default=int(os.environ.get("SKILLSPECTOR_LLM_JOBS", "4")),
-                    help="targets scanned in parallel (default 4, well under NVIDIA Build's free-tier rate limit)")
+    ap.add_argument("--jobs", type=int, default=int(os.environ.get("SKILLSPECTOR_JOBS", "0")),
+                    help="targets scanned in parallel (default SKILLSPECTOR_JOBS, else DEFAULT_JOBS for the provider)")
     ap.add_argument("--retries", type=int, default=2, help="times to retry a target whose LLM calls failed")
     ap.add_argument("--skip-without-key", action="store_true",
-                    help="exit 0 with a notice if the NVIDIA Build key is not set (for CI runs without secrets)")
+                    help="exit 0 with a notice if neither XAI_API_KEY nor NVIDIA_INFERENCE_KEY is set (for CI runs without secrets)")
     ap.add_argument("--allow-unreviewed", action="store_true",
                     help="exit 0 even if findings are UNREVIEWED; they are still listed (CI)")
     ap.add_argument("--only", metavar="GLOB", help="scan only targets whose name matches (not for a release record)")

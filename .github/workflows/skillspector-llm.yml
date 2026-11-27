@@ -1,8 +1,9 @@
 name: SkillSpector LLM scan
 
-# The LLM-mode scan sends the scanned text to NVIDIA Build, so it runs only when something it scans
-# changes, and a newer push to the same pull request cancels the older run (NVIDIA Build's free
-# tier is about 40 requests a minute). The scan logic lives in scripts/skillspector-llm-scan.py.
+# The LLM-mode scan sends the scanned text to xAI (secret XAI_API_KEY) or, without that, NVIDIA
+# Build (secret NVIDIA_INFERENCE_KEY), so it runs only when something it scans changes, and a newer
+# push to the same pull request cancels the older run. The scan logic, including the choice of
+# provider and how many targets run in parallel, lives in scripts/skillspector-llm-scan.py.
 on:
   pull_request:
     paths:
@@ -39,7 +40,7 @@ concurrency:
 jobs:
   skillspector-llm:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -47,8 +48,9 @@ jobs:
           python-version: "3.12"
       - name: Install SkillSpector (NVIDIA, Apache-2.0) and PyYAML
         run: python -m pip install "skillspector==2.13.7" pyyaml
-      - name: Scan with SkillSpector's LLM analyzers (skips without the secret, fails if the key is rejected)
+      - name: Scan with SkillSpector's LLM analyzers (skips without either secret, fails if the key is rejected)
         env:
+          XAI_API_KEY: ${{ secrets.XAI_API_KEY }}
           NVIDIA_INFERENCE_KEY: ${{ secrets.NVIDIA_INFERENCE_KEY }}
         run: python scripts/skillspector-llm-scan.py --record "$RUNNER_TEMP/skillspector-llm-record.md" --skip-without-key --allow-unreviewed
       - name: Upload the scan record
