@@ -20,7 +20,7 @@ The key is the repository secret `NVIDIA_INFERENCE_KEY`, an NVIDIA Build key (`n
 
 - **Key available** (pushes, and pull requests from this repository): the script checks the key with one small request, then scans every target. A key that is rejected fails the job with the reason. A scan whose LLM calls did not succeed fails the job. Findings that no static exception explains are listed as warnings and in the job summary, and the full record is uploaded as an artifact named `skillspector-llm-record-<sha>`.
 - **Key not available** (pull requests from forks, which GitHub gives no secrets): the job skips cleanly with a notice that says so. It does not fail.
-- **Request volume.** NVIDIA Build's free tier allows about 40 requests a minute. The workflow runs only when a scanned path changes, a newer push to the same pull request cancels the older run, and the script scans one target at a time and retries a target whose calls failed after a pause. Set `SKILLSPECTOR_LLM_JOBS` or `--jobs` to change the parallelism, `--retries` to change the retries.
+- **Request volume.** NVIDIA Build's free tier allows about 40 requests a minute. The workflow runs only when a scanned path changes, a newer push to the same pull request cancels the older run, and the script scans four targets at a time (each makes a few calls over most of a minute) and retries a target whose calls failed after a pause. Set `SKILLSPECTOR_LLM_JOBS` or `--jobs` to change the parallelism, `--retries` to change the retries.
 
 ## The release steps
 
@@ -46,7 +46,7 @@ export NVIDIA_INFERENCE_KEY=nvapi-...    # from your secret store, never typed i
 python scripts/skillspector-llm-scan.py --record release-scans/<tag>.md
 ```
 
-The script defaults to `SKILLSPECTOR_PROVIDER=nv_build` (NVIDIA Build) and reads the key from `NVIDIA_INFERENCE_KEY`. Use the model SkillSpector picks for that provider, or set `SKILLSPECTOR_MODEL`. The record states the provider and model SkillSpector actually used for each analyzer. The scan sends the text of the scanned files to the provider. Everything it scans is in this public repo, but do not run it from a fork or branch that holds private material you would not send there.
+The script defaults to `SKILLSPECTOR_PROVIDER=nv_build` (NVIDIA Build) and reads the key from `NVIDIA_INFERENCE_KEY`. With `nv_build` it uses the model named by `NV_BUILD_MODEL` at the top of the script rather than SkillSpector's own default for that provider, which NVIDIA Build still lists but does not answer; set `SKILLSPECTOR_MODEL` to use another. NVIDIA Build retires models without notice (a retired one answers HTTP 410), so if the check before the scan says the model is gone or not answering, pick a current chat model from `https://integrate.api.nvidia.com/v1/models`, try it with `--only`, and update `NV_BUILD_MODEL` in a pull request. The record states the provider and model SkillSpector actually used for each analyzer. The scan sends the text of the scanned files to the provider. Everything it scans is in this public repo, but do not run it from a fork or branch that holds private material you would not send there.
 
 To use another provider, set `SKILLSPECTOR_PROVIDER` and that provider's own variables. `skillspector scan --help` lists them all.
 
@@ -60,7 +60,7 @@ Other SkillSpector providers work the same way through their own variables, but 
 
 What the script does:
 
-- With `nv_build`, checks the key with one small request first. No key stops it with exit code 2 (or exit code 0 and a notice with `--skip-without-key`, which CI uses for runs without secrets). A rejected key always exits 2.
+- With `nv_build`, checks the key and the model with one small request first. No key stops it with exit code 2 (or exit code 0 and a notice with `--skip-without-key`, which CI uses for runs without secrets). A rejected key, a retired or unknown model, or a model that does not answer that request within a short limit always exits 2, with the reason.
 - Runs `skillspector scan` without `--no-llm` on every target, and counts a target only if the LLM was requested, every LLM call succeeded, no semantic analyzer failed, and every file under the target was inspected. SkillSpector itself reports a missing or rejected key as a warning and still exits 0 with static results, so the script treats that as a failure and exits 2 with the reason. A scan with no working key is never recorded as a pass.
 - Writes the record: the commit, a content id of the scanned files, the scanner version, the provider and model, how many LLM calls succeeded, and a table of every finding with its rule, severity, file and line, the matched text, SkillSpector's explanation, and a disposition.
 - Marks a finding `COVERED BY STATIC EXCEPTION` only when it has the same rule, file, matched text and source line as an entry in `.github/skillspector-exceptions.yaml`. Every other finding is written as `UNREVIEWED`, and the script exits 1 while any remain (exit 0 with `--allow-unreviewed`, which CI uses so that findings are reported without failing every run).

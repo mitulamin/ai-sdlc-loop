@@ -7,6 +7,7 @@ copies, which differ from skills/ only in front matter and links). Needs PyYAML 
 """
 import fnmatch
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -101,7 +102,8 @@ def find_scanner():
     exe = shutil.which("skillspector")
     if not exe:
         return None, None, f"skillspector is not installed: pip install 'skillspector=={SCANNER_VERSION}'"
-    version = subprocess.run([exe, "--version"], capture_output=True, text=True).stdout.strip()
+    # Rich styles the version even when piped if FORCE_COLOR is set to any value, so drop ANSI escapes.
+    version = re.sub(r"\x1b\[[0-9;]*m", "", subprocess.run([exe, "--version"], capture_output=True, text=True).stdout).strip()
     if SCANNER_VERSION not in version:
         return exe, version, f"expected SkillSpector {SCANNER_VERSION}; the reviewed exceptions only apply to that version"
     return exe, version, None

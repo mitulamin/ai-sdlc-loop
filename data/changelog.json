@@ -338,7 +338,7 @@
         "ci",
         "releasing"
       ],
-      "summary": "Extended the SkillSpector CI scan from skills/ to agents/, commands/, template/ and a throwaway install for each harness, and added the scan with the LLM analyzers on (scripts/skillspector-llm-scan.py, defaulting to NVIDIA Build with the key in NVIDIA_INFERENCE_KEY), run in CI by workflow skillspector-llm.yml and required before every release (RELEASING.md, workflow release-gate.yml, per-finding record). Reworded the reviewer agents' loads label in scripts/build-agents.py so SkillSpector's static parser can read every reviewer file.",
+      "summary": "Extended the SkillSpector CI scan from skills/ to agents/, commands/, template/ and a throwaway install for each harness, and added the scan with the LLM analyzers on (scripts/skillspector-llm-scan.py, defaulting to NVIDIA Build with the key in NVIDIA_INFERENCE_KEY and a pinned model, nvidia/nemotron-3-ultra-550b-a55b, because SkillSpector's own default for NVIDIA Build no longer answers), run in CI by workflow skillspector-llm.yml and required before every release (RELEASING.md, workflow release-gate.yml, per-finding record). Reworded the reviewer agents' loads label in scripts/build-agents.py so SkillSpector's static parser can read every reviewer file.",
       "reason": "The static scan covered only skills, but agents, commands, the template and the installed harness files are what an agent actually reads. A model-assisted pass catches intent that static rules miss; it uses an NVIDIA Build key rather than a paid model vendor, needs a person to triage its findings, and so gates releases and warns on pull requests instead of failing every build."
     }
   ]

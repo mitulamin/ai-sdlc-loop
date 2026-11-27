@@ -18,17 +18,22 @@ SKILLSPECTOR_PROVIDER defaults to nv_build and the key is read from the NVIDIA_I
 environment variable. Set SKILLSPECTOR_PROVIDER to use another SkillSpector provider (for example
 ollama, which needs a local Ollama service and no key, or openai_compatible with
 SKILLSPECTOR_COMPAT_API_KEY and SKILLSPECTOR_COMPAT_BASE_URL); that provider's own variables then
-apply. Optionally set SKILLSPECTOR_MODEL. The key is never printed: anything the script echoes is
-scrubbed of it.
+apply. With nv_build the model defaults to NV_BUILD_MODEL below, not SkillSpector's own default
+(z-ai/glm-5.3-flash in SkillSpector 2.13.7, which NVIDIA Build lists but does not answer within
+minutes); set SKILLSPECTOR_MODEL to use another. The key is never printed: anything the script
+echoes is scrubbed of it.
 
-Before scanning, with nv_build, one tiny request checks the key. A key that is missing stops the
-script with exit code 2, or with exit code 0 and a notice under --skip-without-key (CI uses that
-for runs that get no secrets, such as pull requests from forks). A key that is present but
-rejected always stops it with exit code 2.
+Before scanning, with nv_build, one tiny request checks the key and the model. A key that is
+missing stops the script with exit code 2, or with exit code 0 and a notice under
+--skip-without-key (CI uses that for runs that get no secrets, such as pull requests from forks).
+A key that is rejected, a model that is retired or not served, or a model that does not answer the
+check in time always stops it with exit code 2.
 
-Rate limits. NVIDIA Build's free tier allows roughly 40 requests a minute. Targets are scanned one
-at a time by default (--jobs, or SKILLSPECTOR_LLM_JOBS), and a target whose LLM calls failed (for
-example because of a rate limit) is tried again after a pause, up to --retries times.
+Rate limits. NVIDIA Build's free tier allows roughly 40 requests a minute. A target makes a few
+LLM calls over most of a minute, so four targets are scanned at a time by default, which keeps a
+full run inside the CI time limit and well under that rate (--jobs, or SKILLSPECTOR_LLM_JOBS). A
+target whose LLM calls failed (for example because of a rate limit) is tried again after a pause,
+up to --retries times.
 
 SkillSpector reports a degraded LLM stage (no key, a rejected key, a failed request) as a warning
 and still exits 0 with static results only. This script treats that as a failure: a target counts
@@ -76,7 +81,9 @@ from skillspector_targets import (  # noqa: E402
 
 TIMEOUT_SECONDS = 1800
 DEFAULT_PROVIDER = "nv_build"
+NV_BUILD_MODEL = "nvidia/nemotron-3-ultra-550b-a55b"
 KEY_ENV = "NVIDIA_INFERENCE_KEY"
+PREFLIGHT_TIMEOUT_SECONDS = 90
 RETRY_PAUSE_SECONDS = 75
 RECORDS_DIR = "release-scans"
 UNREVIEWED = "UNREVIEWED"
@@ -146,7 +153,7 @@ def scan(target, tmp, retries):
 
 
 def preflight():
-    """Check the NVIDIA Build key with one tiny request. Return None, or the reason the scan cannot run."""
+    """Check the NVIDIA Build key and model with one tiny request. Return None, or the reason the scan cannot run."""
     try:
         from skillspector.providers.nv_build.provider import BUILD_BASE_URL, NvBuildProvider
     except ImportError:
@@ -161,7 +168,7 @@ def preflight():
     last = None
     for attempt in range(3):
         try:
-            with urllib.request.urlopen(req, timeout=120):
+            with urllib.request.urlopen(req, timeout=PREFLIGHT_TIMEOUT_SECONDS):
                 return None
         except urllib.error.HTTPError as e:
             if e.code in (401, 403):
@@ -171,7 +178,11 @@ def preflight():
             if e.code == 429:
                 return None
             last = f"HTTP {e.code}"
-        except (urllib.error.URLError, TimeoutError) as e:
+        except (TimeoutError, urllib.error.URLError) as e:
+            if isinstance(e, TimeoutError) or isinstance(getattr(e, "reason", None), TimeoutError):
+                # The endpoint rejects a bad key at once, so a timeout means the model is not answering.
+                return (f"model {model} did not answer a one-token request on {BUILD_BASE_URL} within "
+                        f"{PREFLIGHT_TIMEOUT_SECONDS}s; set SKILLSPECTOR_MODEL to a model that responds")
             last = scrub(str(e))
         time.sleep(10 * (attempt + 1))
     return f"could not reach {BUILD_BASE_URL} to check the key ({last})"
@@ -216,6 +227,7 @@ def record(args):
         print(err, file=sys.stderr)
         return 2
     if provider == DEFAULT_PROVIDER:
+        os.environ["SKILLSPECTOR_MODEL"] = os.environ.get("SKILLSPECTOR_MODEL", "").strip() or NV_BUILD_MODEL
         if not os.environ.get(KEY_ENV, "").strip():
             msg = (f"{KEY_ENV} is not set, so the LLM-mode scan did not run. Export an NVIDIA Build key "
                    f"(nvapi-...) as {KEY_ENV}, or set SKILLSPECTOR_PROVIDER to another provider (see RELEASING.md).")
@@ -350,8 +362,8 @@ def main():
     mode = ap.add_mutually_exclusive_group(required=True)
     mode.add_argument("--record", metavar="PATH", help="run the scan and write the record here")
     mode.add_argument("--verify", metavar="PATH", help="check a record is complete")
-    ap.add_argument("--jobs", type=int, default=int(os.environ.get("SKILLSPECTOR_LLM_JOBS", "1")),
-                    help="targets scanned in parallel (default 1, to stay under provider rate limits)")
+    ap.add_argument("--jobs", type=int, default=int(os.environ.get("SKILLSPECTOR_LLM_JOBS", "4")),
+                    help="targets scanned in parallel (default 4, well under NVIDIA Build's free-tier rate limit)")
     ap.add_argument("--retries", type=int, default=2, help="times to retry a target whose LLM calls failed")
     ap.add_argument("--skip-without-key", action="store_true",
                     help="exit 0 with a notice if the NVIDIA Build key is not set (for CI runs without secrets)")
