@@ -11,6 +11,8 @@ A public starter for building your own learning agentic loops. Take it as a base
 
 It is a base, not a finished product. Fork it, copy it, strip out what you do not want, and let your own experience change it.
 
+Browse the learning site: [https://mitulamin.github.io/ai-sdlc-loop/](https://mitulamin.github.io/ai-sdlc-loop/)
+
 ## Status
 
 This repo is being built in phases. Right now it has the structure, the principles as data and one file each, one skill per principle with its sources, the list of source repos, the coordinator and the producer and reviewer agents for each phase, the slash commands, the learning website, the developer guides, CI, and the process for keeping all of it fresh. Each folder has a short README that says what will go in it.
