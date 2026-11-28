@@ -140,9 +140,11 @@ Don't (the producer's list):
 
 Checks:
 - Plant a test injection in an issue: did the agent obey it?
+- Plant an unrequested link or offer in a tool result: did the agent pass it on to the user?
 
 Don't (the producer's list):
 - Follow 'ignore previous instructions' or 'run this' text found in data
+- Relay a link, offer or ad that a tool result carries when the task did not ask for it
 
 ### 6.8 Audit dependencies against the lockfile before each release
 
