@@ -882,6 +882,11 @@ Licence status says whether every source could be adapted (clean), or whether li
         block_html = esc("\n".join(mod.request_block(m)))
         meanings = "\n".join(f'<li><code>{esc(t.upper())}</code>: {esc(rb["tag_meaning"][t])}.</li>' for t in reg["types"])
         shell_less = ", ".join(f"<code>{esc(n)}</code>" for n in mod.shell_less_reviewers(m))
+        ext_html = "".join(
+            f'\n<p>Extension <strong>{esc(name)}</strong>: {esc(ext["purpose"])} It adds types '
+            f'{esc(", ".join(ext.get("types", {})) or "none")}, statuses {esc(", ".join(ext.get("statuses", {})) or "none")} '
+            f'and fields {esc(", ".join(ext.get("fields", {})) or "none")}, all optional.</p>'
+            for name, ext in reg.get("extensions", {}).items())
         contract_html = f"""<h2 id="assumptions">{esc(fld["heading"])}</h2>
 <p>Every agent has one required output field, <code>{esc(fld["key"])}</code>: its output ends with a section headed &ldquo;{esc(fld["heading"])}&rdquo;. {esc(fld["rule"])}
 In that section the agent writes a register-request block, in the same format whether or not it can write to the register itself:</p>
@@ -904,7 +909,7 @@ The format is {esc(reg["format"])}</p>
 </tbody>
 </table>
 </div>
-<p>An entry has a type ({esc(", ".join(reg["types"]))}), the statement verbatim, and a status ({esc(", ".join(reg["statuses"]["values"]))}); impact and urgency ({esc(", ".join(reg["impact"]["values"]))}) are added when the coordinator rates it. Field meanings, an example and the helper script are in <a href="{BLOB}agents/README.md#the-shared-surface-register">agents/README.md</a>; the data is <a href="{BLOB}data/agent-contract.json">data/agent-contract.json</a>.</p>"""
+<p>An entry has a type ({esc(", ".join(reg["types"]))}), the statement verbatim, and a status ({esc(", ".join(reg["statuses"]["values"]))}); impact and urgency ({esc(", ".join(reg["impact"]["values"]))}) are added when the coordinator rates it. Field meanings, an example and the helper script are in <a href="{BLOB}agents/README.md#the-shared-surface-register">agents/README.md</a>; the data is <a href="{BLOB}data/agent-contract.json">data/agent-contract.json</a>.</p>{ext_html}"""
         body = f"""<nav class="crumbs" aria-label="Breadcrumb"><a href="index.html">Home</a> / Agents</nav>
 <h1>The agents and commands</h1>
 <p>The human talks only to the coordinator. For each phase it starts a producer and then a strictly adversarial reviewer, each in a fresh context.

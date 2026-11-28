@@ -90,4 +90,17 @@ Example (the block above, ingested by the coordinator, then one update line):
 {"id": "r-20261126224500-9c1d", "event": "update", "ts": "2026-11-26T22:45:00Z", "agent": "coordinator", "phase": "all", "ref": "r-20261126223000-4f2a", "status": "surfaced", "by": "coordinator", "impact": "medium", "urgency": "medium", "note": "Listed in the end-of-cycle report, item 2."}
 ```
 
+### Extension: aidev-po
+
+aidev-po (https://github.com/mitulamin/aidev-po) defines the product upstream and writes this same register. Its lines use the baseline above plus the values and fields below, so a register goes to ai-sdlc-loop in an aidev-po gate bundle and comes back again, and both checkers pass it. ai-sdlc-loop's agents do not write these values, and they are not register-request block types. A register that uses none of them is a plain baseline register.
+
+- `phase`: aidev-po writes its stage in phase, in lower case: idea, audience, actors, systems, scope, workshops, presentations or fsd.
+- `type` `decision`: a choice the human made, or aidev-po's coordinator made on the human's behalf, while defining the product. It is binding downstream: follow it, and raise a question rather than override it.
+- `type` `feedback`: the human's feedback on an aidev-po output; the full record is in the product's .po/feedback.jsonl, named in record.
+- `type` `attribution`: aidev-po's tracer's finding for a feedback entry; the full record is in the product's .po/attributions.jsonl, named in record.
+- `status` `decided`: A decision in force.
+- `status` `superseded`: A decision replaced by a later one, named in ref.
+- `item_ids` (optional on `declare`, an array of strings): stable IDs of the output items the entry is about, such as REQ-012 or AC-003.
+- `record` (optional on `declare`, a string, matching `^(FB|AT)-[0-9]{3,}$`; required for type `feedback` and `attribution`): the id of the full feedback or attribution record.
+
 [scripts/register.py](../scripts/register.py) appends valid lines safely (`add`, `update`, `ingest`) and reads the log back (`list --open`, `check`). `scripts/register.py selftest` checks that the block parser round-trips every type, and `scripts/build-agents.py --check` runs it.

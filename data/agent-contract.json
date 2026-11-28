@@ -1,5 +1,5 @@
 {
-  "schema_version": "1.1.0",
+  "schema_version": "1.2.0",
   "note": "The output field every agent must declare, the register-request block it is written in, and the format of the shared surface register. scripts/build-agents.py renders these into agents/, commands/ and the agents page, and scripts/build-agents.py --check and scripts/check-skills.py fail if an agent lacks the field or the instruction. scripts/register.py parses the block.",
   "output_field": {
     "key": "assumptions_and_open_questions",
@@ -115,6 +115,38 @@
         "coordinator"
       ],
       "meaning": "who wrote the line: the agent itself, or the coordinator mirroring the agent's register-request block verbatim"
+    },
+    "extensions": {
+      "aidev-po": {
+        "purpose": "aidev-po (https://github.com/mitulamin/aidev-po) defines the product upstream and writes this same register. Its lines use the baseline above plus the values and fields below, so a register goes to ai-sdlc-loop in an aidev-po gate bundle and comes back again, and both checkers pass it. ai-sdlc-loop's agents do not write these values, and they are not register-request block types. A register that uses none of them is a plain baseline register.",
+        "phase_values": "aidev-po writes its stage in phase, in lower case: idea, audience, actors, systems, scope, workshops, presentations or fsd.",
+        "types": {
+          "decision": "a choice the human made, or aidev-po's coordinator made on the human's behalf, while defining the product. It is binding downstream: follow it, and raise a question rather than override it",
+          "feedback": "the human's feedback on an aidev-po output; the full record is in the product's .po/feedback.jsonl, named in record",
+          "attribution": "aidev-po's tracer's finding for a feedback entry; the full record is in the product's .po/attributions.jsonl, named in record"
+        },
+        "statuses": {
+          "decided": "A decision in force.",
+          "superseded": "A decision replaced by a later one, named in ref."
+        },
+        "fields": {
+          "item_ids": {
+            "event": "declare",
+            "kind": "string-array",
+            "meaning": "stable IDs of the output items the entry is about, such as REQ-012 or AC-003"
+          },
+          "record": {
+            "event": "declare",
+            "kind": "string",
+            "pattern": "^(FB|AT)-[0-9]{3,}$",
+            "required_for_types": [
+              "feedback",
+              "attribution"
+            ],
+            "meaning": "the id of the full feedback or attribution record"
+          }
+        }
+      }
     }
   }
 }

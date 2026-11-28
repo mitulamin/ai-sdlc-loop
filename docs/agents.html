@@ -121,6 +121,7 @@ The format is JSON Lines: one JSON object per line, UTF-8, append-only. Never ed
 </table>
 </div>
 <p>An entry has a type (assumption, question, blocker), the statement verbatim, and a status (open, surfaced, answered, dismissed, duplicate); impact and urgency (low, medium, high) are added when the coordinator rates it. Field meanings, an example and the helper script are in <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/agents/README.md#the-shared-surface-register">agents/README.md</a>; the data is <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/data/agent-contract.json">data/agent-contract.json</a>.</p>
+<p>Extension <strong>aidev-po</strong>: aidev-po (https://github.com/mitulamin/aidev-po) defines the product upstream and writes this same register. Its lines use the baseline above plus the values and fields below, so a register goes to ai-sdlc-loop in an aidev-po gate bundle and comes back again, and both checkers pass it. ai-sdlc-loop&#x27;s agents do not write these values, and they are not register-request block types. A register that uses none of them is a plain baseline register. It adds types decision, feedback, attribution, statuses decided, superseded and fields item_ids, record, all optional.</p>
 <p class="muted">Sources: <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/agents/">agents/</a> and <a href="https://github.com/mitulamin/ai-sdlc-loop/blob/main/commands/">commands/</a>.</p>
 </main>
 <footer class="site-footer">

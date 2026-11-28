@@ -12,7 +12,7 @@
   "additionalProperties": false,
   "properties": {
     "schema_version": {
-      "const": "1.1.0"
+      "const": "1.2.0"
     },
     "note": {
       "type": "string"
@@ -233,6 +233,85 @@
             },
             "meaning": {
               "type": "string"
+            }
+          }
+        },
+        "extensions": {
+          "type": "object",
+          "description": "Optional values and fields another tool that writes the same register adds to the baseline, one entry per tool. The checker accepts them; agents here do not write them, and they are not register-request block types.",
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "purpose"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "purpose": {
+                "type": "string"
+              },
+              "phase_values": {
+                "type": "string"
+              },
+              "types": {
+                "type": "object",
+                "propertyNames": {
+                  "pattern": "^[a-z]+$"
+                },
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "statuses": {
+                "type": "object",
+                "propertyNames": {
+                  "pattern": "^[a-z]+$"
+                },
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "fields": {
+                "type": "object",
+                "propertyNames": {
+                  "pattern": "^[a-z_]+$"
+                },
+                "additionalProperties": {
+                  "type": "object",
+                  "required": [
+                    "event",
+                    "kind",
+                    "meaning"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "event": {
+                      "enum": [
+                        "declare",
+                        "update"
+                      ]
+                    },
+                    "kind": {
+                      "enum": [
+                        "string",
+                        "string-array"
+                      ]
+                    },
+                    "pattern": {
+                      "type": "string"
+                    },
+                    "required_for_types": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 1
+                    },
+                    "meaning": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
             }
           }
         }
