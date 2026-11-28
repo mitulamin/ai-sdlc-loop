@@ -398,6 +398,18 @@
       ],
       "summary": "Principle 5.14 now names traffic: Instrument boundaries and failure points: latency, traffic, errors, saturation, retries, breaker state. That covers all four Google SRE golden signals plus retries and breaker state. The 5.14 skill (Do list, Self-check, reviewer checks), the agents that quote it, the principle page and the guides' note that traffic belongs beside 5.14 are updated to match.",
       "reason": "The statement listed three of the four golden signals, and the guides had to say traffic belonged beside it. Traffic is the denominator that turns an error count into a rate."
+    },
+    {
+      "date": "2026-11-27",
+      "research_run": "run-1",
+      "type": "schema",
+      "ids": [
+        "agents",
+        "scripts",
+        "site"
+      ],
+      "summary": "agent-contract schema 1.1.0 to 1.2.0: added optional register.extensions, the values and fields another tool that writes the same register adds to the baseline. The first is aidev-po: types decision, feedback and attribution, statuses decided and superseded, and declare fields item_ids (array of strings) and record (FB- or AT- id, required for feedback and attribution); aidev-po writes its stage in phase. scripts/register.py check accepts them and selftest checks them; they are not register-request block types, so no agent's block changes. agents/README.md documents the extension and the coordinator follows decided decisions from an aidev-po gate bundle register. Existing data and registers stay valid; set schema_version to 1.2.0.",
+      "reason": "aidev-po hands its register to ai-sdlc-loop in a gate bundle and takes ai-sdlc-loop's entries back. With one taxonomy and a documented extension both checkers accept the same file in both directions."
     }
   ]
 }

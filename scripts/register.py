@@ -21,6 +21,10 @@ QUESTION, BLOCKER), with the statement copied verbatim. It fails on a block it c
 nothing is dropped silently. `selftest` checks that the parser and the block writer
 round-trip all three tags. `list` shows each entry with its current status; the register
 file itself stays readable without this script.
+
+`check` also accepts the optional types, statuses and fields of each tool listed in
+register.extensions (aidev-po), so a register handed over by that tool, and handed back,
+passes here and there. Extensions never add register-request block types.
 """
 import argparse
 import contextlib
@@ -44,6 +48,13 @@ NONE_TEXT = CONTRACT_DOC["output_field"]["none_text"]
 TYPE_TO_TAG = {t: t.upper() for t in CONTRACT["types"]}
 TAG_TO_TYPE = {tag: t for t, tag in TYPE_TO_TAG.items()}
 LINE_RE = re.compile(r"\[(" + "|".join(re.escape(t) for t in TAG_TO_TYPE) + r"): (\S.*)\]")
+
+# Extensions (register.extensions) widen what a line may hold, never the register-request block.
+EXTENSIONS = CONTRACT.get("extensions", {})
+ALL_TYPES = list(CONTRACT["types"]) + [t for e in EXTENSIONS.values() for t in e.get("types", {})]
+ALL_STATUSES = list(CONTRACT["statuses"]["values"]) + [s for e in EXTENSIONS.values() for s in e.get("statuses", {})]
+EXT_FIELDS = {ev: {k: f for e in EXTENSIONS.values() for k, f in e.get("fields", {}).items() if f["event"] == ev}
+              for ev in CONTRACT["events"]}
 
 
 def now():
@@ -118,7 +129,19 @@ def validate(rec, known_ids=None):
     for k in spec.get("optional", []):
         if k in rec and not isinstance(rec[k], str):
             errs.append(f"{k} must be a string")
-    allowed = set(spec["required"]) | set(spec.get("optional", []))
+    ext = EXT_FIELDS[event]
+    for k, f in ext.items():
+        if k not in rec:
+            continue
+        v = rec[k]
+        if f["kind"] == "string-array":
+            if not isinstance(v, list) or not all(isinstance(x, str) and x.strip() for x in v):
+                errs.append(f"{k} must be an array of non-empty strings")
+        elif not isinstance(v, str) or not v.strip():
+            errs.append(f"{k} must be a non-empty string")
+        elif f.get("pattern") and not re.fullmatch(f["pattern"], v):
+            errs.append(f"{k} {v!r} does not match {f['pattern']}")
+    allowed = set(spec["required"]) | set(spec.get("optional", [])) | set(ext)
     for k in rec:
         if k not in allowed:
             errs.append(f"unexpected field {k}")
@@ -128,11 +151,14 @@ def validate(rec, known_ids=None):
         errs.append(f"id {rec['id']!r} does not match {CONTRACT['id_pattern']}")
     if not re.fullmatch(r"\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ", rec["ts"]):
         errs.append(f"ts {rec['ts']!r} is not UTC RFC 3339 (YYYY-MM-DDTHH:MM:SSZ)")
-    if rec["status"] not in CONTRACT["statuses"]["values"]:
-        errs.append(f"status must be one of {CONTRACT['statuses']['values']}")
+    if rec["status"] not in ALL_STATUSES:
+        errs.append(f"status must be one of {ALL_STATUSES}")
     if event == "declare":
-        if rec["type"] not in CONTRACT["types"]:
-            errs.append(f"type must be one of {CONTRACT['types']}")
+        if rec["type"] not in ALL_TYPES:
+            errs.append(f"type must be one of {ALL_TYPES}")
+        for k, f in ext.items():
+            if rec["type"] in f.get("required_for_types", []) and k not in rec:
+                errs.append(f"type {rec['type']} needs {k}")
         if rec["status"] != "open":
             errs.append("a declared entry starts as open")
         if "via" in rec and rec["via"] not in CONTRACT["via"]["values"]:
@@ -273,6 +299,42 @@ def cmd_check(args):
     return 0
 
 
+def selftest_extensions():
+    """Each extension's types, statuses and fields validate on a line, and stay out of the block."""
+    problems = []
+    base = {"id": new_id(), "event": "declare", "ts": now(), "agent": "po", "phase": "fsd", "text": "x", "status": "open"}
+    upd = {"id": new_id(), "event": "update", "ts": now(), "agent": "po", "phase": "fsd", "ref": base["id"], "status": "open"}
+    plain = CONTRACT["types"][0]
+    for name, e in EXTENSIONS.items():
+        fields = {k: f for k, f in e.get("fields", {}).items() if f["event"] == "declare"}
+        for t in e.get("types", {}):
+            rec = dict(base, type=t)
+            needs = [k for k, f in fields.items() if t in f.get("required_for_types", [])]
+            for k in needs:
+                rec[k] = "FB-001"
+            if validate(rec):
+                problems.append(f"extension {name}: type {t} does not validate: {validate(rec)}")
+            if t.upper() in TAG_TO_TYPE:
+                problems.append(f"extension {name}: type {t} must not be a register-request block type")
+            for k in needs:
+                if not validate({x: y for x, y in rec.items() if x != k}):
+                    problems.append(f"extension {name}: type {t} without {k} was accepted")
+        for s in e.get("statuses", {}):
+            if validate(dict(upd, status=s), {base["id"]}):
+                problems.append(f"extension {name}: status {s} does not validate")
+        for k, f in fields.items():
+            if f["kind"] == "string-array":
+                if validate(dict(base, type=plain, **{k: ["REQ-001"]})):
+                    problems.append(f"extension {name}: field {k} does not validate")
+                if not validate(dict(base, type=plain, **{k: "REQ-001"})):
+                    problems.append(f"extension {name}: field {k} accepted a string for an array")
+            elif f.get("pattern") and not validate(dict(base, type=plain, **{k: "not an id"})):
+                problems.append(f"extension {name}: field {k} accepted a value that does not match {f['pattern']}")
+    if not validate(dict(base, type="guess")):
+        problems.append("an unknown type was accepted")
+    return problems
+
+
 def selftest():
     """Round-trip every contract type through the block writer and the parser, and check the rejects."""
     problems = []
@@ -317,6 +379,7 @@ def selftest():
             checked = cmd_check(argparse.Namespace(register=str(reg)))
         if checked != 0:
             problems.append("ingested entries do not validate")
+    problems += selftest_extensions()
     if problems:
         print("\n".join(problems), file=sys.stderr)
         return 1
